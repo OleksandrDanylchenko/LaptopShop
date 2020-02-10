@@ -1,0 +1,65 @@
+package ua.alexd.domain;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "Displays")
+public class Display {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
+
+    @Basic
+    @Column(name = "type")
+    private String type;
+
+    @Basic
+    @Column(name = "diagonal")
+    private float diagonal;
+
+    @Basic
+    @Column(name = "resolution")
+    private String resolution;
+
+    public Display() {
+    }
+
+    public Display(String type, float diagonal, String resolution) {
+        this.type = type;
+        this.diagonal = diagonal;
+        this.resolution = resolution;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public float getDiagonal() {
+        return diagonal;
+    }
+
+    public void setDiagonal(float diagonal) {
+        this.diagonal = diagonal;
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+}
