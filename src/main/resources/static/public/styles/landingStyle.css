@@ -1,0 +1,17 @@
+.landingText {
+    color: darkgoldenrod;
+    font-family: Lato, "Anonymous Pro", sans-serif;
+    font-size: 26px;
+    height: auto;
+}
+
+.landingRef {
+    color: darkblue;
+    font-family: Lato, "Anonymous Pro", sans-serif;
+    font-size: 18px;
+    height: auto;
+}
+
+.landingList {
+    color: darkblue;
+}
