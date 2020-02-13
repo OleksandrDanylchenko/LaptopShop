@@ -21,13 +21,14 @@ public class ShopController {
     private String getRecords(@RequestParam(required = false, defaultValue = "") String filterAddress,
                               @NotNull Model model) {
         Iterable<Shop> shops;
-
         if (filterAddress != null && !filterAddress.isEmpty())
             shops = shopRepo.findByAddress(filterAddress);
         else
             shops = shopRepo.findAll();
+
         model.addAttribute("shops", shops);
         model.addAttribute("filterAddress", filterAddress);
+
         return "list/shopList";
     }
 
@@ -40,8 +41,8 @@ public class ShopController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String address, @NotNull Model model) {
-            var newShop = new Shop(address);
-            shopRepo.save(newShop);
+        var newShop = new Shop(address);
+        shopRepo.save(newShop);
 
         var shops = shopRepo.findAll();
         model.addAttribute("shops", shops);

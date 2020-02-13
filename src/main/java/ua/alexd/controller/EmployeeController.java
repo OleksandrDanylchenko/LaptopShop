@@ -8,14 +8,13 @@ import ua.alexd.domain.Employee;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
 
-import java.util.ArrayList;
-
 //TODO Add posts
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
     private final EmployeeRepo employeeRepo;
     private final ShopRepo shopRepo;
+
 
     public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo) {
         this.employeeRepo = employeeRepo;
@@ -38,48 +37,54 @@ public class EmployeeController {
         else
             employees = employeeRepo.findAll();
 
-        var shops = shopRepo.findAll();
-        var shopsIds = new ArrayList<Integer>();
-        for (var shop : shops)
-            shopsIds.add(shop.getId());
-
         model.addAttribute("employees", employees);
-        model.addAttribute("shopIds", shopsIds);
         model.addAttribute("firstName", firstName);
         model.addAttribute("secondName", secondName);
-        return "employee";
+        return "/list/employeeList";
     }
 
     @NotNull
-    @PostMapping
-    private String addRecord(@RequestParam String firstName, @RequestParam String secondName, @RequestParam int shopId,
-                             @NotNull Model model) {
-        var shop = shopRepo.findById(shopId);
-        if (shop.isPresent()) {
-            var newEmployee = new Employee(firstName, secondName, shop.get());
-            employeeRepo.save(newEmployee);
-        }
-
-        var employees = employeeRepo.findAll();
-        var shops = shopRepo.findAll();
-        var shopsIds = new ArrayList<Integer>();
-        for (var s : shops)
-            shopsIds.add(s.getId());
-
-        model.addAttribute("employees", employees);
-        model.addAttribute("shopIds", shopsIds);
-        return "employee";
+    @GetMapping("/add")
+    private String addRecord(@NotNull Model model) {
+        var shopsAddresses = shopRepo.getAllAddresses();
+        model.addAttribute("shopAddresses", shopsAddresses);
+        return "add/employeeAdd";
     }
 
-    //TODO
-//    @NotNull
-//    @PostMapping("/edit/{editEmployee}")
-//    private String saveEditedRecord(
-//                                    @NotNull @PathVariable("editShop") Shop editShop) {
-//        editShop.setAddress(address);
-//        shopRepo.save(editShop);
-//        return "redirect:/shop";
-//    }
+    @NotNull
+    @PostMapping("/add")
+    private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
+                             @RequestParam String shopAddress, @NotNull Model model) {
+        var shop = shopRepo.findByAddress(shopAddress);
+        var newEmployee = new Employee(firstName, secondName, shop.get(0));
+        employeeRepo.save(newEmployee);
+
+        var employees = employeeRepo.findAll();
+        model.addAttribute("employees", employees);
+        return "/list/employeeList";
+    }
+
+    @NotNull
+    @GetMapping("/edit/{editEmployee}")
+    private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
+        var shopsAddresses = shopRepo.getAllAddresses();
+        model.addAttribute("editEmployee", editEmployee);
+        model.addAttribute("shopAddresses", shopsAddresses);
+        return "/edit/employeeEdit";
+    }
+
+    @NotNull
+    @PostMapping("/edit/{editEmployee}")
+    private String saveEditedRecord(@NotNull @PathVariable("editEmployee") Employee editEmployee,
+                                    @RequestParam String firstName, @RequestParam String secondName,
+                                    @RequestParam String shopAddress, @NotNull Model model) {
+        editEmployee.setFirstName(firstName);
+        editEmployee.setSecondName(secondName);
+        var newShop = shopRepo.findByAddress(shopAddress);
+        editEmployee.setShop(newShop.get(0));
+        employeeRepo.save(editEmployee);
+        return "redirect:/employee";
+    }
 
     @NotNull
     @GetMapping("/delete/{delEmployee}")
