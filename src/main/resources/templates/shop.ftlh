@@ -12,7 +12,7 @@
     <div>
         <p>Знайти магазин за адресою:</p>
         <form method="get" action="/shop">
-            <label>Адреса шуканого магазину: <input type="text" name="filterAddress" value="${filter!}"/></label>
+            <label>Адреса шуканого магазину: <input type="text" name="filterAddress" value="${filterAddress!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
@@ -23,7 +23,7 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Address</th>
+                <th>Адреса</th>
                 <th></th>
                 <th></th>
             </tr>

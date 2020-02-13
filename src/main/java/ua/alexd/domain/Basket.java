@@ -23,18 +23,13 @@ public class Basket {
     @JoinColumn(name = "clientId")
     private Client client;
 
-    @ManyToOne
-    @JoinColumn(name = "statusId")
-    private Status status;
-
     public Basket() {
     }
 
-    public Basket(Timestamp date, Employee employee, Client client, Status status) {
+    public Basket(Timestamp date, Employee employee, Client client) {
         this.date = date;
         this.employee = employee;
         this.client = client;
-        this.status = status;
     }
 
     public int getId() {
@@ -67,13 +62,5 @@ public class Basket {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

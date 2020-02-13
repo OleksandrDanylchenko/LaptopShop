@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="/styles/landingStyle.css">
     </head>
     <body>
+    <div><a href="/">Головна сторінка</a> </div>
     <#nested>
     </body>
     </html>

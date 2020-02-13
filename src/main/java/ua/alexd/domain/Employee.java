@@ -22,10 +22,6 @@ public class Employee {
     @JoinColumn(name = "shopId")
     private Shop shop;
 
-    @ManyToOne
-    @JoinColumn(name = "postId")
-    private Post post;
-
     public Employee() {
     }
 
@@ -65,13 +61,5 @@ public class Employee {
 
     public void setShop(Shop shop) {
         this.shop = shop;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 }

@@ -30,18 +30,13 @@ public class Laptop {
     @JoinColumn(name = "hardwareId")
     private Hardware hardware;
 
-    @ManyToOne
-    @JoinColumn(name = "weightId")
-    private Weight weight;
-
     public Laptop() {
     }
 
-    public Laptop(Producer producer, Type type, Hardware hardware, Weight weight) {
+    public Laptop(Producer producer, Type type, Hardware hardware) {
         this.producer = producer;
         this.type = type;
         this.hardware = hardware;
-        this.weight = weight;
     }
 
     public int getId() {
@@ -82,13 +77,5 @@ public class Laptop {
 
     public void setHardware(Hardware hardware) {
         this.hardware = hardware;
-    }
-
-    public Weight getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Weight weight) {
-        this.weight = weight;
     }
 }
