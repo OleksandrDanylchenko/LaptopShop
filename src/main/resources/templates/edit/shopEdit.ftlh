@@ -1,4 +1,4 @@
-<#import "parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Shop editing">
     <h1>Зміна адреси магазину:</h1>

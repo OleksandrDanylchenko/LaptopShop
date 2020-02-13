@@ -1,12 +1,11 @@
-<#import "parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Shops">
+    <@main.mainPageRef/>
+
     <div>
-        <p>Додати новий магазин:</p>
-        <form method="post" action="/shop">
-            <label>Адреса нового магазину: <input type="text" name="address"/></label>
-            <button type="submit">Додати</button>
-        </form>
+        <p><a href="/shop/add">Додати новий магазин</a></p>
     </div>
 
     <div>

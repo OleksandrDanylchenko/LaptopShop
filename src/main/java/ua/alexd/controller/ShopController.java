@@ -28,32 +28,38 @@ public class ShopController {
             shops = shopRepo.findAll();
         model.addAttribute("shops", shops);
         model.addAttribute("filterAddress", filterAddress);
-        return "shop";
+        return "list/shopList";
     }
 
     @NotNull
-    @PostMapping
+    @GetMapping("/add")
+    private String addRecord(@NotNull Model model) {
+        return "add/shopAdd";
+    }
+
+    @NotNull
+    @PostMapping("/add")
     private String addRecord(@RequestParam String address, @NotNull Model model) {
-        var newShop = new Shop(address);
-        shopRepo.save(newShop);
+            var newShop = new Shop(address);
+            shopRepo.save(newShop);
 
         var shops = shopRepo.findAll();
         model.addAttribute("shops", shops);
 
-        return "shop";
+        return "/list/shopList";
     }
 
     @NotNull
     @GetMapping("/edit/{editShop}")
     private String editRecord(@PathVariable Shop editShop, @NotNull Model model) {
         model.addAttribute("editShop", editShop);
-        return "shopEdit";
+        return "/edit/shopEdit";
     }
 
     @NotNull
     @PostMapping("/edit/{editShop}")
-    private String saveEditedRecord(@NotNull @RequestParam String address,
-                                    @NotNull @PathVariable("editShop") Shop editShop) {
+    private String editedRecord(@NotNull @RequestParam String address,
+                                @NotNull @PathVariable("editShop") Shop editShop) {
         editShop.setAddress(address);
         shopRepo.save(editShop);
         return "redirect:/shop";
