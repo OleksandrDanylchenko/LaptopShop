@@ -23,10 +23,6 @@ public class Laptop {
     private Type type;
 
     @ManyToOne
-    @JoinColumn(name = "displayId")
-    private Display display;
-
-    @ManyToOne
     @JoinColumn(name = "hardwareId")
     private Hardware hardware;
 
@@ -61,14 +57,6 @@ public class Laptop {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public Display getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(Display display) {
-        this.display = display;
     }
 
     public Hardware getHardware() {

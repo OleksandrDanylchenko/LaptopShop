@@ -3,21 +3,20 @@
 
 <@pad.page "Employee">
     <@main.mainPageRef/>
-
     <div>
-        <p><a href="/employee/add">Додати новий магазин</a></p>
-    </div>
-
-    <div>
-        <p>Знайти співробітника за критеріями:</p>
-        <form method="get" action="/employee">
-            <label>Ім'я: <input type="text" name="firstName" value="${firstName!}"/></label>
-            <label>Прізвище: <input type="text" name="secondName" value="${secondName!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
+        <p><a href="/employee/add">Додати нового співробітника</a></p>
     </div>
 
     <#if employees?has_content>
+        <div>
+            <p>Знайти співробітника за критеріями:</p>
+            <form method="get" action="/employee">
+                <label>Ім'я: <input type="text" name="firstName" value="${firstName!}"/></label>
+                <label>Прізвище: <input type="text" name="secondName" value="${secondName!}"/></label>
+                <button type="submit">Шукати</button>
+            </form>
+        </div>
+
         <div><p>Список співробітників:</p></div>
         <table>
             <thead>
@@ -40,7 +39,8 @@
                     <td>${employee.shop.id}</td>
                     <td>${employee.shop.address}</td>
                     <td><a href="/employee/edit/${employee.id}">Edit</a></td>
-                    <td><a href="/employee/delete/${employee.id}" onclick="return confirm('Are you sure?')">Delete</a></td>
+                    <td><a href="/employee/delete/${employee.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
                 </tr>
             </#list>
             </tbody>

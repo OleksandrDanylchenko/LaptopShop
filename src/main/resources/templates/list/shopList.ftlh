@@ -8,15 +8,15 @@
         <p><a href="/shop/add">Додати новий магазин</a></p>
     </div>
 
-    <div>
-        <p>Знайти магазин за адресою:</p>
-        <form method="get" action="/shop">
-            <label>Адреса шуканого магазину: <input type="text" name="filterAddress" value="${filterAddress!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-
     <#if shops?has_content>
+        <div>
+            <form method="get" action="/shop">
+                <label>Знайти магазин за адресою: <input type="text" name="filterAddress"
+                                                         value="${filterAddress!}"/></label>
+                <button type="submit">Шукати</button>
+            </form>
+        </div>
+
         <div><p>Список магазинів:</p></div>
         <table>
             <thead>

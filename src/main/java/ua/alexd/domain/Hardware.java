@@ -11,6 +11,10 @@ public class Hardware {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name = "displayId")
+    private Display display;
+
+    @ManyToOne
     @JoinColumn(name = "cpuId")
     private CPU cpu;
 
@@ -47,6 +51,14 @@ public class Hardware {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Display getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Display display) {
+        this.display = display;
     }
 
     public CPU getCpu() {
