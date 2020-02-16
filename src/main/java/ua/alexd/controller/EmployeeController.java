@@ -1,12 +1,15 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Employee;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
+
+import static ua.alexd.specification.EmployeeSpecification.*;
 
 //TODO Add posts
 @Controller
@@ -23,23 +26,22 @@ public class EmployeeController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@NotNull @RequestParam(required = false, defaultValue = "") String firstName,
-                              @RequestParam(required = false, defaultValue = "") String secondName,
+    private String getRecords(@RequestParam(required = false) String firstName,
+                              @RequestParam(required = false) String secondName,
+                              @RequestParam(required = false) String shopAddress,
                               @NotNull Model model) {
-        Iterable<Employee> employees;
+        var employeesSpecification = Specification.where(firstNameEqual(firstName))
+                .and(secondNameEqual(secondName))
+                .and(shopAddressLike(shopAddress));
+        var employees = employeeRepo.findAll(employeesSpecification);
 
-        if (!firstName.isEmpty() && secondName.isEmpty())
-            employees = employeeRepo.findByFirstName(firstName);
-        else if (!secondName.isEmpty() && firstName.isEmpty())
-            employees = employeeRepo.findBySecondName(secondName);
-        else if (!firstName.isEmpty() && !secondName.isEmpty())
-            employees = employeeRepo.findByFirstNameAndSecondName(firstName, secondName);
-        else
-            employees = employeeRepo.findAll();
+        var shopsAddresses = shopRepo.getAllAddresses();
 
         model.addAttribute("employees", employees);
         model.addAttribute("firstName", firstName);
         model.addAttribute("secondName", secondName);
+        model.addAttribute("shopAddress", shopAddress);
+        model.addAttribute("shopAddresses", shopsAddresses);
         return "/list/employeeList";
     }
 
@@ -61,7 +63,7 @@ public class EmployeeController {
 
         var employees = employeeRepo.findAll();
         model.addAttribute("employees", employees);
-        return "/list/employeeList";
+        return "redirect:/employee";
     }
 
     @NotNull
