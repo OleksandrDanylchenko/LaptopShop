@@ -2,6 +2,8 @@
 
 <@pad.page "Employee adding">
     <#if shopAddresses?has_content>
+        <h2>${errorMessage!}</h2>
+
         <div>
             <h1>Додати нового співробітника:</h1>
             <form method="post" action="/employee/add">

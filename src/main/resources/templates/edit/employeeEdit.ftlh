@@ -1,6 +1,8 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Employee editing">
+    <h2>${errorMessage!}</h2>
+
     <h1>Зміна інформації співробітника:</h1>
     <form method="post" action="/employee/edit/${editEmployee.id}">
         <label>Ім'я:   <input type="text" name="firstName" value="${editEmployee.firstName}"></label>
