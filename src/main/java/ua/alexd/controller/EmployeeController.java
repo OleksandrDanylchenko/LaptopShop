@@ -56,7 +56,8 @@ public class EmployeeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, shopAddress, model)) return "add/employeeAdd";
+        if (isFieldsEmpty(firstName, secondName, shopAddress, model))
+            return "add/employeeAdd";
 
         var shop = shopRepo.findByAddress(shopAddress);
         var newEmployee = new Employee(firstName, secondName, shop.get(0));
@@ -99,7 +100,7 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    private boolean isFieldsEmpty(@RequestParam String firstName, @RequestParam String secondName, @RequestParam String shopAddress, @NotNull Model model) {
+    private boolean isFieldsEmpty(String firstName, String secondName, String shopAddress, Model model) {
         if (firstName == null || secondName == null || shopAddress == null ||
                 firstName.isEmpty() || secondName.isEmpty() || shopAddress.isEmpty()) {
             model.addAttribute("errorMessage",

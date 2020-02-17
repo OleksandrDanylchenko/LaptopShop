@@ -18,16 +18,16 @@ public class ShopController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false, defaultValue = "") String filterAddress,
+    private String getRecords(@RequestParam(required = false, defaultValue = "") String address,
                               @NotNull Model model) {
         Iterable<Shop> shops;
-        if (filterAddress != null && !filterAddress.isEmpty())
-            shops = shopRepo.findByAddress(filterAddress);
+        if (address != null && !address.isEmpty())
+            shops = shopRepo.findByAddress(address);
         else
             shops = shopRepo.findAll();
 
         model.addAttribute("shops", shops);
-        model.addAttribute("filterAddress", filterAddress);
+        model.addAttribute("address", address);
 
         return "list/shopList";
     }
@@ -66,7 +66,7 @@ public class ShopController {
                                 @NotNull @PathVariable("editShop") Shop editShop,
                                 @NotNull Model model) {
         if (isAddressEmpty(address, model))
-            return "add/shopAdd";
+            return "edit/shopEdit";
 
         editShop.setAddress(address);
         shopRepo.save(editShop);

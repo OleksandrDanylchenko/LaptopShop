@@ -1,7 +1,7 @@
 package ua.alexd.domain;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @Table(name = "Clients")
@@ -21,12 +21,12 @@ public class Client {
 
     @Basic
     @Column(name = "dateReg")
-    private Timestamp dateReg;
+    private Date dateReg;
 
     public Client() {
     }
 
-    public Client(String firstName, String secondName, Timestamp dateReg) {
+    public Client(String firstName, String secondName, Date dateReg) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.dateReg = dateReg;
@@ -56,11 +56,11 @@ public class Client {
         this.secondName = secondName;
     }
 
-    public Timestamp getDateReg() {
+    public Date getDateReg() {
         return dateReg;
     }
 
-    public void setDateReg(Timestamp dateReg) {
+    public void setDateReg(Date dateReg) {
         this.dateReg = dateReg;
     }
 }
