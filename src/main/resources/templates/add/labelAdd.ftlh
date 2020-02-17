@@ -1,7 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 <#import "../parts/mainRef.ftlh" as main>
 
-<@pad.page "Producer add">
+<@pad.page "Label adding">
     <h2>${errorMessage!}</h2>
 
     <div>

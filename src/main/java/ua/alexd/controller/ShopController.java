@@ -18,7 +18,7 @@ public class ShopController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false, defaultValue = "") String address,
+    private String getRecords(@RequestParam(required = false) String address,
                               @NotNull Model model) {
         var shops = address != null && !address.isEmpty()
                 ? shopRepo.findByAddress(address)

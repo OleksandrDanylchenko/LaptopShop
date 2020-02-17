@@ -1,6 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
-<@pad.page "Client edit">
+<@pad.page "Client editing">
     <h2>${errorMessage!}</h2>
 
     <h1>Зміна інформації співробітника:</h1>

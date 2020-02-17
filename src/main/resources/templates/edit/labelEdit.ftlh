@@ -1,7 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 <#import "../parts/mainRef.ftlh" as main>
 
-<@pad.page "Label edit">
+<@pad.page "Label editing">
     <h2>${errorMessage!}</h2>
 
     <h1>Зміна найменування:</h1>

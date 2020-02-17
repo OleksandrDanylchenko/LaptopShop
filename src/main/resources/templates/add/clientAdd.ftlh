@@ -1,6 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
-<@pad.page "Client padding">
+<@pad.page "Client adding">
     <h2>${errorMessage!}</h2>
 
     <div>
