@@ -68,8 +68,10 @@ public class ClientController {
 
     @NotNull
     @GetMapping("/edit/{editClient}")
-    private String editRecord(@PathVariable Client editClient, @NotNull Model model) {
+    private String editRecord(@NotNull @PathVariable Client editClient, @NotNull Model model) {
+        var dateRegStr = new SimpleDateFormat("yyyy-MM-dd").format(editClient.getDateReg());
         model.addAttribute("editClient", editClient);
+        model.addAttribute("dateRegStr", dateRegStr);
         return "/edit/clientEdit";
     }
 

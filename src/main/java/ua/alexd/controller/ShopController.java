@@ -12,7 +12,7 @@ import ua.alexd.repos.ShopRepo;
 public class ShopController {
     private final ShopRepo shopRepo;
 
-    public ShopController(ShopRepo shopRepo) {
+    public ShopController(final ShopRepo shopRepo) {
         this.shopRepo = shopRepo;
     }
 
