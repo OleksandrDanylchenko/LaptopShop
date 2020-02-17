@@ -16,7 +16,7 @@ public class Laptop {
 
     @ManyToOne
     @JoinColumn(name = "producerId")
-    private Producer producer;
+    private Label label;
 
     @ManyToOne
     @JoinColumn(name = "typeId")
@@ -29,8 +29,8 @@ public class Laptop {
     public Laptop() {
     }
 
-    public Laptop(Producer producer, Type type, Hardware hardware) {
-        this.producer = producer;
+    public Laptop(Label label, Type type, Hardware hardware) {
+        this.label = label;
         this.type = type;
         this.hardware = hardware;
     }
@@ -43,12 +43,12 @@ public class Laptop {
         this.id = id;
     }
 
-    public Producer getProducer() {
-        return producer;
+    public Label getLabel() {
+        return label;
     }
 
-    public void setProducer(Producer producer) {
-        this.producer = producer;
+    public void setLabel(Label label) {
+        this.label = label;
     }
 
     public Type getType() {

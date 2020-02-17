@@ -14,7 +14,6 @@
                 </#list>
             </select>
         </label>
-        <input type="hidden" value="${editEmployee.id}" name="id">
         <button type="submit">Зберегти</button>
     </form>
 </@pad.page>

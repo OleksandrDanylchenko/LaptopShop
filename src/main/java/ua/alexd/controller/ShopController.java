@@ -20,11 +20,9 @@ public class ShopController {
     @GetMapping
     private String getRecords(@RequestParam(required = false, defaultValue = "") String address,
                               @NotNull Model model) {
-        Iterable<Shop> shops;
-        if (address != null && !address.isEmpty())
-            shops = shopRepo.findByAddress(address);
-        else
-            shops = shopRepo.findAll();
+        var shops = address != null && !address.isEmpty()
+                ? shopRepo.findByAddress(address)
+                : shopRepo.findAll();
 
         model.addAttribute("shops", shops);
         model.addAttribute("address", address);
@@ -34,7 +32,7 @@ public class ShopController {
 
     @NotNull
     @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
+    private String addRecord() {
         return "add/shopAdd";
     }
 
@@ -50,7 +48,7 @@ public class ShopController {
         var shops = shopRepo.findAll();
         model.addAttribute("shops", shops);
 
-        return "/list/shopList";
+        return "redirect:/shop";
     }
 
     @NotNull
@@ -63,7 +61,7 @@ public class ShopController {
     @NotNull
     @PostMapping("/edit/{editShop}")
     private String editedRecord(@RequestParam String address,
-                                @NotNull @PathVariable("editShop") Shop editShop,
+                                @NotNull @PathVariable Shop editShop,
                                 @NotNull Model model) {
         if (isAddressEmpty(address, model))
             return "edit/shopEdit";
@@ -75,7 +73,7 @@ public class ShopController {
 
     @NotNull
     @GetMapping("/delete/{delShop}")
-    private String deleteRecord(@NotNull @PathVariable("delShop") Shop delShop) {
+    private String deleteRecord(@NotNull @PathVariable Shop delShop) {
         shopRepo.delete(delShop);
         return "redirect:/shop";
     }

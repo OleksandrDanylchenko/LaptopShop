@@ -3,8 +3,8 @@ package ua.alexd.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Producers")
-public class Producer {
+@Table(name = "Labels")
+public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -18,10 +18,10 @@ public class Producer {
     @Column(name = "model")
     private String model;
 
-    public Producer() {
+    public Label() {
     }
 
-    public Producer(String brand, String model) {
+    public Label(String brand, String model) {
         this.brand = brand;
         this.model = model;
     }
