@@ -10,6 +10,10 @@ public class Hardware {
     @Column(name = "id")
     private int id;
 
+    @Basic
+    @Column(name = "asssemblyName")
+    private String assemblyName;
+
     @ManyToOne
     @JoinColumn(name = "displayId")
     private Display display;
@@ -37,7 +41,8 @@ public class Hardware {
     public Hardware() {
     }
 
-    public Hardware(CPU cpu, GPU gpu, RAM ram, SSD ssd, HDD hdd) {
+    public Hardware(String assemblyName, CPU cpu, GPU gpu, RAM ram, SSD ssd, HDD hdd) {
+        this.assemblyName = assemblyName;
         this.cpu = cpu;
         this.gpu = gpu;
         this.ram = ram;
@@ -51,6 +56,14 @@ public class Hardware {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getAssemblyName() {
+        return assemblyName;
+    }
+
+    public void setAssemblyName(String assemblyName) {
+        this.assemblyName = assemblyName;
     }
 
     public Display getDisplay() {
