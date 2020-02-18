@@ -28,11 +28,9 @@ public class DisplayController {
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
         var displays = displayRepo.findAll(displaySpecification);
 
-        siteModel.addAttribute("displays", displays);
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("type", type);
-        siteModel.addAttribute("diagonal", diagonal);
-        siteModel.addAttribute("resolution", resolution);
+        siteModel.addAttribute("displays", displays).addAttribute("model", model)
+                .addAttribute("type", type).addAttribute("diagonal", diagonal)
+                .addAttribute("resolution", resolution);
         return "/list/displayList";
     }
 
@@ -47,10 +45,8 @@ public class DisplayController {
     private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
                              @RequestParam String resolution, @NotNull Model siteModel) {
         if (isFieldsEmpty(model, type, diagonal, resolution, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("type", type);
-            siteModel.addAttribute("diagonal", diagonal);
-            siteModel.addAttribute("resolution", resolution);
+            siteModel.addAttribute("model", model).addAttribute("type", type)
+                    .addAttribute("diagonal", diagonal).addAttribute("resolution", resolution);
             return "add/displayAdd";
         }
 

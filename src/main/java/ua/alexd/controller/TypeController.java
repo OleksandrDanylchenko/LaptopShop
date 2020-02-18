@@ -24,9 +24,7 @@ public class TypeController {
                 ? typeRepo.findByName(name)
                 : typeRepo.findAll();
 
-        model.addAttribute("types", types);
-        model.addAttribute("name", name);
-
+        model.addAttribute("types", types).addAttribute("name", name);
         return "list/typeList";
     }
 

@@ -30,9 +30,8 @@ public class RAMController {
         var ramSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var rams = ramRepo.findAll(ramSpecification);
 
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("memory", memory);
-        siteModel.addAttribute("rams", rams);
+        siteModel.addAttribute("model", model).addAttribute("memory", memory)
+                .addAttribute("rams", rams);
         return "/list/ramList";
     }
 
@@ -47,8 +46,7 @@ public class RAMController {
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("memory", memory);
+            siteModel.addAttribute("model", model).addAttribute("memory", memory);
             return "add/ramAdd";
         }
 

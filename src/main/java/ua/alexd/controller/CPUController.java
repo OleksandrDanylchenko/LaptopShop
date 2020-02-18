@@ -28,9 +28,8 @@ public class CPUController {
         var cpuSpecification = Specification.where(modelLike(model)).and(frequencyEqual(frequency));
         var cpus = cpuRepo.findAll(cpuSpecification);
 
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("frequency", frequency);
-        siteModel.addAttribute("cpus", cpus);
+        siteModel.addAttribute("model", model).addAttribute("frequency", frequency)
+                .addAttribute("cpus", cpus);
         return "/list/cpuList";
     }
 
@@ -46,8 +45,7 @@ public class CPUController {
                              @RequestParam(required = false) String frequency,
                              @NotNull Model siteModel) {
         if (isFieldsEmpty(model, frequency, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("frequency", frequency);
+            siteModel.addAttribute("model", model).addAttribute("frequency", frequency);
             return "add/cpuAdd";
         }
 

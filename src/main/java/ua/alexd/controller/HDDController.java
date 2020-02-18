@@ -28,9 +28,8 @@ public class HDDController {
         var hddSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var hdds = hddRepo.findAll(hddSpecification);
 
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("memory", memory);
-        siteModel.addAttribute("hdds", hdds);
+        siteModel.addAttribute("model", model).addAttribute("memory", memory)
+                .addAttribute("hdds", hdds);
         return "/list/hddList";
     }
 
@@ -45,8 +44,7 @@ public class HDDController {
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("memory", memory);
+            siteModel.addAttribute("model", model).addAttribute("memory", memory);
             return "add/hddAdd";
         }
 

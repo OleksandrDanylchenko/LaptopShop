@@ -37,10 +37,8 @@ public class ClientController {
                 .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));
         var clients = clientRepo.findAll(clientSpecification);
 
-        model.addAttribute("clients", clients);
-        model.addAttribute("firstName", firstName);
-        model.addAttribute("secondName", secondName);
-        model.addAttribute("dateRegStr", dateRegStr);
+        model.addAttribute("clients", clients).addAttribute("firstName", firstName)
+                .addAttribute("secondName", secondName).addAttribute("dateRegStr", dateRegStr);
         return "/list/clientList";
     }
 
@@ -55,8 +53,7 @@ public class ClientController {
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String dateRegStr, @NotNull Model model) throws ParseException {
         if (isFieldsEmpty(firstName, secondName, dateRegStr, model)) {
-            model.addAttribute("firstName", firstName);
-            model.addAttribute("secondName", secondName);
+            model.addAttribute("firstName", firstName).addAttribute("secondName", secondName);
             return "add/clientAdd";
         }
 
@@ -71,8 +68,7 @@ public class ClientController {
     @GetMapping("/edit/{editClient}")
     private String editRecord(@NotNull @PathVariable Client editClient, @NotNull Model model) {
         var dateRegStr = new SimpleDateFormat("yyyy-MM-dd").format(editClient.getDateReg());
-        model.addAttribute("editClient", editClient);
-        model.addAttribute("dateRegStr", dateRegStr);
+        model.addAttribute("editClient", editClient).addAttribute("dateRegStr", dateRegStr);
         return "/edit/clientEdit";
     }
 

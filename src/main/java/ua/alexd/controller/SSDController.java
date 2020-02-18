@@ -28,9 +28,8 @@ public class SSDController {
         var ssdSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var ssds = ssdRepo.findAll(ssdSpecification);
 
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("memory", memory);
-        siteModel.addAttribute("ssds", ssds);
+        siteModel.addAttribute("model", model).addAttribute("memory", memory)
+                .addAttribute("ssds", ssds);
         return "/list/ssdList";
     }
 
@@ -45,8 +44,7 @@ public class SSDController {
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("memory", memory);
+            siteModel.addAttribute("model", model).addAttribute("memory", memory);
             return "add/ssdAdd";
         }
 

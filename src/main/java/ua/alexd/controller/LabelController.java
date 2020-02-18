@@ -28,9 +28,8 @@ public class LabelController {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
         var labels = labelRepo.findAll(labelSpecification);
 
-        siteModel.addAttribute("brand", brand);
-        siteModel.addAttribute("model", model);
-        siteModel.addAttribute("labels", labels);
+        siteModel.addAttribute("brand", brand).addAttribute("model", model)
+                .addAttribute("labels", labels);
         return "/list/labelList";
     }
 
@@ -46,8 +45,7 @@ public class LabelController {
                               @RequestParam(required = false) String model,
                               @NotNull Model siteModel) {
         if (isFieldsEmpty(brand, model, siteModel)) {
-            siteModel.addAttribute("brand", brand);
-            siteModel.addAttribute("model", model);
+            siteModel.addAttribute("brand", brand).addAttribute("model", model);
             return "add/labelAdd";
         }
 

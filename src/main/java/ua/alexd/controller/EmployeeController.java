@@ -35,11 +35,10 @@ public class EmployeeController {
 
         var shopsAddresses = shopRepo.getAllAddresses();
 
-        model.addAttribute("employees", employees);
-        model.addAttribute("firstName", firstName);
-        model.addAttribute("secondName", secondName);
-        model.addAttribute("shopAddress", shopAddress);
-        model.addAttribute("shopAddresses", shopsAddresses);
+        model.addAttribute("employees", employees).addAttribute("firstName", firstName)
+                .addAttribute("secondName", secondName)
+                .addAttribute("shopAddress", shopAddress)
+                .addAttribute("shopAddresses", shopsAddresses);
         return "/list/employeeList";
     }
 
@@ -56,9 +55,9 @@ public class EmployeeController {
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, @NotNull Model model) {
         if (isFieldsEmpty(firstName, secondName, shopAddress, model)) {
-            model.addAttribute("firstName", firstName);
-            model.addAttribute("secondName", secondName);
-            model.addAttribute("shopAddress", shopAddress);
+            model.addAttribute("firstName", firstName)
+                    .addAttribute("secondName", secondName)
+                    .addAttribute("shopAddress", shopAddress);
             return "add/employeeAdd";
         }
 
@@ -73,8 +72,7 @@ public class EmployeeController {
     @GetMapping("/edit/{editEmployee}")
     private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
         var shopsAddresses = shopRepo.getAllAddresses();
-        model.addAttribute("editEmployee", editEmployee);
-        model.addAttribute("shopAddresses", shopsAddresses);
+        model.addAttribute("editEmployee", editEmployee).addAttribute("shopAddresses", shopsAddresses);
         return "/edit/employeeEdit";
     }
 
