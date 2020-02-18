@@ -45,8 +45,11 @@ public class GPUController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel))
+        if (isFieldsEmpty(model, memory, siteModel)) {
+            siteModel.addAttribute("model", model);
+            siteModel.addAttribute("memory", memory);
             return "add/gpuAdd";
+        }
 
         var newGpu = new GPU(model, memory);
         gpuRepo.save(newGpu);
@@ -65,11 +68,8 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model);
-            siteModel.addAttribute("memory", memory);
+        if (isFieldsEmpty(model, memory, siteModel))
             return "edit/gpuEdit";
-        }
 
         editGpu.setModel(model);
         editGpu.setMemory(memory);
