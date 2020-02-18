@@ -11,6 +11,10 @@ public class Display {
     private int id;
 
     @Basic
+    @Column(name = "model")
+    private String model;
+
+    @Basic
     @Column(name = "type")
     private String type;
 
@@ -22,10 +26,10 @@ public class Display {
     @Column(name = "resolution")
     private String resolution;
 
-    public Display() {
-    }
+    public Display() { }
 
-    public Display(String type, String diagonal, String resolution) {
+    public Display(String model, String type, String diagonal, String resolution) {
+        this.model = model;
         this.type = type;
         this.diagonal = diagonal;
         this.resolution = resolution;
@@ -37,6 +41,14 @@ public class Display {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getType() {

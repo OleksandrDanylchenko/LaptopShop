@@ -21,16 +21,18 @@ public class DisplayController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String type, @RequestParam(required = false) String diagonal,
-                              @RequestParam(required = false) String resolution, @NotNull Model model) {
-        var displaySpecification = Specification.where(typeEqual(type))
+    private String getRecords(@RequestParam(required = false) String model, @RequestParam(required = false) String type,
+                              @RequestParam(required = false) String diagonal, @RequestParam(required = false) String resolution,
+                              @NotNull Model siteModel) {
+        var displaySpecification = Specification.where(modelLike(model)).and(typeEqual(type))
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
         var displays = displayRepo.findAll(displaySpecification);
 
-        model.addAttribute("displays", displays);
-        model.addAttribute("type", type);
-        model.addAttribute("diagonal", diagonal);
-        model.addAttribute("resolution", resolution);
+        siteModel.addAttribute("displays", displays);
+        siteModel.addAttribute("model", model);
+        siteModel.addAttribute("type", type);
+        siteModel.addAttribute("diagonal", diagonal);
+        siteModel.addAttribute("resolution", resolution);
         return "/list/displayList";
     }
 
@@ -42,16 +44,17 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false) String type, @RequestParam(required = false) String diagonal,
-                             @RequestParam(required = false) String resolution, @NotNull Model model) {
-        if (isFieldsEmpty(type, diagonal, resolution, model)) {
-            model.addAttribute("type", type);
-            model.addAttribute("diagonal", diagonal);
-            model.addAttribute("resolution", resolution);
+    private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
+                             @RequestParam String resolution, @NotNull Model siteModel) {
+        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel)) {
+            siteModel.addAttribute("model", model);
+            siteModel.addAttribute("type", type);
+            siteModel.addAttribute("diagonal", diagonal);
+            siteModel.addAttribute("resolution", resolution);
             return "add/displayAdd";
         }
 
-        var newDisplay = new Display(type, diagonal, resolution);
+        var newDisplay = new Display(model, type, diagonal, resolution);
         displayRepo.save(newDisplay);
 
         return "redirect:/display";
@@ -66,12 +69,13 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/edit/{editDisplay}")
-    private String saveEditedRecord(@RequestParam String type, @RequestParam String diagonal,
-                                    @RequestParam String resolution,
-                                    @NotNull @PathVariable Display editDisplay, @NotNull Model model) {
-        if (isFieldsEmpty(type, diagonal, resolution, model))
+    private String saveEditedRecord(@RequestParam String model, @RequestParam String type,
+                                    @RequestParam String diagonal, @RequestParam String resolution,
+                                    @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
+        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel))
             return "edit/displayEdit";
 
+        editDisplay.setModel(model);
         editDisplay.setType(type);
         editDisplay.setDiagonal(diagonal);
         editDisplay.setResolution(resolution);
@@ -86,10 +90,10 @@ public class DisplayController {
         return "redirect:/display";
     }
 
-    private boolean isFieldsEmpty(String type, String diagonal, String resolution, Model model) {
-        if (type == null || diagonal == null || resolution == null ||
-                type.isEmpty() || diagonal.isEmpty() || resolution.isEmpty()) {
-            model.addAttribute("errorMessage",
+    private boolean isFieldsEmpty(String model, String type, String diagonal, String resolution, Model siteModel) {
+        if (model == null || type == null || diagonal == null || resolution == null ||
+                model.isEmpty() || type.isEmpty() || diagonal.isEmpty() || resolution.isEmpty()) {
+            siteModel.addAttribute("errorMessage",
                     "Поля дисплею не можуть бути пустими!");
             return true;
         }

@@ -4,8 +4,17 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Display;
+import ua.alexd.domain.GPU;
 
 public class DisplaySpecification {
+    @Nullable
+    @Contract(pure = true)
+    public static Specification<Display> modelLike(String expression) {
+        if (expression == null || expression.isEmpty())
+            return null;
+        return (root, query, builder) -> builder.like(root.get("model"), "%" + expression + "%");
+    }
+
     @Nullable
     @Contract(pure = true)
     public static Specification<Display> typeEqual(String expression) {

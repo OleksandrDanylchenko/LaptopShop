@@ -6,6 +6,7 @@
     <div>
         <h1>Додати новий дисплей:</h1>
         <form method="post" action="/display/add">
+            <label>Нова модель: <input type="text" name="model" value="${model!}"/></label>
             <label>Новий тип: <input type="text" name="type" value="${type!}"/></label>
             <label>Нова діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${diagonal!}"/></label>
             <label>Нове розширення: <input type="text" name="resolution" value="${resolution!}"/></label>

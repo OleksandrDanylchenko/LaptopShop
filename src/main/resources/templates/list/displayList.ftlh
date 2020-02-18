@@ -11,6 +11,7 @@
     <div>
         <p>Знайти дисплей за критеріями:</p>
         <form method="get" action="/display">
+            <label>Модель: <input type="text" name="model" value="${model!}"/></label>
             <label>Тип: <input type="text" name="type" value="${type!}"/></label>
             <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${diagonal!}"/></label>
             <label>Розширення: <input type="text" name="resolution" value="${resolution!}"/></label>
@@ -24,6 +25,7 @@
             <thead>
             <tr>
                 <th>Id</th>
+                <th>Модель</th>
                 <th>Тип</th>
                 <th>Діагональ</th>
                 <th>Розширення</th>
@@ -35,6 +37,7 @@
             <#list displays as display>
                 <tr>
                     <td>${display.id}</td>
+                    <td>${display.model}</td>
                     <td>${display.type}</td>
                     <td>${display.diagonal}</td>
                     <td>${display.resolution}</td>
