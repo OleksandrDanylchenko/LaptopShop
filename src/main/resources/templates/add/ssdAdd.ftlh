@@ -6,7 +6,7 @@
     <h1>Додати нову відеокарту:</h1>
     <form method="post" action="/ssd/add">
         <label>Нова модель: <input type="text" name="model" value="${model!}"/></label>
-        <label>Новий обсяг пам'яті: <input type="number" name="memory" min="1" value="${memory!}"/></label>
+        <label>Новий обсяг пам'яті:   <input type="number" name="memory" min="1" value="${(memory??)?then(memory?c, '')}"/></label>
         <button type="submit">Додати</button>
     </form>
 </@pad.page>

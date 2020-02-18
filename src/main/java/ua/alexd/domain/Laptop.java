@@ -15,7 +15,7 @@ public class Laptop {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "producerId")
+    @JoinColumn(name = "labelId")
     private Label label;
 
     @ManyToOne
