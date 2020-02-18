@@ -17,7 +17,6 @@ public class EmployeeController {
     private final EmployeeRepo employeeRepo;
     private final ShopRepo shopRepo;
 
-
     public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo) {
         this.employeeRepo = employeeRepo;
         this.shopRepo = shopRepo;

@@ -1,6 +1,7 @@
 package ua.alexd.repos;
 
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import ua.alexd.domain.Hardware;
 
-public interface HardwareRepo extends CrudRepository<Hardware, Integer> { }
+public interface HardwareRepo extends CrudRepository<Hardware, Integer>, JpaSpecificationExecutor<Hardware> { }
