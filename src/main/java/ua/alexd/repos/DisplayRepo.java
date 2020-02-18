@@ -15,5 +15,5 @@ public interface DisplayRepo extends CrudRepository<Display, Integer>, JpaSpecif
     @Query(value = "SELECT d.model FROM Display d")
     List<String> getAllModels();
 
-    List<Display> findByModel(String model);
+    Display findByModel(String model);
 }

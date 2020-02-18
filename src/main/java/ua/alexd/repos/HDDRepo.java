@@ -16,5 +16,5 @@ public interface HDDRepo extends CrudRepository<HDD, Integer>, JpaSpecificationE
     @Query(value = "SELECT hdd.model FROM HDD hdd")
     List<String> getAllModels();
 
-    List<HDD> findByModel(String model);
+    HDD findByModel(String model);
 }

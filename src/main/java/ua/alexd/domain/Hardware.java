@@ -41,13 +41,14 @@ public class Hardware {
     public Hardware() {
     }
 
-    public Hardware(String assemblyName, CPU cpu, GPU gpu, RAM ram, SSD ssd, HDD hdd) {
+    public Hardware(String assemblyName, CPU cpu, GPU gpu, RAM ram, SSD ssd, HDD hdd, Display display) {
         this.assemblyName = assemblyName;
         this.cpu = cpu;
         this.gpu = gpu;
         this.ram = ram;
         this.ssd = ssd;
         this.hdd = hdd;
+        this.display = display;
     }
 
     public int getId() {

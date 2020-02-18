@@ -15,5 +15,5 @@ public interface RAMRepo extends CrudRepository<RAM, Integer>, JpaSpecificationE
     @Query(value = "SELECT ram.model FROM RAM ram")
     List<String> getAllModels();
 
-    List<RAM> findByModel(String model);
+    RAM findByModel(String model);
 }

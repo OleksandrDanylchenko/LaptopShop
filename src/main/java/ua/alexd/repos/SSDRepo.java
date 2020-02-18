@@ -15,5 +15,5 @@ public interface SSDRepo extends CrudRepository<SSD, Integer>, JpaSpecificationE
     @Query(value = "SELECT ssd.model FROM SSD ssd")
     List<String> getAllModels();
 
-    List<SSD> findByModel(String model);
+    SSD findByModel(String model);
 }

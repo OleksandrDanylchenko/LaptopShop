@@ -16,5 +16,5 @@ public interface GPURepo extends CrudRepository<GPU, Integer>, JpaSpecificationE
     @Query(value = "SELECT gpu.model FROM GPU gpu")
     List<String> getAllModels();
 
-    List<GPU> findByModel(String model);
+    GPU findByModel(String model);
 }

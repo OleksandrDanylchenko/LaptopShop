@@ -41,7 +41,8 @@ public class ShopController {
             return "add/shopAdd";
 
         var newShop = new Shop(address);
-        shopRepo.save(newShop);
+        if (!saveRecord(newShop, model))
+            return "add/shopAdd";
 
         return "redirect:/shop";
     }
@@ -62,7 +63,9 @@ public class ShopController {
             return "edit/shopEdit";
 
         editShop.setAddress(address);
-        shopRepo.save(editShop);
+        if (!saveRecord(editShop, model))
+            return "edit/shopEdit";
+
         return "redirect:/shop";
     }
 
@@ -80,5 +83,16 @@ public class ShopController {
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(Shop saveShop, Model model) {
+        try {
+            shopRepo.save(saveShop);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Адреса " + saveShop.getAddress() + " уже присутня в базі");
+            return false;
+        }
+        return true;
     }
 }

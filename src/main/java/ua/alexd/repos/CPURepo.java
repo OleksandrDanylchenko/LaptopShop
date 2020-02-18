@@ -15,5 +15,5 @@ public interface CPURepo extends CrudRepository<CPU, Integer>, JpaSpecificationE
     @Query(value = "SELECT cpu.model FROM CPU cpu")
     List<String> getAllModels();
 
-    List<CPU> findByModel(String model);
+    CPU findByModel(String model);
 }
