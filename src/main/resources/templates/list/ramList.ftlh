@@ -12,7 +12,7 @@
         <p>Знайти оперативну пам'ять за критеріями:</p>
         <form method="get" action="/ram">
             <label>Модель: <input type="text" name="model" value="${model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${memory!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${memory!?c}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
