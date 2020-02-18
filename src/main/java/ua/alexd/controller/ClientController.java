@@ -54,15 +54,16 @@ public class ClientController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String dateRegStr, @NotNull Model model) throws ParseException {
-        if (isFieldsEmpty(firstName, secondName, dateRegStr, model))
+        if (isFieldsEmpty(firstName, secondName, dateRegStr, model)) {
+            model.addAttribute("firstName", firstName);
+            model.addAttribute("secondName", secondName);
             return "add/clientAdd";
+        }
 
         var dateReg = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateRegStr).getTime());
         var newClient = new Client(firstName, secondName, dateReg);
         clientRepo.save(newClient);
 
-        var clients = clientRepo.findAll();
-        model.addAttribute("client", clients);
         return "redirect:/client";
     }
 

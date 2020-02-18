@@ -28,5 +28,5 @@ public final class EmployeeSpecification {
         if (expression == null || expression.isEmpty())
             return null;
         return (root, query, builder) -> builder.like(root.join("shop").get("address"), "%" + expression + "%");
-}
+    }
 }

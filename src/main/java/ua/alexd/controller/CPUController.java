@@ -45,14 +45,15 @@ public class CPUController {
     private String addRecord(@RequestParam(required = false) String model,
                              @RequestParam(required = false) String frequency,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency, siteModel))
+        if (isFieldsEmpty(model, frequency, siteModel)) {
+            siteModel.addAttribute("model", model);
+            siteModel.addAttribute("frequency", frequency);
             return "add/cpuAdd";
+        }
 
         var newCpu = new CPU(model, frequency);
         cpuRepo.save(newCpu);
 
-        var cpus = cpuRepo.findAll();
-        siteModel.addAttribute("cpus", cpus);
         return "redirect:/cpu";
     }
 

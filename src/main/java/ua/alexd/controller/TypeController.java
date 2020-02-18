@@ -45,9 +45,6 @@ public class TypeController {
         var newType = new Type(name);
         typeRepo.save(newType);
 
-        var types = typeRepo.findAll();
-        model.addAttribute("types", types);
-
         return "redirect:/type";
     }
 

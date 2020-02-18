@@ -45,14 +45,15 @@ public class LabelController {
     private String addRecord(@RequestParam(required = false) String brand,
                               @RequestParam(required = false) String model,
                               @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model, siteModel))
+        if (isFieldsEmpty(brand, model, siteModel)) {
+            siteModel.addAttribute("brand", brand);
+            siteModel.addAttribute("model", model);
             return "add/labelAdd";
+        }
 
         var newLabel = new Label(brand, model);
         labelRepo.save(newLabel);
 
-        var labels = labelRepo.findAll();
-        siteModel.addAttribute("labels", labels);
         return "redirect:/label";
     }
 

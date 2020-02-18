@@ -51,8 +51,6 @@ public class GPUController {
         var newGpu = new GPU(model, memory);
         gpuRepo.save(newGpu);
 
-        var gpus = gpuRepo.findAll();
-        siteModel.addAttribute("gpus", gpus);
         return "redirect:/gpu";
     }
 
@@ -67,8 +65,11 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel))
+        if (isFieldsEmpty(model, memory, siteModel)) {
+            siteModel.addAttribute("model", model);
+            siteModel.addAttribute("memory", memory);
             return "edit/gpuEdit";
+        }
 
         editGpu.setModel(model);
         editGpu.setMemory(memory);

@@ -44,14 +44,16 @@ public class DisplayController {
     @PostMapping("/add")
     private String addRecord(@RequestParam(required = false) String type, @RequestParam(required = false) String diagonal,
                              @RequestParam(required = false) String resolution, @NotNull Model model) {
-        if (isFieldsEmpty(type, diagonal, resolution, model))
+        if (isFieldsEmpty(type, diagonal, resolution, model)) {
+            model.addAttribute("type", type);
+            model.addAttribute("diagonal", diagonal);
+            model.addAttribute("resolution", resolution);
             return "add/displayAdd";
+        }
 
         var newDisplay = new Display(type, diagonal, resolution);
         displayRepo.save(newDisplay);
 
-        var displays = displayRepo.findAll();
-        model.addAttribute("displays", displays);
         return "redirect:/display";
     }
 

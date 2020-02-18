@@ -45,9 +45,6 @@ public class ShopController {
         var newShop = new Shop(address);
         shopRepo.save(newShop);
 
-        var shops = shopRepo.findAll();
-        model.addAttribute("shops", shops);
-
         return "redirect:/shop";
     }
 
