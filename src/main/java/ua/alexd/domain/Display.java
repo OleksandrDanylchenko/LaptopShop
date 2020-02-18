@@ -16,7 +16,7 @@ public class Display {
 
     @Basic
     @Column(name = "diagonal")
-    private float diagonal;
+    private String diagonal;
 
     @Basic
     @Column(name = "resolution")
@@ -25,7 +25,7 @@ public class Display {
     public Display() {
     }
 
-    public Display(String type, float diagonal, String resolution) {
+    public Display(String type, String diagonal, String resolution) {
         this.type = type;
         this.diagonal = diagonal;
         this.resolution = resolution;
@@ -47,11 +47,11 @@ public class Display {
         this.type = type;
     }
 
-    public float getDiagonal() {
+    public String getDiagonal() {
         return diagonal;
     }
 
-    public void setDiagonal(float diagonal) {
+    public void setDiagonal(String diagonal) {
         this.diagonal = diagonal;
     }
 

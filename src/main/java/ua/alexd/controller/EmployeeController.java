@@ -30,8 +30,7 @@ public class EmployeeController {
                               @RequestParam(required = false) String shopAddress,
                               @NotNull Model model) {
         var employeesSpecification = Specification.where(firstNameEqual(firstName))
-                .and(secondNameEqual(secondName))
-                .and(shopAddressLike(shopAddress));
+                .and(secondNameEqual(secondName)).and(shopAddressLike(shopAddress));
         var employees = employeeRepo.findAll(employeesSpecification);
 
         var shopsAddresses = shopRepo.getAllAddresses();
@@ -79,7 +78,7 @@ public class EmployeeController {
 
     @NotNull
     @PostMapping("/edit/{editEmployee}")
-    private String saveEditedRecord(@NotNull @PathVariable("editEmployee") Employee editEmployee,
+    private String saveEditedRecord(@NotNull @PathVariable Employee editEmployee,
                                     @RequestParam String firstName, @RequestParam String secondName,
                                     @RequestParam String shopAddress, @NotNull Model model) {
         if (isFieldsEmpty(firstName, secondName, shopAddress, model))
@@ -87,15 +86,15 @@ public class EmployeeController {
 
         editEmployee.setFirstName(firstName);
         editEmployee.setSecondName(secondName);
-        var newShop = shopRepo.findByAddress(shopAddress);
-        editEmployee.setShop(newShop.get(0));
+        var employeeShop = shopRepo.findByAddress(shopAddress);
+        editEmployee.setShop(employeeShop.get(0));
         employeeRepo.save(editEmployee);
         return "redirect:/employee";
     }
 
     @NotNull
     @GetMapping("/delete/{delEmployee}")
-    private String deleteRecord(@NotNull @PathVariable("delEmployee") Employee delEmployee) {
+    private String deleteRecord(@NotNull @PathVariable Employee delEmployee) {
         employeeRepo.delete(delEmployee);
         return "redirect:/employee";
     }
