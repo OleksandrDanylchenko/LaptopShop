@@ -16,12 +16,12 @@ public class CPU {
 
     @Basic
     @Column(name = "frequency")
-    private float frequency;
+    private String frequency;
 
     public CPU() {
     }
 
-    public CPU(String model, float frequency) {
+    public CPU(String model, String frequency) {
         this.model = model;
         this.frequency = frequency;
     }
@@ -42,11 +42,11 @@ public class CPU {
         this.model = model;
     }
 
-    public float getFrequency() {
+    public String getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(float frequency) {
+    public void setFrequency(String frequency) {
         this.frequency = frequency;
     }
 }

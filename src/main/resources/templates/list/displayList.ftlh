@@ -12,7 +12,7 @@
         <p>Знайти дисплей за критеріями:</p>
         <form method="get" action="/display">
             <label>Тип: <input type="text" name="type" value="${type!}"/></label>
-            <label>Діагональ: <input type="number" step="0.1" name="diagonal" value="${diagonal!}"/></label>
+            <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${diagonal!}"/></label>
             <label>Розширення: <input type="text" name="resolution" value="${resolution!}"/></label>
             <button type="submit">Шукати</button>
         </form>

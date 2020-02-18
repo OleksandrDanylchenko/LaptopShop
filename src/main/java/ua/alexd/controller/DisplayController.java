@@ -64,8 +64,9 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/edit/{editDisplay}")
-    private String saveEditedRecord(@PathVariable Display editDisplay, @RequestParam String type,
-                                    @RequestParam String diagonal, @RequestParam String resolution, @NotNull Model model) {
+    private String saveEditedRecord(@RequestParam String type, @RequestParam String diagonal,
+                                    @RequestParam String resolution,
+                                    @NotNull @PathVariable Display editDisplay, @NotNull Model model) {
         if (isFieldsEmpty(type, diagonal, resolution, model))
             return "edit/displayEdit";
 

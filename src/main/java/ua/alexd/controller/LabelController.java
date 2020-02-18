@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Label;
 import ua.alexd.repos.LabelRepo;
 
-import static ua.alexd.specification.ProducerSpecification.brandEqual;
-import static ua.alexd.specification.ProducerSpecification.modelLike;
+import static ua.alexd.specification.LabelSpecification.brandEqual;
+import static ua.alexd.specification.LabelSpecification.modelLike;
 
 @Controller
 @RequestMapping("/label")
@@ -65,10 +65,8 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/edit/{editLabel}")
-    private String addRecord(@RequestParam(required = false) String brand,
-                             @RequestParam(required = false) String model,
-                             @NotNull @PathVariable("editLabel") Label editLabel,
-                             @NotNull Model siteModel) {
+    private String addRecord(@RequestParam String brand, @RequestParam String model,
+                             @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
         if (isFieldsEmpty(brand, model, siteModel))
             return "edit/shopEdit";
 

@@ -6,7 +6,7 @@
     <h1>Зміна інформації дисплея:</h1>
     <form method="post" action="/display/edit/${editDisplay.id}">
         <label>Тип: <input type="text" name="type" value="${editDisplay.type!}"/></label>
-        <label>Діагональ: <input type="number" step="0.1" name="diagonal" value="${editDisplay.diagonal!}"/></label>
+        <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${editDisplay.diagonal!}"/></label>
         <label>Розширення: <input type="text" name="resolution" value="${editDisplay.resolution!}"/></label>
         <button type="submit">Зберегти</button>
     </form>

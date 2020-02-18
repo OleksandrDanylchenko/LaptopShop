@@ -1,5 +1,4 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Label editing">
     <h2>${errorMessage!}</h2>
