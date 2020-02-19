@@ -130,6 +130,7 @@ public class BasketController {
         return "redirect:/basket";
     }
 
+    // TODO Fix doubling
     @NotNull
     private String getDateTimeStr(@NotNull LocalDateTime dateTime) {
         var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
