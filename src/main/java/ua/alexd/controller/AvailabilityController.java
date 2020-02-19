@@ -106,10 +106,10 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String saveEditedRecord(@PathVariable Availability editAvailability, @RequestParam Integer price, @RequestParam Integer quantity,
-                                    @RequestParam String laptopModel, @RequestParam String shopAddress,
-                                    @RequestParam String dateStartStr, @RequestParam String dateEndStr,
-                                    @NotNull Model model) throws ParseException {
+    private String saveEditedRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
+                                    @RequestParam Integer quantity, @RequestParam String laptopModel,
+                                    @RequestParam String shopAddress, @RequestParam String dateStartStr,
+                                    @RequestParam String dateEndStr, @NotNull Model model) throws ParseException {
         if (isFieldsEmpty(laptopModel, shopAddress, dateStartStr, dateEndStr, model)) {
             model.addAttribute("laptopModels", laptopRepo.getAllModels())
                     .addAttribute("shopAddresses", shopRepo.getAllAddresses())

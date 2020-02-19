@@ -1,7 +1,7 @@
 package ua.alexd.domain;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Baskets")
@@ -12,8 +12,8 @@ public class Basket {
     private int id;
 
     @Basic
-    @Column(name = "date")
-    private Timestamp date;
+    @Column(name = "dateTime")
+    private LocalDateTime dateTime;
 
     @ManyToOne
     @JoinColumn(name = "employeeId")
@@ -26,8 +26,8 @@ public class Basket {
     public Basket() {
     }
 
-    public Basket(Timestamp date, Employee employee, Client client) {
-        this.date = date;
+    public Basket(LocalDateTime dateTime, Employee employee, Client client) {
+        this.dateTime = dateTime;
         this.employee = employee;
         this.client = client;
     }
@@ -40,12 +40,12 @@ public class Basket {
         this.id = id;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setDateTime(LocalDateTime date) {
+        this.dateTime = date;
     }
 
     public Employee getEmployee() {
