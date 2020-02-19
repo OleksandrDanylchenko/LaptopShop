@@ -9,7 +9,7 @@
     </div>
 
     <div>
-        <p>Знайти процесор за критеріями:</p>
+        <p>Знайти відеокарту за критеріями:</p>
         <form method="get" action="/gpu">
             <label>Модель: <input type="text" name="model" value="${model!}"/></label>
             <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="64" value="${memory!}"/></label>
