@@ -1,7 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 <#import "../parts/mainRef.ftlh" as main>
 
-<@pad.page "Employee">
+<@pad.page "Laptop">
     <@main.mainPageRef/>
 
     <div>

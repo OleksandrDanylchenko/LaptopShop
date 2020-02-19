@@ -13,7 +13,7 @@
         <form method="get" action="/employee">
             <label>Ім'я: <input type="text" name="firstName" value="${firstName!}"/></label>
             <label>Прізвище: <input type="text" name="secondName" value="${secondName!}"/></label>
-            <label>Магазин: <input type="text" name="shopAddress" value="${shopAddress!}"/></label>
+            <label>Адреса магазину: <input type="text" name="shopAddress" value="${shopAddress!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

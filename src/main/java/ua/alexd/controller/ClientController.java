@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +30,7 @@ public class ClientController {
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false) String dateRegStr,
                               @NotNull Model model) throws ParseException {
-        var dateReg = dateRegStr == null || dateRegStr.isEmpty()
-                ? null
-                : new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateRegStr).getTime());
-
+        var dateReg = getDate(dateRegStr);
         var clientSpecification = Specification.where(firstNameEqual(firstName))
                 .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));
         var clients = clientRepo.findAll(clientSpecification);
@@ -80,7 +78,7 @@ public class ClientController {
         if (isFieldsEmpty(firstName, secondName, dateRegStr, model))
             return "/edit/clientEdit";
 
-        var dateReg = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateRegStr).getTime());
+        var dateReg = getDate(dateRegStr);
         editClient.setFirstName(firstName);
         editClient.setSecondName(secondName);
         editClient.setDateReg(dateReg);
@@ -90,7 +88,7 @@ public class ClientController {
 
     @NotNull
     @GetMapping("/delete/{delClient}")
-    private String deleteRecord(@NotNull @PathVariable("delClient") Client delClient) {
+    private String deleteRecord(@NotNull @PathVariable Client delClient) {
         clientRepo.delete(delClient);
         return "redirect:/client";
     }
@@ -103,5 +101,14 @@ public class ClientController {
             return true;
         }
         return false;
+    }
+
+    // TODO Fix doubling
+    @Nullable
+    private static Date getDate(String dateStr) throws ParseException {
+        final var dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateStr == null || dateStr.isEmpty()
+                ? null
+                : new Date(dateFormat.parse(dateStr).getTime());
     }
 }

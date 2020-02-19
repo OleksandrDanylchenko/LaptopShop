@@ -129,12 +129,18 @@ public class HardwareController {
     @NotNull
     @PostMapping("/edit/{editHardware}")
     private String editRecord(@RequestParam String assemblyName, @RequestParam String cpuModel, @RequestParam String ramModel,
-                             @RequestParam String ssdModel, @RequestParam String displayModel,
-                             @RequestParam String hddModel, @RequestParam String gpuModel,
-                             @PathVariable Hardware editHardware, @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName, cpuModel, ramModel, ssdModel, displayModel, hddModel, gpuModel, model))
+                              @RequestParam String ssdModel, @RequestParam String displayModel,
+                              @RequestParam String hddModel, @RequestParam String gpuModel,
+                              @PathVariable Hardware editHardware, @NotNull Model model) {
+        if (isFieldsEmpty(assemblyName, cpuModel, ramModel, ssdModel, displayModel, hddModel, gpuModel, model)) {
+            model.addAttribute("cpuModels", cpuRepo.getAllModels())
+                    .addAttribute("ramModels", ramRepo.getAllModels())
+                    .addAttribute("ssdModels", ssdRepo.getAllModels())
+                    .addAttribute("displayModels", displayRepo.getAllModels())
+                    .addAttribute("hddModels", hddRepo.getAllModels())
+                    .addAttribute("gpuModels", gpuRepo.getAllModels());
             return "/edit/hardwareEdit";
-
+        }
         editHardware.setAssemblyName(assemblyName);
 
         var cpu = cpuRepo.findByModel(cpuModel);

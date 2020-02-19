@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "Availability")
+@Table(name = "Availabilities")
 public class Availability {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,8 +16,8 @@ public class Availability {
     private int quantity;
 
     @Basic
-    @Column(name = "fullPrice")
-    private int fullPrice;
+    @Column(name = "price")
+    private int price;
 
     @Basic
     @Column(name = "dateStart")
@@ -38,9 +38,9 @@ public class Availability {
     public Availability() {
     }
 
-    public Availability(int quantity, int fullPrice, Date dateStart, Date dateEnd, Shop shop, Laptop laptop) {
+    public Availability(int quantity, int price, Date dateStart, Date dateEnd, Shop shop, Laptop laptop) {
         this.quantity = quantity;
-        this.fullPrice = fullPrice;
+        this.price = price;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.shop = shop;
@@ -63,12 +63,12 @@ public class Availability {
         this.quantity = quantity;
     }
 
-    public int getFullPrice() {
-        return fullPrice;
+    public int getPrice() {
+        return price;
     }
 
-    public void setFullPrice(int fullPrice) {
-        this.fullPrice = fullPrice;
+    public void setPrice(int fullPrice) {
+        this.price = fullPrice;
     }
 
     public Date getDateStart() {
