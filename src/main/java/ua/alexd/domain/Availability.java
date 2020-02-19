@@ -1,7 +1,7 @@
 package ua.alexd.domain;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @Table(name = "Availability")
@@ -21,11 +21,11 @@ public class Availability {
 
     @Basic
     @Column(name = "dateStart")
-    private Timestamp dateStart;
+    private Date dateStart;
 
     @Basic
     @Column(name = "dateEnd")
-    private Timestamp dateEnd;
+    private Date dateEnd;
 
     @ManyToOne
     @JoinColumn(name = "shopId")
@@ -38,7 +38,7 @@ public class Availability {
     public Availability() {
     }
 
-    public Availability(int quantity, int fullPrice, Timestamp dateStart, Timestamp dateEnd, Shop shop, Laptop laptop) {
+    public Availability(int quantity, int fullPrice, Date dateStart, Date dateEnd, Shop shop, Laptop laptop) {
         this.quantity = quantity;
         this.fullPrice = fullPrice;
         this.dateStart = dateStart;
@@ -71,19 +71,19 @@ public class Availability {
         this.fullPrice = fullPrice;
     }
 
-    public Timestamp getDateStart() {
+    public Date getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Timestamp dateStart) {
+    public void setDateStart(Date dateStart) {
         this.dateStart = dateStart;
     }
 
-    public Timestamp getDateEnd() {
+    public Date getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Timestamp dateEnd) {
+    public void setDateEnd(Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
