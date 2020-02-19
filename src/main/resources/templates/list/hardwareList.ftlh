@@ -13,7 +13,7 @@
         <form method="get" action="/hardware">
             <label>Назва збірки: <input type="text" name="assemblyName" value="${assemblyName!}"/></label>
             <p><label>Модель дисплею: <input type="text" name="displayModel" value="${displayModel!}"/></label>
-            <label>Діагональ дисплею: <input type="text" name="displayDiagonal" step="0.1" min="0.1" value="${displayDiagonal!}"/></label>
+            <label>Діагональ дисплею: <input type="number" name="displayDiagonal" step="0.1" min="0.1" value="${displayDiagonal!}"/></label>
             <label>Розширення дисплею: <input type="text" name="displayResolution" value="${displayResolution!}"/></label>
             <label>Тип дисплею: <input type="text" name="displayType" value="${displayType!}"/></label></p>
             <p><label>Модель процесору: <input type="text" name="cpuModel" value="${cpuModel!}"/></label>

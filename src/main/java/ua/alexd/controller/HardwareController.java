@@ -5,8 +5,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.alexd.domain.Employee;
-import ua.alexd.domain.GPU;
 import ua.alexd.domain.Hardware;
 import ua.alexd.repos.*;
 
@@ -94,9 +92,12 @@ public class HardwareController {
                              @RequestParam String hddModel, @RequestParam String gpuModel,
                              @NotNull Model model) {
         if (isFieldsEmpty(assemblyName, cpuModel, ramModel, ssdModel, displayModel, hddModel, gpuModel, model)) {
-            model.addAttribute("displayModel", displayModel).addAttribute("cpuModel", cpuModel)
-                    .addAttribute("ramModel", ramModel).addAttribute("ssdModel", ssdModel)
-                    .addAttribute("hddModel", hddModel).addAttribute("gpuModel", gpuModel);
+            model.addAttribute("cpuModels", cpuRepo.getAllModels())
+                    .addAttribute("ramModels", ramRepo.getAllModels())
+                    .addAttribute("ssdModels", ssdRepo.getAllModels())
+                    .addAttribute("displayModels", displayRepo.getAllModels())
+                    .addAttribute("hddModels", hddRepo.getAllModels())
+                    .addAttribute("gpuModels", gpuRepo.getAllModels());
             return "add/hardwareAdd";
         }
 
@@ -115,7 +116,13 @@ public class HardwareController {
     @NotNull
     @GetMapping("/edit/{editHardware}")
     private String editRecord(@PathVariable Hardware editHardware, @NotNull Model model) {
-        model.addAttribute("editHardware", editHardware);
+        model.addAttribute("editHardware", editHardware)
+                .addAttribute("cpuModels", cpuRepo.getAllModels())
+                .addAttribute("ramModels", ramRepo.getAllModels())
+                .addAttribute("ssdModels", ssdRepo.getAllModels())
+                .addAttribute("displayModels", displayRepo.getAllModels())
+                .addAttribute("hddModels", hddRepo.getAllModels())
+                .addAttribute("gpuModels", gpuRepo.getAllModels());
         return "/edit/hardwareEdit";
     }
 
