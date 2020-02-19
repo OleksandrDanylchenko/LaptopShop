@@ -1,5 +1,6 @@
 package ua.alexd.repos;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,5 +11,8 @@ import java.util.List;
 @Repository
 @Transactional
 public interface TypeRepo extends CrudRepository<Type, Integer> {
-    List<Type> findByName(String name);
+    @Query(value = "SELECT t.name FROM Type t")
+    List<String> getAllNames();
+
+    Type findByName(String name);
 }

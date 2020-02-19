@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Hardware;
 import ua.alexd.repos.*;
 
-import static ua.alexd.specification.hardwareSpecification.*;
+import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
 @RequestMapping("/hardware")
@@ -136,16 +136,22 @@ public class HardwareController {
             return "/edit/hardwareEdit";
 
         editHardware.setAssemblyName(assemblyName);
+
         var cpu = cpuRepo.findByModel(cpuModel);
         editHardware.setCpu(cpu);
+
         var ram = ramRepo.findByModel(ramModel);
         editHardware.setRam(ram);
+
         var ssd = ssdRepo.findByModel(ssdModel);
         editHardware.setSsd(ssd);
+
         var hdd = hddRepo.findByModel(hddModel);
         editHardware.setHdd(hdd);
+
         var gpu = gpuRepo.findByModel(gpuModel);
         editHardware.setGpu(gpu);
+
         hardwareRepo.save(editHardware);
 
         return "redirect:/hardware";

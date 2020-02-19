@@ -32,12 +32,9 @@ public class EmployeeController {
                 .and(secondNameEqual(secondName)).and(shopAddressLike(shopAddress));
         var employees = employeeRepo.findAll(employeesSpecification);
 
-        var shopsAddresses = shopRepo.getAllAddresses();
-
         model.addAttribute("employees", employees).addAttribute("firstName", firstName)
                 .addAttribute("secondName", secondName)
-                .addAttribute("shopAddress", shopAddress)
-                .addAttribute("shopAddresses", shopsAddresses);
+                .addAttribute("shopAddress", shopAddress);
         return "/list/employeeList";
     }
 
@@ -103,8 +100,6 @@ public class EmployeeController {
                 firstName.isEmpty() || secondName.isEmpty() || shopAddress.isEmpty()) {
             model.addAttribute("errorMessage",
                     "Поля співробітника не можуть бути пустими!");
-            var shopsAddresses = shopRepo.getAllAddresses();
-            model.addAttribute("shopAddresses", shopsAddresses);
             return true;
         }
         return false;
