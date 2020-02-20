@@ -44,13 +44,13 @@ public class CPUController {
     private String addRecord(@RequestParam(required = false) String model,
                              @RequestParam(required = false) String frequency,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("frequency", frequency);
+        if (isFieldsEmpty(model, frequency, siteModel))
             return "add/cpuAdd";
-        }
 
         var newCpu = new CPU(model, frequency);
-        cpuRepo.save(newCpu);
+
+        if (!saveRecord(newCpu, siteModel))
+            return "add/cpuAdd";
 
         return "redirect:/cpu";
     }
@@ -71,7 +71,10 @@ public class CPUController {
 
         editCpu.setModel(model);
         editCpu.setFrequency(frequency);
-        cpuRepo.save(editCpu);
+
+        if (!saveRecord(editCpu, siteModel))
+            return "edit/cpuEdit";
+
         return "redirect:/cpu";
     }
 
@@ -86,9 +89,24 @@ public class CPUController {
         if (frequency == null || model == null ||
                 frequency.isEmpty() || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля процесора не можуть бути пустими!");
+                    "Поля процесора не можуть бути пустими!")
+                    .addAttribute("model", model)
+                    .addAttribute("frequency", frequency);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(CPU saveCPU, Model model) {
+        try {
+            cpuRepo.save(saveCPU);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель процесора " + saveCPU.getModel() + " уже присутня в базі")                    .addAttribute("model", model)
+                    .addAttribute("model", saveCPU.getModel())
+                    .addAttribute("frequency", saveCPU.getFrequency());
+            return false;
+        }
+        return true;
     }
 }
