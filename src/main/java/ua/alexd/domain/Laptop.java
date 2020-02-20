@@ -10,10 +10,6 @@ public class Laptop {
     @Column(name = "id")
     private int id;
 
-    @Basic
-    @Column(name = "description")
-    private String description;
-
     @ManyToOne
     @JoinColumn(name = "labelId")
     private Label label;

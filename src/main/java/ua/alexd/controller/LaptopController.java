@@ -62,18 +62,16 @@ public class LaptopController {
                              @RequestParam String typeName,
                              @RequestParam String labelModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model)) {
-            model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                    .addAttribute("typeNames", typeRepo.getAllNames())
-                    .addAttribute("labelModels", labelRepo.getAllModels());
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
             return "add/labelAdd";
-        }
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName);
         var label = labelRepo.findByModel(labelModel);
         var newLaptop = new Laptop(label, type, hardware);
-        laptopRepo.save(newLaptop);
+
+        if (!saveRecord(newLaptop, model))
+            return "edit/labelEdit";
 
         return "redirect:/laptop";
     }
@@ -94,12 +92,8 @@ public class LaptopController {
                               @RequestParam String typeName,
                               @RequestParam String labelModel,
                               @PathVariable Laptop editLaptop, @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model)) {
-            model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                    .addAttribute("typeNames", typeRepo.getAllNames())
-                    .addAttribute("labelModels", labelRepo.getAllModels());
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
             return "edit/labelEdit";
-        }
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         editLaptop.setHardware(hardware);
@@ -110,7 +104,8 @@ public class LaptopController {
         var label = labelRepo.findByModel(labelModel);
         editLaptop.setLabel(label);
 
-        laptopRepo.save(editLaptop);
+        if (!saveRecord(editLaptop, model))
+            return "add/labelAdd";
 
         return "redirect:/laptop";
     }
@@ -126,9 +121,26 @@ public class LaptopController {
         if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
                 hardwareAssemblyName.isEmpty() || typeName.isEmpty() || labelModel.isEmpty()) {
             model.addAttribute("errorMessage",
-                    "Поля ноутбуку не можуть бути пустими!");
+                    "Поля ноутбуку не можуть бути пустими!")
+                    .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
+                    .addAttribute("typeNames", typeRepo.getAllNames())
+                    .addAttribute("labelModels", labelRepo.getAllModels());
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(Laptop saveLaptop, Model model) {
+        try {
+            laptopRepo.save(saveLaptop);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі")
+                    .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
+                    .addAttribute("typeNames", typeRepo.getAllNames())
+                    .addAttribute("labelModels", labelRepo.getAllModels());
+            return false;
+        }
+        return true;
     }
 }
