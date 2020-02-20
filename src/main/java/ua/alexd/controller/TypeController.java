@@ -38,10 +38,12 @@ public class TypeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String name, @NotNull Model model) {
         if (isNameEmpty(name, model))
-            return "add/shopAdd";
+            return "add/typeAdd";
 
         var newType = new Type(name);
-        typeRepo.save(newType);
+
+        if (!saveRecord(newType, model))
+            return "add/typeAdd";
 
         return "redirect:/type";
     }
@@ -62,7 +64,10 @@ public class TypeController {
             return "edit/typeEdit";
 
         editType.setName(name);
-        typeRepo.save(editType);
+
+        if (!saveRecord(editType, model))
+            return "edit/typeEdit";
+
         return "redirect:/type";
     }
 
@@ -77,9 +82,22 @@ public class TypeController {
     private boolean isNameEmpty(String name, Model model) {
         if (name == null || name.isEmpty()) {
             model.addAttribute("errorMessage",
-                    "Назва типу не можу бути пустою!");
+                    "Назва типу не можу бути пустою!")
+                    .addAttribute("name", name);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(Type saveType, Model model) {
+        try {
+            typeRepo.save(saveType);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Тип " + saveType.getName() + " уже присутня в базі")
+                    .addAttribute("name", saveType.getName());
+            return false;
+        }
+        return true;
     }
 }
