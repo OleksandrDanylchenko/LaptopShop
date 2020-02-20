@@ -5,7 +5,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.alexd.domain.GPU;
 import ua.alexd.domain.RAM;
 import ua.alexd.repos.RAMRepo;
 
@@ -45,13 +44,13 @@ public class RAMController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("memory", memory);
+        if (isFieldsEmpty(model, memory, siteModel))
             return "add/ramAdd";
-        }
 
         var newRam = new RAM(model, memory);
-        ramRepo.save(newRam);
+
+        if (!saveRecord(newRam, siteModel))
+            return "add/ramAdd";
 
         return "redirect:/ram";
     }
@@ -72,7 +71,10 @@ public class RAMController {
 
         editRam.setModel(model);
         editRam.setMemory(memory);
-        ramRepo.save(editRam);
+
+        if (!saveRecord(editRam, siteModel))
+            return "edit/ramEdit";
+
         return "redirect:/ram";
     }
 
@@ -86,9 +88,23 @@ public class RAMController {
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля оперативної пам'яті не можуть бути пустими!");
+                    "Поля оперативної пам'яті не можуть бути пустими!")
+                    .addAttribute("model", model).addAttribute("memory", memory);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(RAM saveRAM, Model model) {
+        try {
+            ramRepo.save(saveRAM);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель оперативної пам'яті " + saveRAM.getModel() + " уже присутня в базі")
+                    .addAttribute("model", saveRAM.getModel())
+                    .addAttribute("memory", saveRAM.getMemory());
+            return false;
+        }
+        return true;
     }
 }
