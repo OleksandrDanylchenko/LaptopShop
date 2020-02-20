@@ -44,13 +44,12 @@ public class GPUController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("memory", memory);
+        if (isFieldsEmpty(model, memory, siteModel))
             return "add/gpuAdd";
-        }
 
         var newGpu = new GPU(model, memory);
-        gpuRepo.save(newGpu);
+        if (!saveRecord(newGpu, siteModel))
+            return "add/gpuAdd";
 
         return "redirect:/gpu";
     }
@@ -71,7 +70,10 @@ public class GPUController {
 
         editGpu.setModel(model);
         editGpu.setMemory(memory);
-        gpuRepo.save(editGpu);
+
+        if (!saveRecord(editGpu, siteModel))
+            return "edit/gpuEdit";
+
         return "redirect:/gpu";
     }
 
@@ -85,9 +87,23 @@ public class GPUController {
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля відеокарти не можуть бути пустими!");
+                    "Поля відеокарти не можуть бути пустими!")
+                    .addAttribute("model", model).addAttribute("memory", memory);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(GPU saveGpu, Model model) {
+        try {
+            gpuRepo.save(saveGpu);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель відеокарти " + saveGpu.getModel() + " уже присутня в базі")
+                    .addAttribute("model", saveGpu.getModel())
+                    .addAttribute("memory", saveGpu.getMemory());
+            return false;
+        }
+        return true;
     }
 }

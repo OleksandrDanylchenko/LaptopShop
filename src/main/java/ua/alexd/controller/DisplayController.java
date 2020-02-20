@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.alexd.domain.CPU;
 import ua.alexd.domain.Display;
 import ua.alexd.repos.DisplayRepo;
 
@@ -22,7 +23,8 @@ public class DisplayController {
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model, @RequestParam(required = false) String type,
-                              @RequestParam(required = false) String diagonal, @RequestParam(required = false) String resolution,
+                              @RequestParam(required = false) String diagonal,
+                              @RequestParam(required = false) String resolution,
                               @NotNull Model siteModel) {
         var displaySpecification = Specification.where(modelLike(model)).and(typeEqual(type))
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
@@ -44,14 +46,12 @@ public class DisplayController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
                              @RequestParam String resolution, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("type", type)
-                    .addAttribute("diagonal", diagonal).addAttribute("resolution", resolution);
+        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel))
             return "add/displayAdd";
-        }
 
         var newDisplay = new Display(model, type, diagonal, resolution);
-        displayRepo.save(newDisplay);
+        if (!saveRecord(newDisplay, siteModel))
+            return "add/displayAdd";
 
         return "redirect:/display";
     }
@@ -75,7 +75,10 @@ public class DisplayController {
         editDisplay.setType(type);
         editDisplay.setDiagonal(diagonal);
         editDisplay.setResolution(resolution);
-        displayRepo.save(editDisplay);
+
+        if (!saveRecord(editDisplay, siteModel))
+            return "edit/displayEdit";
+
         return "redirect:/display";
     }
 
@@ -90,9 +93,27 @@ public class DisplayController {
         if (model == null || type == null || diagonal == null || resolution == null ||
                 model.isEmpty() || type.isEmpty() || diagonal.isEmpty() || resolution.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля дисплею не можуть бути пустими!");
+                    "Поля дисплею не можуть бути пустими!")
+                    .addAttribute("model", model).addAttribute("type", type)
+                    .addAttribute("diagonal", diagonal)
+                    .addAttribute("resolution", resolution);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(Display saveDisplay, Model model) {
+        try {
+            displayRepo.save(saveDisplay);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель дисплею " + saveDisplay.getModel() + " уже присутня в базі")
+                    .addAttribute("model", saveDisplay.getModel())
+                    .addAttribute("type", saveDisplay.getType())
+                    .addAttribute("diagonal", saveDisplay.getDiagonal())
+                    .addAttribute("resolution", saveDisplay.getResolution());
+            return false;
+        }
+        return true;
     }
 }
