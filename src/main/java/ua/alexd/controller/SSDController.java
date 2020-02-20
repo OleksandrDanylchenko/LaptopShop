@@ -43,13 +43,12 @@ public class SSDController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("memory", memory);
+        if (isFieldsEmpty(model, memory, siteModel))
             return "add/ssdAdd";
-        }
 
         var newSSD = new SSD(model, memory);
-        ssdRepo.save(newSSD);
+        if (!saveRecord(newSSD, siteModel))
+            return "add/ssdAdd";
 
         return "redirect:/ssd";
     }
@@ -70,7 +69,10 @@ public class SSDController {
 
         editSSD.setModel(model);
         editSSD.setMemory(memory);
-        ssdRepo.save(editSSD);
+
+        if (!saveRecord(editSSD, siteModel))
+            return "edit/ssdEdit";
+
         return "redirect:/ssd";
     }
 
@@ -84,9 +86,23 @@ public class SSDController {
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля SSD диску не можуть бути пустими!");
+                    "Поля SSD диску не можуть бути пустими!")
+                    .addAttribute("model", model).addAttribute("memory", memory);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(SSD saveSSD, Model model) {
+        try {
+            ssdRepo.save(saveSSD);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель дисплею " + saveSSD.getModel() + " уже присутня в базі")
+                    .addAttribute("model", saveSSD.getModel())
+                    .addAttribute("memory", saveSSD.getMemory());
+            return false;
+        }
+        return true;
     }
 }
