@@ -56,9 +56,9 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/edit/{editShop}")
-    private String editedRecord(@RequestParam String address,
-                                @NotNull @PathVariable Shop editShop,
-                                @NotNull Model model) {
+    private String editRecord(@RequestParam String address,
+                              @NotNull @PathVariable Shop editShop,
+                              @NotNull Model model) {
         if (isAddressEmpty(address, model))
             return "edit/shopEdit";
 

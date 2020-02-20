@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Availability;
-import ua.alexd.domain.Client;
 import ua.alexd.repos.AvailabilityRepo;
 import ua.alexd.repos.LaptopRepo;
 import ua.alexd.repos.ShopRepo;
@@ -48,8 +47,10 @@ public class AvailabilityController {
         var availabilities = availabilityRepo.findAll(availabilitySpecification);
 
         model.addAttribute("price", price).addAttribute("quantity", quantity)
-                .addAttribute("laptopModel", laptopModel).addAttribute("shopAddress", shopAddress)
-                .addAttribute("dateStartStr", dateStartStr).addAttribute("dateEndStr", dateEndStr)
+                .addAttribute("laptopModel", laptopModel)
+                .addAttribute("shopAddress", shopAddress)
+                .addAttribute("dateStartStr", dateStartStr)
+                .addAttribute("dateEndStr", dateEndStr)
                 .addAttribute("availabilities", availabilities);
         return "/list/availabilityList";
     }
@@ -85,7 +86,8 @@ public class AvailabilityController {
         var dateStart = getDate(dateStartStr);
         var dateEnd = getDate(dateEndStr);
         var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
-        availabilityRepo.save(newAvailability);
+        if (!saveRecord(newAvailability, model))
+            return "edit/availabilityAdd";
 
         return "redirect:/availability";
     }
@@ -106,17 +108,12 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String saveEditedRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
-                                    @RequestParam Integer quantity, @RequestParam String laptopModel,
-                                    @RequestParam String shopAddress, @RequestParam String dateStartStr,
-                                    @RequestParam String dateEndStr, @NotNull Model model) throws ParseException {
-        if (isFieldsEmpty(laptopModel, shopAddress, dateStartStr, dateEndStr, model)) {
-            model.addAttribute("laptopModels", laptopRepo.getAllModels())
-                    .addAttribute("shopAddresses", shopRepo.getAllAddresses())
-                    .addAttribute("dateStartStr", dateStartStr)
-                    .addAttribute("dateEndStr", dateEndStr);
+    private String editedRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
+                                @RequestParam Integer quantity, @RequestParam String laptopModel,
+                                @RequestParam String shopAddress, @RequestParam String dateStartStr,
+                                @RequestParam String dateEndStr, @NotNull Model model) throws ParseException {
+        if (isFieldsEmpty(laptopModel, shopAddress, dateStartStr, dateEndStr, model))
             return "/edit/availabilityEdit";
-        }
 
         var dateStart = getDate(dateStartStr);
         editAvailability.setDateStart(dateStart);
@@ -133,6 +130,9 @@ public class AvailabilityController {
         editAvailability.setPrice(price);
         editAvailability.setQuantity(quantity);
 
+        if (!saveRecord(editAvailability, model))
+            return "edit/availabilityEdit";
+
         return "redirect:/availability";
     }
 
@@ -148,7 +148,11 @@ public class AvailabilityController {
         if (laptopModel == null || shopAddress == null || dateStartStr == null || dateEndStr == null ||
                 laptopModel.isEmpty() || shopAddress.isEmpty() || dateStartStr.isEmpty() || dateEndStr.isEmpty()) {
             model.addAttribute("errorMessage",
-                    "Поля запису про наявність не можуть бути пустими!");
+                    "Поля запису про наявність не можуть бути пустими!")
+                    .addAttribute("laptopModels", laptopRepo.getAllModels())
+                    .addAttribute("shopAddresses", shopRepo.getAllAddresses())
+                    .addAttribute("dateStartStr", dateStartStr)
+                    .addAttribute("dateEndStr", dateEndStr);
             return true;
         }
         return false;
@@ -161,5 +165,19 @@ public class AvailabilityController {
         return dateStr == null || dateStr.isEmpty()
                 ? null
                 : new Date(dateFormat.parse(dateStr).getTime());
+    }
+
+    private boolean saveRecord(Availability saveAvailability, Model model) {
+        try {
+            availabilityRepo.save(saveAvailability);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель ноутбуку " + saveAvailability.getLaptop().getLabel().getModel()
+                            + " уже присутня в базі")
+                    .addAttribute("laptopModels", laptopRepo.getAllModels())
+                    .addAttribute("shopAddresses", shopRepo.getAllAddresses());
+            return false;
+        }
+        return true;
     }
 }
