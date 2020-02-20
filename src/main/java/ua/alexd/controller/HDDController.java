@@ -43,13 +43,12 @@ public class HDDController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel)) {
-            siteModel.addAttribute("model", model).addAttribute("memory", memory);
+        if (isFieldsEmpty(model, memory, siteModel))
             return "add/hddAdd";
-        }
 
         var newHDD = new HDD(model, memory);
-        hddRepo.save(newHDD);
+        if (!saveRecord(newHDD, siteModel))
+            return "add/hddAdd";
 
         return "redirect:/hdd";
     }
@@ -70,7 +69,10 @@ public class HDDController {
 
         editHDD.setModel(model);
         editHDD.setMemory(memory);
-        hddRepo.save(editHDD);
+
+        if (!saveRecord(editHDD, siteModel))
+            return "edit/hddEdit";
+
         return "redirect:/hdd";
     }
 
@@ -84,9 +86,23 @@ public class HDDController {
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля HDD диску не можуть бути пустими!");
+                    "Поля HDD диску не можуть бути пустими!")
+                    .addAttribute("model", model).addAttribute("memory", memory);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(HDD saveHDD, Model model) {
+        try {
+            hddRepo.save(saveHDD);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель HDD диску " + saveHDD.getModel() + " уже присутня в базі")
+                    .addAttribute("model", saveHDD.getModel())
+                    .addAttribute("memory", saveHDD.getMemory());
+            return false;
+        }
+        return true;
     }
 }
