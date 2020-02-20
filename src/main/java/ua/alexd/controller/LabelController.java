@@ -44,13 +44,13 @@ public class LabelController {
     private String addRecord(@RequestParam(required = false) String brand,
                               @RequestParam(required = false) String model,
                               @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model, siteModel)) {
-            siteModel.addAttribute("brand", brand).addAttribute("model", model);
+        if (isFieldsEmpty(brand, model, siteModel))
             return "add/labelAdd";
-        }
 
         var newLabel = new Label(brand, model);
-        labelRepo.save(newLabel);
+
+        if (!saveRecord(newLabel, siteModel))
+            return "add/labelAdd";
 
         return "redirect:/label";
     }
@@ -67,11 +67,14 @@ public class LabelController {
     private String addRecord(@RequestParam String brand, @RequestParam String model,
                              @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
         if (isFieldsEmpty(brand, model, siteModel))
-            return "edit/shopEdit";
+            return "edit/labelEdit";
 
         editLabel.setBrand(brand);
         editLabel.setModel(model);
-        labelRepo.save(editLabel);
+
+        if (!saveRecord(editLabel, siteModel))
+            return "add/labelEdit";
+
         return "redirect:/label";
     }
 
@@ -86,9 +89,23 @@ public class LabelController {
         if (brand == null || model == null ||
                 brand.isEmpty() || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля найменування не можуть бути пустими!");
+                    "Поля найменування не можуть бути пустими!")
+                    .addAttribute("brand", brand).addAttribute("model", model);
             return true;
         }
         return false;
+    }
+
+    private boolean saveRecord(Label saveLabel, Model model) {
+        try {
+            labelRepo.save(saveLabel);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",
+                    "Модель " + saveLabel.getModel() + " уже присутня в базі")
+                    .addAttribute("brand", saveLabel.getBrand())
+                    .addAttribute("model", saveLabel.getModel());
+            return false;
+        }
+        return true;
     }
 }
