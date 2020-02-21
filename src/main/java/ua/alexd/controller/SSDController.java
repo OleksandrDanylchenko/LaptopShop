@@ -28,8 +28,7 @@ public class SSDController {
         var ssdSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var ssds = ssdRepo.findAll(ssdSpecification);
 
-        siteModel.addAttribute("model", model).addAttribute("memory", memory)
-                .addAttribute("ssds", ssds);
+        siteModel.addAttribute("ssds", ssds);
         return "/list/ssdList";
     }
 
@@ -69,7 +68,6 @@ public class SSDController {
 
         editSSD.setModel(model);
         editSSD.setMemory(memory);
-
         if (!saveRecord(editSSD, siteModel))
             return "edit/ssdEdit";
 
@@ -85,9 +83,7 @@ public class SSDController {
 
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля SSD диску не можуть бути пустими!")
-                    .addAttribute("model", model).addAttribute("memory", memory);
+            siteModel.addAttribute("errorMessage", "Поля SSD диску не можуть бути пустими!");
             return true;
         }
         return false;
@@ -98,9 +94,7 @@ public class SSDController {
             ssdRepo.save(saveSSD);
         } catch (Exception e) {
             model.addAttribute("errorMessage",
-                    "Модель дисплею " + saveSSD.getModel() + " уже присутня в базі")
-                    .addAttribute("model", saveSSD.getModel())
-                    .addAttribute("memory", saveSSD.getMemory());
+                    "Модель дисплею " + saveSSD.getModel() + " уже присутня в базі");
             return false;
         }
         return true;

@@ -11,8 +11,8 @@
     <div>
         <p>Знайти процесор за критеріями:</p>
         <form method="get" action="/ssd">
-            <label>Модель: <input type="text" name="model" value="${model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${(memory??)?then(memory?c, '')}"/></label>
+            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${(RequestParameters.memory??)?then(RequestParameters.memory?c, '')}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
