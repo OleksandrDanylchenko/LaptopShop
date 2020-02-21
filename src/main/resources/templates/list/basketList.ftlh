@@ -1,5 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 <#import "../parts/mainRef.ftlh" as main>
+<#setting locale="uk">
 
 <@pad.page "Basket">
     <@main.mainPageRef/>

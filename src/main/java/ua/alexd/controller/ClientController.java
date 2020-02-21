@@ -1,7 +1,6 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +10,9 @@ import ua.alexd.repos.ClientRepo;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import static ua.alexd.specification.ClientSpecification.*;
+import static ua.alexd.util.DateConverter.isNonValidDate;
 
 @Controller
 @RequestMapping("/client")
@@ -28,15 +27,15 @@ public class ClientController {
     @GetMapping
     private String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
-                              @RequestParam(required = false) String dateRegStr,
+                              @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
                               @NotNull Model model) throws ParseException {
-        var dateReg = getDate(dateRegStr);
+        if (isNonValidDate(dateReg))
+            dateReg = null;
         var clientSpecification = Specification.where(firstNameEqual(firstName))
                 .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));
         var clients = clientRepo.findAll(clientSpecification);
 
-        model.addAttribute("clients", clients).addAttribute("firstName", firstName)
-                .addAttribute("secondName", secondName).addAttribute("dateRegStr", dateRegStr);
+        model.addAttribute("clients", clients);
         return "/list/clientList";
     }
 
@@ -49,40 +48,41 @@ public class ClientController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam String dateRegStr, @NotNull Model model) throws ParseException {
-        if (isFieldsEmpty(firstName, secondName, dateRegStr, model)) {
-            model.addAttribute("firstName", firstName).addAttribute("secondName", secondName);
+                             @RequestParam(defaultValue = "0001-01-01") Date dateReg, @NotNull Model model) throws ParseException {
+        if (isNonValidDate(dateReg))
+            dateReg = null;
+        if (isFieldsEmpty(firstName, secondName, dateReg, model))
             return "add/clientAdd";
-        }
 
-        var dateReg = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(dateRegStr).getTime());
         var newClient = new Client(firstName, secondName, dateReg);
         clientRepo.save(newClient);
 
         return "redirect:/client";
     }
 
+
     @NotNull
     @GetMapping("/edit/{editClient}")
     private String editRecord(@NotNull @PathVariable Client editClient, @NotNull Model model) {
-        var dateRegStr = new SimpleDateFormat("yyyy-MM-dd").format(editClient.getDateReg());
-        model.addAttribute("editClient", editClient).addAttribute("dateRegStr", dateRegStr);
+        model.addAttribute("editClient", editClient);
         return "/edit/clientEdit";
     }
 
     @NotNull
     @PostMapping("/edit/{editClient}")
     private String saveEditedRecord(@PathVariable Client editClient, @RequestParam String firstName,
-                                    @RequestParam String secondName, @RequestParam String dateRegStr,
+                                    @RequestParam String secondName, @RequestParam(defaultValue = "0001-01-01") Date dateReg,
                                     @NotNull Model model) throws ParseException {
-        if (isFieldsEmpty(firstName, secondName, dateRegStr, model))
+        if (isNonValidDate(dateReg))
+            dateReg = null;
+        if (isFieldsEmpty(firstName, secondName, dateReg, model))
             return "/edit/clientEdit";
 
-        var dateReg = getDate(dateRegStr);
         editClient.setFirstName(firstName);
         editClient.setSecondName(secondName);
         editClient.setDateReg(dateReg);
         clientRepo.save(editClient);
+
         return "redirect:/client";
     }
 
@@ -93,22 +93,13 @@ public class ClientController {
         return "redirect:/client";
     }
 
-    private boolean isFieldsEmpty(String firstName, String secondName, String dateReg, Model model) {
+    private boolean isFieldsEmpty(String firstName, String secondName, Date dateReg, Model model) {
         if (firstName == null || secondName == null || dateReg == null ||
-                firstName.isEmpty() || secondName.isEmpty() || dateReg.isEmpty()) {
+                firstName.isEmpty() || secondName.isEmpty()) {
             model.addAttribute("errorMessage",
                     "Поля клієнта не можуть бути пустими!");
             return true;
         }
         return false;
-    }
-
-    // TODO Fix doubling
-    @Nullable
-    private static Date getDate(String dateStr) throws ParseException {
-        final var dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateStr == null || dateStr.isEmpty()
-                ? null
-                : new Date(dateFormat.parse(dateStr).getTime());
     }
 }
