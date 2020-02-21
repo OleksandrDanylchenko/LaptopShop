@@ -94,8 +94,7 @@ public class ClientController {
     }
 
     private boolean isFieldsEmpty(String firstName, String secondName, Date dateReg, Model model) {
-        if (firstName == null || secondName == null || dateReg == null ||
-                firstName.isEmpty() || secondName.isEmpty()) {
+        if (firstName == null || secondName == null || dateReg == null || firstName.isEmpty() || secondName.isEmpty()) {
             model.addAttribute("errorMessage", "Поля клієнта не можуть бути пустими!");
             return true;
         }

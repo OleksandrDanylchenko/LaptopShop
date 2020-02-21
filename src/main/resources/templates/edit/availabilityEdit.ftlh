@@ -21,8 +21,8 @@
                 </#list>
             </select>
         </label>
-        <p><label>Дата початку продаж: <input type="date" name="dateStartStr" value="${editAvailability.dateStartStr!}" min="2019-02-16"></label>
-            <label>Дата закінчення продаж: <input type="date" name="dateEndStr" value="${editAvailability.dateEndStr!}" min="2019-02-16"></label></p>
+        <p><label>Дата початку продаж: <input type="date" name="dateStart" min="2019-02-16" value="${editAvailability.dateStart?iso_utc}"></label>
+            <label>Дата закінчення продаж: <input type="date" name="dateEnd"  min="2019-02-16" value="${editAvailability.dateEnd?iso_utc}"></label></p>
         <button type="submit">Додати</button>
     </form>
 </@pad.page>

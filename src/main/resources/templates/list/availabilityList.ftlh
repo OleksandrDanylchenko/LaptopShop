@@ -12,12 +12,12 @@
     <div>
         <p>Знайти запис про наявність за критеріями:</p>
         <form method="get" action="/availability">
-            <label>Модель ноутбука: <input type="text" name="laptopModel" value="${laptopModel!}"/></label>
-            <label>Ціна: <input type="number" step="10" min="5000" name="price" value="${(price??)?then(price?c, '')}"/></label>
-            <label>Кількість: <input type="number" step="1" min="1" name="quantity" value="${(quantity??)?then(quantity?c, '')}"/></label>
-            <label>Адреса магазину: <input type="text" name="shopAddress" value="${shopAddress!}"/></label>
-            <p><label>Дата початку продаж: <input type="date" name="dateStartStr" value="${dateStartStr!}" min="2019-02-16"></label>
-            <label>Дата закінчення продаж: <input type="date" name="dateEndStr" value="${dateEndStr!}" min="2019-02-16"></label></p>
+            <label>Модель ноутбука: <input type="text" name="laptopModel" value="${RequestParameters.laptopModel!}"/></label>
+            <label>Ціна: <input type="number" step="10" min="5000" name="price" value="${RequestParameters.price!}"/></label>
+            <label>Кількість: <input type="number" step="1" min="1" name="quantity" value="${RequestParameters.quantity!}"/></label>
+            <label>Адреса магазину: <input type="text" name="shopAddress" value="${RequestParameters.shopAddress!}"/></label>
+            <p><label>Дата початку продаж: <input type="date" name="dateStart" min="2019-02-16" value="${RequestParameters.dateStart!}"></label>
+            <label>Дата закінчення продаж: <input type="date" name="dateEnd" min="2019-02-16" value="${RequestParameters.dateEnd!}"></label></p>
             <button type="submit">Шукати</button>
         </form>
     </div>

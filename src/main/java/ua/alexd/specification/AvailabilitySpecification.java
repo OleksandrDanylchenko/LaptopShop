@@ -39,7 +39,7 @@ public class AvailabilitySpecification {
     public static Specification<Availability> fullPriceEqual(Integer expression) {
         if (expression == null)
             return null;
-        return (root, query, builder) -> builder.equal(root.get("fullPrice"), expression);
+        return (root, query, builder) -> builder.equal(root.get("price"), expression);
     }
 
     @Nullable
