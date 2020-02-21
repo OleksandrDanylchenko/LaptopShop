@@ -11,21 +11,21 @@
     <div>
         <p>Знайти збірку за критеріями:</p>
         <form method="get" action="/hardware">
-            <label>Назва збірки: <input type="text" name="assemblyName" value="${assemblyName!}"/></label>
-            <p><label>Модель дисплею: <input type="text" name="displayModel" value="${displayModel!}"/></label>
-            <label>Діагональ дисплею: <input type="number" name="displayDiagonal" step="0.1" min="0.1" value="${displayDiagonal!}"/></label>
-            <label>Розширення дисплею: <input type="text" name="displayResolution" value="${displayResolution!}"/></label>
-            <label>Тип дисплею: <input type="text" name="displayType" value="${displayType!}"/></label></p>
-            <p><label>Модель процесору: <input type="text" name="cpuModel" value="${cpuModel!}"/></label>
-            <label>Частота процесору: <input type="number" name="cpuFrequency" step="0.1" min="0.1" max="5" value="${cpuFrequency!}"/></label></p>
-            <p><label>Модель відеокарти: <input type="text" name="gpuModel" value="${gpuModel!}"/></label>
-            <label>Об'єм відеопам'яті: <input type="number" name="gpuMemory" min="1" max="64" value="${gpuMemory!}"/></label></p>
-            <p><label>Модель оперативної пам'яті: <input type="text" name="ramModel" value="${ramModel!}"/></label>
-            <label>Об'єм оперативної пам'яті: <input type="number" name="ramMemory" min="1" max="128" value="${ramMemory!}"/></label></p>
-            <p><label>Модель SSD диску: <input type="text" name="ssdModel" value="${ssdModel!}"/></label>
-            <label>Об'єм SSD диску: <input type="number" name="ssdMemory" min="1" value="${(ssdMemory??)?then(ssdMemory?c, '')}"/></label></p>
-            <p><label>Модель HDD диску: <input type="text" name="hddModel" value="${hddModel!}"/></label>
-            <label>Об'єм HDD диску: <input type="number" name="hddMemory" value="${(hddMemory??)?then(hddMemory?c, '')}"/></label></p>
+            <label>Назва збірки: <input type="text" name="assemblyName" value="${RequestParameters.assemblyName!}"/></label>
+            <p><label>Модель дисплею: <input type="text" name="displayModel" value="${RequestParameters.displayModel!}"/></label>
+            <label>Діагональ дисплею: <input type="number" name="displayDiagonal" step="0.1" min="0.1" value="${RequestParameters.displayDiagonal!}"/></label>
+            <label>Розширення дисплею: <input type="text" name="displayResolution" value="${RequestParameters.displayResolution!}"/></label>
+            <label>Тип дисплею: <input type="text" name="displayType" value="${RequestParameters.displayType!}"/></label></p>
+            <p><label>Модель процесору: <input type="text" name="cpuModel" value="${RequestParameters.cpuModel!}"/></label>
+            <label>Частота процесору: <input type="number" name="cpuFrequency" step="0.1" min="0.1" max="5" value="${RequestParameters.cpuFrequency!}"/></label></p>
+            <p><label>Модель відеокарти: <input type="text" name="gpuModel" value="${RequestParameters.gpuModel!}"/></label>
+            <label>Об'єм відеопам'яті: <input type="number" name="gpuMemory" min="1" max="64" value="${RequestParameters.gpuMemory!}"/></label></p>
+            <p><label>Модель оперативної пам'яті: <input type="text" name="ramModel" value="${RequestParameters.ramModel!}"/></label>
+            <label>Об'єм оперативної пам'яті: <input type="number" name="ramMemory" min="1" max="128" value="${RequestParameters.ramMemory!}"/></label></p>
+            <p><label>Модель SSD диску: <input type="text" name="ssdModel" value="${RequestParameters.ssdModel!}"/></label>
+            <label>Об'єм SSD диску: <input type="number" name="ssdMemory" min="1" value="${RequestParameters.ssdMemory!}"/></label></p>
+            <p><label>Модель HDD диску: <input type="text" name="hddModel" value="${RequestParameters.hddModel!}"/></label>
+            <label>Об'єм HDD диску: <input type="number" name="hddMemory" value="${RequestParameters.hddMemory!}"/></label></p>
             <button type="submit">Шукати</button>
         </form>
     </div>

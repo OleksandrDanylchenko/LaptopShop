@@ -62,27 +62,14 @@ public class HardwareController {
                 .and(assemblyNameEqual(assemblyName));
         var hardware = hardwareRepo.findAll(hardwareSpecification);
 
-        model.addAttribute("hardware", hardware)
-                .addAttribute("displayModel", displayModel).addAttribute("displayDiagonal", displayDiagonal)
-                .addAttribute("displayResolution", displayResolution).addAttribute("displayType", displayType)
-                .addAttribute("cpuModel", cpuModel).addAttribute("cpuFrequency", cpuFrequency)
-                .addAttribute("ramModel", ramModel).addAttribute("ramMemory", ramMemory)
-                .addAttribute("ssdModel", ssdModel).addAttribute("ssdMemory", ssdMemory)
-                .addAttribute("hddModel", hddModel).addAttribute("hddMemory", hddMemory)
-                .addAttribute("gpuModel", gpuModel).addAttribute("gpuMemory", gpuMemory)
-                .addAttribute("assemblyName", assemblyName);
+        model.addAttribute("hardware", hardware);
         return "/list/hardwareList";
     }
 
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        model.addAttribute("cpuModels", cpuRepo.getAllModels())
-                .addAttribute("ramModels", ramRepo.getAllModels())
-                .addAttribute("ssdModels", ssdRepo.getAllModels())
-                .addAttribute("displayModels", displayRepo.getAllModels())
-                .addAttribute("hddModels", hddRepo.getAllModels())
-                .addAttribute("gpuModels", gpuRepo.getAllModels());
+        initializeDropDownChoices(model);
         return "add/hardwareAdd";
     }
 
@@ -101,8 +88,8 @@ public class HardwareController {
         var hdd = hddRepo.findByModel(hddModel);
         var gpu = gpuRepo.findByModel(gpuModel);
         var display = displayRepo.findByModel(displayModel);
-        var newHardware = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
 
+        var newHardware = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
         if (!saveRecord(newHardware, model))
             return "add/hardwareAdd";
 
@@ -112,13 +99,8 @@ public class HardwareController {
     @NotNull
     @GetMapping("/edit/{editHardware}")
     private String editRecord(@PathVariable Hardware editHardware, @NotNull Model model) {
-        model.addAttribute("editHardware", editHardware)
-                .addAttribute("cpuModels", cpuRepo.getAllModels())
-                .addAttribute("ramModels", ramRepo.getAllModels())
-                .addAttribute("ssdModels", ssdRepo.getAllModels())
-                .addAttribute("displayModels", displayRepo.getAllModels())
-                .addAttribute("hddModels", hddRepo.getAllModels())
-                .addAttribute("gpuModels", gpuRepo.getAllModels());
+        model.addAttribute("editHardware", editHardware);
+        initializeDropDownChoices(model);
         return "/edit/hardwareEdit";
     }
 
@@ -161,43 +143,37 @@ public class HardwareController {
         return "redirect:/hardware";
     }
 
-    // TODO Fix doubling
     private boolean isFieldsEmpty(String assemblyName, String cpuModel, String ramModel, String ssdModel,
                                   String displayModel, String hddModel, String gpuModel, @NotNull Model model) {
         if (assemblyName == null || cpuModel == null || ramModel == null || ssdModel == null ||
                 displayModel == null || hddModel == null || gpuModel == null ||
                 assemblyName.isEmpty() || cpuModel.isEmpty() || ramModel.isEmpty() || ssdModel.isEmpty() ||
                 displayModel.isEmpty() || hddModel.isEmpty() || gpuModel.isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Поля збірки не можуть бути пустими!")
-                    .addAttribute("assemblyName", assemblyName)
-                    .addAttribute("cpuModels", cpuRepo.getAllModels())
-                    .addAttribute("ramModels", ramRepo.getAllModels())
-                    .addAttribute("ssdModels", ssdRepo.getAllModels())
-                    .addAttribute("displayModels", displayRepo.getAllModels())
-                    .addAttribute("hddModels", hddRepo.getAllModels())
-                    .addAttribute("gpuModels", gpuRepo.getAllModels());
+            model.addAttribute("errorMessage", "Поля збірки не можуть бути пустими!");
+            initializeDropDownChoices(model);
             return true;
         }
         return false;
     }
 
-    // TODO Fix doubling
     private boolean saveRecord(Hardware saveHardware, Model model) {
         try {
             hardwareRepo.save(saveHardware);
         } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
-                    "Збірка " + saveHardware.getAssemblyName() + " уже присутня в базі")
-                    .addAttribute("assemblyName", saveHardware.getAssemblyName())
-                    .addAttribute("cpuModels", cpuRepo.getAllModels())
-                    .addAttribute("ramModels", ramRepo.getAllModels())
-                    .addAttribute("ssdModels", ssdRepo.getAllModels())
-                    .addAttribute("displayModels", displayRepo.getAllModels())
-                    .addAttribute("hddModels", hddRepo.getAllModels())
-                    .addAttribute("gpuModels", gpuRepo.getAllModels());
+                    "Збірка " + saveHardware.getAssemblyName() + " уже присутня в базі");
+            initializeDropDownChoices(model);
             return false;
         }
         return true;
+    }
+
+    private void initializeDropDownChoices(@NotNull Model model) {
+        model.addAttribute("cpuModels", cpuRepo.getAllModels())
+                .addAttribute("ramModels", ramRepo.getAllModels())
+                .addAttribute("ssdModels", ssdRepo.getAllModels())
+                .addAttribute("displayModels", displayRepo.getAllModels())
+                .addAttribute("hddModels", hddRepo.getAllModels())
+                .addAttribute("gpuModels", gpuRepo.getAllModels());
     }
 }

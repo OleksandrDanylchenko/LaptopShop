@@ -11,49 +11,49 @@
 
                             <h1>Додати нову збірку:</h1>
                             <form method="post" action="/hardware/add">
-                                <label>Назва нової збірки: <input type="text" name="assemblyName" value="${assemblyName!}"/></label>
-                                <label>Модель процесору нової збірки:
+                                <label>Назва нової збірки: <input type="text" name="assemblyName" value="${RequestParameters.assemblyName!}"/></label>
+                                <p><label>Модель процесору нової збірки:
                                     <select name="cpuModel">
                                         <#list cpuModels as cpuModel>
                                             <option>${cpuModel}</option>
                                         </#list>
                                     </select>
-                                </label>
-                                <label>Модель відеокарти нової збірки:
+                                </label></p>
+                                <p><label>Модель відеокарти нової збірки:
                                     <select name="gpuModel">
                                         <#list gpuModels as gpuModel>
                                             <option>${gpuModel}</option>
                                         </#list>
                                     </select>
-                                </label>
-                                <label>Модель дисплею нової збірки:
+                                </label></p>
+                                <p><label>Модель дисплею нової збірки:
                                     <select name="displayModel">
                                         <#list displayModels as displayModel>
                                             <option>${displayModel}</option>
                                         </#list>
                                     </select>
-                                </label>
-                                <label>Модель оперативної пам'яті нової збірки:
+                                </label></p>
+                                <p><label>Модель оперативної пам'яті нової збірки:
                                     <select name="ramModel">
                                         <#list ramModels as ramModel>
                                             <option>${ramModel}</option>
                                         </#list>
                                     </select>
-                                </label>
-                                <label>Модель SSD диску нової збірки:
+                                </label></p>
+                                <p><label>Модель SSD диску нової збірки:
                                     <select name="ssdModel">
                                         <#list ssdModels as ssdModel>
                                             <option>${ssdModel}</option>
                                         </#list>
                                     </select>
-                                </label>
-                                <label>Модель HDD диску нової збірки:
+                                </label></p>
+                                <p><label>Модель HDD диску нової збірки:
                                     <select name="hddModel">
                                         <#list hddModels as hddModel>
                                             <option>${hddModel}</option>
                                         </#list>
                                     </select>
-                                </label>
+                                </label></p>
                                 <button type="submit">Додати</button>
                             </form>
                         <#else>

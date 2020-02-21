@@ -90,8 +90,7 @@ public class TypeController {
         try {
             typeRepo.save(saveType);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Тип " + saveType.getName() + " уже присутній в базі");
+            model.addAttribute("errorMessage", "Тип " + saveType.getName() + " уже присутній в базі");
             return false;
         }
         return true;
