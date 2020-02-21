@@ -11,10 +11,10 @@
     <div>
         <p>Знайти покупку за критеріями:</p>
         <form method="get" action="/buying">
-            <label>ID кошику: <input type="number" step="1" min="1" name="basketId" value="${basketId!}"/></label>
-            <label>Модель ноутбуку: <input type="text" name="laptopModel" value="${laptopModel!}"/></label>
-            <label>Загальна ціна: <input type="number" step="10" min="1" name="totalPrice" value="${totalPrice!}"/></label>
-            <label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${dateTimeStr!}"/></label>
+            <label>ID кошику: <input type="number" step="1" min="1" name="basketId" value="${RequestParameters.basketId!}"/></label>
+            <label>Модель ноутбуку: <input type="text" name="laptopModel" value="${RequestParameters.laptopModel!}"/></label>
+            <label>Загальна ціна: <input type="number" step="10" min="1" name="totalPrice" value="${RequestParameters.totalPrice!}"/></label>
+            <label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
@@ -40,7 +40,7 @@
                     <td>${buying.id}</td>
                     <td>${buying.totalPrice}</td>
                     <td>${buying.basket.id}</td>
-                    <td>${buying.basket.dateTime}</td>
+                    <td>${buying.basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
                     <td>${buying.laptop.id}</td>
                     <td>${buying.laptop.label.model}</td>
                     <td><a href="/buying/edit/${buying.id}">Edit</a></td>

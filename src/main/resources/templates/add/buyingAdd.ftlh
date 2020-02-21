@@ -22,7 +22,7 @@
                     </select>
                 </label>
                 <label>Загальна сума: <input type="number" step="10" min="5000" name="totalPrice"
-                                             value="${(totalPrice??)?then(totalPrice?c, '')}"/></label>
+                                             value="${RequestParameters.totalPrice!}"/></label>
                 <button type="submit">Додати</button>
             </form>
         <#else>

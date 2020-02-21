@@ -1,21 +1,17 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
 import ua.alexd.repos.LaptopRepo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static ua.alexd.specification.BuyingSpecification.*;
+import static ua.alexd.util.DateTimeConverter.getDateTime;
 
 @Controller
 @RequestMapping("/buying")
@@ -42,9 +38,7 @@ public class BuyingController {
                 .and(laptopModelEqual(laptopModel)).and(totalPriceEqual(totalPrice)).and(dateTimeEqual(dateTime));
         var buyings = buyingRepo.findAll(buyingSpecification);
 
-        model.addAttribute("basketId", basketId).addAttribute("laptopModel", laptopModel)
-                .addAttribute("totalPrice", totalPrice).addAttribute("dateTimeStr", dateTimeStr)
-                .addAttribute("buyings", buyings);
+        model.addAttribute("buyings", buyings);
 
         return "/list/buyingList";
     }
@@ -52,8 +46,7 @@ public class BuyingController {
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        model.addAttribute("basketIds", basketRepo.getAllIds())
-                .addAttribute("laptopModels", laptopRepo.getAllModels());
+        initializeDropDownChoices(model);
         return "add/buyingAdd";
     }
 
@@ -76,10 +69,8 @@ public class BuyingController {
     @NotNull
     @GetMapping("/edit/{editBuying}")
     private String editRecord(@NotNull @PathVariable Buying editBuying, @NotNull Model model) {
-        model.addAttribute("editBuying", editBuying)
-                .addAttribute("basketIds", basketRepo.getAllIds())
-                .addAttribute("laptopModels", laptopRepo.getAllModels())
-                .addAttribute("dateTimeStr", getDateTimeStr(editBuying.getBasket().getDateTime()));
+        model.addAttribute("editBuying", editBuying);
+        initializeDropDownChoices(model);
         return "/edit/buyingEdit";
     }
 
@@ -113,27 +104,15 @@ public class BuyingController {
     private boolean isFieldsEmpty(Integer basketId, String laptopModel, Integer totalPrice, Model model) {
         if (basketId == null || totalPrice == null || laptopModel == null || laptopModel.isEmpty() ||
                 basketRepo.findById(basketId).isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Поля покупки не можуть бути пустими!")
-                    .addAttribute("basketIds", basketRepo.getAllIds())
-                    .addAttribute("laptopModels", laptopRepo.getAllModels());
+            model.addAttribute("errorMessage", "Поля покупки не можуть бути пустими!");
+            initializeDropDownChoices(model);
             return true;
         }
         return false;
     }
 
-// TODO Fix doubling
-    @NotNull
-    private String getDateTimeStr(@NotNull LocalDateTime dateTime) {
-        var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
-        return dateTime.format(dateTimeFormat);
-    }
-
-    @Nullable
-    private LocalDateTime getDateTime(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.isEmpty())
-            return null;
-        var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
-        return LocalDateTime.parse(dateTimeStr, dateTimeFormat);
+    private void initializeDropDownChoices(@NotNull Model model) {
+        model.addAttribute("basketIds", basketRepo.getAllIds())
+                .addAttribute("laptopModels", laptopRepo.getAllModels());
     }
 }

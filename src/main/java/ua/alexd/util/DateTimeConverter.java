@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public final class DateConverter {
+public final class DateTimeConverter {
     public static boolean isNonValidDate(@NotNull Date dateReg) throws ParseException {
         var dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         var nonValidDate = dateFormat.parse("0001-01-01");

@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.ClientSpecification.*;
-import static ua.alexd.util.DateConverter.isNonValidDate;
+import static ua.alexd.util.DateTimeConverter.isNonValidDate;
 
 @Controller
 @RequestMapping("/client")
@@ -96,8 +96,7 @@ public class ClientController {
     private boolean isFieldsEmpty(String firstName, String secondName, Date dateReg, Model model) {
         if (firstName == null || secondName == null || dateReg == null ||
                 firstName.isEmpty() || secondName.isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Поля клієнта не можуть бути пустими!");
+            model.addAttribute("errorMessage", "Поля клієнта не можуть бути пустими!");
             return true;
         }
         return false;

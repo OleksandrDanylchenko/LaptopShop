@@ -11,8 +11,8 @@ import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
 
 import static ua.alexd.specification.BasketSpecification.*;
-import static ua.alexd.util.DateConverter.getDateTime;
-import static ua.alexd.util.DateConverter.getDateTimeStr;
+import static ua.alexd.util.DateTimeConverter.getDateTime;
+import static ua.alexd.util.DateTimeConverter.getDateTimeStr;
 
 @Controller
 @RequestMapping("/basket")
