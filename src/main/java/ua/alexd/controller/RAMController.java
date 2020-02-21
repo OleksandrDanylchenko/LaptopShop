@@ -11,7 +11,6 @@ import ua.alexd.repos.RAMRepo;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
-
 @Controller
 @RequestMapping("/ram")
 public class RAMController {
@@ -29,8 +28,7 @@ public class RAMController {
         var ramSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var rams = ramRepo.findAll(ramSpecification);
 
-        siteModel.addAttribute("model", model).addAttribute("memory", memory)
-                .addAttribute("rams", rams);
+        siteModel.addAttribute("rams", rams);
         return "/list/ramList";
     }
 
@@ -48,7 +46,6 @@ public class RAMController {
             return "add/ramAdd";
 
         var newRam = new RAM(model, memory);
-
         if (!saveRecord(newRam, siteModel))
             return "add/ramAdd";
 
@@ -71,7 +68,6 @@ public class RAMController {
 
         editRam.setModel(model);
         editRam.setMemory(memory);
-
         if (!saveRecord(editRam, siteModel))
             return "edit/ramEdit";
 
@@ -88,8 +84,7 @@ public class RAMController {
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
             siteModel.addAttribute("errorMessage",
-                    "Поля оперативної пам'яті не можуть бути пустими!")
-                    .addAttribute("model", model).addAttribute("memory", memory);
+                    "Поля оперативної пам'яті не можуть бути пустими!");
             return true;
         }
         return false;
@@ -100,9 +95,7 @@ public class RAMController {
             ramRepo.save(saveRAM);
         } catch (Exception e) {
             model.addAttribute("errorMessage",
-                    "Модель оперативної пам'яті " + saveRAM.getModel() + " уже присутня в базі")
-                    .addAttribute("model", saveRAM.getModel())
-                    .addAttribute("memory", saveRAM.getMemory());
+                    "Модель оперативної пам'яті " + saveRAM.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
