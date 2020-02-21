@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -78,8 +79,7 @@ public class ShopController {
 
     private boolean isAddressEmpty(String address, Model model) {
         if (address == null || address.isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Адреса магазину не можу бути пустою!");
+            model.addAttribute("errorMessage", "Адреса магазину не можу бути пустою!");
             return true;
         }
         return false;
@@ -88,7 +88,7 @@ public class ShopController {
     private boolean saveRecord(Shop saveShop, Model model) {
         try {
             shopRepo.save(saveShop);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Адреса " + saveShop.getAddress() + " уже присутня в базі");
             return false;

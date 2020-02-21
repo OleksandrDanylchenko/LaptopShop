@@ -11,8 +11,8 @@
     <div>
         <p>Знайти відеокарту за критеріями:</p>
         <form method="get" action="/gpu">
-            <label>Модель: <input type="text" name="model" value="${model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="64" value="${memory!}"/></label>
+            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="64" value="${RequestParameters.memory!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

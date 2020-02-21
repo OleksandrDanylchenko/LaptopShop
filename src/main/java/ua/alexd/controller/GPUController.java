@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,6 @@ import ua.alexd.repos.GPURepo;
 
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
-
 
 @Controller
 @RequestMapping("/gpu")
@@ -29,8 +29,7 @@ public class GPUController {
         var gpuSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var gpus = gpuRepo.findAll(gpuSpecification);
 
-        siteModel.addAttribute("model", model).addAttribute("memory", memory)
-                .addAttribute("gpus", gpus);
+        siteModel.addAttribute("gpus", gpus);
         return "/list/gpuList";
     }
 
@@ -70,7 +69,6 @@ public class GPUController {
 
         editGpu.setModel(model);
         editGpu.setMemory(memory);
-
         if (!saveRecord(editGpu, siteModel))
             return "edit/gpuEdit";
 
@@ -86,9 +84,7 @@ public class GPUController {
 
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
         if (memory == null || model == null || model.isEmpty()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля відеокарти не можуть бути пустими!")
-                    .addAttribute("model", model).addAttribute("memory", memory);
+            siteModel.addAttribute("errorMessage", "Поля відеокарти не можуть бути пустими!");
             return true;
         }
         return false;
@@ -97,11 +93,8 @@ public class GPUController {
     private boolean saveRecord(GPU saveGpu, Model model) {
         try {
             gpuRepo.save(saveGpu);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage",
-                    "Модель відеокарти " + saveGpu.getModel() + " уже присутня в базі")
-                    .addAttribute("model", saveGpu.getModel())
-                    .addAttribute("memory", saveGpu.getMemory());
+        } catch (DataIntegrityViolationException ignored) {
+            model.addAttribute("errorMessage", "Модель відеокарти " + saveGpu.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
