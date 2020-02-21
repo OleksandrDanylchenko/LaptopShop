@@ -21,7 +21,7 @@
                         </#list>
                     </select>
                 </label>
-                <label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${dateTimeStr!}"/></label>
+                <label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"/></label>
                 <button type="submit">Додати</button>
             </form>
         <#else>

@@ -12,14 +12,14 @@
     <div>
         <p>Знайти кошик за критеріями:</p>
         <form method="get" action="/basket">
-            <label>ID продавця: <input type="number" step="1" min="1" name="employeeId" value="${employeeId!}"/></label>
-            <label>Ім'я продавця: <input type="text" name="employeeFirstName" value="${employeeFirstName!}"/></label>
-            <label>Прізвище продавця: <input type="text" name="employeeSecondNamee" value="${employeeSecondName!}"/></label>
-            <label>Адреса магазину: <input type="text" name="employeeShopAddress" value="${employeeShopAddress!}"/></label>
-            <p><label>ID покупця: <input type="number" step="1" min="1" name="clientId" value="${clientId!}"/></label>
-            <label>Ім'я покупця: <input type="text" name="clientFirstName" value="${clientFirstName!}"/></label>
-            <label>Прізвище покупця: <input type="text" name="clientSecondName" value="${clientSecondName!}"/></label></p>
-            <p><label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${dateTimeStr!}"/></label></p>
+            <label>ID продавця: <input type="number" step="1" min="1" name="employeeId" value="${RequestParameters.employeeId!}"/></label>
+            <label>Ім'я продавця: <input type="text" name="employeeFirstName" value="${RequestParameters.employeeFirstName!}"/></label>
+            <label>Прізвище продавця: <input type="text" name="employeeSecondName" value="${RequestParameters.employeeSecondName!}"/></label>
+            <label>Адреса магазину: <input type="text" name="employeeShopAddress" value="${RequestParameters.employeeShopAddress!}"/></label>
+            <p><label>ID покупця: <input type="number" step="1" min="1" name="clientId" value="${RequestParameters.clientId!}"/></label>
+            <label>Ім'я покупця: <input type="text" name="clientFirstName" value="${RequestParameters.clientFirstName!}"/></label>
+            <label>Прізвище покупця: <input type="text" name="clientSecondName" value="${RequestParameters.clientSecondName!}"/></label></p>
+            <p><label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"/></label></p>
             <button type="submit">Шукати</button>
         </form>
     </div>

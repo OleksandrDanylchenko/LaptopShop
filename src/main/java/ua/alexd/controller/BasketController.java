@@ -1,7 +1,6 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +10,9 @@ import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import static ua.alexd.specification.BasketSpecification.*;
+import static ua.alexd.util.DateConverter.getDateTime;
+import static ua.alexd.util.DateConverter.getDateTimeStr;
 
 @Controller
 @RequestMapping("/basket")
@@ -51,16 +48,7 @@ public class BasketController {
                 .and(clientSecondNameEqual(clientSecondName))
                 .and(dateTimeEqual(dateTime));
         var baskets = basketRepo.findAll(basketSpecification);
-
-        model.addAttribute("employeeId", employeeId)
-                .addAttribute("clientId", clientId)
-                .addAttribute("employeeFirstName", employeeFirstName)
-                .addAttribute("employeeSecondName", employeeSecondName)
-                .addAttribute("employeeShopAddress", employeeShopAddress)
-                .addAttribute("clientFirstName", clientFirstName)
-                .addAttribute("clientSecondName", clientSecondName)
-                .addAttribute("dateTimeStr", dateTimeStr)
-                .addAttribute("baskets", baskets);
+        model.addAttribute("baskets", baskets);
 
         return "/list/basketList";
     }
@@ -68,8 +56,7 @@ public class BasketController {
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        model.addAttribute("clientIds", clientRepo.getAllIds())
-                .addAttribute("employeeIds", employeeRepo.getAllIds());
+        initializeDropDownChoices(model);
         return "add/basketAdd";
     }
 
@@ -93,10 +80,10 @@ public class BasketController {
     @NotNull
     @GetMapping("/edit/{editBasket}")
     private String editRecord(@NotNull @PathVariable Basket editBasket, @NotNull Model model) {
+        var a = getDateTimeStr(editBasket.getDateTime());
         model.addAttribute("editBasket", editBasket)
-                .addAttribute("clientIds", clientRepo.getAllIds())
-                .addAttribute("employeeIds", employeeRepo.getAllIds())
                 .addAttribute("dateTimeStr", getDateTimeStr(editBasket.getDateTime()));
+        initializeDropDownChoices(model);
         return "/edit/basketEdit";
     }
 
@@ -130,31 +117,18 @@ public class BasketController {
         return "redirect:/basket";
     }
 
-    // TODO Fix doubling
-    @NotNull
-    private String getDateTimeStr(@NotNull LocalDateTime dateTime) {
-        var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
-        return dateTime.format(dateTimeFormat);
-    }
-
-    @Nullable
-    private LocalDateTime getDateTime(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.isEmpty())
-            return null;
-        var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
-        return LocalDateTime.parse(dateTimeStr, dateTimeFormat);
-    }
-
     private boolean isFieldsEmpty(Integer employeeId, Integer clientId, String dateTimeStr, Model model) {
         if (employeeId == null || clientId == null || dateTimeStr == null || dateTimeStr.isEmpty() ||
                 employeeRepo.findById(employeeId).isEmpty() || clientRepo.findById(clientId).isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Поля кошику не можуть бути пустими!")
-                    .addAttribute("clientIds", clientRepo.getAllIds())
-                    .addAttribute("employeeIds", employeeRepo.getAllIds())
-                    .addAttribute("dateTimeStr", dateTimeStr);
+            model.addAttribute("errorMessage", "Поля кошику не можуть бути пустими!");
+            initializeDropDownChoices(model);
             return true;
         }
         return false;
+    }
+
+    private void initializeDropDownChoices(@NotNull Model model) {
+        model.addAttribute("clientIds", clientRepo.getAllIds())
+                .addAttribute("employeeIds", employeeRepo.getAllIds());
     }
 }
