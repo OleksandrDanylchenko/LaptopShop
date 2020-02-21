@@ -32,17 +32,14 @@ public class EmployeeController {
                 .and(secondNameEqual(secondName)).and(shopAddressLike(shopAddress));
         var employees = employeeRepo.findAll(employeesSpecification);
 
-        model.addAttribute("employees", employees).addAttribute("firstName", firstName)
-                .addAttribute("secondName", secondName)
-                .addAttribute("shopAddress", shopAddress);
+        model.addAttribute("employees", employees);
         return "/list/employeeList";
     }
 
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        var shopsAddresses = shopRepo.getAllAddresses();
-        model.addAttribute("shopAddresses", shopsAddresses);
+        initDropDownChoices(model);
         return "add/employeeAdd";
     }
 
@@ -50,12 +47,8 @@ public class EmployeeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, shopAddress, model)) {
-            model.addAttribute("firstName", firstName)
-                    .addAttribute("secondName", secondName)
-                    .addAttribute("shopAddress", shopAddress);
+        if (isFieldsEmpty(firstName, secondName, shopAddress, model))
             return "add/employeeAdd";
-        }
 
         var shop = shopRepo.findByAddress(shopAddress).get(0);
         var newEmployee = new Employee(firstName, secondName, shop);
@@ -67,8 +60,8 @@ public class EmployeeController {
     @NotNull
     @GetMapping("/edit/{editEmployee}")
     private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
-        var shopsAddresses = shopRepo.getAllAddresses();
-        model.addAttribute("editEmployee", editEmployee).addAttribute("shopAddresses", shopsAddresses);
+        model.addAttribute("editEmployee", editEmployee);
+        initDropDownChoices(model);
         return "/edit/employeeEdit";
     }
 
@@ -85,6 +78,7 @@ public class EmployeeController {
         var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
         editEmployee.setShop(employeeShop);
         employeeRepo.save(editEmployee);
+
         return "redirect:/employee";
     }
 
@@ -100,8 +94,14 @@ public class EmployeeController {
                 firstName.isEmpty() || secondName.isEmpty() || shopAddress.isEmpty()) {
             model.addAttribute("errorMessage",
                     "Поля співробітника не можуть бути пустими!");
+            initDropDownChoices(model);
             return true;
         }
         return false;
+    }
+
+    private void initDropDownChoices(@NotNull Model model) {
+        var shopsAddresses = shopRepo.getAllAddresses();
+        model.addAttribute("shopAddresses", shopsAddresses);
     }
 }

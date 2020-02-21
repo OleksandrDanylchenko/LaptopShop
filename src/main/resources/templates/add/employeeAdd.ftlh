@@ -7,8 +7,8 @@
         <div>
             <h1>Додати нового співробітника:</h1>
             <form method="post" action="/employee/add">
-                <label>Ім'я нового співробітника: <input type="text" name="firstName" value="${firstName!}"/></label>
-                <label>Прізвище нового співробітника: <input type="text" name="secondName" value="${secondName!}"/></label>
+                <label>Ім'я нового співробітника: <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
+                <label>Прізвище нового співробітника: <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
                 <label>Адреса магазину:
                     <select name="shopAddress">
                         <#list shopAddresses as address>

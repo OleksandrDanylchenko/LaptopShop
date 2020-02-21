@@ -11,9 +11,9 @@
     <div>
         <p>Знайти співробітника за критеріями:</p>
         <form method="get" action="/employee">
-            <label>Ім'я: <input type="text" name="firstName" value="${firstName!}"/></label>
-            <label>Прізвище: <input type="text" name="secondName" value="${secondName!}"/></label>
-            <label>Адреса магазину: <input type="text" name="shopAddress" value="${shopAddress!}"/></label>
+            <label>Ім'я: <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
+            <label>Прізвище: <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
+            <label>Адреса магазину: <input type="text" name="shopAddress" value="${RequestParameters.shopAddress!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
