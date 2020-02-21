@@ -28,8 +28,7 @@ public class LabelController {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
         var labels = labelRepo.findAll(labelSpecification);
 
-        siteModel.addAttribute("brand", brand).addAttribute("model", model)
-                .addAttribute("labels", labels);
+        siteModel.addAttribute("labels", labels);
         return "/list/labelList";
     }
 
@@ -48,7 +47,6 @@ public class LabelController {
             return "add/labelAdd";
 
         var newLabel = new Label(brand, model);
-
         if (!saveRecord(newLabel, siteModel))
             return "add/labelAdd";
 
@@ -71,7 +69,6 @@ public class LabelController {
 
         editLabel.setBrand(brand);
         editLabel.setModel(model);
-
         if (!saveRecord(editLabel, siteModel))
             return "add/labelEdit";
 
@@ -88,9 +85,7 @@ public class LabelController {
     private boolean isFieldsEmpty(String brand, String model, Model siteModel) {
         if (brand == null || model == null ||
                 brand.isEmpty() || model.isEmpty()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля найменування не можуть бути пустими!")
-                    .addAttribute("brand", brand).addAttribute("model", model);
+            siteModel.addAttribute("errorMessage", "Поля найменування не можуть бути пустими!");
             return true;
         }
         return false;
@@ -101,9 +96,7 @@ public class LabelController {
             labelRepo.save(saveLabel);
         } catch (Exception e) {
             model.addAttribute("errorMessage",
-                    "Модель " + saveLabel.getModel() + " уже присутня в базі")
-                    .addAttribute("brand", saveLabel.getBrand())
-                    .addAttribute("model", saveLabel.getModel());
+                    "Модель " + saveLabel.getModel() + " уже присутня в базі");
             return false;
         }
         return true;

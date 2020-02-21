@@ -11,8 +11,8 @@
     <div>
         <p>Знайти виробника за критеріями:</p>
         <form method="get" action="/label">
-            <label>Бренд: <input type="text" name="brand" value="${brand!}"/></label>
-            <label>Модель: <input type="text" name="model" value="${model!}"/></label>
+            <label>Бренд: <input type="text" name="brand" value="${RequestParameters.brand!}"/></label>
+            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
