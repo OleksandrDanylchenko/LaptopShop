@@ -14,5 +14,5 @@ public interface ShopRepo extends CrudRepository<Shop, Integer> {
     @Query(value = "SELECT s.address FROM Shop s")
     List<String> getAllAddresses();
 
-    Shop findByAddress(String address);
+    List<Shop> findByAddress(String address);
 }

@@ -14,7 +14,8 @@ public class FreemarkerConfig implements BeanPostProcessor {
             throws BeansException {
         if (bean instanceof FreeMarkerConfigurer) {
             FreeMarkerConfigurer configurer = (FreeMarkerConfigurer) bean;
-            configurer.getConfiguration().setObjectWrapper(new Java8ObjectWrapper(freemarker.template.Configuration.getVersion()));
+            configurer.getConfiguration()
+                    .setObjectWrapper(new Java8ObjectWrapper(freemarker.template.Configuration.getVersion()));
         }
         return bean;
     }

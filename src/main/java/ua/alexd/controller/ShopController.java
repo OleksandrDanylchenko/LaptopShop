@@ -24,7 +24,7 @@ public class ShopController {
                 ? shopRepo.findByAddress(address)
                 : shopRepo.findAll();
 
-        model.addAttribute("shops", shops).addAttribute("address", address);
+        model.addAttribute("shops", shops);
         return "list/shopList";
     }
 

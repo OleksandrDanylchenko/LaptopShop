@@ -38,7 +38,8 @@ public class BasketSpecification {
     public static Specification<Basket> employeeShopAddressEqual(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        return (root, query, builder) -> builder.equal(root.join("employee").join("shop").get("address"), expression);
+        return (root, query, builder) -> builder.equal(root.join("employee").join("shop")
+                .get("address"), expression);
     }
 
     @Nullable

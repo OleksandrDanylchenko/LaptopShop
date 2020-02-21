@@ -13,8 +13,8 @@ public class AvailabilitySpecification {
     public static Specification<Availability> laptopModelLike(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        return (root, query, builder) -> builder.like(root.join("laptop").join("label").get("model"),
-                "%" + expression + "%");
+        return (root, query, builder) -> builder.like(root.join("laptop").join("label")
+                        .get("model"), "%" + expression + "%");
     }
 
     @Nullable

@@ -11,8 +11,8 @@
 
     <div>
         <form method="get" action="/shop">
-            <label>Знайти магазин за адресою: <input type="text" name="filterAddress"
-                                                     value="${filterAddress!}"/></label>
+            <label>Знайти магазин за адресою: <input type="text" name="address"
+                                                     value="${RequestParameters.address!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

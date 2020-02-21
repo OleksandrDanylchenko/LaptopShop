@@ -21,7 +21,8 @@ public class BuyingSpecification {
     public static Specification<Buying> laptopModelEqual(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        return (root, query, builder) -> builder.equal(root.join("laptop").join("label").get("model"), expression);
+        return (root, query, builder) -> builder.equal(root.join("laptop").join("label")
+                .get("model"), expression);
     }
 
     @Nullable

@@ -82,7 +82,7 @@ public class AvailabilityController {
         }
 
         var laptop = laptopRepo.findByLabelModel(laptopModel);
-        var shop = shopRepo.findByAddress(shopAddress);
+        var shop = shopRepo.findByAddress(shopAddress).get(0);
         var dateStart = getDate(dateStartStr);
         var dateEnd = getDate(dateEndStr);
         var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
@@ -124,7 +124,7 @@ public class AvailabilityController {
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editAvailability.setLaptop(laptop);
 
-        var shop = shopRepo.findByAddress(shopAddress);
+        var shop = shopRepo.findByAddress(shopAddress).get(0);
         editAvailability.setShop(shop);
 
         editAvailability.setPrice(price);

@@ -27,6 +27,7 @@ public final class EmployeeSpecification {
     public static Specification<Employee> shopAddressLike(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        return (root, query, builder) -> builder.like(root.join("shop").get("address"), "%" + expression + "%");
+        return (root, query, builder) -> builder.like(root.join("shop")
+                .get("address"), "%" + expression + "%");
     }
 }

@@ -57,7 +57,7 @@ public class EmployeeController {
             return "add/employeeAdd";
         }
 
-        var shop = shopRepo.findByAddress(shopAddress);
+        var shop = shopRepo.findByAddress(shopAddress).get(0);
         var newEmployee = new Employee(firstName, secondName, shop);
         employeeRepo.save(newEmployee);
 
@@ -82,7 +82,7 @@ public class EmployeeController {
 
         editEmployee.setFirstName(firstName);
         editEmployee.setSecondName(secondName);
-        var employeeShop = shopRepo.findByAddress(shopAddress);
+        var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
         editEmployee.setShop(employeeShop);
         employeeRepo.save(editEmployee);
         return "redirect:/employee";
