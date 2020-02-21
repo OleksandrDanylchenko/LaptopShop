@@ -40,20 +40,14 @@ public class LaptopController {
                 .and(typeNameEqual(typeName)).and(labelBrandEqual(labelBrand)).and(labelModelLike(labelModel));
         var laptops = laptopRepo.findAll(laptopSpecification);
 
-        model.addAttribute("hardwareAssemblyName", hardwareAssemblyName)
-                .addAttribute("typeName", typeName)
-                .addAttribute("labelBrand", labelBrand)
-                .addAttribute("labelModel", labelModel)
-                .addAttribute("laptops", laptops);
+        model.addAttribute("laptops", laptops);
         return "/list/laptopList";
     }
 
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", labelRepo.getAllModels());
+        initializeDropDownChoices(model);
         return "add/laptopAdd";
     }
 
@@ -72,7 +66,7 @@ public class LaptopController {
         var newLaptop = new Laptop(label, type, hardware);
 
         if (!saveRecord(newLaptop, model))
-            return "edit/labelEdit";
+            return "add/laptopAdd";
 
         return "redirect:/laptop";
     }
@@ -80,10 +74,8 @@ public class LaptopController {
     @NotNull
     @GetMapping("/edit/{editLaptop}")
     private String editRecord(@PathVariable Laptop editLaptop, @NotNull Model model) {
-        model.addAttribute("editLaptop", editLaptop)
-                .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", labelRepo.getAllModels());
+        model.addAttribute("editLaptop", editLaptop);
+        initializeDropDownChoices(model);
         return "/edit/laptopEdit";
     }
 
@@ -106,7 +98,7 @@ public class LaptopController {
         editLaptop.setLabel(label);
 
         if (!saveRecord(editLaptop, model))
-            return "add/labelAdd";
+            return "edit/labelEdit";
 
         return "redirect:/laptop";
     }
@@ -122,10 +114,8 @@ public class LaptopController {
         if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
                 hardwareAssemblyName.isEmpty() || typeName.isEmpty() || labelModel.isEmpty()) {
             model.addAttribute("errorMessage",
-                    "Поля ноутбуку не можуть бути пустими!")
-                    .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                    .addAttribute("typeNames", typeRepo.getAllNames())
-                    .addAttribute("labelModels", labelRepo.getAllModels());
+                    "Поля ноутбуку не можуть бути пустими!");
+            initializeDropDownChoices(model);
             return true;
         }
         return false;
@@ -136,12 +126,16 @@ public class LaptopController {
             laptopRepo.save(saveLaptop);
         } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
-                    "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі")
-                    .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                    .addAttribute("typeNames", typeRepo.getAllNames())
-                    .addAttribute("labelModels", labelRepo.getAllModels());
+                    "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі");
+            initializeDropDownChoices(model);
             return false;
         }
         return true;
+    }
+
+    private void initializeDropDownChoices(@NotNull Model model) {
+        model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
+                .addAttribute("typeNames", typeRepo.getAllNames())
+                .addAttribute("labelModels", labelRepo.getAllModels());
     }
 }

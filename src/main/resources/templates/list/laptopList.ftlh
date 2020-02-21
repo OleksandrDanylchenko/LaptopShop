@@ -11,10 +11,10 @@
     <div>
         <p>Знайти ноутбук за критеріями:</p>
         <form method="get" action="/laptop">
-            <label>Бренд: <input type="text" name="labelBrand" value="${labelBrand!}"/></label>
-            <label>Модель: <input type="text" name="labelModel" value="${labelModel!}"/></label>
-            <label>Тип: <input type="text" name="typeName" value="${typeName!}"/></label>
-            <label>Назва збірки: <input type="text" name="hardwareAssemblyName" value="${hardwareAssemblyName!}"/></label>
+            <label>Бренд: <input type="text" name="labelBrand" value="${RequestParameters.labelBrand!}"/></label>
+            <label>Модель: <input type="text" name="labelModel" value="${RequestParameters.labelModel!}"/></label>
+            <label>Тип: <input type="text" name="typeName" value="${RequestParameters.typeName!}"/></label>
+            <label>Назва збірки: <input type="text" name="hardwareAssemblyName" value="${RequestParameters.hardwareAssemblyName!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
