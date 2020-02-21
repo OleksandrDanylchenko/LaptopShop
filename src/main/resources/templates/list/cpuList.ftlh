@@ -11,8 +11,8 @@
     <div>
         <p>Знайти процесор за критеріями:</p>
         <form method="get" action="/cpu">
-            <label>Модель: <input type="text" name="model" value="${model!}"/></label>
-            <label>Частота: <input type="number" step="0.1" name="frequency" min="0.1" max="5" value="${frequency!}"/></label>
+            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
+            <label>Частота: <input type="number" step="0.1" name="frequency" min="0.1" max="5" value="${RequestParameters.frequency!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

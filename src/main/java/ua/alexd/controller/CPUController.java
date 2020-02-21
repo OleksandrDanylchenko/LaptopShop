@@ -28,8 +28,7 @@ public class CPUController {
         var cpuSpecification = Specification.where(modelLike(model)).and(frequencyEqual(frequency));
         var cpus = cpuRepo.findAll(cpuSpecification);
 
-        siteModel.addAttribute("model", model).addAttribute("frequency", frequency)
-                .addAttribute("cpus", cpus);
+        siteModel.addAttribute("cpus", cpus);
         return "/list/cpuList";
     }
 
@@ -48,7 +47,6 @@ public class CPUController {
             return "add/cpuAdd";
 
         var newCpu = new CPU(model, frequency);
-
         if (!saveRecord(newCpu, siteModel))
             return "add/cpuAdd";
 
@@ -71,7 +69,6 @@ public class CPUController {
 
         editCpu.setModel(model);
         editCpu.setFrequency(frequency);
-
         if (!saveRecord(editCpu, siteModel))
             return "edit/cpuEdit";
 
@@ -88,10 +85,7 @@ public class CPUController {
     private boolean isFieldsEmpty(String model, String frequency, Model siteModel) {
         if (frequency == null || model == null ||
                 frequency.isEmpty() || model.isEmpty()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля процесора не можуть бути пустими!")
-                    .addAttribute("model", model)
-                    .addAttribute("frequency", frequency);
+            siteModel.addAttribute("errorMessage", "Поля процесора не можуть бути пустими!");
             return true;
         }
         return false;
@@ -102,9 +96,7 @@ public class CPUController {
             cpuRepo.save(saveCPU);
         } catch (Exception e) {
             model.addAttribute("errorMessage",
-                    "Модель процесора " + saveCPU.getModel() + " уже присутня в базі")                    .addAttribute("model", model)
-                    .addAttribute("model", saveCPU.getModel())
-                    .addAttribute("frequency", saveCPU.getFrequency());
+                    "Модель процесора " + saveCPU.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
