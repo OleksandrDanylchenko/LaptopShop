@@ -30,9 +30,7 @@ public class DisplayController {
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
         var displays = displayRepo.findAll(displaySpecification);
 
-        siteModel.addAttribute("displays", displays).addAttribute("model", model)
-                .addAttribute("type", type).addAttribute("diagonal", diagonal)
-                .addAttribute("resolution", resolution);
+        siteModel.addAttribute("displays", displays);
         return "/list/displayList";
     }
 
@@ -75,7 +73,6 @@ public class DisplayController {
         editDisplay.setType(type);
         editDisplay.setDiagonal(diagonal);
         editDisplay.setResolution(resolution);
-
         if (!saveRecord(editDisplay, siteModel))
             return "edit/displayEdit";
 
@@ -92,11 +89,7 @@ public class DisplayController {
     private boolean isFieldsEmpty(String model, String type, String diagonal, String resolution, Model siteModel) {
         if (model == null || type == null || diagonal == null || resolution == null ||
                 model.isEmpty() || type.isEmpty() || diagonal.isEmpty() || resolution.isEmpty()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля дисплею не можуть бути пустими!")
-                    .addAttribute("model", model).addAttribute("type", type)
-                    .addAttribute("diagonal", diagonal)
-                    .addAttribute("resolution", resolution);
+            siteModel.addAttribute("errorMessage", "Поля дисплею не можуть бути пустими!");
             return true;
         }
         return false;
@@ -107,11 +100,7 @@ public class DisplayController {
             displayRepo.save(saveDisplay);
         } catch (Exception e) {
             model.addAttribute("errorMessage",
-                    "Модель дисплею " + saveDisplay.getModel() + " уже присутня в базі")
-                    .addAttribute("model", saveDisplay.getModel())
-                    .addAttribute("type", saveDisplay.getType())
-                    .addAttribute("diagonal", saveDisplay.getDiagonal())
-                    .addAttribute("resolution", saveDisplay.getResolution());
+                    "Модель дисплею " + saveDisplay.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
