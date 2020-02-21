@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,7 +93,7 @@ public class HDDController {
     private boolean saveRecord(HDD saveHDD, Model model) {
         try {
             hddRepo.save(saveHDD);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель HDD диску " + saveHDD.getModel() + " уже присутня в базі");
             return false;

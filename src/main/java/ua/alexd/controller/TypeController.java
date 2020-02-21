@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TypeController {
                 ? typeRepo.findByName(name)
                 : typeRepo.findAll();
 
-        model.addAttribute("types", types).addAttribute("name", name);
+        model.addAttribute("types", types);
         return "list/typeList";
     }
 
@@ -41,7 +42,6 @@ public class TypeController {
             return "add/typeAdd";
 
         var newType = new Type(name);
-
         if (!saveRecord(newType, model))
             return "add/typeAdd";
 
@@ -64,7 +64,6 @@ public class TypeController {
             return "edit/typeEdit";
 
         editType.setName(name);
-
         if (!saveRecord(editType, model))
             return "edit/typeEdit";
 
@@ -81,9 +80,7 @@ public class TypeController {
 
     private boolean isNameEmpty(String name, Model model) {
         if (name == null || name.isEmpty()) {
-            model.addAttribute("errorMessage",
-                    "Назва типу не можу бути пустою!")
-                    .addAttribute("name", name);
+            model.addAttribute("errorMessage", "Назва типу не можу бути пустою!");
             return true;
         }
         return false;
@@ -92,10 +89,9 @@ public class TypeController {
     private boolean saveRecord(Type saveType, Model model) {
         try {
             typeRepo.save(saveType);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
-                    "Тип " + saveType.getName() + " уже присутня в базі")
-                    .addAttribute("name", saveType.getName());
+                    "Тип " + saveType.getName() + " уже присутній в базі");
             return false;
         }
         return true;

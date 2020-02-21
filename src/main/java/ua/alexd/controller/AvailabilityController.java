@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -170,7 +171,7 @@ public class AvailabilityController {
     private boolean saveRecord(Availability saveAvailability, Model model) {
         try {
             availabilityRepo.save(saveAvailability);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель ноутбуку " + saveAvailability.getLaptop().getLabel().getModel()
                             + " уже присутня в базі")

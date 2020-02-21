@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -133,7 +134,7 @@ public class LaptopController {
     private boolean saveRecord(Laptop saveLaptop, Model model) {
         try {
             laptopRepo.save(saveLaptop);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі")
                     .addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())

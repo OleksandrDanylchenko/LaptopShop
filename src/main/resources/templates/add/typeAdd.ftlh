@@ -6,7 +6,7 @@
     <div>
         <h1>Додати новий тип:</h1>
         <form method="post" action="/type/add">
-            <label>Назва нового типу: <input type="text" name="name"/></label>
+            <label>Назва нового типу: <input type="text" name="name" value="${RequestParameters.name!}"/></label>
             <button type="submit">Додати</button>
         </form>
     </div>

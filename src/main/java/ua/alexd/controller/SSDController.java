@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,7 +93,7 @@ public class SSDController {
     private boolean saveRecord(SSD saveSSD, Model model) {
         try {
             ssdRepo.save(saveSSD);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель дисплею " + saveSSD.getModel() + " уже присутня в базі");
             return false;

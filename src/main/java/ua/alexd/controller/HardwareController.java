@@ -1,6 +1,7 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -185,7 +186,7 @@ public class HardwareController {
     private boolean saveRecord(Hardware saveHardware, Model model) {
         try {
             hardwareRepo.save(saveHardware);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Збірка " + saveHardware.getAssemblyName() + " уже присутня в базі")
                     .addAttribute("assemblyName", saveHardware.getAssemblyName())

@@ -10,7 +10,7 @@
 
     <div>
         <form method="get" action="/type">
-            <label>Знайти тип за назвою: <input type="text" name="name" value="${name!}"/></label>
+            <label>Знайти тип за назвою: <input type="text" name="name" value="${RequestParameters.name!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
