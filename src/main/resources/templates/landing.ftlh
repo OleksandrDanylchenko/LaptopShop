@@ -5,6 +5,9 @@
         <h1 class="landingText">Доброго дня!</h1>
         <p class="landingText">Нижче представлено перелік доступних контролерів:</p>
 
+        <#assign controllers = ['availability', 'basket', 'buying', 'client', 'cpu', 'display', 'employee', 'gpu',
+        'hardware', 'hdd', 'laptop', 'label', 'ram', 'shop', 'ssd', 'type']>
+
         <ul class="landingList" style="list-style-type:square;">
             <#list controllers as controller>
                 <li><a class="landingRef" href="/${controller}">${controller?cap_first} controller</a></li>

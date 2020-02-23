@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Type">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/type/add">Додати новий тип ноутбуків</a></p>
     </div>

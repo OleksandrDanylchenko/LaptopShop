@@ -1,10 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 <#setting locale="uk">
 
 <@pad.page "Client">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/client/add">Додати нового клієнта</a></p>
     </div>
@@ -12,9 +9,10 @@
     <div>
         <p>Знайти клієнта за критеріями:</p>
         <form method="get" action="/client">
-            <label>Ім'я:   <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
-            <label>Прізвище:   <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
-            <label>Дата реєстрації:   <input type="date" name="dateReg" min="2019-02-16" value="${RequestParameters.dateReg!}"></label>
+            <label>Ім'я: <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
+            <label>Прізвище: <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
+            <label>Дата реєстрації: <input type="date" name="dateReg" min="2019-02-16"
+                                           value="${RequestParameters.dateReg!}"></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

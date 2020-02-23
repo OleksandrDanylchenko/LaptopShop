@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "RAM">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/ram/add">Додати нову оперативну пам'ять</a></p>
     </div>
@@ -12,7 +9,8 @@
         <p>Знайти оперативну пам'ять за критеріями:</p>
         <form method="get" action="/ram">
             <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="128" value="${RequestParameters.memory!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="128"
+                                         value="${RequestParameters.memory!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

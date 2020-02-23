@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "SSD">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/ssd/add">Додати новий SSD диск</a></p>
     </div>
@@ -12,7 +9,8 @@
         <p>Знайти процесор за критеріями:</p>
         <form method="get" action="/ssd">
             <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${(RequestParameters.memory??)?then(RequestParameters.memory?c, '')}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1"
+                                         value="${(RequestParameters.memory??)?then(RequestParameters.memory?c, '')}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

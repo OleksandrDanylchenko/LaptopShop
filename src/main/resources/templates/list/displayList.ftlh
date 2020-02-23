@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Display">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/display/add">Додати новий дисплей</a></p>
     </div>
@@ -13,7 +10,8 @@
         <form method="get" action="/display">
             <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
             <label>Тип: <input type="text" name="type" value="${RequestParameters.type!}"/></label>
-            <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${RequestParameters.diagonal!}"/></label>
+            <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1"
+                                     value="${RequestParameters.diagonal!}"/></label>
             <label>Розширення: <input type="text" name="resolution" value="${RequestParameters.resolution!}"/></label>
             <button type="submit">Шукати</button>
         </form>

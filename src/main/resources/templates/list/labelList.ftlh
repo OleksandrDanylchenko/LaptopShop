@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Label">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/label/add">Додати нове найменування</a></p>
     </div>

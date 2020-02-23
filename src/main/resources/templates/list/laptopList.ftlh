@@ -1,9 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
+
 
 <@pad.page "Laptop">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/laptop/add">Додати новий ноутбук</a></p>
     </div>
@@ -14,7 +12,8 @@
             <label>Бренд: <input type="text" name="labelBrand" value="${RequestParameters.labelBrand!}"/></label>
             <label>Модель: <input type="text" name="labelModel" value="${RequestParameters.labelModel!}"/></label>
             <label>Тип: <input type="text" name="typeName" value="${RequestParameters.typeName!}"/></label>
-            <label>Назва збірки: <input type="text" name="hardwareAssemblyName" value="${RequestParameters.hardwareAssemblyName!}"/></label>
+            <label>Назва збірки: <input type="text" name="hardwareAssemblyName"
+                                        value="${RequestParameters.hardwareAssemblyName!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

@@ -1,8 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "CPU">
-    <@main.mainPageRef/>
 
     <div>
         <p><a href="/cpu/add">Додати новий процесор</a></p>

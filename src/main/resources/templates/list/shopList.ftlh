@@ -1,13 +1,9 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Shops">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/shop/add">Додати новий магазин</a></p>
     </div>
-
 
     <div>
         <form method="get" action="/shop">

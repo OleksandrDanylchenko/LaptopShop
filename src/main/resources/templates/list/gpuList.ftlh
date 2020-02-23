@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "GPU">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/gpu/add">Додати нову відеокарту</a></p>
     </div>
@@ -12,7 +9,8 @@
         <p>Знайти відеокарту за критеріями:</p>
         <form method="get" action="/gpu">
             <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="64" value="${RequestParameters.memory!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" max="64"
+                                         value="${RequestParameters.memory!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

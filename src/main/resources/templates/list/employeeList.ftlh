@@ -1,9 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
+
 
 <@pad.page "Employee">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/employee/add">Додати нового співробітника</a></p>
     </div>
@@ -13,7 +11,8 @@
         <form method="get" action="/employee">
             <label>Ім'я: <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
             <label>Прізвище: <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
-            <label>Адреса магазину: <input type="text" name="shopAddress" value="${RequestParameters.shopAddress!}"/></label>
+            <label>Адреса магазину: <input type="text" name="shopAddress"
+                                           value="${RequestParameters.shopAddress!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

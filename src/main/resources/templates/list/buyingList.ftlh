@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "Buying">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/buying/add">Додати нову покупку</a></p>
     </div>
@@ -11,10 +8,14 @@
     <div>
         <p>Знайти покупку за критеріями:</p>
         <form method="get" action="/buying">
-            <label>ID кошику: <input type="number" step="1" min="1" name="basketId" value="${RequestParameters.basketId!}"/></label>
-            <label>Модель ноутбуку: <input type="text" name="laptopModel" value="${RequestParameters.laptopModel!}"/></label>
-            <label>Загальна ціна: <input type="number" step="10" min="1" name="totalPrice" value="${RequestParameters.totalPrice!}"/></label>
-            <label>Час покупки: <input type="datetime-local" name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"/></label>
+            <label>ID кошику: <input type="number" step="1" min="1" name="basketId"
+                                     value="${RequestParameters.basketId!}"/></label>
+            <label>Модель ноутбуку: <input type="text" name="laptopModel"
+                                           value="${RequestParameters.laptopModel!}"/></label>
+            <label>Загальна ціна: <input type="number" step="10" min="1" name="totalPrice"
+                                         value="${RequestParameters.totalPrice!}"/></label>
+            <label>Час покупки: <input type="datetime-local" name="dateTimeStr"
+                                       value="${RequestParameters.dateTimeStr!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>

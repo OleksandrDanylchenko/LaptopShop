@@ -1,9 +1,6 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/mainRef.ftlh" as main>
 
 <@pad.page "HDD">
-    <@main.mainPageRef/>
-
     <div>
         <p><a href="/hdd/add">Додати новий HDD диск</a></p>
     </div>
@@ -12,7 +9,8 @@
         <p>Знайти HDD диск за критеріями:</p>
         <form method="get" action="/hdd">
             <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1" value="${RequestParameters.memory!}"/></label>
+            <label>Обсяг пам'яті: <input type="number" name="memory" min="1"
+                                         value="${RequestParameters.memory!}"/></label>
             <button type="submit">Шукати</button>
         </form>
     </div>
