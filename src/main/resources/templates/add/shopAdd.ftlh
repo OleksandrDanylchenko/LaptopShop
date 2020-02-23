@@ -3,9 +3,12 @@
 <@pad.page "Shop adding">
     <h2>${errorMessage!}</h2>
 
-    <h1>Додати новий магазин:</h1>
-    <form method="post" action="/shop/add">
-        <label>Адреса нового магазину: <input type="text" name="address" value="${RequestParameters.address!}"/></label>
-        <button type="submit">Додати</button>
-    </form>
+    <p class="h1">Додати новий магазин:</p>
+    <div class="form-group">
+        <form method="post" action="/shop/add" class="form-inline">
+            <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
+                   placeholder="Адреса нового магазину" style="width: 450px"/>
+            <button type="submit" class="btn btn-primary ml-2">Додати</button>
+        </form>
+    </div>
 </@pad.page>
