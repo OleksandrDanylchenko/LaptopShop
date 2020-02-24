@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,6 @@ public class ShopController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String address, @NotNull Model model) {
-        if (isAddressEmpty(address, model))
-            return "add/shopAdd";
-
         var newShop = new Shop(address);
         if (!saveRecord(newShop, model))
             return "add/shopAdd";
@@ -60,9 +58,6 @@ public class ShopController {
     private String editRecord(@RequestParam String address,
                               @NotNull @PathVariable Shop editShop,
                               @NotNull Model model) {
-        if (isAddressEmpty(address, model))
-            return "edit/shopEdit";
-
         editShop.setAddress(address);
         if (!saveRecord(editShop, model))
             return "edit/shopEdit";
@@ -77,20 +72,16 @@ public class ShopController {
         return "redirect:/shop";
     }
 
-    private boolean isAddressEmpty(String address, Model model) {
-        if (address == null || address.isEmpty()) {
-            model.addAttribute("errorMessage", "Адреса магазину не можу бути пустою!");
-            return true;
-        }
-        return false;
-    }
-
     private boolean saveRecord(Shop saveShop, Model model) {
         try {
             shopRepo.save(saveShop);
         } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
-                    "Адреса " + saveShop.getAddress() + " уже присутня в базі");
+                    "Адреса \"" + saveShop.getAddress() + "\" уже присутня в базі");
+            return false;
+        } catch (InvalidDataAccessResourceUsageException ignored) {
+            model.addAttribute("errorMessage",
+                    "Уведена адреса задовга для зберігання");
             return false;
         }
         return true;

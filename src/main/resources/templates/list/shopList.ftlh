@@ -7,11 +7,12 @@
         </div>
 
         <div class="col">
-            <div class="form-group mt-2 float-right" id="shopSearch">
+            <div class="form-group float-right" id="shopSearch">
                 <form method="get" action="/shop" class="form-inline">
+                    <label class="sr-only" for="shopSearchAddress">Шукана адреса</label>
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
-                           placeholder="Адреса" style="width: 300px"/>
-                    <button type="submit" class="btn btn-primary ml-2">Шукати</button>
+                           placeholder="Адреса"/>
+                    <button type="submit" class="btn btn-primary ml-sm-2 my-2">Шукати</button>
                 </form>
             </div>
         </div>
@@ -34,8 +35,10 @@
                     <tr>
                         <th scope="row">${shop.id}</th>
                         <td>${shop.address}</td>
-                        <td><a href="/shop/edit/${shop.id}">Edit</a></td>
-                        <td><a href="/shop/delete/${shop.id}" onclick="return confirm('Are you sure?')">Delete</a></td>
+                        <td><a class="btn btn-outline-primary" href="/shop/edit/${shop.id}"
+                               role="button">Змінити</a></td>
+                        <td><a class="btn btn-outline-primary" href="/shop/delete/${shop.id}"
+                               role="button" onclick="return confirm('Are you sure?')">Видалити</a></td>
                     </tr>
                 </#list>
                 </tbody>
