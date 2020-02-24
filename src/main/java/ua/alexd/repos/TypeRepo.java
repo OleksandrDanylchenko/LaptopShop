@@ -14,5 +14,5 @@ public interface TypeRepo extends CrudRepository<Type, Integer> {
     @Query(value = "SELECT t.name FROM Type t")
     List<String> getAllNames();
 
-    Type findByName(String name);
+    List<Type> findByName(String name);
 }

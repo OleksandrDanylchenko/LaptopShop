@@ -38,8 +38,8 @@
                     <td>${laptop.id}</td>
                     <td>${laptop.label.brand}</td>
                     <td>${laptop.label.model}</td>
-                    <td>${laptop.type.name}</td>
-                    <td>${laptop.hardware.assemblyName}</td>
+                    <td>${laptop.type.name!"Видалено"}</td>
+                    <td>${laptop.hardware.assemblyName!"Видалено"}</td>
                     <td><a href="/laptop/edit/${laptop.id}">Edit</a></td>
                     <td><a href="/laptop/delete/${laptop.id}" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>

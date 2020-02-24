@@ -61,7 +61,7 @@ public class LaptopController {
             return "add/labelAdd";
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
-        var type = typeRepo.findByName(typeName);
+        var type = typeRepo.findByName(typeName).get(0);
         var label = labelRepo.findByModel(labelModel);
         var newLaptop = new Laptop(label, type, hardware);
 
@@ -91,7 +91,7 @@ public class LaptopController {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         editLaptop.setHardware(hardware);
 
-        var type = typeRepo.findByName(typeName);
+        var type = typeRepo.findByName(typeName).get(0);
         editLaptop.setType(type);
 
         var label = labelRepo.findByModel(labelModel);
