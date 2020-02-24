@@ -64,9 +64,9 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/edit/{editDisplay}")
-    private String saveEditedRecord(@RequestParam String model, @RequestParam String type,
-                                    @RequestParam String diagonal, @RequestParam String resolution,
-                                    @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
+    private String editRecord(@RequestParam String model, @RequestParam String type,
+                              @RequestParam String diagonal, @RequestParam String resolution,
+                              @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
         if (isFieldsEmpty(model, type, diagonal, resolution, siteModel))
             return "edit/displayEdit";
 
@@ -89,7 +89,7 @@ public class DisplayController {
 
     private boolean isFieldsEmpty(String model, String type, String diagonal, String resolution, Model siteModel) {
         if (model == null || type == null || diagonal == null || resolution == null ||
-                model.isEmpty() || type.isEmpty() || diagonal.isEmpty() || resolution.isEmpty()) {
+                model.isBlank() || type.isBlank()|| diagonal.isBlank() || resolution.isBlank()) {
             siteModel.addAttribute("errorMessage", "Поля дисплею не можуть бути пустими!");
             return true;
         }

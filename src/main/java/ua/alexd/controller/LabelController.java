@@ -63,8 +63,8 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/edit/{editLabel}")
-    private String addRecord(@RequestParam String brand, @RequestParam String model,
-                             @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
+    private String editRecord(@RequestParam String brand, @RequestParam String model,
+                              @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
         if (isFieldsEmpty(brand, model, siteModel))
             return "edit/labelEdit";
 
@@ -85,7 +85,7 @@ public class LabelController {
 
     private boolean isFieldsEmpty(String brand, String model, Model siteModel) {
         if (brand == null || model == null ||
-                brand.isEmpty() || model.isEmpty()) {
+                brand.isBlank() || model.isBlank()) {
             siteModel.addAttribute("errorMessage", "Поля найменування не можуть бути пустими!");
             return true;
         }

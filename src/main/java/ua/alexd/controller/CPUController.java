@@ -85,7 +85,7 @@ public class CPUController {
 
     private boolean isFieldsEmpty(String model, String frequency, Model siteModel) {
         if (frequency == null || model == null ||
-                frequency.isEmpty() || model.isEmpty()) {
+                frequency.isBlank() || model.isBlank()) {
             siteModel.addAttribute("errorMessage", "Поля процесора не можуть бути пустими!");
             return true;
         }

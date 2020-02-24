@@ -13,7 +13,7 @@
                     <label class="sr-only" for="shopSearchAddress">Шукана адреса</label>
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
                            placeholder="Адреса"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="btn btn-primary ml-md-2 my-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
@@ -37,7 +37,7 @@
                         <th scope="row">${shop.id}</th>
                         <td>${shop.address}</td>
                         <td><a class="btn btn-outline-primary" href="/shop/edit/${shop.id}"
-                               role="button"><i class="far fa-edit"></i></a></td>
+                               role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-primary" href="/shop/delete/${shop.id}"
                                role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
                         </td>

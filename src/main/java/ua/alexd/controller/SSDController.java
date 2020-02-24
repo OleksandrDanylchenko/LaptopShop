@@ -41,8 +41,8 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String model, @RequestParam Integer memory,
-                             @NotNull Model siteModel) {
+    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
+                              @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel))
             return "add/ssdAdd";
 
@@ -62,8 +62,8 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/edit/{editSSD}")
-    private String addRecord(@RequestParam String model, @RequestParam Integer memory,
-                             @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
+    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
+                              @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel))
             return "edit/ssdEdit";
 
@@ -83,7 +83,7 @@ public class SSDController {
     }
 
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
-        if (memory == null || model == null || model.isEmpty()) {
+        if (memory == null || model == null || model.isBlank()) {
             siteModel.addAttribute("errorMessage", "Поля SSD диску не можуть бути пустими!");
             return true;
         }

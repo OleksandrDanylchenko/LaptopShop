@@ -102,7 +102,7 @@ public class BuyingController {
     }
 
     private boolean isFieldsEmpty(Integer basketId, String laptopModel, Integer totalPrice, Model model) {
-        if (basketId == null || totalPrice == null || laptopModel == null || laptopModel.isEmpty() ||
+        if (basketId == null || totalPrice == null || laptopModel == null || laptopModel.isBlank() ||
                 basketRepo.findById(basketId).isEmpty()) {
             model.addAttribute("errorMessage", "Поля покупки не можуть бути пустими!");
             initializeDropDownChoices(model);

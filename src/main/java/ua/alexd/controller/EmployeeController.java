@@ -67,9 +67,9 @@ public class EmployeeController {
 
     @NotNull
     @PostMapping("/edit/{editEmployee}")
-    private String saveEditedRecord(@NotNull @PathVariable Employee editEmployee,
-                                    @RequestParam String firstName, @RequestParam String secondName,
-                                    @RequestParam String shopAddress, @NotNull Model model) {
+    private String editRecord(@NotNull @PathVariable Employee editEmployee,
+                              @RequestParam String firstName, @RequestParam String secondName,
+                              @RequestParam String shopAddress, @NotNull Model model) {
         if (isFieldsEmpty(firstName, secondName, shopAddress, model))
             return "/edit/employeeEdit";
 
@@ -91,7 +91,7 @@ public class EmployeeController {
 
     private boolean isFieldsEmpty(String firstName, String secondName, String shopAddress, Model model) {
         if (firstName == null || secondName == null || shopAddress == null ||
-                firstName.isEmpty() || secondName.isEmpty() || shopAddress.isEmpty()) {
+                firstName.isBlank() || secondName.isBlank() || shopAddress.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля співробітника не можуть бути пустими!");
             initDropDownChoices(model);

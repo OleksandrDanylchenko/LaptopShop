@@ -94,12 +94,12 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String editedRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
-                                @RequestParam Integer quantity, @RequestParam String laptopModel,
-                                @RequestParam String shopAddress,
-                                @RequestParam(defaultValue = "0001-01-01") Date dateStart,
-                                @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
-                                @NotNull Model model) throws ParseException {
+    private String editRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
+                              @RequestParam Integer quantity, @RequestParam String laptopModel,
+                              @RequestParam String shopAddress,
+                              @RequestParam(defaultValue = "0001-01-01") Date dateStart,
+                              @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
+                              @NotNull Model model) throws ParseException {
         if (isNonValidDate(dateStart))
             dateStart = null;
         if (isNonValidDate(dateEnd))
@@ -134,8 +134,8 @@ public class AvailabilityController {
 
     private boolean isFieldsEmpty(String laptopModel, String shopAddress, Integer price, Integer quantity,
                                   Date dateStart, Date dateEnd, Model model) {
-        if (laptopModel == null || shopAddress == null || dateStart == null || dateEnd == null || price == null ||
-                quantity == null || laptopModel.isEmpty() || shopAddress.isEmpty()) {
+        if (laptopModel == null || shopAddress == null || dateStart == null || dateEnd == null ||
+                price == null || quantity == null || laptopModel.isBlank() || shopAddress.isBlank()) {
             model.addAttribute("errorMessage", "Поля запису про наявність не можуть бути пустими!");
             initializeDropDownChoices(model);
             return true;

@@ -90,9 +90,9 @@ public class BasketController {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String saveEditedRecord(@PathVariable Basket editBasket, @RequestParam Integer employeeId,
-                                    @RequestParam Integer clientId, @RequestParam String dateTimeStr,
-                                    @NotNull Model model) {
+    private String editRecord(@PathVariable Basket editBasket, @RequestParam Integer employeeId,
+                              @RequestParam Integer clientId, @RequestParam String dateTimeStr,
+                              @NotNull Model model) {
         if (isFieldsEmpty(employeeId, clientId, dateTimeStr, model))
             return "/edit/basketEdit";
 
@@ -118,7 +118,7 @@ public class BasketController {
     }
 
     private boolean isFieldsEmpty(Integer employeeId, Integer clientId, String dateTimeStr, Model model) {
-        if (employeeId == null || clientId == null || dateTimeStr == null || dateTimeStr.isEmpty() ||
+        if (employeeId == null || clientId == null || dateTimeStr == null || dateTimeStr.isBlank() ||
                 employeeRepo.findById(employeeId).isEmpty() || clientRepo.findById(clientId).isEmpty()) {
             model.addAttribute("errorMessage", "Поля кошику не можуть бути пустими!");
             initializeDropDownChoices(model);

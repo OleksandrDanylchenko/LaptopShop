@@ -1,45 +1,66 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Label">
-    <div>
-        <p><a href="/label/add">Додати нове найменування</a></p>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-primary float-left" href="/label/add" role="button">
+                <i class="far fa-plus-square"></i> Додати нове найменування</a>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <button class="btn btn-primary float-right w-50" type="button" data-toggle="collapse"
+                        data-target="#labelSearch" aria-expanded="false" aria-controls="labelSearch">
+                    Знайти найменування
+                </button>
+            </div>
+            <div class="row">
+                <div class="collapse form-group float-right w-50" id="labelSearch">
+                    <form method="get" action="/label">
+                        <label class="sr-only" for="labelSearch">Шукане найменування</label>
+                        <input type="text" class="form-control mr-1 mt-2" name="brand"
+                               value="${RequestParameters.brand!}" placeholder="Бренд"/>
+                        <input type="text" class="form-control mr-1 mt-2" name="model"
+                               value="${RequestParameters.model!}" placeholder="Модель"/>
+                        <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right"><i
+                                    class="fa fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <p>Знайти виробника за критеріями:</p>
-        <form method="get" action="/label">
-            <label>Бренд: <input type="text" name="brand" value="${RequestParameters.brand!}"/></label>
-            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-
-    <#if labels?has_content>
-        <div><p>Список найменування:</p></div>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Бренд</th>
-                <th>Модель</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list labels as label>
+    <div class="row mt-5">
+        <#if labels?has_content>
+            <div class="h3">Список найменувань:</div>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>${label.id}</td>
-                    <td>${label.brand}</td>
-                    <td>${label.model}</td>
-                    <td><a href="/label/edit/${label.id}">Edit</a></td>
-                    <td><a href="/label/delete/${label.id}" onclick="return confirm('Are you sure?')">Delete</a>
-                    </td>
+                    <th scope="col">Id</th>
+                    <th scope="col">Бренд</th>
+                    <th scope="col">Модель</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </#list>
-            </tbody>
-        </table>
-    <#else>
-        <h3>Не знайдено жодного найменування.</h3>
-    </#if>
+                </thead>
+                <tbody>
+                <#list labels as label>
+                    <tr>
+                        <th scope="row">${label.id}</th>
+                        <td>${label.brand}</td>
+                        <td>${label.model}</td>
+                        <td><a class="btn btn-outline-primary" href="/label/edit/${label.id}"
+                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline-primary" href="/label/delete/${label.id}"
+                               role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        <#else>
+            <h3>Не знайдено жодного найменування.</h3>
+        </#if>
+    </div>
 </@pad.page>

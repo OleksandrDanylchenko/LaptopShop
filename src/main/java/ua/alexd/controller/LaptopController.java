@@ -112,7 +112,7 @@ public class LaptopController {
 
     private boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel, Model model) {
         if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
-                hardwareAssemblyName.isEmpty() || typeName.isEmpty() || labelModel.isEmpty()) {
+                hardwareAssemblyName.isBlank() || typeName.isBlank() || labelModel.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля ноутбуку не можуть бути пустими!");
             initializeDropDownChoices(model);

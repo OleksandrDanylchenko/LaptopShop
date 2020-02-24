@@ -147,8 +147,8 @@ public class HardwareController {
                                   String displayModel, String hddModel, String gpuModel, @NotNull Model model) {
         if (assemblyName == null || cpuModel == null || ramModel == null || ssdModel == null ||
                 displayModel == null || hddModel == null || gpuModel == null ||
-                assemblyName.isEmpty() || cpuModel.isEmpty() || ramModel.isEmpty() || ssdModel.isEmpty() ||
-                displayModel.isEmpty() || hddModel.isEmpty() || gpuModel.isEmpty()) {
+                assemblyName.isBlank() || cpuModel.isBlank() || ramModel.isBlank() || ssdModel.isBlank() ||
+                displayModel.isBlank() || hddModel.isBlank() || gpuModel.isBlank()) {
             model.addAttribute("errorMessage", "Поля збірки не можуть бути пустими!");
             initializeDropDownChoices(model);
             return true;

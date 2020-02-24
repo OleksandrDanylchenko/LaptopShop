@@ -12,7 +12,7 @@
                     <label class="sr-only" for="typeSearchName">Шукана назва</label>
                     <input type="text" class="form-control" name="name" value="${RequestParameters.name!}"
                            placeholder="Назва"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2"><i class="fas fa-search"></i></button>
+                    <button type="submit" class="btn btn-primary ml-md-2 my-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
@@ -36,7 +36,7 @@
                         <th scope="row">${type.id}</th>
                         <td>${type.name}</td>
                         <td><a class="btn btn-outline-primary" href="/type/edit/${type.id}"
-                               role="button"><i class="far fa-edit"></i></a></td>
+                               role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-primary" href="/type/delete/${type.id}"
                                role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
                         </td>

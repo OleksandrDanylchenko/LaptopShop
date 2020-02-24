@@ -70,9 +70,9 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/edit/{editClient}")
-    private String saveEditedRecord(@PathVariable Client editClient, @RequestParam String firstName,
-                                    @RequestParam String secondName, @RequestParam(defaultValue = "0001-01-01") Date dateReg,
-                                    @NotNull Model model) throws ParseException {
+    private String editRecord(@PathVariable Client editClient, @RequestParam String firstName,
+                              @RequestParam String secondName, @RequestParam(defaultValue = "0001-01-01") Date dateReg,
+                              @NotNull Model model) throws ParseException {
         if (isNonValidDate(dateReg))
             dateReg = null;
         if (isFieldsEmpty(firstName, secondName, dateReg, model))
@@ -94,7 +94,7 @@ public class ClientController {
     }
 
     private boolean isFieldsEmpty(String firstName, String secondName, Date dateReg, Model model) {
-        if (firstName == null || secondName == null || dateReg == null || firstName.isEmpty() || secondName.isEmpty()) {
+        if (firstName == null || secondName == null || dateReg == null || firstName.isBlank() || secondName.isBlank()) {
             model.addAttribute("errorMessage", "Поля клієнта не можуть бути пустими!");
             return true;
         }

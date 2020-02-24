@@ -62,8 +62,8 @@ public class HDDController {
 
     @NotNull
     @PostMapping("/edit/{editHDD}")
-    private String addRecord(@RequestParam String model, @RequestParam Integer memory,
-                             @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
+    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
+                              @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
         if (isFieldsEmpty(model, memory, siteModel))
             return "edit/hddEdit";
 
@@ -83,7 +83,7 @@ public class HDDController {
     }
 
     private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
-        if (memory == null || model == null || model.isEmpty()) {
+        if (memory == null || model == null || model.isBlank()) {
             siteModel.addAttribute("errorMessage", "Поля HDD диску не можуть бути пустими!");
             return true;
         }
