@@ -50,8 +50,8 @@
                         <td>${employee.shop.id}</td>
                         <td>${employee.shop.address}</td>
                     <#else>
-                        <td>Видалено</td>
-                        <td>Видалено</td>
+                        <td>Закрито</td>
+                        <td>Закрито</td>
                     </#if>
                     <td>${employee.isActive?then("Так", "Ні")}</td>
                     <td><a href="/employee/edit/${employee.id}">Edit</a></td>

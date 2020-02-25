@@ -1,6 +1,7 @@
 package ua.alexd.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Shops")
@@ -13,6 +14,9 @@ public class Shop {
     @Basic
     @Column(name = "address")
     private String address;
+
+    @OneToMany(mappedBy = "shop")
+    private List<Employee> shopEmployees;
 
     public Shop() {
     }
@@ -35,5 +39,13 @@ public class Shop {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<Employee> getShopEmployees() {
+        return shopEmployees;
+    }
+
+    public void setShopEmployees(List<Employee> shopEmployees) {
+        this.shopEmployees = shopEmployees;
     }
 }

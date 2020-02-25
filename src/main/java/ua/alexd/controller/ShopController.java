@@ -7,15 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Shop;
+import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
 
 @Controller
 @RequestMapping("/shop")
 public class ShopController {
     private final ShopRepo shopRepo;
+    private final EmployeeRepo employeeRepo;
 
-    public ShopController(final ShopRepo shopRepo) {
+    public ShopController(final ShopRepo shopRepo, EmployeeRepo employeeRepo) {
         this.shopRepo = shopRepo;
+        this.employeeRepo = employeeRepo;
     }
 
     @NotNull
@@ -74,6 +77,7 @@ public class ShopController {
     @NotNull
     @GetMapping("/delete/{delShop}")
     private String deleteRecord(@NotNull @PathVariable Shop delShop) {
+        dismissEmployees(delShop);
         shopRepo.delete(delShop);
         return "redirect:/shop";
     }
@@ -102,7 +106,10 @@ public class ShopController {
         return true;
     }
 
-    private void dismissEmployees() {
-
+    private void dismissEmployees(@NotNull Shop delShop) {
+        var employees = delShop.getShopEmployees();
+        employees.forEach(e -> e.setActive(false));
+        for (var employee : employees)
+            employeeRepo.save(employee);
     }
 }
