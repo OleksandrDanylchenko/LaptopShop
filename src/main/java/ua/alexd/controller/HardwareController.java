@@ -79,7 +79,7 @@ public class HardwareController {
                              @RequestParam String ssdModel, @RequestParam String displayModel,
                              @RequestParam String hddModel, @RequestParam String gpuModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName, cpuModel, ramModel, ssdModel, displayModel, hddModel, gpuModel, model))
+        if (isFieldsEmpty(assemblyName, model))
             return "add/hardwareAdd";
 
         var cpu = cpuRepo.findByModel(cpuModel);
@@ -110,7 +110,7 @@ public class HardwareController {
                               @RequestParam String ssdModel, @RequestParam String displayModel,
                               @RequestParam String hddModel, @RequestParam String gpuModel,
                               @PathVariable Hardware editHardware, @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName, cpuModel, ramModel, ssdModel, displayModel, hddModel, gpuModel, model))
+        if (isFieldsEmpty(assemblyName, model))
             return "/edit/hardwareEdit";
 
         editHardware.setAssemblyName(assemblyName);
@@ -143,13 +143,9 @@ public class HardwareController {
         return "redirect:/hardware";
     }
 
-    private boolean isFieldsEmpty(String assemblyName, String cpuModel, String ramModel, String ssdModel,
-                                  String displayModel, String hddModel, String gpuModel, @NotNull Model model) {
-        if (assemblyName == null || cpuModel == null || ramModel == null || ssdModel == null ||
-                displayModel == null || hddModel == null || gpuModel == null ||
-                assemblyName.isBlank() || cpuModel.isBlank() || ramModel.isBlank() || ssdModel.isBlank() ||
-                displayModel.isBlank() || hddModel.isBlank() || gpuModel.isBlank()) {
-            model.addAttribute("errorMessage", "Поля збірки не можуть бути пустими!");
+    private boolean isFieldsEmpty(String assemblyName, @NotNull Model model) {
+        if (assemblyName == null || assemblyName.isBlank()) {
+            model.addAttribute("errorMessage", "Назва збірки не може бути пустими!");
             initializeDropDownChoices(model);
             return true;
         }
