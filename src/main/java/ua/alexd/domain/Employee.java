@@ -18,6 +18,10 @@ public class Employee {
     @Column(name = "secondName")
     private String secondName;
 
+    @Basic
+    @Column(name = "isActive")
+    private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name = "shopId")
     private Shop shop;
@@ -25,10 +29,11 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String firstName, String secondName, Shop shop) {
+    public Employee(String firstName, String secondName, Shop shop, boolean isActive) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.shop = shop;
+        this.isActive = isActive;
     }
 
     public int getId() {
@@ -61,5 +66,13 @@ public class Employee {
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

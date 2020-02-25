@@ -13,6 +13,14 @@
             <label>Прізвище: <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
             <label>Адреса магазину: <input type="text" name="shopAddress"
                                            value="${RequestParameters.shopAddress!}"/></label>
+            <#assign isActiveChoises = [' ', 'Так', 'Ні']>
+            <label>Працюючий:
+                <select name="isActive">
+                    <#list isActiveChoises as choice>
+                        <option>${choice}</option>
+                    </#list>
+                </select>
+            </label>
             <button type="submit">Шукати</button>
         </form>
     </div>
@@ -27,6 +35,7 @@
                 <th>Прізвище</th>
                 <th>№ магазину</th>
                 <th>Адреса магазину</th>
+                <th>Працюючий</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -37,8 +46,14 @@
                     <td>${employee.id}</td>
                     <td>${employee.firstName}</td>
                     <td>${employee.secondName}</td>
-                    <td>${employee.shop.id}</td>
-                    <td>${employee.shop.address}</td>
+                    <#if employee.shop??>
+                        <td>${employee.shop.id}</td>
+                        <td>${employee.shop.address}</td>
+                    <#else>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                    </#if>
+                    <td>${employee.isActive?then("Так", "Ні")}</td>
                     <td><a href="/employee/edit/${employee.id}">Edit</a></td>
                     <td><a href="/employee/delete/${employee.id}" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>

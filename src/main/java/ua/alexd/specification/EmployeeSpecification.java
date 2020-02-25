@@ -30,4 +30,12 @@ public final class EmployeeSpecification {
         return (root, query, builder) -> builder.like(root.join("shop")
                 .get("address"), "%" + expression + "%");
     }
+
+    @Nullable
+    @Contract(pure = true)
+    public static Specification<Employee> isActiveEqual(String expression) {
+        if (expression == null || expression.isEmpty())
+            return null;
+        return (root, query, builder) -> builder.equal(root.get("isActive"), expression.equals("Так"));
+    }
 }

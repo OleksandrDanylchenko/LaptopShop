@@ -106,9 +106,12 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/edit/{editHardware}")
-    private String editRecord(@RequestParam String assemblyName, @RequestParam String cpuModel, @RequestParam String ramModel,
-                              @RequestParam String ssdModel, @RequestParam String displayModel,
-                              @RequestParam String hddModel, @RequestParam String gpuModel,
+    private String editRecord(@RequestParam String assemblyName, @RequestParam(required = false) String cpuModel,
+                              @RequestParam(required = false) String ramModel,
+                              @RequestParam(required = false) String ssdModel,
+                              @RequestParam(required = false) String displayModel,
+                              @RequestParam(required = false) String hddModel,
+                              @RequestParam(required = false) String gpuModel,
                               @PathVariable Hardware editHardware, @NotNull Model model) {
         if (isFieldsEmpty(assemblyName, model))
             return "/edit/hardwareEdit";

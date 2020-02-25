@@ -54,7 +54,7 @@ public class BuyingController {
     @PostMapping("/add")
     private String addRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
                              @RequestParam Integer totalPrice, @NotNull Model model) {
-        if (isFieldsEmpty(basketId, laptopModel, totalPrice, model))
+        if (isFieldsEmpty(totalPrice, model))
             return "add/buyingAdd";
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -76,10 +76,10 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/edit/{editBuying}")
-    private String editRecord(@PathVariable Buying editBuying, @RequestParam Integer basketId,
-                              @RequestParam String laptopModel, @RequestParam Integer totalPrice,
+    private String editRecord(@PathVariable Buying editBuying, @RequestParam(required = false) Integer basketId,
+                              @RequestParam(required = false) String laptopModel, @RequestParam Integer totalPrice,
                               @NotNull Model model) {
-        if (isFieldsEmpty(basketId, laptopModel, totalPrice, model))
+        if (isFieldsEmpty(totalPrice, model))
             return "/edit/buyingEdit";
 
         @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -101,9 +101,8 @@ public class BuyingController {
         return "redirect:/buying";
     }
 
-    private boolean isFieldsEmpty(Integer basketId, String laptopModel, Integer totalPrice, Model model) {
-        if (basketId == null || totalPrice == null || laptopModel == null || laptopModel.isBlank() ||
-                basketRepo.findById(basketId).isEmpty()) {
+    private boolean isFieldsEmpty(Integer totalPrice, Model model) {
+        if (totalPrice == null) {
             model.addAttribute("errorMessage", "Поля покупки не можуть бути пустими!");
             initializeDropDownChoices(model);
             return true;

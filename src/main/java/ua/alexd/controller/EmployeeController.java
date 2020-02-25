@@ -27,9 +27,10 @@ public class EmployeeController {
     private String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false) String shopAddress,
+                              @RequestParam(required = false) String isActive,
                               @NotNull Model model) {
-        var employeesSpecification = Specification.where(firstNameEqual(firstName))
-                .and(secondNameEqual(secondName)).and(shopAddressLike(shopAddress));
+        var employeesSpecification = Specification.where(firstNameEqual(firstName)).and(secondNameEqual(secondName))
+                .and(shopAddressLike(shopAddress)).and(isActiveEqual(isActive));
         var employees = employeeRepo.findAll(employeesSpecification);
 
         model.addAttribute("employees", employees);
@@ -46,12 +47,12 @@ public class EmployeeController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam String shopAddress, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, shopAddress, model))
+                             @RequestParam String shopAddress, String isActive, @NotNull Model model) {
+        if (isFieldsEmpty(firstName, secondName, model))
             return "add/employeeAdd";
 
-        var shop = shopRepo.findByAddress(shopAddress).get(0);
-        var newEmployee = new Employee(firstName, secondName, shop);
+        var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
+        var newEmployee = new Employee(firstName, secondName, shop, true);
         employeeRepo.save(newEmployee);
 
         return "redirect:/employee";
@@ -69,14 +70,16 @@ public class EmployeeController {
     @PostMapping("/edit/{editEmployee}")
     private String editRecord(@NotNull @PathVariable Employee editEmployee,
                               @RequestParam String firstName, @RequestParam String secondName,
-                              @RequestParam String shopAddress, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, shopAddress, model))
+                              @RequestParam String shopAddress, @RequestParam String isActive,
+                              @NotNull Model model) {
+        if (isFieldsEmpty(firstName, secondName, model))
             return "/edit/employeeEdit";
 
         editEmployee.setFirstName(firstName);
         editEmployee.setSecondName(secondName);
         var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
         editEmployee.setShop(employeeShop);
+        editEmployee.setActive(isActive.equals("Так"));
         employeeRepo.save(editEmployee);
 
         return "redirect:/employee";
@@ -89,9 +92,9 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    private boolean isFieldsEmpty(String firstName, String secondName, String shopAddress, Model model) {
-        if (firstName == null || secondName == null || shopAddress == null ||
-                firstName.isBlank() || secondName.isBlank() || shopAddress.isBlank()) {
+    private boolean isFieldsEmpty(String firstName, String secondName, Model model) {
+        if (firstName == null || secondName == null ||
+                firstName.isBlank() || secondName.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля співробітника не можуть бути пустими!");
             initDropDownChoices(model);

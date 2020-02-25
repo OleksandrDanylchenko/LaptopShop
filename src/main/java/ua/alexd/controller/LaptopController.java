@@ -57,7 +57,7 @@ public class LaptopController {
                              @RequestParam String typeName,
                              @RequestParam String labelModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
+        if (isFieldsEmpty(hardwareAssemblyName, model))
             return "add/labelAdd";
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
@@ -82,10 +82,10 @@ public class LaptopController {
     @NotNull
     @PostMapping("/edit/{editLaptop}")
     private String editRecord(@RequestParam String hardwareAssemblyName,
-                              @RequestParam String typeName,
-                              @RequestParam String labelModel,
+                              @RequestParam(required = false) String typeName,
+                              @RequestParam(required = false) String labelModel,
                               @PathVariable Laptop editLaptop, @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
+        if (isFieldsEmpty(hardwareAssemblyName, model))
             return "edit/labelEdit";
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
@@ -110,9 +110,8 @@ public class LaptopController {
         return "redirect:/laptop";
     }
 
-    private boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel, Model model) {
-        if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
-                hardwareAssemblyName.isBlank() || typeName.isBlank() || labelModel.isBlank()) {
+    private boolean isFieldsEmpty(String hardwareAssemblyName, Model model) {
+        if (hardwareAssemblyName == null || hardwareAssemblyName.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля ноутбуку не можуть бути пустими!");
             initializeDropDownChoices(model);

@@ -65,7 +65,7 @@ public class BasketController {
     @PostMapping("/add")
     private String addRecord(@RequestParam Integer employeeId, @RequestParam Integer clientId,
                              @RequestParam String dateTimeStr, @NotNull Model model) {
-        if (isFieldsEmpty(employeeId, clientId, dateTimeStr, model))
+        if (isFieldsEmpty(dateTimeStr, model))
             return "/add/basketAdd";
 
         var dateTime = getDateTime(dateTimeStr);
@@ -90,10 +90,10 @@ public class BasketController {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String editRecord(@PathVariable Basket editBasket, @RequestParam Integer employeeId,
-                              @RequestParam Integer clientId, @RequestParam String dateTimeStr,
+    private String editRecord(@PathVariable Basket editBasket, @RequestParam(required = false) Integer employeeId,
+                              @RequestParam(required = false) Integer clientId, @RequestParam String dateTimeStr,
                               @NotNull Model model) {
-        if (isFieldsEmpty(employeeId, clientId, dateTimeStr, model))
+        if (isFieldsEmpty(dateTimeStr, model))
             return "/edit/basketEdit";
 
         var employee = employeeRepo.findById(employeeId).get();
@@ -117,9 +117,8 @@ public class BasketController {
         return "redirect:/basket";
     }
 
-    private boolean isFieldsEmpty(Integer employeeId, Integer clientId, String dateTimeStr, Model model) {
-        if (employeeId == null || clientId == null || dateTimeStr == null || dateTimeStr.isBlank() ||
-                employeeRepo.findById(employeeId).isEmpty() || clientRepo.findById(clientId).isEmpty()) {
+    private boolean isFieldsEmpty(String dateTimeStr, Model model) {
+        if (dateTimeStr == null || dateTimeStr.isBlank()) {
             model.addAttribute("errorMessage", "Поля кошику не можуть бути пустими!");
             initializeDropDownChoices(model);
             return true;
