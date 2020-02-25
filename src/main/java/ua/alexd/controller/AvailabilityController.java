@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.AvailabilitySpecification.*;
+import static ua.alexd.util.DateTimeConverter.isDateStartPrevDateEnd;
 import static ua.alexd.util.DateTimeConverter.isNonValidDate;
 
 @Controller
@@ -66,11 +67,11 @@ public class AvailabilityController {
                              @RequestParam(defaultValue = "0001-01-01") Date dateStart,
                              @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
                              @NotNull Model model) throws ParseException {
-        if (isNonValidDate(dateStart))
-            dateStart = null;
-        if (isNonValidDate(dateEnd))
-            dateEnd = null;
-        if (isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model)) {
+        if (isNonValidDate(dateStart) || isNonValidDate(dateEnd))
+            dateStart = dateEnd = null;
+
+        if (isDateStartPrevDateEnd(dateStart, dateEnd, model) ||
+                isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model)) {
             initializeDropDownChoices(model);
             return "add/availabilityAdd";
         }
@@ -100,11 +101,11 @@ public class AvailabilityController {
                               @RequestParam(defaultValue = "0001-01-01") Date dateStart,
                               @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
                               @NotNull Model model) throws ParseException {
-        if (isNonValidDate(dateStart))
-            dateStart = null;
-        if (isNonValidDate(dateEnd))
-            dateEnd = null;
-        if (isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model))
+        if (isNonValidDate(dateStart) || isNonValidDate(dateEnd))
+            dateStart = dateEnd = null;
+
+        if (isDateStartPrevDateEnd(dateStart, dateEnd, model) ||
+                isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model))
             return "/edit/availabilityEdit";
 
         editAvailability.setDateStart(dateStart);
