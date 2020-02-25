@@ -12,7 +12,7 @@
                 </#list>
             </select>
         </label>
-        <label>Ціна: <input type="number" step="10" min="5000" name="price" value="${(editAvailability.price??)?then(editAvailability.price?c, '')}"/></label>
+        <label>Ціна: <input type="number" step="1" min="5000" name="price" value="${(editAvailability.price??)?then(editAvailability.price?c, '')}"/></label>
         <label>Кількість: <input type="number" step="1" min="1" name="quantity" value="${(editAvailability.quantity??)?then(editAvailability.quantity?c, '')}"/></label>
         <label>Адреса магазину:
             <select name="shopAddress">

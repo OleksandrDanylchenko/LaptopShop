@@ -40,10 +40,21 @@
                 <tr>
                     <td>${buying.id}</td>
                     <td>${buying.totalPrice}</td>
-                    <td>${buying.basket.id!"Видалено"}</td>
-                    <td>${buying.basket.dateTime.format('yyyy-MM-dd HH:mm')!"Видалено"}</td>
-                    <td>${buying.laptop.id!"Видалено"}</td>
-                    <td>${buying.laptop.label.model!"Видалено"}</td>
+                    <#if buying.basket??>
+                        <td>${buying.basket.id}</td>
+                        <td>${buying.basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
+                    <#else>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                    </#if>
+
+                    <#if buying.laptop??>
+                        <td>${buying.laptop.id}</td>
+                        <td>${buying.laptop.label.model}</td>
+                    <#else>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                    </#if>
                     <td><a href="/buying/edit/${buying.id}">Edit</a></td>
                     <td><a href="/buying/delete/${buying.id}" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>

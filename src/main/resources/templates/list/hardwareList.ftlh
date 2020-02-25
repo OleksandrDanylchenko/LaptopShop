@@ -65,12 +65,12 @@
                 <tr>
                     <td>${assembly.id}</td>
                     <th>${assembly.assemblyName}</th>
-                    <th>${assembly.cpu.model!"Видалено"}</th>
-                    <th>${assembly.gpu.model!"Видалено"}</th>
-                    <th>${assembly.display.model!"Видалено"}</th>
-                    <th>${assembly.ram.model!"Видалено"}</th>
-                    <th>${assembly.ssd.model!"Видалено"}</th>
-                    <th>${assembly.hdd.model!"Видалено"}</th>
+                    <td><#if assembly.cpu??>${assembly.cpu.model}<#else>Видалено</#if></td>
+                    <td><#if assembly.gpu??>${assembly.gpu.model}<#else>Видалено</#if></td>
+                    <td><#if assembly.display??>${assembly.display.model}<#else>Видалено</#if></td>
+                    <td><#if assembly.ram??>${assembly.ram.model}<#else>Видалено</#if></td>
+                    <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Видалено</#if></td>
+                    <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Видалено</#if></td>
                     <td><a href="/hardware/edit/${assembly.id}">Edit</a></td>
                     <td><a href="/hardware/delete/${assembly.id}" onclick="return confirm('Are you sure?')">Delete</a>
                     </td>

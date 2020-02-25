@@ -51,13 +51,28 @@
             <#list baskets as basket>
                 <tr>
                     <td>${basket.id}</td>
-                    <td>${basket.employee.id!"Видалено"}</td>
-                    <td>${basket.employee.firstName!"Видалено"}</td>
-                    <td>${basket.employee.secondName!"Видалено"}</td>
-                    <td>${basket.employee.shop.address!"Видалено"}</td>
-                    <td>${basket.client.id!"Видалено"}</td>
-                    <td>${basket.client.firstName!"Видалено"}</td>
-                    <td>${basket.client.secondName!"Видалено"}</td>
+                    <#if basket.employee??>
+                        <td>${basket.employee.id}</td>
+                        <td>${basket.employee.firstName}</td>
+                        <td>${basket.employee.secondName}</td>
+                        <td>${basket.employee.shop.address}</td>
+                    <#else>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                    </#if>
+
+                    <#if basket.client??>
+                        <td>${basket.client.id}</td>
+                        <td>${basket.client.firstName}</td>
+                        <td>${basket.client.secondName}</td>
+                    <#else>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                        <td>Видалено</td>
+                    </#if>
+
                     <td>${basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
                     <td><a href="/basket/edit/${basket.id}">Edit</a></td>
                     <td><a href="/basket/delete/${basket.id}" onclick="return confirm('Are you sure?')">Delete</a>

@@ -11,7 +11,7 @@
         <form method="get" action="/availability">
             <label>Модель ноутбука: <input type="text" name="laptopModel"
                                            value="${RequestParameters.laptopModel!}"/></label>
-            <label>Ціна: <input type="number" step="10" min="5000" name="price"
+            <label>Ціна: <input type="number" step="1" min="5000" name="price"
                                 value="${RequestParameters.price!}"/></label>
             <label>Кількість: <input type="number" step="1" min="1" name="quantity"
                                      value="${RequestParameters.quantity!}"/></label>

@@ -14,7 +14,7 @@
                         </#list>
                     </select>
                 </label>
-                <label>Ціна: <input type="number" step="10" min="5000" name="price" value="${RequestParameters.price!}"/></label>
+                <label>Ціна: <input type="number" step="1" min="5000" name="price" value="${RequestParameters.price!}"/></label>
                 <label>Кількість: <input type="number" step="1" min="1" name="quantity" value="${RequestParameters.quantity!}"/></label>
                 <label>Адреса магазину:
                     <select name="shopAddress">
