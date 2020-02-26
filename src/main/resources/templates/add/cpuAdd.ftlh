@@ -1,12 +1,21 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "CPU adding">
-    <h2>${errorMessage!}</h2>
+    <@error.errorOutput errorMessage!/>
 
-    <h1>Додати новий процесор:</h1>
-    <form method="post" action="/cpu/add">
-        <label>Нова модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-        <label>Нова частота: <input type="number" step="0.1" name="frequency" min="0.1" max="5" value="${RequestParameters.frequency!}"/></label>
-        <button type="submit">Додати</button>
+    <p class="h1">Додати новий процесор:</p>
+    <form method="post" action="/cpu/add" class="form-group needs-validation w-100" novalidate>
+        <div class="form-row">
+            <input type="text" class="form-control mr-1 mt-2" name="model"
+                   value="${RequestParameters.model!}" placeholder="Нова модель" required/>
+            <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+        </div>
+        <div class="form-row">
+            <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="frequency"
+                   value="${RequestParameters.frequency!}" placeholder="Частота" required/>
+            <div class="invalid-feedback">Некоректна частота!</div>
+        </div>
+        <button type="submit" class="btn btn-primary my-2 float-right">Додати</button>
     </form>
 </@pad.page>

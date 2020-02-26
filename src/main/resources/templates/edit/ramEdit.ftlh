@@ -13,7 +13,7 @@
         </div>
         <div class="form-row">
             <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
-                   value="${editRam.memory!}" placeholder="Пам'ять(GiB)" required/>
+                   value="${(editRam.memory??)?then(editRam.memory?c, '')}" placeholder="Пам'ять(GiB)" required/>
             <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
         </div>
         <button type="submit" class="btn btn-primary my-2 float-right">Зберегти</button>
