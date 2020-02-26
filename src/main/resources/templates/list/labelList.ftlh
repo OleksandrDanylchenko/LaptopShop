@@ -20,8 +20,7 @@
                     <input type="text" class="form-control mr-1 mt-2" name="model"
                            value="${RequestParameters.model!}" placeholder="Модель"/>
                     <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right"><i
-                                class="fa fa-search"></i>
-                    </button>
+                                class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>

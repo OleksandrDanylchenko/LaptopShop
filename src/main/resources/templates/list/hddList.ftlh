@@ -1,46 +1,61 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "HDD">
-    <div>
-        <p><a href="/hdd/add">Додати новий HDD диск</a></p>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-primary " href="/hdd/add" role="button">
+                <i class="far fa-plus-square"></i> Додати новий HDD диск</a>
+        </div>
+
+        <div class="col-lg-3 col-4">
+            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+                    data-target="#hddSearch" aria-expanded="false" aria-controls="hddSearch">
+                Знайти HDD диск
+            </button>
+            <div class="collapse form-group" id="hddSearch">
+                <form method="get" action="/hdd">
+                    <input type="text" class="form-control mr-1 mt-2" name="model"
+                           value="${RequestParameters.model!}" placeholder="Модель"/>
+                    <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
+                           value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
+                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <p>Знайти HDD диск за критеріями:</p>
-        <form method="get" action="/hdd">
-            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Обсяг пам'яті: <input type="number" name="memory" min="1"
-                                         value="${RequestParameters.memory!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-
-    <#if hdds?has_content>
-        <div><p>Список HDD дисків:</p></div>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Модель</th>
-                <th>Пам'ять(GiB)</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list hdds as hdd>
+    <div class="row mt-5">
+        <#if hdds?has_content>
+            <div class="h2">Список HDD дисків:</div>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>${hdd.id}</td>
-                    <td>${hdd.model}</td>
-                    <td>${hdd.memory}</td>
-                    <td><a href="/hdd/edit/${hdd.id}">Edit</a></td>
-                    <td><a href="/hdd/delete/${hdd.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
-                    </td>
+                    <th scope="col">Id</th>
+                    <th scope="col">Модель</th>
+                    <th scope="col">Пам'ять(GiB)</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </#list>
-            </tbody>
-        </table>
-    <#else>
-        <h3>Не знайдено жодного HDD диску.</h3>
-    </#if>
+                </thead>
+                <tbody>
+                <#list hdds as hdd>
+                    <tr>
+                        <th scope="row">${hdd.id}</th>
+                        <td>${hdd.model}</td>
+                        <td>${hdd.memory}</td>
+                        <td><a class="btn btn-outline-primary" href="/hdd/edit/${hdd.id}"
+                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline-danger" href="/hdd/delete/${hdd.id}"
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        <#else>
+            <div class="h3">Не знайдено жодного HDD диску.</div>
+        </#if>
+    </div>
 </@pad.page>
