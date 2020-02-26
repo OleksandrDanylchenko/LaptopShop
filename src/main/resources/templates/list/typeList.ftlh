@@ -20,7 +20,7 @@
 
     <div class="row mt-2">
         <#if types?has_content>
-            <div class="h3">Список типів:</div>
+            <div class="h2">Список типів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

@@ -21,7 +21,7 @@
 
     <div class="row mt-2">
         <#if shops?has_content>
-            <div class="h3">Список магазинів:</div>
+            <div class="h2">Список магазинів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -38,7 +38,7 @@
                         <td>${shop.address}</td>
                         <td><a class="btn btn-outline-primary" href="/shop/edit/${shop.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-primary" href="/shop/delete/${shop.id}"
+                        <td><a class="btn btn-outline-danger" href="/shop/delete/${shop.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

@@ -28,7 +28,7 @@
 
     <div class="row mt-5">
         <#if ssds?has_content>
-            <div class="h3">Список SSD дисків:</div>
+            <div class="h2">Список SSD дисків:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -47,7 +47,7 @@
                         <td>${ssd.memory}</td>
                         <td><a class="btn btn-outline-primary" href="/ssd/edit/${ssd.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-primary" href="/ssd/delete/${ssd.id}"
+                        <td><a class="btn btn-outline-danger" href="/ssd/delete/${ssd.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

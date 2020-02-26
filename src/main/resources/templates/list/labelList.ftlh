@@ -28,7 +28,7 @@
     </div>
     <div class="row mt-5">
         <#if labels?has_content>
-            <div class="h3">Список найменувань:</div>
+            <div class="h2">Список найменувань:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -47,7 +47,7 @@
                         <td>${label.model}</td>
                         <td><a class="btn btn-outline-primary" href="/label/edit/${label.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-primary" href="/label/delete/${label.id}"
+                        <td><a class="btn btn-outline-danger" href="/label/delete/${label.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>

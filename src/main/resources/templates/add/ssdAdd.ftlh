@@ -14,7 +14,7 @@
         <div class="form-row">
             <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
                    value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)" required/>
-            <div class="invalid-feedback">Кількість пам'яті не може бути пустою!</div>
+            <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
         </div>
         <button type="submit" class="btn btn-primary my-2 float-right">Додати</button>
     </form>
