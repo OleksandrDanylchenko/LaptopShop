@@ -1,48 +1,56 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "Laptop adding">
     <#if hardwareAssemblyNames?has_content>
         <#if typeNames?has_content>
             <#if labelModels?has_content>
-                <h2>${errorMessage!}</h2>
+                <@error.errorOutput errorMessage!/>
 
-                <div>
-                    <h1>Додати новий ноутбук:</h1>
-                    <form method="post" action="/laptop/add">
-                        <label>Модель нового ноутбуку:
-                            <select name="labelModel">
-                                <#list labelModels as labelModel>
-                                    <option>${labelModel}</option>
-                                </#list>
-                            </select>
-                        </label>
-                        <label>Тип нового ноутбуку:
-                            <select name="typeName">
-                                <#list typeNames as typeName>
-                                    <option>${typeName}</option>
-                                </#list>
-                            </select>
-                        </label>
-                        <label>Збірка нового ноутбуку:
-                            <select name="hardwareAssemblyName">
-                                <#list hardwareAssemblyNames as hardwareAssemblyName>
-                                    <option>${hardwareAssemblyName}</option>
-                                </#list>
-                            </select>
-                        </label>
-                        <button type="submit">Додати</button>
-                    </form>
-                </div>
+                <p class="h1">Додати новий ноутбук:</p>
+                <form method="post" action="/laptop/add">
+                    <div class="form-row my-2">
+                        <select class="custom-select" name="labelModel">
+                            <option value="" selected disabled>Оберіть нову модель</option>
+                            <#list labelModels as labelModel>
+                                <option>${labelModel}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <div class="form-row my-2">
+                        <select class="custom-select" name="typeName">
+                            <option value="" selected disabled>Оберіть тип</option>
+                            <#list typeNames as typeName>
+                                <option>${typeName}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <div class="form-row my-2">
+                        <select class="custom-select" name="hardwareAssemblyName">
+                            <option value="" selected disabled>Оберіть збірку</option>
+                            <#list hardwareAssemblyNames as hardwareAssemblyName>
+                                <option>${hardwareAssemblyName}</option>
+                            </#list>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-1 float-right">Додати</button>
+                </form>
             <#else>
-                <h1>Не знайдено жодного найменування.</h1>
-                <p><a href="/label/add">Додайте нове найменування</a> для створення ноутбуку.</p>
+                <div class="alert alert-warning" role="alert">
+                    <div class="h1 text-center">Не знайдено жодного найменування.</div>
+                    <div class="h3 text-center"><a href="/label/add">Додайте нове найменування</a> для створення ноутбуку.</div>
+                </div>
             </#if>
         <#else>
-            <h1>Не знайдено жодного типу.</h1>
-            <p><a href="/type/add">Додайте новий тип</a> для створення ноутбуку.</p>
+            <div class="alert alert-warning" role="alert">
+                <div class="h1 text-center">>Не знайдено жодного типу.</div>
+                <div class="h3 text-center"><a href="/type/add">Додайте новий тип</a> для створення ноутбуку.</div>
+            </div>
         </#if>
     <#else>
-        <h1>Не знайдено жодної збірки.</h1>
-        <p><a href="/hardware/add">Додайте нову збірку</a> для створення ноутбуку.</p>
+        <div class="alert alert-warning" role="alert">
+            <div class="h1 text-center">>Не знайдено жодної збірки.</div>
+            <div class="h3 text-center"><a href="/hardware/add">Додайте нову збірку</a> для створення ноутбуку.</div>
+        </div>
     </#if>
 </@pad.page>

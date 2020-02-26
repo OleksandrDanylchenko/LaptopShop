@@ -9,10 +9,10 @@
 
         <div class="col-lg-3 col-4">
             <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
-                    data-target="#ssdSearch" aria-expanded="false" aria-controls="ssdSearch">
+                    data-target="#ramSearch" aria-expanded="false" aria-controls="ramSearch">
                 Знайти оперативну пам'ять
             </button>
-            <div class="collapse form-group" id="ssdSearch">
+            <div class="collapse form-group" id="ramSearch">
                 <form method="get" action="/ram">
                     <input type="text" class="form-control mr-1 mt-2" name="model"
                            value="${RequestParameters.model!}" placeholder="Модель"/>
@@ -55,7 +55,7 @@
                 </tbody>
             </table>
         <#else>
-            <h3>Не знайдено жодної оперативної пам'яті.</h3>
+            <div class="h3">Не знайдено жодної оперативної пам'яті.</div>
         </#if>
     </div>
 </@pad.page>

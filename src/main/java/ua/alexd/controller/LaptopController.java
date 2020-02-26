@@ -47,18 +47,18 @@ public class LaptopController {
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        initializeDropDownChoices(model);
+        initializeAddingDropDownChoices(model);
         return "add/laptopAdd";
     }
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String hardwareAssemblyName,
-                             @RequestParam String typeName,
-                             @RequestParam String labelModel,
+    private String addRecord(@RequestParam(required = false) String hardwareAssemblyName,
+                             @RequestParam(required = false) String typeName,
+                             @RequestParam(required = false) String labelModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, model))
-            return "add/labelAdd";
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
+            return "add/laptopAdd";
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName).get(0);
@@ -75,17 +75,17 @@ public class LaptopController {
     @GetMapping("/edit/{editLaptop}")
     private String editRecord(@PathVariable Laptop editLaptop, @NotNull Model model) {
         model.addAttribute("editLaptop", editLaptop);
-        initializeDropDownChoices(model);
+        initializeEditingDropDownChoices(editLaptop, model);
         return "/edit/laptopEdit";
     }
 
     @NotNull
     @PostMapping("/edit/{editLaptop}")
-    private String editRecord(@RequestParam String hardwareAssemblyName,
+    private String editRecord(@RequestParam(required = false) String hardwareAssemblyName,
                               @RequestParam(required = false) String typeName,
                               @RequestParam(required = false) String labelModel,
                               @PathVariable Laptop editLaptop, @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, model))
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
             return "edit/labelEdit";
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
@@ -98,7 +98,7 @@ public class LaptopController {
         editLaptop.setLabel(label);
 
         if (!saveRecord(editLaptop, model))
-            return "edit/labelEdit";
+            return "edit/laptopEdit";
 
         return "redirect:/laptop";
     }
@@ -110,31 +110,48 @@ public class LaptopController {
         return "redirect:/laptop";
     }
 
-    private boolean isFieldsEmpty(String hardwareAssemblyName, Model model) {
-        if (hardwareAssemblyName == null || hardwareAssemblyName.isBlank()) {
+    private boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel, Model model) {
+        if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
+                typeName.isBlank() || labelModel.isBlank() || hardwareAssemblyName.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля ноутбуку не можуть бути пустими!");
-            initializeDropDownChoices(model);
+            initializeAddingDropDownChoices(model);
             return true;
         }
         return false;
     }
 
+    // TODO remove after testing
     private boolean saveRecord(Laptop saveLaptop, Model model) {
         try {
             laptopRepo.save(saveLaptop);
         } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі");
-            initializeDropDownChoices(model);
+            initializeAddingDropDownChoices(model);
             return false;
         }
         return true;
     }
 
-    private void initializeDropDownChoices(@NotNull Model model) {
+    private void initializeEditingDropDownChoices(@NotNull Laptop editLaptop, @NotNull Model model) {
+        var addedLaptopModels = laptopRepo.getAllModels();
+        addedLaptopModels.remove(editLaptop.getLabel().getModel());
+        var availableModels = labelRepo.getAllModels();
+        availableModels.removeAll(addedLaptopModels);
+
         model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
                 .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", labelRepo.getAllModels());
+                .addAttribute("labelModels", availableModels);
+    }
+
+    private void initializeAddingDropDownChoices(@NotNull Model model) {
+        var addedLaptopModels = laptopRepo.getAllModels();
+        var availableModels = labelRepo.getAllModels();
+        availableModels.removeAll(addedLaptopModels);
+
+        model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
+                .addAttribute("typeNames", typeRepo.getAllNames())
+                .addAttribute("labelModels", availableModels);
     }
 }

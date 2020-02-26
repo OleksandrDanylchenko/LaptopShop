@@ -1,36 +1,31 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "Hardware editing">
-    <h2>${errorMessage!}</h2>
+    <@error.errorOutput errorMessage!/>
 
-    <h1>Змінити ноутбук:</h1>
+    <p class="h1">Змінити ноутбук:</p>
     <form method="post" action="/laptop/edit/${editLaptop.id}">
         <#if labelModels?has_content>
-            <label>Модель нового ноутбуку:
-                <select name="labelModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="labelModel">
+                    <option value="" selected disabled>Оберіть модель</option>
                     <#list labelModels as labelModel>
-                        <#if editLaptop.laptop??>
-                            <option value="${labelModel}"<#if labelModel == editLaptop.laptop.model>
+                        <#if editLaptop.label??>
+                            <option value="${labelModel}"<#if labelModel == editLaptop.label.model>
                                 selected="selected"</#if>>${labelModel}</option>
                         <#else>
                             <option>${labelModel}</option>
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
-        <label>Тип нового ноутбуку:
-            <select name="typeName">
-                <#list typeNames as typeName>
-                    <option>${typeName}</option>
-                </#list>
-            </select>
-        </label>
-
         <#if typeNames?has_content>
-            <label>Тип нового ноутбуку:
-                <select name="typeName">
+            <div class="form-row my-2">
+                <select class="custom-select" name="typeName">
+                    <option value="" selected disabled>Оберіть тип</option>
                     <#list typeNames as typeName>
                         <#if editLaptop.type??>
                             <option value="${typeName}"<#if typeName == editLaptop.type.name>
@@ -40,23 +35,24 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if typeNames?has_content>
-            <label>Збірка нового ноутбуку:
-                <select name="hardwareAssemblyName">
+            <div class="form-row my-2">
+                <select class="custom-select" name="hardwareAssemblyName">
+                    <option value="" selected disabled>Оберіть збірку</option>
                     <#list hardwareAssemblyNames as hardwareAssemblyName>
                         <#if editLaptop.hardware??>
-                            <option value="${hardwareAssemblyName}"<#if hardwareAssemblyName == editLaptop.hardware.name>
+                            <option value="${hardwareAssemblyName}"<#if hardwareAssemblyName == editLaptop.hardware.assemblyName>
                                 selected="selected"</#if>>${hardwareAssemblyName}</option>
                         <#else>
                             <option>${hardwareAssemblyName}</option>
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
-        <button type="submit">Зберегти</button>
+        <button type="submit" class="btn btn-primary mt-1 float-right">Зберегти</button>
     </form>
 </@pad.page>

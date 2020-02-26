@@ -20,7 +20,7 @@
 
     <#include "navBar.ftlh">
 
-    <div class="container mt-lg-3 mt-2">
+    <div class="container-fluid mt-lg-3 mt-2 px-5">
         <#nested>
     </div>
 
