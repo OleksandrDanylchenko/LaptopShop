@@ -1,15 +1,24 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "Hardware editing">
-    <h2>${errorMessage!}</h2>
+    <@error.errorOutput errorMessage!/>
 
-    <h1>Змінити збірку:</h1>
-    <form method="post" action="/hardware/edit/${editHardware.id}">
-        <label>Назва збірки: <input type="text" name="assemblyName" value="${editHardware.assemblyName}"/></label>
+    <p class="h1">Змінити збірку:</p>
+    <form method="post" action="/hardware/edit/${editHardware.id}" class="form-group needs-validation w-100"
+          novalidate>
+
+        <div class="form-row my-2">
+            <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
+                   value="${editHardware.assemblyName}" placeholder="Назва"
+                   required/>
+            <div class="invalid-feedback">Назва моделі не може бути пустою!</div>
+        </div>
 
         <#if cpuModels?has_content>
-            <label>Модель процесору:
-                <select name="cpuModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="cpuModel">
+                    <option value="" selected disabled>Оберіть модель процесору</option>
                     <#list cpuModels as cpuModel>
                         <#if editHardware.cpu??>
                             <option value="${cpuModel}"<#if cpuModel == editHardware.cpu.model>
@@ -19,12 +28,13 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if gpuModels?has_content>
-            <label>Модель відеокарти:
-                <select name="gpuModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="gpuModel">
+                    <option value="" selected disabled>Оберіть модель відеокарти</option>
                     <#list gpuModels as gpuModel>
                         <#if editHardware.gpu??>
                             <option value="${gpuModel}"<#if gpuModel == editHardware.gpu.model>
@@ -34,12 +44,13 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if displayModels?has_content>
-            <label>Модель дисплею:
-                <select name="displayModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="displayModel">
+                    <option value="" selected disabled>Оберіть модель дисплею</option>
                     <#list displayModels as displayModel>
                         <#if editHardware.display??>
                             <option value="${displayModel}"<#if displayModel == editHardware.display.model>
@@ -49,12 +60,13 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if ramModels?has_content>
-            <label>Модель оперативної пам'яті:
-                <select name="ramModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="ramModel">
+                    <option value="" selected disabled>Оберіть модель оперативної пам'яті</option>
                     <#list ramModels as ramModel>
                         <#if editHardware.ram??>
                             <option value="${ramModel}"<#if ramModel == editHardware.ram.model>
@@ -64,12 +76,13 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if ssdModels?has_content>
-            <label>Модель SSD диску:
-                <select name="ssdModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="ssdModel">
+                    <option value="" selected disabled>Оберіть модель SSD диску</option>
                     <#list ssdModels as ssdModel>
                         <#if editHardware.ssd??>
                             <option value="${ssdModel}"<#if ssdModel == editHardware.ssd.model>
@@ -79,12 +92,13 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
         <#if hddModels?has_content>
-            <label>Модель HDD диску:
-                <select name="hddModel">
+            <div class="form-row my-2">
+                <select class="custom-select" name="hddModel">
+                    <option value="" selected disabled>Оберіть модель HDD диску</option>
                     <#list hddModels as hddModel>
                         <#if editHardware.hdd??>
                             <option value="${hddModel}"<#if hddModel == editHardware.hdd.model>
@@ -94,9 +108,9 @@
                         </#if>
                     </#list>
                 </select>
-            </label>
+            </div>
         </#if>
 
-        <button type="submit">Зберегти</button>
+        <button type="submit" class="btn btn-primary mt-1 float-right">Зберегти</button>
     </form>
 </@pad.page>

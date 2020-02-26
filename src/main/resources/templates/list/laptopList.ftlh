@@ -51,8 +51,8 @@
                         <td scope="row">${laptop.id}</td>
                         <td>${laptop.label.brand}</td>
                         <td>${laptop.label.model}</td>
-                        <td><#if laptop.type??>${laptop.type.name}<#else>Видалено</#if></td>
-                        <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Видалено</#if></td>
+                        <td><#if laptop.type??>${laptop.type.name}<#else>Відсутній</#if></td>
+                        <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Відсутній</#if></td>
                         <td><a class="btn btn-outline-primary" href="/laptop/edit/${laptop.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/laptop/delete/${laptop.id}"

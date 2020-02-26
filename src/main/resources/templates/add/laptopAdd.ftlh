@@ -8,7 +8,7 @@
                 <@error.errorOutput errorMessage!/>
 
                 <p class="h1">Додати новий ноутбук:</p>
-                <form method="post" action="/laptop/add">
+                <form method="post" action="/laptop/add" class="form-group">
                     <div class="form-row my-2">
                         <select class="custom-select" name="labelModel">
                             <option value="" selected disabled>Оберіть нову модель</option>

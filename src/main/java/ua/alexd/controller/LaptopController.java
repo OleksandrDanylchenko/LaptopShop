@@ -12,6 +12,8 @@ import ua.alexd.repos.LabelRepo;
 import ua.alexd.repos.LaptopRepo;
 import ua.alexd.repos.TypeRepo;
 
+import java.util.List;
+
 import static ua.alexd.specification.LaptopSpecification.*;
 
 @Controller
@@ -47,7 +49,7 @@ public class LaptopController {
     @NotNull
     @GetMapping("/add")
     private String addRecord(@NotNull Model model) {
-        initializeAddingDropDownChoices(model);
+        initializeAddingChoices(model);
         return "add/laptopAdd";
     }
 
@@ -75,7 +77,7 @@ public class LaptopController {
     @GetMapping("/edit/{editLaptop}")
     private String editRecord(@PathVariable Laptop editLaptop, @NotNull Model model) {
         model.addAttribute("editLaptop", editLaptop);
-        initializeEditingDropDownChoices(editLaptop, model);
+        initializeEditingChoices(editLaptop, model);
         return "/edit/laptopEdit";
     }
 
@@ -115,7 +117,7 @@ public class LaptopController {
                 typeName.isBlank() || labelModel.isBlank() || hardwareAssemblyName.isBlank()) {
             model.addAttribute("errorMessage",
                     "Поля ноутбуку не можуть бути пустими!");
-            initializeAddingDropDownChoices(model);
+            initializeAddingChoices(model);
             return true;
         }
         return false;
@@ -128,25 +130,23 @@ public class LaptopController {
         } catch (DataIntegrityViolationException ignored) {
             model.addAttribute("errorMessage",
                     "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі");
-            initializeAddingDropDownChoices(model);
+            initializeAddingChoices(model);
             return false;
         }
         return true;
     }
 
-    private void initializeEditingDropDownChoices(@NotNull Laptop editLaptop, @NotNull Model model) {
+    private void initializeEditingChoices(@NotNull Laptop editLaptop, @NotNull Model model) {
         var addedLaptopModels = laptopRepo.getAllModels();
         addedLaptopModels.remove(editLaptop.getLabel().getModel());
-        var availableModels = labelRepo.getAllModels();
-        availableModels.removeAll(addedLaptopModels);
-
-        model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", availableModels);
+        initializeDropDownChoices(addedLaptopModels, model);
     }
 
-    private void initializeAddingDropDownChoices(@NotNull Model model) {
-        var addedLaptopModels = laptopRepo.getAllModels();
+    private void initializeAddingChoices(@NotNull Model model) {
+        initializeDropDownChoices(laptopRepo.getAllModels(), model);
+    }
+
+    private void initializeDropDownChoices(List<String> addedLaptopModels, @NotNull Model model) {
         var availableModels = labelRepo.getAllModels();
         availableModels.removeAll(addedLaptopModels);
 

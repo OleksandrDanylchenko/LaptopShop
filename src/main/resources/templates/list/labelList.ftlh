@@ -14,7 +14,6 @@
             </button>
             <div class="collapse form-group" id="labelSearch">
                 <form method="get" action="/label">
-                    <label class="sr-only" for="labelSearch">Шукане найменування</label>
                     <input type="text" class="form-control mr-1 mt-2" name="brand"
                            value="${RequestParameters.brand!}" placeholder="Бренд"/>
                     <input type="text" class="form-control mr-1 mt-2" name="model"
@@ -25,6 +24,7 @@
             </div>
         </div>
     </div>
+
     <div class="row mt-5">
         <#if labels?has_content>
             <div class="h2">Список найменувань:</div>

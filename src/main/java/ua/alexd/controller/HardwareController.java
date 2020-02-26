@@ -75,9 +75,13 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String assemblyName, @RequestParam String cpuModel, @RequestParam String ramModel,
-                             @RequestParam String ssdModel, @RequestParam String displayModel,
-                             @RequestParam String hddModel, @RequestParam String gpuModel,
+    private String addRecord(@RequestParam(required = false) String assemblyName,
+                             @RequestParam(required = false) String cpuModel,
+                             @RequestParam(required = false) String ramModel,
+                             @RequestParam(required = false) String ssdModel,
+                             @RequestParam(required = false) String displayModel,
+                             @RequestParam(required = false) String hddModel,
+                             @RequestParam(required = false) String gpuModel,
                              @NotNull Model model) {
         if (isFieldsEmpty(assemblyName, model))
             return "add/hardwareAdd";
@@ -106,7 +110,8 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/edit/{editHardware}")
-    private String editRecord(@RequestParam String assemblyName, @RequestParam(required = false) String cpuModel,
+    private String editRecord(@RequestParam String assemblyName,
+                              @RequestParam(required = false) String cpuModel,
                               @RequestParam(required = false) String ramModel,
                               @RequestParam(required = false) String ssdModel,
                               @RequestParam(required = false) String displayModel,
@@ -121,6 +126,9 @@ public class HardwareController {
         var cpu = cpuRepo.findByModel(cpuModel);
         editHardware.setCpu(cpu);
 
+        var gpu = gpuRepo.findByModel(gpuModel);
+        editHardware.setGpu(gpu);
+
         var ram = ramRepo.findByModel(ramModel);
         editHardware.setRam(ram);
 
@@ -130,8 +138,8 @@ public class HardwareController {
         var hdd = hddRepo.findByModel(hddModel);
         editHardware.setHdd(hdd);
 
-        var gpu = gpuRepo.findByModel(gpuModel);
-        editHardware.setGpu(gpu);
+        var display = displayRepo.findByModel(displayModel);
+        editHardware.setDisplay(display);
 
         if (!saveRecord(editHardware, model))
             return "/edit/hardwareEdit";
@@ -148,7 +156,7 @@ public class HardwareController {
 
     private boolean isFieldsEmpty(String assemblyName, @NotNull Model model) {
         if (assemblyName == null || assemblyName.isBlank()) {
-            model.addAttribute("errorMessage", "Назва збірки не може бути пустими!");
+            model.addAttribute("errorMessage", "Назва збірки не може бути пустою!");
             initializeDropDownChoices(model);
             return true;
         }
