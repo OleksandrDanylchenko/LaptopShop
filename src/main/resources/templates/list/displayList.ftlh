@@ -40,7 +40,7 @@
                     <td>${display.diagonal}</td>
                     <td>${display.resolution}</td>
                     <td><a href="/display/edit/${display.id}">Edit</a></td>
-                    <td><a href="/display/delete/${display.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/display/delete/${display.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

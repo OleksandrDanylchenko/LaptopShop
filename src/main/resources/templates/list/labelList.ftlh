@@ -48,7 +48,7 @@
                         <td><a class="btn btn-outline-primary" href="/label/edit/${label.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-primary" href="/label/delete/${label.id}"
-                               role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 </#list>

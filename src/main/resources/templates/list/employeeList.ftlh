@@ -55,7 +55,7 @@
                     </#if>
                     <td>${employee.isActive?then("Так", "Ні")}</td>
                     <td><a href="/employee/edit/${employee.id}">Edit</a></td>
-                    <td><a href="/employee/delete/${employee.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/employee/delete/${employee.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

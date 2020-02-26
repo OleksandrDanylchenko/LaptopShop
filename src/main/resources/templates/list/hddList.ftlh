@@ -34,7 +34,7 @@
                     <td>${hdd.model}</td>
                     <td>${hdd.memory}</td>
                     <td><a href="/hdd/edit/${hdd.id}">Edit</a></td>
-                    <td><a href="/hdd/delete/${hdd.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/hdd/delete/${hdd.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

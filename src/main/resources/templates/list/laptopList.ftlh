@@ -41,7 +41,7 @@
                     <td><#if laptop.type??>${laptop.type.name}<#else>Видалено</#if></td>
                     <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Видалено</#if></td>
                     <td><a href="/laptop/edit/${laptop.id}">Edit</a></td>
-                    <td><a href="/laptop/delete/${laptop.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/laptop/delete/${laptop.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

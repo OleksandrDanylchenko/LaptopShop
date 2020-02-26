@@ -75,7 +75,7 @@
 
                     <td>${basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
                     <td><a href="/basket/edit/${basket.id}">Edit</a></td>
-                    <td><a href="/basket/delete/${basket.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/basket/delete/${basket.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

@@ -34,7 +34,7 @@
                     <td>${ram.model}</td>
                     <td>${ram.memory}</td>
                     <td><a href="/ram/edit/${ram.id}">Edit</a></td>
-                    <td><a href="/ram/delete/${ram.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/ram/delete/${ram.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

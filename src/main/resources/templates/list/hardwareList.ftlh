@@ -72,7 +72,7 @@
                     <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Видалено</#if></td>
                     <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Видалено</#if></td>
                     <td><a href="/hardware/edit/${assembly.id}">Edit</a></td>
-                    <td><a href="/hardware/delete/${assembly.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/hardware/delete/${assembly.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

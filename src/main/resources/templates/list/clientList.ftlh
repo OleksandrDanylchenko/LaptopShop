@@ -38,7 +38,7 @@
                     <td>${client.secondName}</td>
                     <td>${client.dateReg}</td>
                     <td><a href="/client/edit/${client.id}">Edit</a></td>
-                    <td><a href="/client/delete/${client.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/client/delete/${client.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

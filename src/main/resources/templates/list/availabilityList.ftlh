@@ -54,7 +54,7 @@
                     <td>${availability.dateStart}</td>
                     <td>${availability.dateEnd}</td>
                     <td><a href="/availability/edit/${availability.id}">Edit</a></td>
-                    <td><a href="/availability/delete/${availability.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/availability/delete/${availability.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

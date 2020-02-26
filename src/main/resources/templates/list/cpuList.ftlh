@@ -35,7 +35,7 @@
                     <td>${cpu.model}</td>
                     <td>${cpu.frequency}</td>
                     <td><a href="/cpu/edit/${cpu.id}">Edit</a></td>
-                    <td><a href="/cpu/delete/${cpu.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/cpu/delete/${cpu.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

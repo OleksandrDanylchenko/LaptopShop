@@ -56,7 +56,7 @@
                         <td>Видалено</td>
                     </#if>
                     <td><a href="/buying/edit/${buying.id}">Edit</a></td>
-                    <td><a href="/buying/delete/${buying.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/buying/delete/${buying.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

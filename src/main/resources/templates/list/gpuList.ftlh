@@ -34,7 +34,7 @@
                     <td>${gpu.model}</td>
                     <td>${gpu.memory}</td>
                     <td><a href="/gpu/edit/${gpu.id}">Edit</a></td>
-                    <td><a href="/gpu/delete/${gpu.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                    <td><a href="/gpu/delete/${gpu.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
                     </td>
                 </tr>
             </#list>

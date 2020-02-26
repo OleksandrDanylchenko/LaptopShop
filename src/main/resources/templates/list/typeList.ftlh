@@ -37,9 +37,9 @@
                         <td>${type.name}</td>
                         <td><a class="btn btn-outline-primary" href="/type/edit/${type.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-primary" href="/type/delete/${type.id}"
-                               role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <td><a class="btn btn-outline-danger" href="/type/delete/${type.id}"
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i>
+                            </a></td>
                     </tr>
                 </#list>
                 </tbody>

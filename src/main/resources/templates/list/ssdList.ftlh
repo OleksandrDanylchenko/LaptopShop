@@ -48,7 +48,7 @@
                         <td><a class="btn btn-outline-primary" href="/ssd/edit/${ssd.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-primary" href="/ssd/delete/${ssd.id}"
-                               role="button" onclick="return confirm('Are you sure?')"><i class="fa fa-trash"></i></a>
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 </#list>
