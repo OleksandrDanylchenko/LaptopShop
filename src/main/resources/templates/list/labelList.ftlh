@@ -7,30 +7,25 @@
                 <i class="far fa-plus-square"></i> Додати нове найменування</a>
         </div>
 
-        <div class="col">
-            <div class="row">
-                <button class="btn btn-primary float-right w-50" type="button" data-toggle="collapse"
-                        data-target="#labelSearch" aria-expanded="false" aria-controls="labelSearch">
-                    Знайти найменування
-                </button>
-            </div>
-            <div class="row">
-                <div class="collapse form-group float-right w-50" id="labelSearch">
-                    <form method="get" action="/label">
-                        <label class="sr-only" for="labelSearch">Шукане найменування</label>
-                        <input type="text" class="form-control mr-1 mt-2" name="brand"
-                               value="${RequestParameters.brand!}" placeholder="Бренд"/>
-                        <input type="text" class="form-control mr-1 mt-2" name="model"
-                               value="${RequestParameters.model!}" placeholder="Модель"/>
-                        <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right"><i
-                                    class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+        <div class="col-lg-3 col-4">
+            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+                    data-target="#labelSearch" aria-expanded="false" aria-controls="labelSearch">
+                Знайти найменування
+            </button>
+            <div class="collapse form-group" id="labelSearch">
+                <form method="get" action="/label">
+                    <label class="sr-only" for="labelSearch">Шукане найменування</label>
+                    <input type="text" class="form-control mr-1 mt-2" name="brand"
+                           value="${RequestParameters.brand!}" placeholder="Бренд"/>
+                    <input type="text" class="form-control mr-1 mt-2" name="model"
+                           value="${RequestParameters.model!}" placeholder="Модель"/>
+                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right"><i
+                                class="fa fa-search"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-
     <div class="row mt-5">
         <#if labels?has_content>
             <div class="h3">Список найменувань:</div>
