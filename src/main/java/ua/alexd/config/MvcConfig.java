@@ -12,6 +12,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/public/images/favicon.ico");
+        registry.addResourceHandler("/navbarLogo.png").addResourceLocations("classpath:/static/public/images/navbarLogo.png");
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/public/images/");
         registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/static/public/styles/");
         registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/static/public/scripts/");

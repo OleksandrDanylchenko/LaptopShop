@@ -1,5 +1,7 @@
-<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Alex Laptop shop</a>
+<nav class="navbar navbar-expand-xl bg-light">
+    <a class="navbar-brand" href="/">
+        <img width="100px" height="60px" src="/navbarLogo.png" alt="navbarLogo">
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
