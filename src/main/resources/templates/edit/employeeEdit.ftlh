@@ -10,12 +10,12 @@
             <div class="col-6">
                 <input type="text" class="form-control" name="firstName"
                        value="${editEmployee.firstName}" placeholder="Ім'я" required/>
-                <div class="invalid-feedback">Ім'я не може бути пустим!</div>
+                <div class="invalid-feedback">Ім'я співробітника не може бути пустим!</div>
             </div>
             <div class="col">
                 <input type="text" class="form-control" name="secondName"
                        value="${editEmployee.secondName}" placeholder="Прізвище" required/>
-                <div class="invalid-feedback">Прізвище не може бути пустим!</div>
+                <div class="invalid-feedback">Прізвище співробітника не може бути пустим!</div>
             </div>
         </div>
         <#if shopAddresses?has_content>

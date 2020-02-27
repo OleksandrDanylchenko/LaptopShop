@@ -1,15 +1,34 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "Client adding">
-    <h2>${errorMessage!}</h2>
+    <@error.errorOutput errorMessage!/>
 
     <div>
-        <h1>Додати нового клієнта:</h1>
-        <form method="post" action="/client/add">
-            <label>Ім'я нового клієнта:   <input type="text" name="firstName" value="${RequestParameters.firstName!}"/></label>
-            <label>Прізвище нового клієнта:   <input type="text" name="secondName" value="${RequestParameters.secondName!}"/></label>
-            <label>Дата реєстрації:   <input type="date" name="dateReg" min="2019-02-16" value="${RequestParameters.dateReg!}"></label>
-            <button type="submit">Додати</button>
+        <div class="h1">Додати нового клієнта:</div>
+        <form method="post" action="/client/add" class="form-group needs-validation w-100" novalidate>
+            <div class="form-row my-2">
+                <div class="col-6">
+                    <input type="text" class="form-control" name="firstName"
+                           value="${RequestParameters.firstName!}" placeholder="Ім'я нового клієнта"
+                           required/>
+                    <div class="invalid-feedback">Ім'я нового клієнта не може бути пустим!</div>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="secondName"
+                           value="${RequestParameters.secondName!}" placeholder="Прізвище нового клієнта"
+                           required/>
+                    <div class="invalid-feedback">Прізвище нового клієнта не може бути пустим!</div>
+                </div>
+            </div>
+            <div class="form-row my-2">
+                <div class="col">
+                    <input type="date" class="form-control" name="dateReg" min="2019-02-16"
+                           value="${RequestParameters.dateReg!}" placeholder="Дата реєстрації" required/>
+                    <div class="invalid-feedback">Уведено некоректну дату!</div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
         </form>
     </div>
 </@pad.page>
