@@ -29,20 +29,21 @@
         </form>
     </div>
 
+    <div class="row mt-5">
     <#if baskets?has_content>
-        <div><p>Список співробітників:</p></div>
-        <table>
+        <div class="h2">Список кошиків:</div>
+        <table class="table table-hover">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>ID продавця</th>
-                <th>Ім'я продавця</th>
-                <th>Прізвище продавця</th>
-                <th>Адреса магазину</th>
-                <th>ID покупця</th>
-                <th>Ім'я покупця</th>
-                <th>Прізвище покупця</th>
-                <th>Час покупки</th>
+                <th class="text-danger" scope="col">ID</th>
+                <th scope="col">ID продавця</th>
+                <th scope="col">Ім'я продавця</th>
+                <th scope="col">Прізвище продавця</th>
+                <th scope="col">Адреса магазину</th>
+                <th scope="col">ID покупця</th>
+                <th scope="col">Ім'я покупця</th>
+                <th scope="col">Прізвище покупця</th>
+                <th scope="col">Час покупки</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -50,7 +51,7 @@
             <tbody>
             <#list baskets as basket>
                 <tr>
-                    <td>${basket.id}</td>
+                    <th class="text-danger" scope="row">${basket.id}</th>
                     <#if basket.employee??>
                         <td>${basket.employee.id}</td>
                         <td>${basket.employee.firstName}</td>
@@ -82,6 +83,7 @@
             </tbody>
         </table>
     <#else>
-        <h3>Не знайдено жодного кошика.</h3>
+        <div class="h3">Не знайдено жодного кошика.</div>
     </#if>
+    </div>
 </@pad.page>

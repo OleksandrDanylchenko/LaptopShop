@@ -8,7 +8,7 @@
         </div>
 
         <div class="col-lg-3 col-4">
-            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#ssdSearch" aria-expanded="false" aria-controls="ssdSearch">
                 Знайти SSD диск
             </button>
@@ -18,7 +18,7 @@
                            value="${RequestParameters.model!}" placeholder="Модель"/>
                     <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
                            value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -32,7 +32,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Модель</th>
                     <th scope="col">Пам'ять(GiB)</th>
                     <th></th>
@@ -42,10 +42,10 @@
                 <tbody>
                 <#list ssds as ssd>
                     <tr>
-                        <th scope="row">${ssd.id}</th>
+                        <th class="text-danger" scope="row">${ssd.id}</th>
                         <td>${ssd.model}</td>
                         <td>${ssd.memory}</td>
-                        <td><a class="btn btn-outline-primary" href="/ssd/edit/${ssd.id}"
+                        <td><a class="btn btn-outline-dark" href="/ssd/edit/${ssd.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/ssd/delete/${ssd.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>

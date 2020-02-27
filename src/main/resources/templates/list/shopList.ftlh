@@ -3,7 +3,7 @@
 <@pad.page "Shops">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-primary float-left" href="/shop/add" role="button">
+            <a class="btn btn-outline-danger float-left" href="/shop/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий магазин</a>
         </div>
 
@@ -13,7 +13,7 @@
                     <label class="sr-only" for="shopSearchAddress">Шукана адреса</label>
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
                            placeholder="Адреса"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Адреса</th>
                     <th></th>
                     <th></th>
@@ -34,9 +34,9 @@
                 <tbody>
                 <#list shops as shop>
                     <tr>
-                        <th scope="row">${shop.id}</th>
+                        <th class="text-danger" scope="row">${shop.id}</th>
                         <td>${shop.address}</td>
-                        <td><a class="btn btn-outline-primary" href="/shop/edit/${shop.id}"
+                        <td><a class="btn btn-outline-dark" href="/shop/edit/${shop.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/shop/delete/${shop.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>

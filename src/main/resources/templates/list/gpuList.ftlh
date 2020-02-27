@@ -3,12 +3,12 @@
 <@pad.page "GPU">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-primary float-left" href="/gpu/add" role="button">
+            <a class="btn btn-outline-danger float-left" href="/gpu/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову відеокарту</a>
         </div>
 
         <div class="col-lg-3 col-4">
-            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#gpuSearch" aria-expanded="false" aria-controls="gpuSearch">
                 Знайти відеокарту
             </button>
@@ -18,7 +18,7 @@
                            value="${RequestParameters.model!}" placeholder="Модель"/>
                     <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
                            value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -32,7 +32,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Модель</th>
                     <th scope="col">Пам'ять(GiB)</th>
                     <th></th>
@@ -42,10 +42,10 @@
                 <tbody>
                 <#list gpus as gpu>
                     <tr>
-                        <th scope="row">${gpu.id}</th>
+                        <th class="text-danger" scope="row">${gpu.id}</th>
                         <td>${gpu.model}</td>
                         <td>${gpu.memory}</td>
-                        <td><a class="btn btn-outline-primary" href="/gpu/edit/${gpu.id}"
+                        <td><a class="btn btn-outline-dark" href="/gpu/edit/${gpu.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/gpu/delete/${gpu.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>

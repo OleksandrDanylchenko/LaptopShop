@@ -60,7 +60,7 @@
                 <tbody>
                 <#list displays as display>
                     <tr>
-                        <th scope="row" class="text-danger">${display.id}</th>
+                        <th class="text-danger" scope="row">${display.id}</th>
                         <td>${display.model}</td>
                         <td>${display.type}</td>
                         <td>${display.diagonal}</td>

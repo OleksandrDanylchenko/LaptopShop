@@ -45,7 +45,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-danger">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Ім'я</th>
                     <th scope="col">Прізвище</th>
                     <th scope="col">Дата реєстрації</th>
@@ -56,7 +56,7 @@
                 <tbody>
                 <#list clients as client>
                     <tr>
-                        <th scope="row" class="text-danger">${client.id}</th>
+                        <th class="text-danger" scope="row">${client.id}</th>
                         <td>${client.firstName}</td>
                         <td>${client.secondName}</td>
                         <td>${client.dateReg}</td>

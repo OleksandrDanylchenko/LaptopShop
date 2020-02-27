@@ -53,7 +53,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" class="text-danger">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Ім'я</th>
                     <th scope="col">Прізвище</th>
                     <th scope="col">№ магазину</th>
@@ -66,7 +66,7 @@
                 <tbody>
                 <#list employees as employee>
                     <tr>
-                        <th scope="row" class="text-danger">${employee.id}</th>
+                        <th class="text-danger" scope="row">${employee.id}</th>
                         <td>${employee.firstName}</td>
                         <td>${employee.secondName}</td>
                         <#if employee.shop??>

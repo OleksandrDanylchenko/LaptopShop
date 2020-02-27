@@ -3,7 +3,7 @@
 <@pad.page "CPU">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger " href="/cpu/add" role="button">
+            <a class="btn btn-outline-danger" href="/cpu/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий процесор</a>
         </div>
 
@@ -32,7 +32,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Модель</th>
                     <th scope="col">Частота(GHz)</th>
                     <th></th>
@@ -42,7 +42,7 @@
                 <tbody>
                 <#list cpus as cpu>
                     <tr>
-                        <th scope="row">${cpu.id}</th>
+                        <th class="text-danger" scope="row">${cpu.id}</th>
                         <td>${cpu.model}</td>
                         <td>${cpu.frequency}</td>
                         <td><a class="btn btn-outline-dark" href="/cpu/edit/${cpu.id}"

@@ -25,42 +25,44 @@
         </form>
     </div>
 
-    <#if availabilities?has_content>
-        <div><p>Список записів про наявність:</p></div>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Модель</th>
-                <th>Ціна</th>
-                <th>Кількість</th>
-                <th>Номер магазину</th>
-                <th>Адреса магазину</th>
-                <th>Початок продаж</th>
-                <th>Закінчення продаж</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list availabilities as availability>
+    <div class="row mt-5">
+        <#if availabilities?has_content>
+            <div class="h2">Список записів про наявність:</div>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>${availability.id}</td>
-                    <td>${availability.laptop.label.model}</td>
-                    <td>${availability.price}</td>
-                    <td>${availability.quantity}</td>
-                    <td>${availability.shop.id}</td>
-                    <td>${availability.shop.address}</td>
-                    <td>${availability.dateStart}</td>
-                    <td>${availability.dateEnd}</td>
-                    <td><a href="/availability/edit/${availability.id}">Edit</a></td>
-                    <td><a href="/availability/delete/${availability.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
-                    </td>
+                    <th class="text-danger" scope="col">Id</th>
+                    <th scope="col">Модель</th>
+                    <th scope="col">Ціна</th>
+                    <th scope="col">Кількість</th>
+                    <th scope="col">Номер магазину</th>
+                    <th scope="col">Адреса магазину</th>
+                    <th scope="col">Початок продаж</th>
+                    <th scope="col">Закінчення продаж</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
-            </#list>
-            </tbody>
-        </table>
-    <#else>
-        <h3>Не знайдено жодного запису про наявність.</h3>
-    </#if>
+                </thead>
+                <tbody>
+                <#list availabilities as availability>
+                    <tr>
+                        <th class="text-danger" scope="row">${availability.id}</th>
+                        <td>${availability.laptop.label.model}</td>
+                        <td>${availability.price}</td>
+                        <td>${availability.quantity}</td>
+                        <td>${availability.shop.id}</td>
+                        <td>${availability.shop.address}</td>
+                        <td>${availability.dateStart}</td>
+                        <td>${availability.dateEnd}</td>
+                        <td><a href="/availability/edit/${availability.id}">Edit</a></td>
+                        <td><a href="/availability/delete/${availability.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
+                        </td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        <#else>
+            <h3>Не знайдено жодного запису про наявність.</h3>
+        </#if>
+    </div>
 </@pad.page>
