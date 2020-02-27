@@ -3,12 +3,12 @@
 <@pad.page "CPU">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-primary " href="/cpu/add" role="button">
+            <a class="btn btn-outline-danger " href="/cpu/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий процесор</a>
         </div>
 
         <div class="col-lg-3 col-4">
-            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#cpuSearch" aria-expanded="false" aria-controls="cpuSearch">
                 Знайти процесор
             </button>
@@ -18,7 +18,7 @@
                            value="${RequestParameters.model!}" placeholder="Модель"/>
                     <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="frequency"
                            value="${RequestParameters.frequency!}" placeholder="Частота"/>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -45,7 +45,7 @@
                         <th scope="row">${cpu.id}</th>
                         <td>${cpu.model}</td>
                         <td>${cpu.frequency}</td>
-                        <td><a class="btn btn-outline-primary" href="/cpu/edit/${cpu.id}"
+                        <td><a class="btn btn-outline-dark" href="/cpu/edit/${cpu.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/cpu/delete/${cpu.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>

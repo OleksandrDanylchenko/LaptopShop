@@ -79,7 +79,7 @@ public class EmployeeController {
         editEmployee.setSecondName(secondName);
         var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
         editEmployee.setShop(employeeShop);
-        editEmployee.setActive(isActive.equals("Так"));
+        editEmployee.setActive(isActive.equals("Працюючий"));
         employeeRepo.save(editEmployee);
 
         return "redirect:/employee";

@@ -36,6 +36,6 @@ public final class EmployeeSpecification {
     public static Specification<Employee> isActiveEqual(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        return (root, query, builder) -> builder.equal(root.get("isActive"), expression.equals("Так"));
+        return (root, query, builder) -> builder.equal(root.get("isActive"), expression.equals("Працюючий"));
     }
 }

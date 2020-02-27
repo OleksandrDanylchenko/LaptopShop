@@ -3,7 +3,7 @@
 <@pad.page "SSD">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-primary " href="/ssd/add" role="button">
+            <a class="btn btn-outline-dark " href="/ssd/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нове найменування</a>
         </div>
 

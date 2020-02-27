@@ -1,15 +1,14 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
-
 <@pad.page "Hardware">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-primary " href="/hardware/add" role="button">
+            <a class="btn btn-outline-danger" href="/hardware/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову збірку</a>
         </div>
 
         <div class="col-6">
-            <button class="btn btn-primary w-100" type="button" data-toggle="collapse"
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#hardwareSearch" aria-expanded="false" aria-controls="hardwareSearch">
                 Знайти збірку
             </button>
@@ -82,7 +81,7 @@
                                    value="${RequestParameters.hddMemory!}" placeholder="Об'єм HDD диск"/>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -119,7 +118,7 @@
                         <td><#if assembly.ram??>${assembly.ram.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Відсутня</#if></td>
-                        <td><a class="btn btn-outline-primary" href="/hardware/edit/${assembly.id}"
+                        <td><a class="btn btn-outline-dark" href="/hardware/edit/${assembly.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
                         <td><a class="btn btn-outline-danger" href="/hardware/delete/${assembly.id}"
                                role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
