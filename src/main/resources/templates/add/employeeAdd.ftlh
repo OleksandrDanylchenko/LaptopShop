@@ -6,7 +6,7 @@
         <@error.errorOutput errorMessage!/>
 
         <div>
-            <h1>Додати нового співробітника:</h1>
+            <div class="h1">Додати нового співробітника:</div>
             <form method="post" action="/employee/add" class="form-group needs-validation w-100" novalidate>
                 <div class="form-row my-2">
                     <div class="col-6">

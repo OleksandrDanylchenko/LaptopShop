@@ -1,16 +1,41 @@
 <#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/errorOutput.ftlh" as error>
 
 <@pad.page "Display adding">
-    <h2>${errorMessage!}</h2>
+    <@error.errorOutput errorMessage!/>
 
     <div>
-        <h1>Додати новий дисплей:</h1>
-        <form method="post" action="/display/add">
-            <label>Нова модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Новий тип: <input type="text" name="type" value="${RequestParameters.type!}"/></label>
-            <label>Нова діагональ: <input type="number" step="0.1" name="diagonal" min="0.1" value="${RequestParameters.diagonal!}"/></label>
-            <label>Нове розширення: <input type="text" name="resolution" value="${RequestParameters.resolution!}"/></label>
-            <button type="submit">Додати</button>
+        <div class="h1">Додати новий дисплей:</div>
+        <form method="post" action="/display/add" class="form-group needs-validation w-100" novalidate>
+            <div class="form-row my-2">
+                <div class="col">
+                    <input type="text" class="form-control mr-1 mt-2" name="model"
+                           value="${RequestParameters.model!}" placeholder="Нова модель" required/>
+                    <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+                </div>
+            </div>
+            <div class="form-row my-2">
+                <div class="col">
+                    <input type="text" class="form-control mr-1 mt-2" name="type"
+                           value="${RequestParameters.type!}" placeholder="Тип" required/>
+                    <div class="invalid-feedback">Назва типу не може бути пустою!</div>
+                </div>
+            </div>
+            <div class="form-row my-2">
+                <div class="col">
+                    <input type="number" class="form-control mr-1 mt-2" step="0.1" min="0.1" name="diagonal"
+                           value="${RequestParameters.diagonal!}" placeholder="Діагональ" required/>
+                    <div class="invalid-feedback">Некоректно задана діагональ!</div>
+                </div>
+            </div>
+            <div class="form-row my-2">
+                <div class="col">
+                    <input type="text" class="form-control mr-1 mt-2" name="resolution"
+                           value="${RequestParameters.resolution!}" placeholder="Розширення" required/>
+                    <div class="invalid-feedback">Некоректно задано розширення!</div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
         </form>
     </div>
 </@pad.page>

@@ -1,52 +1,81 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Display">
-    <div>
-        <p><a href="/display/add">Додати новий дисплей</a></p>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-danger" href="/display/add" role="button">
+                <i class="far fa-plus-square"></i> Додати новий дисплей</a>
+        </div>
+
+        <div class="col-lg-4 col-5">
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
+                    data-target="#displaySearch" aria-expanded="false" aria-controls="displaySearch">
+                Знайти дисплей
+            </button>
+            <div class="collapse form-group" id="displaySearch">
+                <form method="get" action="/display">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="model"
+                                   value="${RequestParameters.model!}" placeholder="Модель"/>
+                        </div>
+                        <div class="col-4">
+                            <input type="text" class="form-control mr-1 mt-2" name="type"
+                                   value="${RequestParameters.type!}" placeholder="Тип"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-5">
+                            <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="diagonal"
+                                   value="${RequestParameters.diagonal!}" placeholder="Діагональ"/>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="resolution"
+                                   value="${RequestParameters.resolution!}" placeholder="Розширення"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <p>Знайти дисплей за критеріями:</p>
-        <form method="get" action="/display">
-            <label>Модель: <input type="text" name="model" value="${RequestParameters.model!}"/></label>
-            <label>Тип: <input type="text" name="type" value="${RequestParameters.type!}"/></label>
-            <label>Діагональ: <input type="number" step="0.1" name="diagonal" min="0.1"
-                                     value="${RequestParameters.diagonal!}"/></label>
-            <label>Розширення: <input type="text" name="resolution" value="${RequestParameters.resolution!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-
-    <#if displays?has_content>
-        <div><p>Список співробітників:</p></div>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Модель</th>
-                <th>Тип</th>
-                <th>Діагональ</th>
-                <th>Розширення</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list displays as display>
+    <div class="row mt-5">
+        <#if displays?has_content>
+            <div class="h2">Список співробітників:</div>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>${display.id}</td>
-                    <td>${display.model}</td>
-                    <td>${display.type}</td>
-                    <td>${display.diagonal}</td>
-                    <td>${display.resolution}</td>
-                    <td><a href="/display/edit/${display.id}">Edit</a></td>
-                    <td><a href="/display/delete/${display.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
-                    </td>
+                    <th class="text-danger" scope="col">Id</th>
+                    <th scope="col">Модель</th>
+                    <th scope="col">Тип</th>
+                    <th scope="col">Діагональ</th>
+                    <th scope="col">Розширення</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </#list>
-            </tbody>
-        </table>
-    <#else>
-        <h3>Не знайдено жодного дисплею.</h3>
-    </#if>
+                </thead>
+                <tbody>
+                <#list displays as display>
+                    <tr>
+                        <th scope="row" class="text-danger">${display.id}</th>
+                        <td>${display.model}</td>
+                        <td>${display.type}</td>
+                        <td>${display.diagonal}</td>
+                        <td>${display.resolution}</td>
+                        <td><a class="btn btn-outline-dark" href="/display/edit/${display.id}"
+                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline-danger" href="/display/delete/${display.id}"
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        <#else>
+            <div class="h3">Не знайдено жодного дисплею.</div>
+        </#if>
+    </div>
 </@pad.page>
