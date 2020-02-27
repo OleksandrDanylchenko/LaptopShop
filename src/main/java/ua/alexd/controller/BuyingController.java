@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
@@ -52,13 +53,16 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
-                             @RequestParam Integer totalPrice, @NotNull Model model) {
+    private String addRecord(@RequestParam(required = false, defaultValue = "0") Integer basketId,
+                             @RequestParam(required = false) String laptopModel,
+                             @RequestParam Integer totalPrice,
+                             @NotNull Model model) {
         if (isFieldsEmpty(totalPrice, model))
             return "add/buyingAdd";
 
-        @SuppressWarnings("OptionalGetWithoutIsPresent")
-        var basket = basketRepo.findById(basketId).get();
+        Basket basket = null;
+        if (basketRepo.findById(basketId).isPresent())
+            basket = basketRepo.findById(basketId).get();
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         var newBuying = new Buying(totalPrice, laptop, basket);
         buyingRepo.save(newBuying);
@@ -76,20 +80,24 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/edit/{editBuying}")
-    private String editRecord(@PathVariable Buying editBuying, @RequestParam(required = false) Integer basketId,
+    private String editRecord(@PathVariable Buying editBuying,
+                              @RequestParam(required = false, defaultValue = "0") Integer basketId,
                               @RequestParam(required = false) String laptopModel, @RequestParam Integer totalPrice,
                               @NotNull Model model) {
         if (isFieldsEmpty(totalPrice, model))
             return "/edit/buyingEdit";
 
-        @SuppressWarnings("OptionalGetWithoutIsPresent")
-        var basket = basketRepo.findById(basketId).get();
+        Basket basket = null;
+        if (basketRepo.findById(basketId).isPresent())
+            basket = basketRepo.findById(basketId).get();
         editBuying.setBasket(basket);
 
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editBuying.setLaptop(laptop);
 
         editBuying.setTotalPrice(totalPrice);
+
+        buyingRepo.save(editBuying);
 
         return "redirect:/buying";
     }

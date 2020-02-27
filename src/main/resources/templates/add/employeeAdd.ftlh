@@ -25,7 +25,7 @@
                 <div class="form-row my-2">
                     <div class="col">
                         <select class="custom-select" name="shopAddress">
-                            <option value="" selected disabled>Адреса магазину</option>
+                            <option value="" selected disabled>Оберіть адресу магазину</option>
                             <#list shopAddresses as address>
                                 <option>${address}</option>
                             </#list>

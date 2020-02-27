@@ -1,68 +1,98 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Buying">
-    <div>
-        <p><a href="/buying/add">Додати нову покупку</a></p>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-danger" href="/buying/add" role="button">
+                <i class="far fa-plus-square"></i> Додати нову покупку</a>
+        </div>
+
+        <div class="col-lg-5 col-6">
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
+                    data-target="#buyingSearch" aria-expanded="false" aria-controls="buyingSearch">
+                Знайти покупку
+            </button>
+            <div class="collapse form-group" id="buyingSearch">
+                <form method="get" action="/buying">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" min="1" class="form-control mr-1 mt-2" name="basketId"
+                                   value="${RequestParameters.basketId!}" placeholder="ID кошику"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="laptopModel"
+                                   value="${RequestParameters.laptopModel!}" placeholder="Модель ноутбуку"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" min="1" class="form-control mr-1 mt-2" name="totalPrice"
+                                   value="${RequestParameters.totalPrice!}" placeholder="Загальна ціна"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="datetime-local" class="form-control mr-1 mt-2" name="dateTimeStr"
+                                   value="${RequestParameters.dateTimeStr!}" placeholder="Дата/Час покупки"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <p>Знайти покупку за критеріями:</p>
-        <form method="get" action="/buying">
-            <label>ID кошику: <input type="number" step="1" min="1" name="basketId"
-                                     value="${RequestParameters.basketId!}"/></label>
-            <label>Модель ноутбуку: <input type="text" name="laptopModel"
-                                           value="${RequestParameters.laptopModel!}"/></label>
-            <label>Загальна ціна: <input type="number" step="10" min="1" name="totalPrice"
-                                         value="${RequestParameters.totalPrice!}"/></label>
-            <label>Час покупки: <input type="datetime-local" name="dateTimeStr"
-                                       value="${RequestParameters.dateTimeStr!}"/></label>
-            <button type="submit">Шукати</button>
-        </form>
-    </div>
-
-    <#if buyings?has_content>
-        <div><p>Список покупок:</p></div>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Загальна ціна</th>
-                <th>ID кошика</th>
-                <th>Час покупки</th>
-                <th>ID ноутбуку</th>
-                <th>Модель ноутбуку</th>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list buyings as buying>
+    <div class="row mt-5">
+        <#if buyings?has_content>
+            <div class="h2">Список покупок:</div>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>${buying.id}</td>
-                    <td>${buying.totalPrice}</td>
-                    <#if buying.basket??>
-                        <td>${buying.basket.id}</td>
-                        <td>${buying.basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
-                    <#else>
-                        <td>Видалено</td>
-                        <td>Видалено</td>
-                    </#if>
-
-                    <#if buying.laptop??>
-                        <td>${buying.laptop.id}</td>
-                        <td>${buying.laptop.label.model}</td>
-                    <#else>
-                        <td>Видалено</td>
-                        <td>Видалено</td>
-                    </#if>
-                    <td><a href="/buying/edit/${buying.id}">Edit</a></td>
-                    <td><a href="/buying/delete/${buying.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
-                    </td>
+                    <th class="text-danger" scope="col">ID</th>
+                    <th scope="col">Загальна ціна</th>
+                    <th scope="col">ID кошика</th>
+                    <th scope="col">Час покупки</th>
+                    <th scope="col">ID ноутбуку</th>
+                    <th scope="col">Модель ноутбуку</th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            </#list>
-            </tbody>
-        </table>
-    <#else>
-        <h3>Не знайдено жодної покупки.</h3>
-    </#if>
+                </thead>
+                <tbody>
+                <#list buyings as buying>
+                    <tr>
+                        <th class="text-danger" scope="row">${buying.id}</th>
+                        <td>${buying.totalPrice}грн.</td>
+                        <#if buying.basket??>
+                            <td>${buying.basket.id}</td>
+                            <td>${buying.basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
+                        <#else>
+                            <td>Видалено</td>
+                            <td>Видалено</td>
+                        </#if>
+
+                        <#if buying.laptop??>
+                            <td>${buying.laptop.id}</td>
+                            <td>${buying.laptop.label.model}</td>
+                        <#else>
+                            <td>Видалено</td>
+                            <td>Видалено</td>
+                        </#if>
+                        <td><a class="btn btn-outline-dark" href="/buying/edit/${buying.id}"
+                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline-danger" href="/buying/delete/${buying.id}"
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                </#list>
+                </tbody>
+            </table>
+        <#else>
+            <h3>Не знайдено жодної покупки.</h3>
+        </#if>
+    </div>
 </@pad.page>

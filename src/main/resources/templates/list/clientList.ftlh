@@ -10,10 +10,10 @@
 
         <div class="col-lg-5 col-6">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
-                    data-target="#employeeSearch" aria-expanded="false" aria-controls="employeeSearch">
+                    data-target="#clientSearch" aria-expanded="false" aria-controls="clientSearch">
                 Знайти клієнта
             </button>
-            <div class="collapse form-group" id="employeeSearch">
+            <div class="collapse form-group" id="clientSearch">
                 <form method="get" action="/client">
                     <div class="form-row">
                         <div class="col-6">

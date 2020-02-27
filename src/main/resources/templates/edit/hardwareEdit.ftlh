@@ -5,9 +5,7 @@
     <@error.errorOutput errorMessage!/>
 
     <p class="h1">Змінити збірку:</p>
-    <form method="post" action="/hardware/edit/${editHardware.id}" class="form-group needs-validation w-100"
-          novalidate>
-
+    <form method="post" action="/hardware/edit/${editHardware.id}" class="form-group needs-validation w-100" novalidate>
         <div class="form-row my-2">
             <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
                    value="${editHardware.assemblyName}" placeholder="Назва"

@@ -95,7 +95,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">Id</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Назва збірки</th>
                     <th scope="col">Модель процесора</th>
                     <th scope="col">Модель відеокарти</th>
@@ -110,7 +110,7 @@
                 <tbody>
                 <#list hardware as assembly>
                     <tr>
-                        <th scope="row">${assembly.id}</th>
+                        <th class="text-danger" scope="row">${assembly.id}</th>
                         <td>${assembly.assemblyName}</td>
                         <td><#if assembly.cpu??>${assembly.cpu.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.gpu??>${assembly.gpu.model}<#else>Відсутня</#if></td>
