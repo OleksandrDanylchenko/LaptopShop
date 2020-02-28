@@ -2,27 +2,59 @@
 <#setting locale="uk">
 
 <@pad.page "Availability">
-    <div>
-        <p><a href="/availability/add">Додати новий запис про наявність</a></p>
-    </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-outline-danger" href="/availability/add" role="button">
+                <i class="far fa-plus-square"></i> Додати новий запис про наявність</a>
+        </div>
 
-    <div>
-        <p>Знайти запис про наявність за критеріями:</p>
-        <form method="get" action="/availability">
-            <label>Модель ноутбука: <input type="text" name="laptopModel"
-                                           value="${RequestParameters.laptopModel!}"/></label>
-            <label>Ціна: <input type="number" step="1" min="5000" name="price"
-                                value="${RequestParameters.price!}"/></label>
-            <label>Кількість: <input type="number" step="1" min="1" name="quantity"
-                                     value="${RequestParameters.quantity!}"/></label>
-            <label>Адреса магазину: <input type="text" name="shopAddress"
-                                           value="${RequestParameters.shopAddress!}"/></label>
-            <p><label>Дата початку продаж: <input type="date" name="dateStart" min="2019-02-16"
-                                                  value="${RequestParameters.dateStart!}"></label>
-                <label>Дата закінчення продаж: <input type="date" name="dateEnd" min="2019-02-16"
-                                                      value="${RequestParameters.dateEnd!}"></label></p>
-            <button type="submit">Шукати</button>
-        </form>
+        <div class="col-lg-5 col-6">
+            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
+                    data-target="#availabilitySearch" aria-expanded="false" aria-controls="availabilitySearch">
+                Знайти запис про наявність
+            </button>
+            <div class="collapse form-group" id="availabilitySearch">
+                <form method="get" action="/availability">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="laptopModel"
+                                   value="${RequestParameters.laptopModel!}" placeholder="Модель ноутбука"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="number" min="5000" class="form-control" name="price"
+                                   value="${RequestParameters.price!}" placeholder="Ціна"/>
+                        </div>
+                        <div class="col">
+                            <input type="number" min="1" class="form-control" name="quantity"
+                                   value="${RequestParameters.quantity!}" placeholder="Кількість"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="shopAddress"
+                                   value="${RequestParameters.shopAddress!}" placeholder="Адреса магазину"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <label class="d-inline ml-2" for="dateStart">Дата початку продаж:</label>
+                            <input type="date" class="form-control" name="dateStart" min="2019-02-16"
+                                   value="${RequestParameters.dateStart!}"/>
+                        </div>
+                        <div class="col">
+                            <label class="d-inline ml-2" for="dateStart">Дата закінчення продаж:</label>
+                            <input type="date" class="form-control" name="dateEnd" min="2019-02-16"
+                                   value="${RequestParameters.dateEnd!}"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="row mt-5">
@@ -54,15 +86,17 @@
                         <td>${availability.shop.address}</td>
                         <td>${availability.dateStart}</td>
                         <td>${availability.dateEnd}</td>
-                        <td><a href="/availability/edit/${availability.id}">Edit</a></td>
-                        <td><a href="/availability/delete/${availability.id}" onclick="return confirm('Ви впевнені?')">Delete</a>
+                        <td><a class="btn btn-outline-dark" href="/availability/edit/${availability.id}"
+                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline-danger" href="/availability/delete/${availability.id}"
+                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                 </#list>
                 </tbody>
             </table>
         <#else>
-            <h3>Не знайдено жодного запису про наявність.</h3>
+            <div class="h3">Не знайдено жодного запису про наявність.</div>
         </#if>
     </div>
 </@pad.page>

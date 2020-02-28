@@ -28,7 +28,7 @@
                     <div class="form-row">
                         <div class="col">
                             <input type="date" class="form-control mr-1 mt-2" name="dateReg" min="2019-02-16"
-                                   value="${RequestParameters.dateReg!}" placeholder="Дата реєстрації"/>
+                                   value="${RequestParameters.dateReg!}"/>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">

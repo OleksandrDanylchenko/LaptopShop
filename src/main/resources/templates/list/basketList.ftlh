@@ -15,47 +15,48 @@
             </button>
             <div class="collapse form-group" id="basketSearch">
                 <form method="get" action="/basket">
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="number" min="1" class="form-control mr-1 mt-2" name="employeeId"
+                            <input type="number" min="1" class="form-control" name="employeeId"
                                    value="${RequestParameters.employeeId!}" placeholder="ID продавця"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="employeeFirstName"
+                            <input type="text" class="form-control" name="employeeFirstName"
                                    value="${RequestParameters.employeeFirstName!}" placeholder="Ім'я продавця"/>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="employeeSecondName"
+                            <input type="text" class="form-control" name="employeeSecondName"
                                    value="${RequestParameters.employeeSecondName!}" placeholder="Прізвище продавця"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="employeeShopAddress"
+                            <input type="text" class="form-control" name="employeeShopAddress"
                                    value="${RequestParameters.employeeShopAddress!}" placeholder="Адреса магазину"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="number" min="1" class="form-control mr-1 mt-2" name="clientId"
+                            <input type="number" min="1" class="form-control" name="clientId"
                                    value="${RequestParameters.clientId!}" placeholder="ID покупця"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="clientFirstName"
+                            <input type="text" class="form-control" name="clientFirstName"
                                    value="${RequestParameters.clientFirstName!}" placeholder="Ім'я покупця"/>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="clientSecondName"
+                            <input type="text" class="form-control" name="clientSecondName"
                                    value="${RequestParameters.clientSecondName!}" placeholder="Прізвище покупця"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="datetime-local" class="form-control mr-1 mt-2" name="dateTimeStr"
+                            <label class="d-inline ml-2" for="dateTimeStr">Дата/час покупки:</label>
+                            <input type="datetime-local" class="form-control" name="dateTimeStr"
                                    value="${RequestParameters.dateTimeStr!}" placeholder="Дата/Час покупки"/>
                         </div>
                     </div>

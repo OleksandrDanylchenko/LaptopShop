@@ -64,14 +64,10 @@ public class AvailabilityController {
     @PostMapping("/add")
     private String addRecord(@RequestParam Integer price, @RequestParam Integer quantity,
                              @RequestParam String laptopModel, @RequestParam String shopAddress,
-                             @RequestParam(defaultValue = "0001-01-01") Date dateStart,
-                             @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
-                             @NotNull Model model) throws ParseException {
-        if (isNonValidDate(dateStart) || isNonValidDate(dateEnd))
-            dateStart = dateEnd = null;
-
-        if (isDateStartPrevDateEnd(dateStart, dateEnd, model) ||
-                isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model)) {
+                             @RequestParam Date dateStart,
+                             @RequestParam Date dateEnd,
+                             @NotNull Model model) {
+        if (isDateStartPrevDateEnd(dateStart, dateEnd, model)) {
             initializeDropDownChoices(model);
             return "add/availabilityAdd";
         }
@@ -98,18 +94,11 @@ public class AvailabilityController {
     private String editRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
                               @RequestParam Integer quantity, @RequestParam String laptopModel,
                               @RequestParam String shopAddress,
-                              @RequestParam(defaultValue = "0001-01-01") Date dateStart,
-                              @RequestParam(defaultValue = "0001-01-01") Date dateEnd,
-                              @NotNull Model model) throws ParseException {
-        if (isNonValidDate(dateStart) || isNonValidDate(dateEnd))
-            dateStart = dateEnd = null;
-
-        if (isDateStartPrevDateEnd(dateStart, dateEnd, model) ||
-                isFieldsEmpty(laptopModel, shopAddress, price, quantity, dateStart, dateEnd, model))
+                              @RequestParam Date dateStart,
+                              @RequestParam Date dateEnd,
+                              @NotNull Model model) {
+        if (isDateStartPrevDateEnd(dateStart, dateEnd, model))
             return "/edit/availabilityEdit";
-
-        editAvailability.setDateStart(dateStart);
-        editAvailability.setDateEnd(dateEnd);
 
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editAvailability.setLaptop(laptop);
@@ -119,6 +108,8 @@ public class AvailabilityController {
 
         editAvailability.setPrice(price);
         editAvailability.setQuantity(quantity);
+        editAvailability.setDateStart(dateStart);
+        editAvailability.setDateEnd(dateEnd);
 
         if (!saveRecord(editAvailability, model))
             return "edit/availabilityEdit";
@@ -133,16 +124,16 @@ public class AvailabilityController {
         return "redirect:/availability";
     }
 
-    private boolean isFieldsEmpty(String laptopModel, String shopAddress, Integer price, Integer quantity,
-                                  Date dateStart, Date dateEnd, Model model) {
-        if (laptopModel == null || shopAddress == null || dateStart == null || dateEnd == null ||
-                price == null || quantity == null || laptopModel.isBlank() || shopAddress.isBlank()) {
-            model.addAttribute("errorMessage", "Поля запису про наявність не можуть бути пустими!");
-            initializeDropDownChoices(model);
-            return true;
-        }
-        return false;
-    }
+//    private boolean isFieldsEmpty(String laptopModel, String shopAddress, Integer price, Integer quantity,
+//                                  Date dateStart, Date dateEnd, Model model) {
+//        if (laptopModel == null || shopAddress == null || dateStart == null || dateEnd == null ||
+//                price == null || quantity == null || laptopModel.isBlank() || shopAddress.isBlank()) {
+//            model.addAttribute("errorMessage", "Поля запису про наявність не можуть бути пустими!");
+//            initializeDropDownChoices(model);
+//            return true;
+//        }
+//        return false;
+//    }
 
     private boolean saveRecord(Availability saveAvailability, Model model) {
         try {

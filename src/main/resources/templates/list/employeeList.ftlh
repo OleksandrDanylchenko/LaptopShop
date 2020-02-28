@@ -33,7 +33,7 @@
                     <div class="form-row">
                         <div class="col">
                             <select class="custom-select mr-1 mt-2" name="isActive">
-                                <option value="" selected disabled>Оберіть статус співробітника</option>
+                                <option value="" selected disabled>Статус співробітника</option>
                                 <option>Працюючий</option>
                                 <option>Звільнений</option>
                             </select>

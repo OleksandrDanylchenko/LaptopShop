@@ -25,7 +25,7 @@
                 <div class="col">
                     <input type="date" class="form-control" name="dateReg" min="2019-02-16"
                            value="${editClient.dateReg?iso_utc}" placeholder="Дата реєстрації" required/>
-                    <div class="invalid-feedback">Уведено некоректну дату!</div>
+                    <div class="invalid-feedback">Уведено некоректну дату реєстрації!</div>
                 </div>
             </div>
             <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
