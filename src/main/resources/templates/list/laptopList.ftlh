@@ -14,14 +14,30 @@
             </button>
             <div class="collapse form-group" id="laptopSearch">
                 <form method="get" action="/laptop">
-                    <input type="text" class="form-control mr-1 mt-2" name="labelBrand"
-                           value="${RequestParameters.labelBrand!}" placeholder="Бренд"/>
-                    <input type="text" class="form-control mr-1 mt-2" name="labelModel"
-                           value="${RequestParameters.labelModel!}" placeholder="Модель"/>
-                    <input type="text" class="form-control mr-1 mt-2" name="typeName"
-                           value="${RequestParameters.typeName!}" placeholder="Тип"/>
-                    <input type="text" class="form-control mr-1 mt-2" name="hardwareAssemblyName"
-                           value="${RequestParameters.hardwareAssemblyName!}" placeholder="Назва збірки"/>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="labelBrand"
+                                   value="${RequestParameters.labelBrand!}" placeholder="Бренд"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="labelModel"
+                                   value="${RequestParameters.labelModel!}" placeholder="Модель"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="typeName"
+                                   value="${RequestParameters.typeName!}" placeholder="Тип"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="hardwareAssemblyName"
+                                   value="${RequestParameters.hardwareAssemblyName!}" placeholder="Назва збірки"/>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>

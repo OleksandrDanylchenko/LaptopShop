@@ -8,7 +8,7 @@
     </button>
 
     <#assign controllers = ['availability', 'basket', 'buying', 'client', 'cpu', 'display', 'employee', 'gpu',
-    'hardware', 'hdd', 'laptop', 'label', 'ram', 'shop', 'ssd', 'type']>
+    'hardware', 'hdd', 'label', 'laptop', 'ram', 'shop', 'ssd', 'type']>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">

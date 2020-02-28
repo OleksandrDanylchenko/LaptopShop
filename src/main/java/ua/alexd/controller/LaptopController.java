@@ -123,7 +123,6 @@ public class LaptopController {
         return false;
     }
 
-    // TODO remove after testing
     private boolean saveRecord(Laptop saveLaptop, Model model) {
         try {
             laptopRepo.save(saveLaptop);
