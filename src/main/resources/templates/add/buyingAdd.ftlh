@@ -11,32 +11,37 @@
                 <form method="post" action="/buying/add" class="form-group needs-validation w-100" novalidate>
                     <div class="form-row my-2">
                         <div class="col">
-                            <select class="custom-select" name="basketId">
-                                <option value="" selected>Оберіть ID кошику</option>
+                            <label class="d-inline ml-2" for="basketId">ID кошику:</label>
+                            <select class="custom-select" name="basketId" required>
+                                <option value="" selected disabled></option>
                                 <#list basketIds as basketId>
                                     <option>${basketId}</option>
                                 </#list>
                             </select>
+                            <div class="invalid-feedback">Не обрано ID кошику!</div>
                         </div>
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
-                            <select class="custom-select" name="laptopModel">
-                                <option value="" selected>Оберіть модель ноутбуку</option>
+                            <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
+                            <select class="custom-select" name="laptopModel" required>
+                                <option value="" selected disabled></option>
                                 <#list laptopModels as laptopModel>
                                     <option>${laptopModel}</option>
                                 </#list>
                             </select>
+                            <div class="invalid-feedback">Не обрано модель ноутбуку!</div>
                         </div>
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
-                            <input type="number" step="1" min="5000" class="form-control" name="totalPrice"
-                                   value="${RequestParameters.totalPrice!}" placeholder="Загальна ціна" required/>
+                            <label class="d-inline ml-2" for="totalPrice">Загальна ціна:</label>
+                            <input type="number" min="5000" class="form-control" name="totalPrice"
+                                   value="${RequestParameters.totalPrice!}" required/>
                             <div class="invalid-feedback">Уведено некоректну ціну!</div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
+                    <button type="submit" class="btn btn-danger float-right">Додати</button>
                 </form>
             </div>
         <#else>

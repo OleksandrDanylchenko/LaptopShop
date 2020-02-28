@@ -8,8 +8,7 @@
                 <@error.errorOutput errorMessage!/>
 
                 <p class="h1">Додати новий ноутбук:</p>
-                <form method="post" action="/laptop/add" class="form-group needs-validation w-100"
-                      novalidate>
+                <form method="post" action="/laptop/add" class="form-group needs-validation w-100" novalidate>
                     <div class="form-row my-2">
                         <div class="col">
                             <label class="d-inline ml-2" for="laptopModel">Назва моделі:</label>

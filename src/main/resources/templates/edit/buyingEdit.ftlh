@@ -9,8 +9,9 @@
         <#if basketIds?has_content>
             <div class="form-row my-2">
                 <div class="col">
-                    <select class="custom-select" name="basketId">
-                        <option value="" selected>Оберіть ID кошику</option>
+                    <label class="d-inline ml-2" for="basketId">ID кошику:</label>
+                    <select class="custom-select" name="basketId" required>
+                        <option value="" selected disabled></option>
                         <#list basketIds as basketId>
                             <#if editBuying.basket??>
                                 <option value="${basketId}"<#if basketId == editBuying.basket.id>
@@ -20,6 +21,7 @@
                             </#if>
                         </#list>
                     </select>
+                    <div class="invalid-feedback">Не обрано ID кошику!</div>
                 </div>
             </div>
         </#if>
@@ -27,8 +29,9 @@
         <#if laptopModels?has_content>
             <div class="form-row my-2">
                 <div class="col">
-                    <select class="custom-select" name="laptopModel">
-                        <option value="" selected>Оберіть модель ноутбуку</option>
+                    <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
+                    <select class="custom-select" name="laptopModel" required>
+                        <option value="" selected disabled></option>
                         <#list laptopModels as laptopModel>
                             <#if editBuying.laptop??>
                                 <option value="${laptopModel}"<#if laptopModel == editBuying.laptop.label.model>
@@ -38,14 +41,17 @@
                             </#if>
                         </#list>
                     </select>
+                    <div class="invalid-feedback">Не обрано модель ноутбуку!</div>
                 </div>
             </div>
         </#if>
 
         <div class="form-row my-2">
             <div class="col">
-                <input type="number" step="1" min="5000" class="form-control" name="totalPrice"
-                       value="${(editBuying.totalPrice??)?then(editBuying.totalPrice?c, '')}" placeholder="Загальна ціна"/>
+                <label class="d-inline ml-2" for="totalPrice">Загальна ціна:</label>
+                <input type="number" min="5000" class="form-control" name="totalPrice"
+                       value="${(editBuying.totalPrice??)?then(editBuying.totalPrice?c, '')}" required/>
+                <div class="invalid-feedback">Уведено некоректну ціну!</div>
             </div>
         </div>
 

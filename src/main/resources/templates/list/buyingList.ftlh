@@ -14,32 +14,33 @@
             </button>
             <div class="collapse form-group" id="buyingSearch">
                 <form method="get" action="/buying">
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="number" min="1" class="form-control mr-1 mt-2" name="basketId"
+                            <input type="number" min="1" class="form-control" name="basketId"
                                    value="${RequestParameters.basketId!}" placeholder="ID кошику"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="laptopModel"
+                            <input type="text" class="form-control" name="laptopModel"
                                    value="${RequestParameters.laptopModel!}" placeholder="Модель ноутбуку"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="number" min="1" class="form-control mr-1 mt-2" name="totalPrice"
+                            <input type="number" min="1" class="form-control" name="totalPrice"
                                    value="${RequestParameters.totalPrice!}" placeholder="Загальна ціна"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="datetime-local" min="2020-02-16T00:00" class="form-control mr-1 mt-2"
+                            <label class="d-inline ml-2" for="dateTimeStr">Дата закінчення продаж:</label>
+                            <input type="datetime-local" min="2020-02-16T00:00" class="form-control"
                                    name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"
                                    placeholder="Дата/Час покупки"/>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
