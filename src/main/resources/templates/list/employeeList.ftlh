@@ -14,32 +14,32 @@
             </button>
             <div class="collapse form-group" id="employeeSearch">
                 <form method="get" action="/employee">
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="firstName"
+                            <input type="text" class="form-control" name="firstName"
                                    value="${RequestParameters.firstName!}" placeholder="Ім'я"/>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="secondName"
+                            <input type="text" class="form-control" name="secondName"
                                    value="${RequestParameters.secondName!}" placeholder="Прізвище"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="shopAddress"
+                            <input type="text" class="form-control" name="shopAddress"
                                    value="${RequestParameters.shopAddress!}" placeholder="Адреса магазину"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <select class="custom-select mr-1 mt-2" name="isActive">
+                            <select class="custom-select" name="isActive">
                                 <option value="" selected disabled>Статус співробітника</option>
                                 <option>Працюючий</option>
                                 <option>Звільнений</option>
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>

@@ -9,30 +9,32 @@
             <div class="h1">Додати нового співробітника:</div>
             <form method="post" action="/employee/add" class="form-group needs-validation w-100" novalidate>
                 <div class="form-row my-2">
-                    <div class="col-6">
+                    <div class="col">
+                        <label class="d-inline ml-2" for="firstName">Ім'я нового співробітника:</label>
                         <input type="text" class="form-control" name="firstName"
-                               value="${RequestParameters.firstName!}" placeholder="Ім'я нового співробітника"
-                               required/>
+                               value="${RequestParameters.firstName!}" required/>
                         <div class="invalid-feedback">Ім'я нового співробітника не може бути пустим!</div>
                     </div>
                     <div class="col">
+                        <label class="d-inline ml-2" for="secondName">Прізвище нового співробітника:</label>
                         <input type="text" class="form-control" name="secondName"
-                               value="${RequestParameters.secondName!}" placeholder="Прізвище нового співробітника"
-                               required/>
+                               value="${RequestParameters.secondName!}" required/>
                         <div class="invalid-feedback">Прізвище нового співробітника не може бути пустим!</div>
                     </div>
                 </div>
                 <div class="form-row my-2">
                     <div class="col">
-                        <select class="custom-select" name="shopAddress">
-                            <option value="" selected disabled>Оберіть адресу магазину</option>
+                        <label class="d-inline ml-2" for="shopAddress">Адреса магазину:</label>
+                        <select class="custom-select" name="shopAddress" required>
+                            <option value="" selected disabled></option>
                             <#list shopAddresses as address>
                                 <option>${address}</option>
                             </#list>
                         </select>
+                        <div class="invalid-feedback">Не обрано магазину!</div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
+                <button type="submit" class="btn btn-danger float-right">Додати</button>
             </form>
         </div>
     <#else>
