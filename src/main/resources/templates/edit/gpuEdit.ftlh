@@ -16,6 +16,6 @@
                    value="${(editGpu.memory??)?then(editGpu.memory?c, '')}" placeholder="Пам'ять(GiB)" required/>
             <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
         </div>
-        <button type="submit" class="btn btn-primary my-2 float-right">Зберегти</button>
+        <button type="submit" class="btn btn-primary float-right">Зберегти</button>
     </form>
 </@pad.page>

@@ -46,7 +46,7 @@
                             <div class="invalid-feedback">Не обрано збірки!</div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger mt-1 float-right">Додати</button>
+                    <button type="submit" class="btn btn-danger float-right">Додати</button>
                 </form>
             <#else>
                 <div class="alert alert-warning" role="alert">

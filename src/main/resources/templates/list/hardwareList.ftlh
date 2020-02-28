@@ -14,10 +14,14 @@
             </button>
             <div class="collapse form-group" id="hardwareSearch">
                 <form method="get" action="/hardware">
-                    <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
-                           value="${RequestParameters.assemblyName!}" placeholder="Назва"/>
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
+                                   value="${RequestParameters.assemblyName!}" placeholder="Назва"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
                             <input type="text" class="form-control mr-1 mt-2" name="displayModel"
                                    value="${RequestParameters.displayModel!}" placeholder="Модель дисплею"/>
                         </div>

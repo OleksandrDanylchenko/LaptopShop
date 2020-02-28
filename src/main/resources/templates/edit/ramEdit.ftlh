@@ -22,6 +22,6 @@
                 <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
             </div>
         </div>
-        <button type="submit" class="btn btn-danger my-2 float-right">Зберегти</button>
+        <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
 </@pad.page>

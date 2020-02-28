@@ -16,6 +16,6 @@
                    value="${editCpu.frequency!}" placeholder="Частота" required/>
             <div class="invalid-feedback">Некоректна частота!</div>
         </div>
-        <button type="submit" class="btn btn-primary my-2 float-right">Зберегти</button>
+        <button type="submit" class="btn btn-primary float-right">Зберегти</button>
     </form>
 </@pad.page>

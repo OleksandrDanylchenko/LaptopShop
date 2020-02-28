@@ -14,60 +14,87 @@
                             <form method="post" action="/hardware/add" class="form-group needs-validation w-100"
                                   novalidate>
                                 <div class="form-row my-2">
-                                    <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
-                                           value="${RequestParameters.assemblyName!}" placeholder="Нова назва"
-                                           required/>
-                                    <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="assemblyName">Назва нової збірки:</label>
+                                        <input type="text" class="form-control" name="assemblyName"
+                                               value="${RequestParameters.assemblyName!}" required/>
+                                        <div class="invalid-feedback">Назва нової збірки не може бути пустою!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="cpuModel">
-                                        <option value="" selected disabled>Оберіть модель процесору</option>
-                                        <#list cpuModels as cpuModel>
-                                            <option>${cpuModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="cpuModel">Модель процесору:</label>
+                                        <select class="custom-select" name="cpuModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list cpuModels as cpuModel>
+                                                <option>${cpuModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель процесору!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="gpuModel">
-                                        <option value="" selected disabled>Оберіть модель відеокарти</option>
-                                        <#list gpuModels as gpuModel>
-                                            <option>${gpuModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="gpuModel">Модель відеокарти:</label>
+                                        <select class="custom-select" name="gpuModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list gpuModels as gpuModel>
+                                                <option>${gpuModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель відеокарти!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="displayModel">
-                                        <option value="" selected disabled>Оберіть модель дисплею</option>
-                                        <#list displayModels as displayModel>
-                                            <option>${displayModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="displayModel">Модель дисплею:</label>
+                                        <select class="custom-select" name="displayModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list displayModels as displayModel>
+                                                <option>${displayModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель дисплею!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="ramModel">
-                                        <option value="" selected disabled>Оберіть модель оперативної пам'яті</option>
-                                        <#list ramModels as ramModel>
-                                            <option>${ramModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="ramModel">Модель оперативної
+                                            пам'яті:</label>
+                                        <select class="custom-select" name="ramModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list ramModels as ramModel>
+                                                <option>${ramModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель оперативної пам'яті!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="ssdModel">
-                                        <option value="" selected disabled>Оберіть модель SSD диску</option>
-                                        <#list ssdModels as ssdModel>
-                                            <option>${ssdModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="ssdModel">Модель SSD диску:</label>
+                                        <select class="custom-select" name="ssdModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list ssdModels as ssdModel>
+                                                <option>${ssdModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель SSD диску!</div>
+                                    </div>
                                 </div>
                                 <div class="form-row my-2">
-                                    <select class="custom-select" name="hddModel">
-                                        <option value="" selected disabled>Оберіть модель HDD диску</option>
-                                        <#list hddModels as hddModel>
-                                            <option>${hddModel}</option>
-                                        </#list>
-                                    </select>
+                                    <div class="col">
+                                        <label class="d-inline ml-2" for="ssdModel">Модель HDD диску:</label>
+                                        <select class="custom-select" name="hddModel" required>
+                                            <option value="" selected disabled></option>
+                                            <#list hddModels as hddModel>
+                                                <option>${hddModel}</option>
+                                            </#list>
+                                        </select>
+                                        <div class="invalid-feedback">Не обрано модель HDD диску!</div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-1 float-right">Додати</button>
+                                <button type="submit" class="btn btn-danger float-right">Додати</button>
                             </form>
                         <#else>
                             <div class="alert alert-warning" role="alert">
