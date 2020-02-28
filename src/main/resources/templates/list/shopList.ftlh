@@ -10,7 +10,6 @@
         <div class="col">
             <div class="form-group float-right" id="shopSearch">
                 <form method="get" action="/shop" class="form-inline">
-                    <label class="sr-only" for="shopSearchAddress">Шукана адреса</label>
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
                            placeholder="Адреса"/>
                     <button type="submit" class="btn btn-danger ml-md-2 my-2"><i class="fa fa-search"></i></button>
