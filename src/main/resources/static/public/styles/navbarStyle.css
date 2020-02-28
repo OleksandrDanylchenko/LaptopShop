@@ -1,8 +1,12 @@
-.navbar {
+/* change the link color */
+.navbar-nav .nav-item .nav-link {
     font-family: "Lato", sans-serif;
     font-size: 20px;
+    color: black;
 }
 
-.nav-link {
-    color: black;
+/* change the color of active or hovered links */
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-item:hover .nav-link {
+    color: red;
 }

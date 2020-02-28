@@ -14,11 +14,19 @@
             </button>
             <div class="collapse form-group" id="hddSearch">
                 <form method="get" action="/hdd">
-                    <input type="text" class="form-control mr-1 mt-2" name="model"
-                           value="${RequestParameters.model!}" placeholder="Модель"/>
-                    <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
-                           value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="model"
+                                   value="${RequestParameters.model!}" placeholder="Модель"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="number" min="1" class="form-control" name="memory"
+                                   value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
