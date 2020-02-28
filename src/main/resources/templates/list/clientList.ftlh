@@ -15,23 +15,24 @@
             </button>
             <div class="collapse form-group" id="clientSearch">
                 <form method="get" action="/client">
-                    <div class="form-row">
-                        <div class="col-6">
-                            <input type="text" class="form-control mr-1 mt-2" name="firstName"
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="firstName"
                                    value="${RequestParameters.firstName!}" placeholder="Ім'я"/>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control mr-1 mt-2" name="secondName"
+                            <input type="text" class="form-control" name="secondName"
                                    value="${RequestParameters.secondName!}" placeholder="Прізвище"/>
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row my-2">
                         <div class="col">
-                            <input type="date" class="form-control mr-1 mt-2" name="dateReg" min="2019-02-16"
+                            <label class="d-inline ml-2" for="dateReg">Дата реєстрації:</label>
+                            <input type="date" class="form-control" name="dateReg" min="2019-02-16"
                                    value="${RequestParameters.dateReg!}"/>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
@@ -70,7 +71,7 @@
                 </tbody>
             </table>
         <#else>
-            <div class="h3">Не знайдено жодного клієнта.</div>
+            <div class="h3">Не знайдено жодного покупця.</div>
         </#if>
     </div>
 </@pad.page>
