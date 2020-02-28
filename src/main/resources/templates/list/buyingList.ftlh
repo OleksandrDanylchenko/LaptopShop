@@ -34,8 +34,9 @@
                     </div>
                     <div class="form-row">
                         <div class="col">
-                            <input type="datetime-local" class="form-control mr-1 mt-2" name="dateTimeStr"
-                                   value="${RequestParameters.dateTimeStr!}" placeholder="Дата/Час покупки"/>
+                            <input type="datetime-local" min="2020-02-16T00:00" class="form-control mr-1 mt-2"
+                                   name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"
+                                   placeholder="Дата/Час покупки"/>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">

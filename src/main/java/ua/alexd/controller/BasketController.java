@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Basket;
+import ua.alexd.domain.Client;
+import ua.alexd.domain.Employee;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
@@ -60,17 +62,25 @@ public class BasketController {
         return "add/basketAdd";
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam Integer employeeId, @RequestParam Integer clientId,
-                             @RequestParam String dateTimeStr, @NotNull Model model) {
+    private String addRecord(@RequestParam(required = false, defaultValue = "0") Integer employeeId,
+                             @RequestParam(required = false, defaultValue = "0") Integer clientId,
+                             @RequestParam String dateTimeStr,
+                             @NotNull Model model) {
         if (isFieldsEmpty(dateTimeStr, model))
             return "/add/basketAdd";
 
+        Employee employee = null;
+        if (employeeRepo.findById(employeeId).isPresent())
+            employee = employeeRepo.findById(employeeId).get();
+
+        Client client = null;
+        if (clientRepo.findById(clientId).isPresent())
+            client = clientRepo.findById(clientId).get();
+
         var dateTime = getDateTime(dateTimeStr);
-        var employee = employeeRepo.findById(employeeId).get();
-        var client = clientRepo.findById(clientId).get();
+
         var newBasket = new Basket(dateTime, employee, client);
         basketRepo.save(newBasket);
 
@@ -87,19 +97,24 @@ public class BasketController {
         return "/edit/basketEdit";
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String editRecord(@PathVariable Basket editBasket, @RequestParam(required = false) Integer employeeId,
-                              @RequestParam(required = false) Integer clientId, @RequestParam String dateTimeStr,
+    private String editRecord(@PathVariable Basket editBasket,
+                              @RequestParam(required = false, defaultValue = "0") Integer employeeId,
+                              @RequestParam(required = false, defaultValue = "0") Integer clientId,
+                              @RequestParam String dateTimeStr,
                               @NotNull Model model) {
         if (isFieldsEmpty(dateTimeStr, model))
             return "/edit/basketEdit";
 
-        var employee = employeeRepo.findById(employeeId).get();
+        Employee employee = null;
+        if (employeeRepo.findById(employeeId).isPresent())
+            employee = employeeRepo.findById(employeeId).get();
         editBasket.setEmployee(employee);
 
-        var client = clientRepo.findById(clientId).get();
+        Client client = null;
+        if (clientRepo.findById(clientId).isPresent())
+            client = clientRepo.findById(clientId).get();
         editBasket.setClient(client);
 
         var dateTime = getDateTime(dateTimeStr);

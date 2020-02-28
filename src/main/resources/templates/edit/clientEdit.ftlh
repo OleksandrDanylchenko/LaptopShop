@@ -5,7 +5,7 @@
     <@error.errorOutput errorMessage!/>
 
     <div>
-        <div class="h1">Зміна інформації клієнта:</div>
+        <div class="h1">Зміна інформації про клієнта:</div>
         <form method="post" action="/client/edit/${editClient.id}" class="form-group needs-validation w-100" novalidate>
             <div class="form-row my-2">
                 <div class="col-6">
