@@ -7,7 +7,7 @@
                 <i class="far fa-plus-square"></i> Додати новий ноутбук</a>
         </div>
 
-        <div class="col-lg-3 col-4">
+        <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#laptopSearch" aria-expanded="false" aria-controls="laptopSearch">
                 Знайти ноутбук
@@ -38,7 +38,7 @@
                                    value="${RequestParameters.hardwareAssemblyName!}" placeholder="Назва збірки"/>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>

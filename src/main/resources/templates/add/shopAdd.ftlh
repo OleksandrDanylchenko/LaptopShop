@@ -10,6 +10,6 @@
         <input type="text" class="form-control flex-grow-1" name="address" value="${RequestParameters.address!}"
                placeholder="Адреса нового магазину" required/>
         <div class="invalid-feedback">Адреса нового магазину не може бути пустою!</div>
-        <button type="submit" class="btn btn-primary ml-md-2 my-2">Додати</button>
+        <button type="submit" class="btn btn-danger ml-md-2 my-2">Додати</button>
     </form>
 </@pad.page>
