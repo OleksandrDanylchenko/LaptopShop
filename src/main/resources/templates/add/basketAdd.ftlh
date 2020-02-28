@@ -11,22 +11,26 @@
                 <form method="post" action="/basket/add" class="form-group needs-validation w-100" novalidate>
                     <div class="form-row mt-4">
                         <div class="col">
-                            <select class="custom-select" name="employeeId">
-                                <option value="" selected>Оберіть ID співробітника</option>
+                            <label class="d-inline ml-2" for="employeeId">ID співробітника:</label>
+                            <select class="custom-select" name="employeeId" required>
+                                <option value="" selected disabled></option>
                                 <#list employeeIds as employeeId>
                                     <option>${employeeId}</option>
                                 </#list>
                             </select>
+                            <div class="invalid-feedback">Не обрано ID співробітника!</div>
                         </div>
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
-                            <select class="custom-select" name="clientId">
-                                <option value="" selected>Оберіть ID покупця</option>
+                            <label class="d-inline ml-2" for="clientId">ID покупця:</label>
+                            <select class="custom-select" name="clientId" required>
+                                <option value="" selected disabled></option>
                                 <#list clientIds as clientId>
                                     <option>${clientId}</option>
                                 </#list>
                             </select>
+                            <div class="invalid-feedback">Не обрано ID покупця!</div>
                         </div>
                     </div>
                     <div class="form-row my-2">
