@@ -4,18 +4,24 @@
 <@pad.page "RAM adding">
     <@error.errorOutput errorMessage!/>
 
-    <p class="h1">Додати нову оперативну пам'ять:</p>
+    <div class="h1">Додати нову оперативну пам'ять:</div>
     <form method="post" action="/ram/add" class="form-group needs-validation w-100" novalidate>
-        <div class="form-row">
-            <input type="text" class="form-control mr-1 mt-2" name="model"
-                   value="${RequestParameters.model!}" placeholder="Нова модель" required/>
-            <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+        <div class="form-row my-2">
+            <div class="col">
+                <label class="d-inline ml-2" for="model">Назва нової моделі:</label>
+                <input type="text" class="form-control" name="model"
+                       value="${RequestParameters.model!}" required/>
+                <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+            </div>
         </div>
-        <div class="form-row">
-            <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
-                   value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)" required/>
-            <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
+        <div class="form-row my-2">
+            <div class="col">
+                <label class="d-inline ml-2" for="memory">Обсяг пам'яті (GiB):</label>
+                <input type="number" min="1" class="form-control" name="memory"
+                       value="${RequestParameters.memory!}" required/>
+                <div class="invalid-feedback">Обсяг пам'яті не може бути пустим!</div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary my-2 float-right">Додати</button>
+        <button type="submit" class="btn btn-danger float-right">Додати</button>
     </form>
 </@pad.page>

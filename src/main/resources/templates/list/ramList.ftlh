@@ -7,18 +7,24 @@
                 <i class="far fa-plus-square"></i> Додати нову оперативну пам'ять</a>
         </div>
 
-        <div class="col-lg-3 col-4">
+        <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#ramSearch" aria-expanded="false" aria-controls="ramSearch">
                 Знайти оперативну пам'ять
             </button>
             <div class="collapse form-group" id="ramSearch">
                 <form method="get" action="/ram">
-                    <input type="text" class="form-control mr-1 mt-2" name="model"
-                           value="${RequestParameters.model!}" placeholder="Модель"/>
-                    <input type="number" min="1" class="form-control mr-1 mt-2" name="memory"
-                           value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="model"
+                                   value="${RequestParameters.model!}" placeholder="Модель"/>
+                        </div>
+                        <div class="col-3">
+                            <input type="number" min="1" class="form-control" name="memory"
+                                   value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
