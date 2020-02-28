@@ -7,18 +7,24 @@
                 <i class="far fa-plus-square"></i> Додати новий процесор</a>
         </div>
 
-        <div class="col-lg-3 col-4">
+        <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#cpuSearch" aria-expanded="false" aria-controls="cpuSearch">
                 Знайти процесор
             </button>
             <div class="collapse form-group" id="cpuSearch">
                 <form method="get" action="/cpu">
-                    <input type="text" class="form-control mr-1 mt-2" name="model"
-                           value="${RequestParameters.model!}" placeholder="Модель"/>
-                    <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="frequency"
-                           value="${RequestParameters.frequency!}" placeholder="Частота"/>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control mr-1 mt-2" name="model"
+                                   value="${RequestParameters.model!}" placeholder="Модель"/>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="frequency"
+                                   value="${RequestParameters.frequency!}" placeholder="Частота (GhZ)"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger float-right">
                         <i class="fa fa-search"></i>
                     </button>
                 </form>
