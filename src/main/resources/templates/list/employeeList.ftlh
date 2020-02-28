@@ -15,7 +15,7 @@
             <div class="collapse form-group" id="employeeSearch">
                 <form method="get" action="/employee">
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col">
                             <input type="text" class="form-control mr-1 mt-2" name="firstName"
                                    value="${RequestParameters.firstName!}" placeholder="Ім'я"/>
                         </div>
