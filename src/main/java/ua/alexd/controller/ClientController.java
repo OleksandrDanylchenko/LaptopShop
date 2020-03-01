@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.ClientSpecification.*;
-import static ua.alexd.util.DateTimeConverter.isNonValidDate;
+import static ua.alexd.util.DateTimeChecker.isNonValidDate;
 
 @Controller
 @RequestMapping("/client")

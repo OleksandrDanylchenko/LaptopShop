@@ -70,7 +70,7 @@
 
     <div class="row mt-5">
         <#if baskets?has_content>
-            <div class="h2">Список кошиків:</div>
+            <div class="h1">Список кошиків:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

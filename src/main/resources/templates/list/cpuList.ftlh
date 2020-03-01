@@ -34,7 +34,7 @@
 
     <div class="row mt-5">
         <#if cpus?has_content>
-            <div class="h2">Список процесорів:</div>
+            <div class="h1">Список процесорів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

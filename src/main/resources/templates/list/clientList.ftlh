@@ -42,7 +42,7 @@
 
     <div class="row mt-5">
         <#if clients?has_content>
-            <div class="h2">Список клієнтів:</div>
+            <div class="h1">Список клієнтів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

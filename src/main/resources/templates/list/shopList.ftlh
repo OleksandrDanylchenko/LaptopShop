@@ -20,7 +20,7 @@
 
     <div class="row mt-2">
         <#if shops?has_content>
-            <div class="h2">Список магазинів:</div>
+            <div class="h1">Список магазинів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

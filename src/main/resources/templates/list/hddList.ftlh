@@ -36,7 +36,7 @@
 
     <div class="row mt-5">
         <#if hdds?has_content>
-            <div class="h2">Список HDD дисків:</div>
+            <div class="h1">Список HDD дисків:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

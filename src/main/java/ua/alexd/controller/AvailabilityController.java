@@ -15,8 +15,8 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.AvailabilitySpecification.*;
-import static ua.alexd.util.DateTimeConverter.isDateStartPrevDateEnd;
-import static ua.alexd.util.DateTimeConverter.isNonValidDate;
+import static ua.alexd.util.DateTimeChecker.isDateStartPrevDateEnd;
+import static ua.alexd.util.DateTimeChecker.isNonValidDate;
 
 @Controller
 @RequestMapping("/availability")
@@ -67,7 +67,9 @@ public class AvailabilityController {
                              @RequestParam Date dateStart,
                              @RequestParam Date dateEnd,
                              @NotNull Model model) {
-        if (isDateStartPrevDateEnd(dateStart, dateEnd, model)) {
+        if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
+            model.addAttribute("errorMessage",
+                    "Дата закінчення продаж не може передувати даті початку продаж");
             initializeDropDownChoices(model);
             return "add/availabilityAdd";
         }
@@ -97,8 +99,11 @@ public class AvailabilityController {
                               @RequestParam Date dateStart,
                               @RequestParam Date dateEnd,
                               @NotNull Model model) {
-        if (isDateStartPrevDateEnd(dateStart, dateEnd, model))
+        if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
+            model.addAttribute("errorMessage",
+                    "Дата закінчення продаж не може передувати даті початку продаж");
             return "/edit/availabilityEdit";
+        }
 
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editAvailability.setLaptop(laptop);

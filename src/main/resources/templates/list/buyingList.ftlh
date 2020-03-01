@@ -50,7 +50,7 @@
 
     <div class="row mt-5">
         <#if buyings?has_content>
-            <div class="h2">Список покупок:</div>
+            <div class="h1">Список покупок:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

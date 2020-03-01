@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ua.alexd.domain.Type;
 import ua.alexd.repos.TypeRepo;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/type")
 public class TypeController {
@@ -21,10 +23,7 @@ public class TypeController {
     @GetMapping
     private String getRecords(@RequestParam(required = false) String name,
                               @NotNull Model model) {
-        var types = name != null && !name.isEmpty()
-                ? typeRepo.findByName(name)
-                : typeRepo.findAll();
-
+        var types = filterRecords(name);
         model.addAttribute("types", types);
         return "list/typeList";
     }
@@ -71,6 +70,15 @@ public class TypeController {
     }
 
     @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@RequestParam(required = false) String name,
+                               @NotNull Model model) {
+        List<Type> types = (List<Type>) filterRecords(name);
+        model.addAttribute("types", types);
+        return "typeExcelView";
+    }
+
+    @NotNull
     @GetMapping("/delete/{delType}")
     private String deleteRecord(@NotNull @PathVariable Type delType) {
         typeRepo.delete(delType);
@@ -94,5 +102,12 @@ public class TypeController {
             return false;
         }
         return true;
+    }
+
+    // TODO Make interface method
+    private Iterable<Type> filterRecords(String name) {
+        return name != null && !name.isEmpty()
+                ? typeRepo.findByName(name)
+                : typeRepo.findAll();
     }
 }

@@ -48,7 +48,7 @@
 
     <div class="row mt-5">
         <#if laptops?has_content>
-            <div class="h2">Список ноутбуків:</div>
+            <div class="h1">Список ноутбуків:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

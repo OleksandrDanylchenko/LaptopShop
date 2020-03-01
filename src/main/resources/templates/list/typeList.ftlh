@@ -6,12 +6,15 @@
             <a class="btn btn-outline-danger float-left" href="/type/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий тип ноутбуків</a>
         </div>
-        <div class="col">
+        <div class="col-1">
+            <a class="btn btn-success float-right" href="/type/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
+        <div class="col-2">
             <div class="form-group float-right" id="typeSearch">
                 <form method="get" action="/type" class="form-inline">
                     <input type="text" class="form-control" name="name" value="${RequestParameters.name!}"
                            placeholder="Назва"/>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-danger ml-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
@@ -19,7 +22,7 @@
 
     <div class="row mt-2">
         <#if types?has_content>
-            <div class="h2">Список типів:</div>
+            <div class="h1">Список типів:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

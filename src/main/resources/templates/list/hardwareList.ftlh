@@ -95,7 +95,7 @@
 
     <div class="row mt-5">
         <#if hardware?has_content>
-            <div class="h2">Список збірок:</div>
+            <div class="h1">Список збірок:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

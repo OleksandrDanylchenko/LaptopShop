@@ -34,7 +34,7 @@
 
     <div class="row mt-5">
         <#if rams?has_content>
-            <div class="h2">Список оперативної пам'яті:</div>
+            <div class="h1">Список оперативної пам'яті:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

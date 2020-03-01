@@ -49,7 +49,7 @@
 
     <div class="row mt-5">
         <#if employees?has_content>
-            <div class="h2">Список співробітників:</div>
+            <div class="h1">Список співробітників:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

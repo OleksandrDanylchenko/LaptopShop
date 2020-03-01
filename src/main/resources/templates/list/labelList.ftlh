@@ -35,7 +35,7 @@
 
     <div class="row mt-5">
         <#if labels?has_content>
-            <div class="h2">Список найменувань:</div>
+            <div class="h1">Список найменувань:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

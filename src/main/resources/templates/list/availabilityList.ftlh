@@ -59,7 +59,7 @@
 
     <div class="row mt-5">
         <#if availabilities?has_content>
-            <div class="h2">Список записів про наявність:</div>
+            <div class="h1">Список записів про наявність:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
