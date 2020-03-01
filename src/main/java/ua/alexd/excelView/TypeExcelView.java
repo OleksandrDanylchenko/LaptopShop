@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelView.rowStyleProvider.setGeneralRowStyle;
-import static ua.alexd.excelView.rowStyleProvider.setHeaderRowStyle;
+import static ua.alexd.excelView.rowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("typeExcelView")
@@ -26,8 +25,11 @@ public class TypeExcelView extends AbstractXlsxView implements ExcelFileStructur
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Type sheet");
         sheet.setFitToPage(true);
+
+        wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
+
         response.setHeader("Content-Disposition", "attachment; filename=type-sheet " + currentDateTime + ".xlsx");
     }
 

@@ -80,4 +80,9 @@ public class rowStyleProvider {
         generalFont = workbook.createFont();
         generalFont.setFontName(fontName);
     }
+
+    public static void wipePreviousStyles() {
+        headerStyle = generalStyle = null;
+        headerFont = generalFont = null;
+    }
 }
