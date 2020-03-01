@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/type")
 public class TypeController {
     private final TypeRepo typeRepo;
+    private static Iterable<Type> lastOutputtedTypes;
 
     public TypeController(TypeRepo typeRepo) {
         this.typeRepo = typeRepo;
@@ -23,7 +24,10 @@ public class TypeController {
     @GetMapping
     private String getRecords(@RequestParam(required = false) String name,
                               @NotNull Model model) {
-        var types = filterRecords(name);
+        var types = name != null && !name.isEmpty()
+                ? typeRepo.findByName(name)
+                : typeRepo.findAll();
+        lastOutputtedTypes = types;
         model.addAttribute("types", types);
         return "list/typeList";
     }
@@ -73,8 +77,7 @@ public class TypeController {
     @GetMapping("/exportExcel")
     private String exportExcel(@RequestParam(required = false) String name,
                                @NotNull Model model) {
-        List<Type> types = (List<Type>) filterRecords(name);
-        model.addAttribute("types", types);
+        model.addAttribute("types", lastOutputtedTypes);
         return "typeExcelView";
     }
 
@@ -102,12 +105,5 @@ public class TypeController {
             return false;
         }
         return true;
-    }
-
-    // TODO Make interface method
-    private Iterable<Type> filterRecords(String name) {
-        return name != null && !name.isEmpty()
-                ? typeRepo.findByName(name)
-                : typeRepo.findAll();
     }
 }

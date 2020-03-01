@@ -29,6 +29,7 @@ public class TypeExcelView extends AbstractXlsxView implements ExcelFileStructur
         response.setHeader("Content-Disposition", "attachment; filename=type-sheet " + currentDateTime + ".xlsx");
     }
 
+    @Override
     public void setExcelHeader(@NotNull Sheet excelSheet) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("ID");
