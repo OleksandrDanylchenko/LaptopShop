@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
+import static ua.alexd.excelView.rowStyleProvider.setGeneralRowStyle;
+import static ua.alexd.excelView.rowStyleProvider.setHeaderRowStyle;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("typeExcelView")
@@ -24,26 +26,28 @@ public class TypeExcelView extends AbstractXlsxView implements ExcelFileStructur
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Type sheet");
         sheet.setFitToPage(true);
-        setExcelHeader(sheet);
-        setExcelRows(sheet, types);
+        setExcelHeader(workbook, sheet);
+        setExcelRows(workbook, sheet, types);
         response.setHeader("Content-Disposition", "attachment; filename=type-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
-    public void setExcelHeader(@NotNull Sheet excelSheet) {
+    public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
         var header = excelSheet.createRow(0);
-        header.createCell(0).setCellValue("ID");
+        header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Назва");
+        setHeaderRowStyle(workbook, header, excelSheet);
     }
 
     @Override
-    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
+    public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
         var rowCount = 1;
         for (var row : rows) {
             var typeRow = (Type) row;
-            var typeExcelRow = excelSheet.createRow(rowCount++);
-            typeExcelRow.createCell(0).setCellValue(typeRow.getId());
-            typeExcelRow.createCell(1).setCellValue(typeRow.getName());
+            var generalRow = excelSheet.createRow(rowCount++);
+            generalRow.createCell(0).setCellValue(typeRow.getId());
+            generalRow.createCell(1).setCellValue(typeRow.getName());
+            setGeneralRowStyle(workbook, generalRow);
         }
     }
 }
