@@ -2,19 +2,20 @@
 
 <@pad.page "Type">
     <div class="row">
-        <div class="col">
-            <a class="btn btn-outline-danger float-left" href="/type/add" role="button">
+        <div class="col-md-8">
+            <a class="btn btn-outline-danger" href="/type/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий тип ноутбуків</a>
         </div>
         <div class="col-1">
-            <a class="btn btn-success float-right" href="/type/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+            <a class="btn btn-success my-2 my-md-0" href="/type/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
         </div>
-        <div class="col-2">
-            <div class="form-group float-right" id="typeSearch">
+        <div class="col-md-3">
+            <div class="form-group" id="typeSearch">
                 <form method="get" action="/type" class="form-inline">
                     <input type="text" class="form-control" name="name" value="${RequestParameters.name!}"
                            placeholder="Назва"/>
-                    <button type="submit" class="btn btn-danger ml-2"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-danger mt-2 mt-sm-0 mt-md-2 mt-xl-0
+                    ml-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>

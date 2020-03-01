@@ -12,7 +12,8 @@
                 <form method="get" action="/shop" class="form-inline">
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
                            placeholder="Адреса"/>
-                    <button type="submit" class="btn btn-danger ml-md-2 my-2"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="btn btn-danger mt-2 mt-sm-0 mt-md-2 mt-xl-0
+                    ml-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>
