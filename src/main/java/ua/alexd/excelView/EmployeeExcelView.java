@@ -57,8 +57,6 @@ public class EmployeeExcelView extends AbstractXlsxView implements ExcelFileStru
             if (employeeRow.getShop() == null) {
                 generalRow.createCell(3).setCellValue("Закрито");
                 generalRow.createCell(4).setCellValue("Закрито");
-                generalRow.createCell(3).setCellValue(employeeRow.getShop().getId());
-                generalRow.createCell(4).setCellValue(employeeRow.getShop().getAddress());
             } else {
                 generalRow.createCell(3).setCellValue(employeeRow.getShop().getId());
                 generalRow.createCell(4).setCellValue(employeeRow.getShop().getAddress());

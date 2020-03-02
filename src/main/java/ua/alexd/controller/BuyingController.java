@@ -18,6 +18,8 @@ import static ua.alexd.util.DateTimeConverter.getDateTime;
 @RequestMapping("/buying")
 public class BuyingController {
     private final BuyingRepo buyingRepo;
+    private static Iterable<Buying> lastOutputtedBuyings;
+
     private final BasketRepo basketRepo;
     private final LaptopRepo laptopRepo;
 
@@ -38,7 +40,7 @@ public class BuyingController {
         var buyingSpecification = Specification.where(basketIdEqual(basketId))
                 .and(laptopModelEqual(laptopModel)).and(totalPriceEqual(totalPrice)).and(dateTimeEqual(dateTime));
         var buyings = buyingRepo.findAll(buyingSpecification);
-
+        lastOutputtedBuyings = buyings;
         model.addAttribute("buyings", buyings);
 
         return "/list/buyingList";
@@ -100,6 +102,13 @@ public class BuyingController {
         buyingRepo.save(editBuying);
 
         return "redirect:/buying";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("buyings", lastOutputtedBuyings);
+        return "buyingExcelView";
     }
 
     @NotNull

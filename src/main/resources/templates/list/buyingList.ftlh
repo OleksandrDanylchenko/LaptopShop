@@ -6,7 +6,9 @@
             <a class="btn btn-outline-danger" href="/buying/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову покупку</a>
         </div>
-
+        <div class="col-1 mr-2 mr-sm-0">
+            <a class="btn btn-success" href="/buying/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
         <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#buyingSearch" aria-expanded="false" aria-controls="buyingSearch">
@@ -54,11 +56,11 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="text-danger" scope="col">ID</th>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Загальна ціна</th>
-                    <th scope="col">ID кошика</th>
+                    <th scope="col">Id кошика</th>
                     <th scope="col">Час покупки</th>
-                    <th scope="col">ID ноутбуку</th>
+                    <th scope="col">Id ноутбуку</th>
                     <th scope="col">Модель ноутбуку</th>
                     <th></th>
                     <th></th>
