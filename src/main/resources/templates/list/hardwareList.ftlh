@@ -6,7 +6,9 @@
             <a class="btn btn-outline-danger" href="/hardware/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову збірку</a>
         </div>
-
+        <div class="col-1 mr-2 mr-sm-0">
+            <a class="btn btn-success" href="/hardware/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
         <div class="col">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#hardwareSearch" aria-expanded="false" aria-controls="hardwareSearch">

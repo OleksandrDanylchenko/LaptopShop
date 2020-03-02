@@ -15,6 +15,8 @@ import static ua.alexd.specification.HardwareSpecification.*;
 @RequestMapping("/hardware")
 public class HardwareController {
     private final HardwareRepo hardwareRepo;
+    private static Iterable<Hardware> lastOutputtedHardware;
+
     private final CPURepo cpuRepo;
     private final RAMRepo ramRepo;
     private final SSDRepo ssdRepo;
@@ -61,7 +63,7 @@ public class HardwareController {
                 .and(hddModelLike(hddModel)).and(hddMemoryEqual(hddMemory))
                 .and(assemblyNameEqual(assemblyName));
         var hardware = hardwareRepo.findAll(hardwareSpecification);
-
+        lastOutputtedHardware = hardware;
         model.addAttribute("hardware", hardware);
         return "/list/hardwareList";
     }
@@ -145,6 +147,13 @@ public class HardwareController {
             return "/edit/hardwareEdit";
 
         return "redirect:/hardware";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("hardware", lastOutputtedHardware);
+        return "hardwareExcelView";
     }
 
     @NotNull
