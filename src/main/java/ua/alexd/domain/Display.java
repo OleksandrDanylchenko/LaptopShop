@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Displays")
-public class Display {
+public class Display implements ShopDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -26,7 +26,8 @@ public class Display {
     @Column(name = "resolution")
     private String resolution;
 
-    public Display() { }
+    public Display() {
+    }
 
     public Display(String model, String type, String diagonal, String resolution) {
         this.model = model;

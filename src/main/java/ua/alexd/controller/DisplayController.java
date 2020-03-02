@@ -16,6 +16,7 @@ import static ua.alexd.specification.DisplaySpecification.*;
 @RequestMapping("/display")
 public class DisplayController {
     private final DisplayRepo displayRepo;
+    private Iterable<Display> lastOutputtedDisplay;
 
     public DisplayController(DisplayRepo displayRepo) {
         this.displayRepo = displayRepo;
@@ -30,7 +31,7 @@ public class DisplayController {
         var displaySpecification = Specification.where(modelLike(model)).and(typeEqual(type))
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
         var displays = displayRepo.findAll(displaySpecification);
-
+        lastOutputtedDisplay = displays;
         siteModel.addAttribute("displays", displays);
         return "/list/displayList";
     }
@@ -78,6 +79,13 @@ public class DisplayController {
             return "edit/displayEdit";
 
         return "redirect:/display";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("displays", lastOutputtedDisplay);
+        return "displayExcelView";
     }
 
     @NotNull
