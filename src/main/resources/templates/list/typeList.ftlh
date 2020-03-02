@@ -15,7 +15,7 @@
                     <input type="text" class="form-control" name="name" value="${RequestParameters.name!}"
                            placeholder="Назва"/>
                     <button type="submit" class="btn btn-danger mt-2 mt-sm-0 mt-md-2 mt-xl-0
-                    ml-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
+                    ml-0 ml-sm-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
                 </form>
             </div>
         </div>

@@ -20,6 +20,8 @@ import static ua.alexd.specification.LaptopSpecification.*;
 @RequestMapping("/laptop")
 public class LaptopController {
     private final LaptopRepo laptopRepo;
+    private static Iterable<Laptop> lastOutputtedLaptops;
+
     private final HardwareRepo hardwareRepo;
     private final TypeRepo typeRepo;
     private final LabelRepo labelRepo;
@@ -41,7 +43,7 @@ public class LaptopController {
         var laptopSpecification = Specification.where(hardwareAssemblyNameLike(hardwareAssemblyName))
                 .and(typeNameEqual(typeName)).and(labelBrandEqual(labelBrand)).and(labelModelLike(labelModel));
         var laptops = laptopRepo.findAll(laptopSpecification);
-
+        lastOutputtedLaptops = laptops;
         model.addAttribute("laptops", laptops);
         return "/list/laptopList";
     }
@@ -103,6 +105,13 @@ public class LaptopController {
             return "edit/laptopEdit";
 
         return "redirect:/laptop";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("laptops", lastOutputtedLaptops);
+        return "laptopExcelView";
     }
 
     @NotNull
