@@ -16,6 +16,7 @@ import static ua.alexd.specification.GPUSpecification.modelLike;
 @RequestMapping("/gpu")
 public class GPUController {
     private final GPURepo gpuRepo;
+    private static Iterable<GPU> lastOutputtedGPUs;
 
     public GPUController(GPURepo gpuRepo) {
         this.gpuRepo = gpuRepo;
@@ -28,7 +29,7 @@ public class GPUController {
                               @NotNull Model siteModel) {
         var gpuSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var gpus = gpuRepo.findAll(gpuSpecification);
-
+        lastOutputtedGPUs = gpus;
         siteModel.addAttribute("gpus", gpus);
         return "/list/gpuList";
     }
@@ -73,6 +74,13 @@ public class GPUController {
             return "edit/gpuEdit";
 
         return "redirect:/gpu";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("gpus", lastOutputtedGPUs);
+        return "gpuExcelView";
     }
 
     @NotNull

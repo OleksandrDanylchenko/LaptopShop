@@ -21,9 +21,7 @@
                             <input type="text" class="form-control" name="model"
                                    value="${RequestParameters.model!}" placeholder="Модель"/>
                         </div>
-                    </div>
-                    <div class="form-row my-2">
-                        <div class="col">
+                        <div class="col-4">
                             <input type="number" min="1" class="form-control" name="memory"
                                    value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
                         </div>
