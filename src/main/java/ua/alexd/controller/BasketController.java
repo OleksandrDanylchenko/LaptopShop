@@ -20,6 +20,8 @@ import static ua.alexd.util.DateTimeConverter.getDateTimeStr;
 @RequestMapping("/basket")
 public class BasketController {
     private final BasketRepo basketRepo;
+    private static Iterable<Basket> lastOutputtedBaskets;
+
     private final ClientRepo clientRepo;
     private final EmployeeRepo employeeRepo;
 
@@ -51,7 +53,7 @@ public class BasketController {
                 .and(dateTimeEqual(dateTime));
         var baskets = basketRepo.findAll(basketSpecification);
         model.addAttribute("baskets", baskets);
-
+        lastOutputtedBaskets = baskets;
         return "/list/basketList";
     }
 
@@ -123,6 +125,13 @@ public class BasketController {
         basketRepo.save(editBasket);
 
         return "redirect:/basket";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("baskets", lastOutputtedBaskets);
+        return "basketExcelView";
     }
 
     @NotNull
