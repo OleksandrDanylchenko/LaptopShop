@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
-import ua.alexd.domain.SSD;
+import ua.alexd.domain.RAM;
 import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,21 +16,21 @@ import java.util.Map;
 import static ua.alexd.excelView.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
-@Component("ssdExcelView")
-public class SSDExcelView extends AbstractXlsxView implements ExcelFileStructure {
+@Component("ramExcelView")
+public class RamExcelView extends AbstractXlsxView implements ExcelFileStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("ssds");
+        List<ShopDomain> types = (List<ShopDomain>) model.get("rams");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("SSD sheet");
+        var sheet = workbook.createSheet("RAM sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=ssd-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=ram-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
@@ -46,11 +46,11 @@ public class SSDExcelView extends AbstractXlsxView implements ExcelFileStructure
     public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
         var rowCount = 1;
         for (var row : rows) {
-            var ssdRow = (SSD) row;
+            var ramRow = (RAM) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(ssdRow.getId());
-            generalRow.createCell(1).setCellValue(ssdRow.getModel());
-            generalRow.createCell(2).setCellValue(ssdRow.getMemory());
+            generalRow.createCell(0).setCellValue(ramRow.getId());
+            generalRow.createCell(1).setCellValue(ramRow.getModel());
+            generalRow.createCell(2).setCellValue(ramRow.getMemory());
             setGeneralRowStyle(workbook, generalRow);
         }
     }

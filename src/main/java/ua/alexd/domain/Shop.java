@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Shops")
-public class Shop {
+public class Shop implements ShopDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

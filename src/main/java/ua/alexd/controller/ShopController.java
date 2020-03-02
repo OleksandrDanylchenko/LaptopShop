@@ -14,6 +14,8 @@ import ua.alexd.repos.ShopRepo;
 @RequestMapping("/shop")
 public class ShopController {
     private final ShopRepo shopRepo;
+    private static Iterable<Shop> lastOutputtedShops;
+
     private final EmployeeRepo employeeRepo;
 
     public ShopController(final ShopRepo shopRepo, EmployeeRepo employeeRepo) {
@@ -28,7 +30,7 @@ public class ShopController {
         var shops = address != null && !address.isEmpty()
                 ? shopRepo.findByAddress(address)
                 : shopRepo.findAll();
-
+        lastOutputtedShops = shops;
         model.addAttribute("shops", shops);
         return "list/shopList";
     }
@@ -75,6 +77,13 @@ public class ShopController {
     }
 
     @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("shops", lastOutputtedShops);
+        return "shopExcelView";
+    }
+
+    @NotNull
     @GetMapping("/delete/{delShop}")
     private String deleteRecord(@NotNull @PathVariable Shop delShop) {
         dismissEmployees(delShop);
@@ -89,7 +98,6 @@ public class ShopController {
         }
         return false;
     }
-
 
     private boolean saveRecord(Shop saveShop, Model model) {
         try {

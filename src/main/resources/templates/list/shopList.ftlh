@@ -2,13 +2,15 @@
 
 <@pad.page "Shops">
     <div class="row">
-        <div class="col">
+        <div class="col-md-8">
             <a class="btn btn-outline-danger float-left" href="/shop/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий магазин</a>
         </div>
-
-        <div class="col">
-            <div class="form-group float-right" id="shopSearch">
+        <div class="col-1">
+            <a class="btn btn-success my-2 my-md-0" href="/shop/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group" id="shopSearch">
                 <form method="get" action="/shop" class="form-inline">
                     <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
                            placeholder="Адреса"/>

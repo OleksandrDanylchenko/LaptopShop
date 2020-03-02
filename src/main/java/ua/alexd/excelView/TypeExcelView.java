@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelView.rowStyleProvider.*;
+import static ua.alexd.excelView.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("typeExcelView")

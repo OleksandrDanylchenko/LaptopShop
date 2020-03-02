@@ -16,6 +16,7 @@ import static ua.alexd.specification.RAMSpecification.modelLike;
 @RequestMapping("/ram")
 public class RAMController {
     private final RAMRepo ramRepo;
+    private static Iterable<RAM> lastOutputtedRams;
 
     public RAMController(RAMRepo ramRepo) {
         this.ramRepo = ramRepo;
@@ -28,7 +29,7 @@ public class RAMController {
                               @NotNull Model siteModel) {
         var ramSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var rams = ramRepo.findAll(ramSpecification);
-
+        lastOutputtedRams = rams;
         siteModel.addAttribute("rams", rams);
         return "/list/ramList";
     }
@@ -73,6 +74,13 @@ public class RAMController {
             return "edit/ramEdit";
 
         return "redirect:/ram";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("rams", lastOutputtedRams);
+        return "ramExcelView";
     }
 
     @NotNull

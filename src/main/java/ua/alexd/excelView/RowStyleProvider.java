@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import static ua.alexd.excelView.ExcelFileStructure.dataColumnWidth;
 import static ua.alexd.excelView.ExcelFileStructure.idColumnWidth;
 
-public class rowStyleProvider {
+public class RowStyleProvider {
     private static CellStyle headerStyle = null;
     private static CellStyle generalStyle = null;
     private static Font headerFont = null;
