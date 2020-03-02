@@ -75,8 +75,7 @@ public class TypeController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@RequestParam(required = false) String name,
-                               @NotNull Model model) {
+    private String exportExcel(@NotNull Model model) {
         model.addAttribute("types", lastOutputtedTypes);
         return "typeExcelView";
     }

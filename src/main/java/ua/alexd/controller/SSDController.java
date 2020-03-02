@@ -16,6 +16,7 @@ import static ua.alexd.specification.SSDSpecification.modelLike;
 @RequestMapping("/ssd")
 public class SSDController {
     private final SSDRepo ssdRepo;
+    private static Iterable<SSD> lastOutputtedSSDs;
 
     public SSDController(SSDRepo ssdRepo) {
         this.ssdRepo = ssdRepo;
@@ -28,7 +29,7 @@ public class SSDController {
                               @NotNull Model siteModel) {
         var ssdSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var ssds = ssdRepo.findAll(ssdSpecification);
-
+        lastOutputtedSSDs = ssds;
         siteModel.addAttribute("ssds", ssds);
         return "/list/ssdList";
     }
@@ -73,6 +74,13 @@ public class SSDController {
             return "edit/ssdEdit";
 
         return "redirect:/ssd";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("ssds", lastOutputtedSSDs);
+        return "ssdExcelView";
     }
 
     @NotNull

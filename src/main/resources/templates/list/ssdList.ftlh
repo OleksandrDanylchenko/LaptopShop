@@ -6,7 +6,9 @@
             <a class="btn btn-outline-danger" href="/ssd/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нове найменування</a>
         </div>
-
+        <div class="col-1 mr-2 mr-sm-0">
+            <a class="btn btn-success" href="/ssd/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
         <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#ssdSearch" aria-expanded="false" aria-controls="ssdSearch">
@@ -19,7 +21,7 @@
                             <input type="text" class="form-control" name="model"
                                    value="${RequestParameters.model!}" placeholder="Модель"/>
                         </div>
-                        <div class="col-3">
+                        <div class="col-5">
                             <input type="number" min="1" class="form-control" name="memory"
                                    value="${RequestParameters.memory!}" placeholder="Пам'ять(GiB)"/>
                         </div>
