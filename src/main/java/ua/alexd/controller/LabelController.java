@@ -16,6 +16,7 @@ import static ua.alexd.specification.LabelSpecification.modelLike;
 @RequestMapping("/label")
 public class LabelController {
     private final LabelRepo labelRepo;
+    private static Iterable<Label> lastOutputtedLabel;
 
     public LabelController(LabelRepo labelRepo) {
         this.labelRepo = labelRepo;
@@ -28,6 +29,7 @@ public class LabelController {
                               @NotNull Model siteModel) {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
         var labels = labelRepo.findAll(labelSpecification);
+        lastOutputtedLabel = labels;
 
         siteModel.addAttribute("labels", labels);
         return "/list/labelList";
@@ -42,8 +44,8 @@ public class LabelController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam(required = false) String brand,
-                              @RequestParam(required = false) String model,
-                              @NotNull Model siteModel) {
+                             @RequestParam(required = false) String model,
+                             @NotNull Model siteModel) {
         if (isFieldsEmpty(brand, model, siteModel))
             return "add/labelAdd";
 
@@ -74,6 +76,13 @@ public class LabelController {
             return "add/labelEdit";
 
         return "redirect:/label";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("labels", lastOutputtedLabel);
+        return "labelExcelView";
     }
 
     @NotNull

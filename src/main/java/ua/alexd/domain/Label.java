@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Labels")
-public class Label {
+public class Label implements ShopDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
-import ua.alexd.domain.Laptop;
+import ua.alexd.domain.Label;
 import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,21 +16,21 @@ import java.util.Map;
 import static ua.alexd.excelView.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
-@Component("laptopExcelView")
-public class LaptopExcelView extends AbstractXlsxView implements ExcelFileStructure {
+@Component("labelExcelView")
+public class LabelExcelView extends AbstractXlsxView implements ExcelFileStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("laptops");
+        List<ShopDomain> types = (List<ShopDomain>) model.get("labels");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Laptop sheet");
+        var sheet = workbook.createSheet("Label sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=laptop-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=label-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
@@ -39,8 +39,6 @@ public class LaptopExcelView extends AbstractXlsxView implements ExcelFileStruct
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Бренд");
         header.createCell(2).setCellValue("Модель");
-        header.createCell(3).setCellValue("Тип");
-        header.createCell(4).setCellValue("Збірка");
         setHeaderRowStyle(workbook, header, excelSheet);
     }
 
@@ -48,17 +46,11 @@ public class LaptopExcelView extends AbstractXlsxView implements ExcelFileStruct
     public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
         var rowCount = 1;
         for (var row : rows) {
-            var laptopRow = (Laptop) row;
+            var labelRow = (Label) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(laptopRow.getId());
-            generalRow.createCell(1).setCellValue(laptopRow.getLabel().getBrand());
-            generalRow.createCell(2).setCellValue(laptopRow.getLabel().getModel());
-            generalRow.createCell(3).setCellValue(laptopRow.getType() != null
-                    ? laptopRow.getType().getName()
-                    : "Відсутній");
-            generalRow.createCell(4).setCellValue(laptopRow.getHardware() != null
-                    ? laptopRow.getHardware().getAssemblyName()
-                    : "Відсутній");
+            generalRow.createCell(0).setCellValue(labelRow.getId());
+            generalRow.createCell(1).setCellValue(labelRow.getBrand());
+            generalRow.createCell(2).setCellValue(labelRow.getModel());
             setGeneralRowStyle(workbook, generalRow);
         }
     }
