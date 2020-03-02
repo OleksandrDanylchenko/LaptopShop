@@ -6,7 +6,9 @@
             <a class="btn btn-outline-danger" href="/employee/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нового співробітника</a>
         </div>
-
+        <div class="col-1 mr-2 mr-sm-0">
+            <a class="btn btn-success" href="/employee/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        </div>
         <div class="col-lg-5 col-6">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#employeeSearch" aria-expanded="false" aria-controls="employeeSearch">

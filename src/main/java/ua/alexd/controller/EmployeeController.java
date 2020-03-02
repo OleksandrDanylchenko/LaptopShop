@@ -15,6 +15,8 @@ import static ua.alexd.specification.EmployeeSpecification.*;
 @RequestMapping("/employee")
 public class EmployeeController {
     private final EmployeeRepo employeeRepo;
+    private static Iterable<Employee> lastOutputtedEmployees;
+
     private final ShopRepo shopRepo;
 
     public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo) {
@@ -32,7 +34,7 @@ public class EmployeeController {
         var employeesSpecification = Specification.where(firstNameEqual(firstName)).and(secondNameEqual(secondName))
                 .and(shopAddressLike(shopAddress)).and(isActiveEqual(isActive));
         var employees = employeeRepo.findAll(employeesSpecification);
-
+        lastOutputtedEmployees = employees;
         model.addAttribute("employees", employees);
         return "/list/employeeList";
     }
@@ -83,6 +85,13 @@ public class EmployeeController {
         employeeRepo.save(editEmployee);
 
         return "redirect:/employee";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("employees", lastOutputtedEmployees);
+        return "employeeExcelView";
     }
 
     @NotNull
