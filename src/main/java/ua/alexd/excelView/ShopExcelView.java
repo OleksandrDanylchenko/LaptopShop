@@ -24,14 +24,14 @@ public class ShopExcelView extends AbstractXlsxView implements ExcelFileStructur
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("shops");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Shop sheet");
+        var sheet = workbook.createSheet("Shops sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=shop-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=shops-sheet " + currentDateTime + ".xlsx");
 
     }
 

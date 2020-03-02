@@ -23,14 +23,14 @@ public class LaptopExcelView extends AbstractXlsxView implements ExcelFileStruct
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("laptops");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Laptop sheet");
+        var sheet = workbook.createSheet("Laptops sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=laptop-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=laptops-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

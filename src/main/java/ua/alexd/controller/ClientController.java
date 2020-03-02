@@ -18,6 +18,7 @@ import static ua.alexd.util.DateTimeChecker.isNonValidDate;
 @RequestMapping("/client")
 public class ClientController {
     private final ClientRepo clientRepo;
+    private static Iterable<Client> lastOutputtedClients;
 
     public ClientController(ClientRepo clientRepo) {
         this.clientRepo = clientRepo;
@@ -34,7 +35,7 @@ public class ClientController {
         var clientSpecification = Specification.where(firstNameEqual(firstName))
                 .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));
         var clients = clientRepo.findAll(clientSpecification);
-
+        lastOutputtedClients = clients;
         model.addAttribute("clients", clients);
         return "/list/clientList";
     }
@@ -84,6 +85,13 @@ public class ClientController {
         clientRepo.save(editClient);
 
         return "redirect:/client";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("clients", lastOutputtedClients);
+        return "clientExcelView";
     }
 
     @NotNull

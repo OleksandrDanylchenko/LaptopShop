@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
-import ua.alexd.domain.Label;
+import ua.alexd.domain.Client;
 import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,29 +16,30 @@ import java.util.Map;
 import static ua.alexd.excelView.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
-@Component("labelExcelView")
-public class LabelExcelView extends AbstractXlsxView implements ExcelFileStructure {
+@Component("clientExcelView")
+public class ClientExcelView extends AbstractXlsxView implements ExcelFileStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("labels");
+        List<ShopDomain> clients = (List<ShopDomain>) model.get("clients");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Labels sheet");
+        var sheet = workbook.createSheet("Clients sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, clients);
 
-        response.setHeader("Content-Disposition", "attachment; filename=labels-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=clients-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
     public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
-        header.createCell(1).setCellValue("Бренд");
-        header.createCell(2).setCellValue("Модель");
+        header.createCell(1).setCellValue("Ім'я");
+        header.createCell(2).setCellValue("Прізвище");
+        header.createCell(3).setCellValue("Дата реєстрації");
         setHeaderRowStyle(workbook, header, excelSheet);
     }
 
@@ -46,11 +47,12 @@ public class LabelExcelView extends AbstractXlsxView implements ExcelFileStructu
     public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
         var rowCount = 1;
         for (var row : rows) {
-            var labelRow = (Label) row;
+            var clientRow = (Client) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(labelRow.getId());
-            generalRow.createCell(1).setCellValue(labelRow.getBrand());
-            generalRow.createCell(2).setCellValue(labelRow.getModel());
+            generalRow.createCell(0).setCellValue(clientRow.getId());
+            generalRow.createCell(1).setCellValue(clientRow.getFirstName());
+            generalRow.createCell(2).setCellValue(clientRow.getSecondName());
+            generalRow.createCell(3).setCellValue(clientRow.getDateReg().toString());
             setGeneralRowStyle(workbook, generalRow);
         }
     }

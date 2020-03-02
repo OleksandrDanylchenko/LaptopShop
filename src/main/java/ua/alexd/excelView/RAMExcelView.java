@@ -23,14 +23,14 @@ public class RAMExcelView extends AbstractXlsxView implements ExcelFileStructure
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("rams");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("RAM sheet");
+        var sheet = workbook.createSheet("RAMs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=ram-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=rams-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

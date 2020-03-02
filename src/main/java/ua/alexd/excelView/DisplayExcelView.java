@@ -23,14 +23,14 @@ public class DisplayExcelView extends AbstractXlsxView implements ExcelFileStruc
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("displays");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Display sheet");
+        var sheet = workbook.createSheet("Displays sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=display-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=displays-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

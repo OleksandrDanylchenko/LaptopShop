@@ -23,14 +23,14 @@ public class EmployeeExcelView extends AbstractXlsxView implements ExcelFileStru
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("employees");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("Employee sheet");
+        var sheet = workbook.createSheet("Employees sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=employee-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=employees-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

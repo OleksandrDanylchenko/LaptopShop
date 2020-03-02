@@ -23,14 +23,14 @@ public class GPUExcelView extends AbstractXlsxView implements ExcelFileStructure
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("gpus");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("GPU sheet");
+        var sheet = workbook.createSheet("GPUs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=gpu-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=gpus-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

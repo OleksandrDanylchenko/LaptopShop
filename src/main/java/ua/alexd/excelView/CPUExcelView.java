@@ -24,14 +24,14 @@ public class CPUExcelView extends AbstractXlsxView implements ExcelFileStructure
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("cpus");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("CPU sheet");
+        var sheet = workbook.createSheet("CPUs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=cpu-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=cpus-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override

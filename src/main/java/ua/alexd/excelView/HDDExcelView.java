@@ -23,14 +23,14 @@ public class HDDExcelView extends AbstractXlsxView implements ExcelFileStructure
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         List<ShopDomain> types = (List<ShopDomain>) model.get("hdds");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("HDD sheet");
+        var sheet = workbook.createSheet("HDDs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
         setExcelRows(workbook, sheet, types);
 
-        response.setHeader("Content-Disposition", "attachment; filename=hdd-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=hdds-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
