@@ -7,7 +7,7 @@
                 <i class="far fa-plus-square"></i> Додати нову збірку</a>
         </div>
 
-        <div class="col-6">
+        <div class="col">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#hardwareSearch" aria-expanded="false" aria-controls="hardwareSearch">
                 Знайти збірку
@@ -62,7 +62,7 @@
                         </div>
                         <div class="col">
                             <input type="number" min="1" class="form-control mr-1 mt-2" name="ramMemory"
-                                   value="${RequestParameters.ramMemory!}" placeholder="Об'єм оперативної пам'яті"/>
+                                   value="${RequestParameters.ramMemory!}" placeholder="Об'єм опер. пам'яті"/>
                         </div>
                     </div>
                     <div class="form-row">

@@ -17,7 +17,7 @@ import static ua.alexd.excelView.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("ramExcelView")
-public class RamExcelView extends AbstractXlsxView implements ExcelFileStructure {
+public class RAMExcelView extends AbstractXlsxView implements ExcelFileStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {

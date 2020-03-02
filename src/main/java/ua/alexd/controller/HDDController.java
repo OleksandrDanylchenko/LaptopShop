@@ -16,6 +16,7 @@ import static ua.alexd.specification.HDDSpecification.modelLike;
 @RequestMapping("/hdd")
 public class HDDController {
     private final HDDRepo hddRepo;
+    private static Iterable<HDD> lastOutputtedHDDs;
 
     public HDDController(HDDRepo hddRepo) {
         this.hddRepo = hddRepo;
@@ -28,7 +29,7 @@ public class HDDController {
                               @NotNull Model siteModel) {
         var hddSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var hdds = hddRepo.findAll(hddSpecification);
-
+        lastOutputtedHDDs = hdds;
         siteModel.addAttribute("hdds", hdds);
         return "/list/hddList";
     }
@@ -73,6 +74,13 @@ public class HDDController {
             return "edit/hddEdit";
 
         return "redirect:/hdd";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("hdds", lastOutputtedHDDs);
+        return "hddExcelView";
     }
 
     @NotNull

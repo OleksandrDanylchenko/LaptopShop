@@ -8,7 +8,7 @@
                 <i class="far fa-plus-square"></i> Додати новий кошик</a>
         </div>
 
-        <div class="col-lg-5 col-6">
+        <div class="col-lg-4 col-5">
             <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
                     data-target="#basketSearch" aria-expanded="false" aria-controls="basketSearch">
                 Знайти кошик

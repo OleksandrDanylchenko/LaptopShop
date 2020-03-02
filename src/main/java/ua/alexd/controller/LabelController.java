@@ -30,7 +30,6 @@ public class LabelController {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
         var labels = labelRepo.findAll(labelSpecification);
         lastOutputtedLabel = labels;
-
         siteModel.addAttribute("labels", labels);
         return "/list/labelList";
     }
