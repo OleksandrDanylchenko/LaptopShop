@@ -16,6 +16,7 @@ import static ua.alexd.specification.CPUSpecification.modelLike;
 @RequestMapping("/cpu")
 public class CPUController {
     private final CPURepo cpuRepo;
+    private static Iterable<CPU> lastOutputtedCPUs;
 
     public CPUController(CPURepo cpuRepo) {
         this.cpuRepo = cpuRepo;
@@ -28,7 +29,7 @@ public class CPUController {
                               @NotNull Model siteModel) {
         var cpuSpecification = Specification.where(modelLike(model)).and(frequencyEqual(frequency));
         var cpus = cpuRepo.findAll(cpuSpecification);
-
+        lastOutputtedCPUs = cpus;
         siteModel.addAttribute("cpus", cpus);
         return "/list/cpuList";
     }
@@ -74,6 +75,13 @@ public class CPUController {
             return "edit/cpuEdit";
 
         return "redirect:/cpu";
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("cpus", lastOutputtedCPUs);
+        return "cpuExcelView";
     }
 
     @NotNull
