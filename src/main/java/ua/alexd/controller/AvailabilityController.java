@@ -22,6 +22,8 @@ import static ua.alexd.util.DateTimeChecker.isNonValidDate;
 @RequestMapping("/availability")
 public class AvailabilityController {
     private final AvailabilityRepo availabilityRepo;
+    private static Iterable<Availability> lastOutputtedAvailabilities;
+
     private final LaptopRepo laptopRepo;
     private final ShopRepo shopRepo;
 
@@ -49,7 +51,7 @@ public class AvailabilityController {
                 .and(dateEndEqual(dateEnd));
         var availabilities = availabilityRepo.findAll(availabilitySpecification);
         model.addAttribute("availabilities", availabilities);
-
+        lastOutputtedAvailabilities = availabilities;
         return "/list/availabilityList";
     }
 
@@ -123,22 +125,18 @@ public class AvailabilityController {
     }
 
     @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("availabilities", lastOutputtedAvailabilities);
+        return "availabilityExcelView";
+    }
+
+    @NotNull
     @GetMapping("/delete/{delAvailability}")
     private String deleteRecord(@NotNull @PathVariable Availability delAvailability) {
         availabilityRepo.delete(delAvailability);
         return "redirect:/availability";
     }
-
-//    private boolean isFieldsEmpty(String laptopModel, String shopAddress, Integer price, Integer quantity,
-//                                  Date dateStart, Date dateEnd, Model model) {
-//        if (laptopModel == null || shopAddress == null || dateStart == null || dateEnd == null ||
-//                price == null || quantity == null || laptopModel.isBlank() || shopAddress.isBlank()) {
-//            model.addAttribute("errorMessage", "Поля запису про наявність не можуть бути пустими!");
-//            initializeDropDownChoices(model);
-//            return true;
-//        }
-//        return false;
-//    }
 
     private boolean saveRecord(Availability saveAvailability, Model model) {
         try {
