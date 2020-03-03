@@ -1,5 +1,5 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
 
 <@pad.page "RAM adding">
     <@error.errorOutput errorMessage!/>

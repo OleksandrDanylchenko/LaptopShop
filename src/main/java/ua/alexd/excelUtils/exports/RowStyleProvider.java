@@ -1,10 +1,10 @@
-package ua.alexd.excelView.export;
+package ua.alexd.excelUtils.exports;
 
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
 
-import static ua.alexd.excelView.export.ExcelExportStructure.dataColumnWidth;
-import static ua.alexd.excelView.export.ExcelExportStructure.idColumnWidth;
+import static ua.alexd.excelUtils.exports.ExcelExportStructure.dataColumnWidth;
+import static ua.alexd.excelUtils.exports.ExcelExportStructure.idColumnWidth;
 
 public class RowStyleProvider {
     private static CellStyle headerStyle;

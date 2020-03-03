@@ -12,7 +12,7 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.ClientSpecification.*;
-import static ua.alexd.util.DateTimeChecker.isNonValidDate;
+import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
 
 @Controller
 @RequestMapping("/client")
@@ -29,7 +29,7 @@ public class ClientController {
     private String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
-                              @NotNull Model model) throws ParseException {
+                              @NotNull Model model) {
         if (isNonValidDate(dateReg))
             dateReg = null;
         var clientSpecification = Specification.where(firstNameEqual(firstName))
@@ -73,7 +73,7 @@ public class ClientController {
     @PostMapping("/edit/{editClient}")
     private String editRecord(@PathVariable Client editClient, @RequestParam String firstName,
                               @RequestParam String secondName, @RequestParam(defaultValue = "0001-01-01") Date dateReg,
-                              @NotNull Model model) throws ParseException {
+                              @NotNull Model model) {
         if (isNonValidDate(dateReg))
             dateReg = null;
         if (isFieldsEmpty(firstName, secondName, dateReg, model))

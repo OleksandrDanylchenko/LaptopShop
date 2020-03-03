@@ -1,5 +1,5 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorsHandling/errorOutput.ftlh" as error>
 
 <@pad.page "Hardware editing">
     <@error.errorOutput errorMessage!/>

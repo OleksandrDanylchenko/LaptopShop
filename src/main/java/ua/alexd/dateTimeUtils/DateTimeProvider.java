@@ -1,4 +1,4 @@
-package ua.alexd.util;
+package ua.alexd.dateTimeUtils;
 
 import org.jetbrains.annotations.NotNull;
 

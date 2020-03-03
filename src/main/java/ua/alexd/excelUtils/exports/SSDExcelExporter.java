@@ -1,11 +1,11 @@
-package ua.alexd.excelView.export;
+package ua.alexd.excelUtils.exports;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
-import ua.alexd.domain.CPU;
+import ua.alexd.domain.SSD;
 import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,24 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelView.export.RowStyleProvider.*;
-import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
+import static ua.alexd.excelUtils.exports.RowStyleProvider.*;
+import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
-@Component("cpuExcelView")
-public class CPUExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
+@Component("ssdExcelView")
+public class SSDExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> cpus = (List<ShopDomain>) model.get("cpus");
+        List<ShopDomain> ssds = (List<ShopDomain>) model.get("ssds");
         var currentDateTime = getCurrentDateTime();
-        var sheet = workbook.createSheet("CPUs sheet");
+        var sheet = workbook.createSheet("SSDs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, cpus);
+        setExcelRows(workbook, sheet, ssds);
 
-        response.setHeader("Content-Disposition", "attachment; filename=cpus-sheet " + currentDateTime + ".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=ssds-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CPUExcelExporter extends AbstractXlsxView implements ExcelExportStr
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Модель");
-        header.createCell(2).setCellValue("Частота(GHz)");
+        header.createCell(2).setCellValue("Обсяг пам'яті");
         setHeaderRowStyle(workbook, header, excelSheet);
     }
 
@@ -46,11 +46,11 @@ public class CPUExcelExporter extends AbstractXlsxView implements ExcelExportStr
     public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
         var rowCount = 1;
         for (var row : rows) {
-            var cpuRow = (CPU) row;
+            var ssdRow = (SSD) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(cpuRow.getId());
-            generalRow.createCell(1).setCellValue(cpuRow.getModel());
-            generalRow.createCell(2).setCellValue(cpuRow.getFrequency());
+            generalRow.createCell(0).setCellValue(ssdRow.getId());
+            generalRow.createCell(1).setCellValue(ssdRow.getModel());
+            generalRow.createCell(2).setCellValue(ssdRow.getMemory());
             setGeneralRowStyle(workbook, generalRow);
         }
     }

@@ -15,8 +15,8 @@ import java.sql.Date;
 import java.text.ParseException;
 
 import static ua.alexd.specification.AvailabilitySpecification.*;
-import static ua.alexd.util.DateTimeChecker.isDateStartPrevDateEnd;
-import static ua.alexd.util.DateTimeChecker.isNonValidDate;
+import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
+import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
 
 @Controller
 @RequestMapping("/availability")
@@ -41,7 +41,7 @@ public class AvailabilityController {
                               @RequestParam(required = false) String shopAddress,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateStart,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateEnd,
-                              @NotNull Model model) throws ParseException {
+                              @NotNull Model model) {
         if (isNonValidDate(dateStart))
             dateStart = null;
         if (isNonValidDate(dateEnd))
