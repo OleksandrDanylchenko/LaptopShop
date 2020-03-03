@@ -5,10 +5,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Type;
 import ua.alexd.repos.TypeRepo;
 
+import java.io.IOException;
 import java.util.List;
+
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 
 @Controller
 @RequestMapping("/type")
@@ -77,6 +81,21 @@ public class TypeController {
     @GetMapping("/exportExcel")
     private String exportExcel(@NotNull Model model) {
         model.addAttribute("types", lastOutputtedTypes);
+        return "typeExcelView";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        model.addAttribute("controllerName", "type");
+        model.addAttribute("tableName", "типів");
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) throws IOException {
+        saveUploadingFile(uploadingFile);
         return "typeExcelView";
     }
 
