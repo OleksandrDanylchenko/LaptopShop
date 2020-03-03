@@ -1,16 +1,16 @@
-package ua.alexd.excelView;
+package ua.alexd.excelView.export;
 
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
 
-import static ua.alexd.excelView.ExcelFileStructure.dataColumnWidth;
-import static ua.alexd.excelView.ExcelFileStructure.idColumnWidth;
+import static ua.alexd.excelView.export.ExcelExportStructure.dataColumnWidth;
+import static ua.alexd.excelView.export.ExcelExportStructure.idColumnWidth;
 
 public class RowStyleProvider {
-    private static CellStyle headerStyle = null;
-    private static CellStyle generalStyle = null;
-    private static Font headerFont = null;
-    private static Font generalFont = null;
+    private static CellStyle headerStyle;
+    private static CellStyle generalStyle;
+    private static Font headerFont;
+    private static Font generalFont;
     private static String fontName = "Lato";
 
     public static void setHeaderRowStyle(Workbook workbook, Row headerRow, Sheet sheet) {
@@ -41,20 +41,16 @@ public class RowStyleProvider {
     }
 
     private static void initializeHeaderStyle(Workbook workbook) {
-        if (generalStyle == null)
-            initializeGeneralStyle(workbook);
         if (headerFont == null)
             initializeHeaderFont(workbook);
+        if (generalStyle == null)
+            initializeGeneralStyle(workbook);
         headerStyle = workbook.createCellStyle();
-        headerStyle.cloneStyleFrom(generalStyle);
         headerStyle.setFont(headerFont);
-        headerStyle.setBorderRight(BorderStyle.THIN);
+        headerStyle.cloneStyleFrom(generalStyle);
         headerStyle.setRightBorderColor(IndexedColors.RED.getIndex());
-        headerStyle.setBorderLeft(BorderStyle.THIN);
         headerStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
-        headerStyle.setBorderTop(BorderStyle.THIN);
         headerStyle.setTopBorderColor(IndexedColors.RED.getIndex());
-        headerStyle.setBorderBottom(BorderStyle.THIN);
         headerStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
     }
 
@@ -66,6 +62,10 @@ public class RowStyleProvider {
         generalStyle.setWrapText(true);
         generalStyle.setAlignment(HorizontalAlignment.CENTER);
         generalStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        generalStyle.setBorderRight(BorderStyle.THIN);
+        generalStyle.setBorderLeft(BorderStyle.THIN);
+        generalStyle.setBorderTop(BorderStyle.THIN);
+        generalStyle.setBorderBottom(BorderStyle.THIN);
     }
 
     private static void initializeHeaderFont(@NotNull Workbook workbook) {
@@ -73,7 +73,7 @@ public class RowStyleProvider {
         headerFont.setFontName(fontName);
         headerFont.setBold(true);
         headerFont.setColor(IndexedColors.RED.getIndex());
-        headerFont.setFontHeightInPoints((short) 10);
+        headerFont.setFontHeightInPoints((short) 12);
     }
 
     private static void initializeGeneralFont(@NotNull Workbook workbook) {

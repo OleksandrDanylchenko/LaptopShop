@@ -1,4 +1,4 @@
-package ua.alexd.excelView;
+package ua.alexd.excelView.export;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -7,7 +7,7 @@ import ua.alexd.domain.ShopDomain;
 
 import java.util.List;
 
-public interface ExcelFileStructure {
+public interface ExcelExportStructure {
     int idColumnWidth = 10*256;
     int dataColumnWidth = 25 * 256;
 

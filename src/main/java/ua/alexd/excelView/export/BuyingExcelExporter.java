@@ -1,4 +1,4 @@
-package ua.alexd.excelView;
+package ua.alexd.excelView.export;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelView.RowStyleProvider.*;
+import static ua.alexd.excelView.export.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("buyingExcelView")
-public class BuyingExcelView extends AbstractXlsxView implements ExcelFileStructure {
+public class BuyingExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {

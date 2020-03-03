@@ -1,4 +1,4 @@
-package ua.alexd.excelView;
+package ua.alexd.excelView.export;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.Availability;
-import ua.alexd.domain.SSD;
 import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelView.RowStyleProvider.*;
+import static ua.alexd.excelView.export.RowStyleProvider.*;
 import static ua.alexd.util.DateTimeProvider.getCurrentDateTime;
 
 @Component("availabilityExcelView")
-public class AvailabilityExcelView extends AbstractXlsxView implements ExcelFileStructure {
+public class AvailabilityExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
