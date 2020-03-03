@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,9 @@ import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
 import ua.alexd.repos.LaptopRepo;
 
+import java.time.LocalDateTime;
+
 import static ua.alexd.specification.BuyingSpecification.*;
-import static ua.alexd.util.DateTimeConverter.getDateTime;
 
 @Controller
 @RequestMapping("/buying")
@@ -34,9 +36,9 @@ public class BuyingController {
     private String getRecords(@RequestParam(required = false) Integer basketId,
                               @RequestParam(required = false) String laptopModel,
                               @RequestParam(required = false) Integer totalPrice,
-                              @RequestParam(required = false) String dateTimeStr,
+                              @RequestParam(required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                               @NotNull Model model) {
-        var dateTime = getDateTime(dateTimeStr);
         var buyingSpecification = Specification.where(basketIdEqual(basketId))
                 .and(laptopModelEqual(laptopModel)).and(totalPriceEqual(totalPrice)).and(dateTimeEqual(dateTime));
         var buyings = buyingRepo.findAll(buyingSpecification);

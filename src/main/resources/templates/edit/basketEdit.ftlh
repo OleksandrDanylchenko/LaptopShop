@@ -46,7 +46,7 @@
             <div class="col">
                 <label class="d-inline ml-2" for="dateTimeStr">Дата/час покупки:</label>
                 <input type="datetime-local" min="2020-02-16T00:00" class="form-control"
-                       name="dateTimeStr" value="${dateTimeStr!}"
+                       name="dateTime" value="${editBasket.dateTime!}"
                        placeholder="Дата/Час покупки" required/>
                 <div class="invalid-feedback">Некоректна дата/час покупки!</div>
             </div>

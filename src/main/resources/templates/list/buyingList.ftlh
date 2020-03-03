@@ -36,10 +36,9 @@
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
-                            <label class="d-inline ml-2" for="dateTimeStr">Дата закінчення продаж:</label>
+                            <label class="d-inline ml-2" for="dateTimeStr">Дата/Час покупки:</label>
                             <input type="datetime-local" min="2020-02-16T00:00" class="form-control"
-                                   name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"
-                                   placeholder="Дата/Час покупки"/>
+                                   name="dateTimeStr" value="${RequestParameters.dateTimeStr!}"/>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger float-right">

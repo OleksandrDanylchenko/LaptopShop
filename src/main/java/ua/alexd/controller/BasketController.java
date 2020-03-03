@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,9 @@ import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
 
+import java.time.LocalDateTime;
+
 import static ua.alexd.specification.BasketSpecification.*;
-import static ua.alexd.util.DateTimeConverter.getDateTime;
-import static ua.alexd.util.DateTimeConverter.getDateTimeStr;
 
 @Controller
 @RequestMapping("/basket")
@@ -40,9 +41,9 @@ public class BasketController {
                               @RequestParam(required = false) Integer clientId,
                               @RequestParam(required = false) String clientFirstName,
                               @RequestParam(required = false) String clientSecondName,
-                              @RequestParam(required = false) String dateTimeStr,
+                              @RequestParam(required = false)
+                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                               @NotNull Model model) {
-        var dateTime = getDateTime(dateTimeStr);
         var basketSpecification = Specification.where(employeeIdEqual(employeeId))
                 .and(clientIdEqual(clientId))
                 .and(employeeFirstNameEqual(employeeFirstName))
@@ -68,11 +69,9 @@ public class BasketController {
     @PostMapping("/add")
     private String addRecord(@RequestParam(required = false, defaultValue = "0") Integer employeeId,
                              @RequestParam(required = false, defaultValue = "0") Integer clientId,
-                             @RequestParam String dateTimeStr,
+                             @RequestParam(required = false)
+                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                              @NotNull Model model) {
-        if (isFieldsEmpty(dateTimeStr, model))
-            return "/add/basketAdd";
-
         Employee employee = null;
         if (employeeRepo.findById(employeeId).isPresent())
             employee = employeeRepo.findById(employeeId).get();
@@ -80,8 +79,6 @@ public class BasketController {
         Client client = null;
         if (clientRepo.findById(clientId).isPresent())
             client = clientRepo.findById(clientId).get();
-
-        var dateTime = getDateTime(dateTimeStr);
 
         var newBasket = new Basket(dateTime, employee, client);
         basketRepo.save(newBasket);
@@ -92,9 +89,7 @@ public class BasketController {
     @NotNull
     @GetMapping("/edit/{editBasket}")
     private String editRecord(@NotNull @PathVariable Basket editBasket, @NotNull Model model) {
-        var a = getDateTimeStr(editBasket.getDateTime());
-        model.addAttribute("editBasket", editBasket)
-                .addAttribute("dateTimeStr", getDateTimeStr(editBasket.getDateTime()));
+        model.addAttribute("editBasket", editBasket);
         initializeDropDownChoices(model);
         return "/edit/basketEdit";
     }
@@ -104,11 +99,9 @@ public class BasketController {
     private String editRecord(@PathVariable Basket editBasket,
                               @RequestParam(required = false, defaultValue = "0") Integer employeeId,
                               @RequestParam(required = false, defaultValue = "0") Integer clientId,
-                              @RequestParam String dateTimeStr,
+                              @RequestParam(required = false)
+                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                               @NotNull Model model) {
-        if (isFieldsEmpty(dateTimeStr, model))
-            return "/edit/basketEdit";
-
         Employee employee = null;
         if (employeeRepo.findById(employeeId).isPresent())
             employee = employeeRepo.findById(employeeId).get();
@@ -119,7 +112,6 @@ public class BasketController {
             client = clientRepo.findById(clientId).get();
         editBasket.setClient(client);
 
-        var dateTime = getDateTime(dateTimeStr);
         editBasket.setDateTime(dateTime);
 
         basketRepo.save(editBasket);
@@ -139,15 +131,6 @@ public class BasketController {
     private String deleteRecord(@NotNull @PathVariable Basket delBasket) {
         basketRepo.delete(delBasket);
         return "redirect:/basket";
-    }
-
-    private boolean isFieldsEmpty(String dateTimeStr, Model model) {
-        if (dateTimeStr == null || dateTimeStr.isBlank()) {
-            model.addAttribute("errorMessage", "Поля кошику не можуть бути пустими!");
-            initializeDropDownChoices(model);
-            return true;
-        }
-        return false;
     }
 
     private void initializeDropDownChoices(@NotNull Model model) {

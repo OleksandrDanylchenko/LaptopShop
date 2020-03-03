@@ -58,8 +58,8 @@
                     <div class="form-row my-2">
                         <div class="col">
                             <label class="d-inline ml-2" for="dateTimeStr">Дата/час покупки:</label>
-                            <input type="datetime-local" class="form-control" name="dateTimeStr"
-                                   value="${RequestParameters.dateTimeStr!}" placeholder="Дата/Час покупки"/>
+                            <input type="datetime-local" class="form-control" name="dateTime"
+                                   value="${RequestParameters.dateTime!}" placeholder="Дата/Час покупки"/>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
