@@ -10,8 +10,9 @@ import ua.alexd.domain.Type;
 import ua.alexd.repos.TypeRepo;
 
 import java.io.IOException;
-import java.util.List;
 
+import static ua.alexd.excelUtils.imports.TypeExcelImporter.importTypesFromExcel;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 
 @Controller
@@ -87,16 +88,31 @@ public class TypeController {
     @NotNull
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
-        model.addAttribute("controllerName", "type");
-        model.addAttribute("tableName", "типів");
+        initializeImportAttributes(model);
         return "parts/excelFilesUpload";
     }
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) throws IOException {
-        saveUploadingFile(uploadingFile);
-        return "typeExcelView";
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newTypes = importTypesFromExcel(uploadedFilePath);
+            newTypes.forEach(newType -> saveRecord(newType, model));
+            return "redirect:/type";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "type");
+        model.addAttribute("tableName", "типів");
     }
 
     @NotNull

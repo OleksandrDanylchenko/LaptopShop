@@ -12,7 +12,7 @@
                 <span class="input-group-text">Excel файл</span>
             </div>
             <div class="custom-file">
-                <input type="file" class="custom-file-input" accept=".xls,.xlsx" name="uploadingFile" required>
+                <input type="file" class="custom-file-input" accept=".xlsx" name="uploadingFile" required>
                 <label class="custom-file-label" data-browse="Огляд">Оберіть файл</label>
             </div>
         </div>
