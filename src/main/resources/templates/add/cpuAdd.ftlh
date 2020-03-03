@@ -19,7 +19,7 @@
                 <label class="d-inline ml-2" for="frequency">Тактова частота (GhZ):</label>
                 <input type="number" step="0.1" min="0.1" class="form-control" name="frequency"
                        value="${RequestParameters.frequency!}" required/>
-                <div class="invalid-feedback">Некоректна тактова частота!</div>
+                <div class="invalid-feedback">Некоректно задано тактову частота!</div>
             </div>
         </div>
         <button type="submit" class="btn btn-danger float-right">Додати</button>
