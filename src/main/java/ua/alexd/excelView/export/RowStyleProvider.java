@@ -46,8 +46,8 @@ public class RowStyleProvider {
         if (generalStyle == null)
             initializeGeneralStyle(workbook);
         headerStyle = workbook.createCellStyle();
-        headerStyle.setFont(headerFont);
         headerStyle.cloneStyleFrom(generalStyle);
+        headerStyle.setFont(headerFont);
         headerStyle.setRightBorderColor(IndexedColors.RED.getIndex());
         headerStyle.setLeftBorderColor(IndexedColors.RED.getIndex());
         headerStyle.setTopBorderColor(IndexedColors.RED.getIndex());

@@ -2,12 +2,17 @@
 
 <@pad.page "Type">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <a class="btn btn-outline-danger" href="/type/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий тип ноутбуків</a>
         </div>
         <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0" href="/type/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+            <a class="btn btn-success my-2 my-md-0 mr-3 mr-sm-0" href="" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+        </div>
+        <div class="col-1">
+            <a class="btn btn-success my-2 my-md-0 ml-3 ml-sm-0" href="/type/exportExcel" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-md-3">
             <div class="form-group" id="typeSearch">

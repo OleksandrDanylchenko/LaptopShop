@@ -7,11 +7,16 @@
             <a class="btn btn-outline-danger" href="/basket/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий кошик</a>
         </div>
-        <div class="col-1 mr-2 mr-sm-0">
-            <a class="btn btn-success" href="/basket/exportExcel" role="button"><i class="fas fa-file-excel"></i></a>
+        <div class="col-sm-1 col-3">
+            <a class="btn btn-success" href="" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
         </div>
-        <div class="col-lg-4 col-5">
-            <button class="btn btn-dark w-100" type="button" data-toggle="collapse"
+        <div class="col-sm-1 col-3">
+            <a class="btn btn-success" href="/basket/exportExcel" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+        </div>
+        <div class="col-lg-4 col-sm-5 col-12">
+            <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
                     data-target="#basketSearch" aria-expanded="false" aria-controls="basketSearch">
                 Знайти кошик
             </button>
