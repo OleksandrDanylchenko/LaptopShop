@@ -21,14 +21,14 @@ public class LabelExcelExporter extends AbstractXlsxView implements ExcelExportS
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("labels");
+        List<ShopDomain> labels = (List<ShopDomain>) model.get("labels");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Labels sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, labels);
 
         response.setHeader("Content-Disposition", "attachment; filename=labels-sheet " + currentDateTime + ".xlsx");
     }

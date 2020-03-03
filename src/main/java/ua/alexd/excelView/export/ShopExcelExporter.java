@@ -21,14 +21,14 @@ public class ShopExcelExporter extends AbstractXlsxView implements ExcelExportSt
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("shops");
+        List<ShopDomain> shops = (List<ShopDomain>) model.get("shops");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Shops sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, shops);
 
         response.setHeader("Content-Disposition", "attachment; filename=shops-sheet " + currentDateTime + ".xlsx");
 

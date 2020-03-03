@@ -21,14 +21,14 @@ public class CPUExcelExporter extends AbstractXlsxView implements ExcelExportStr
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("cpus");
+        List<ShopDomain> cpus = (List<ShopDomain>) model.get("cpus");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("CPUs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, cpus);
 
         response.setHeader("Content-Disposition", "attachment; filename=cpus-sheet " + currentDateTime + ".xlsx");
     }

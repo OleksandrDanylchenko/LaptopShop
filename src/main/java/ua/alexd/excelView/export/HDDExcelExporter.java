@@ -21,14 +21,14 @@ public class HDDExcelExporter extends AbstractXlsxView implements ExcelExportStr
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("hdds");
+        List<ShopDomain> hdds = (List<ShopDomain>) model.get("hdds");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("HDDs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, hdds);
 
         response.setHeader("Content-Disposition", "attachment; filename=hdds-sheet " + currentDateTime + ".xlsx");
     }

@@ -21,14 +21,14 @@ public class SSDExcelExporter extends AbstractXlsxView implements ExcelExportStr
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("ssds");
+        List<ShopDomain> ssds = (List<ShopDomain>) model.get("ssds");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("SSDs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, ssds);
 
         response.setHeader("Content-Disposition", "attachment; filename=ssds-sheet " + currentDateTime + ".xlsx");
     }

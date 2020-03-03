@@ -21,14 +21,14 @@ public class GPUExcelExporter extends AbstractXlsxView implements ExcelExportStr
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("gpus");
+        List<ShopDomain> gpus = (List<ShopDomain>) model.get("gpus");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("GPUs sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, gpus);
 
         response.setHeader("Content-Disposition", "attachment; filename=gpus-sheet " + currentDateTime + ".xlsx");
     }

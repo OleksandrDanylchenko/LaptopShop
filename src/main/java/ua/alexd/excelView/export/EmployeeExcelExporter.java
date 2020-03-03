@@ -21,14 +21,14 @@ public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExpo
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("employees");
+        List<ShopDomain> employees = (List<ShopDomain>) model.get("employees");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Employees sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, employees);
 
         response.setHeader("Content-Disposition", "attachment; filename=employees-sheet " + currentDateTime + ".xlsx");
     }

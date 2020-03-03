@@ -21,14 +21,14 @@ public class DisplayExcelExporter extends AbstractXlsxView implements ExcelExpor
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("displays");
+        List<ShopDomain> displays = (List<ShopDomain>) model.get("displays");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Displays sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, displays);
 
         response.setHeader("Content-Disposition", "attachment; filename=displays-sheet " + currentDateTime + ".xlsx");
     }

@@ -21,14 +21,14 @@ public class HardwareExcelExporter extends AbstractXlsxView implements ExcelExpo
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> types = (List<ShopDomain>) model.get("hardware");
+        List<ShopDomain> hardware = (List<ShopDomain>) model.get("hardware");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Hardware sheet");
         sheet.setFitToPage(true);
 
         wipePreviousStyles();
         setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, types);
+        setExcelRows(workbook, sheet, hardware);
 
         response.setHeader("Content-Disposition", "attachment; filename=hardware-sheet " + currentDateTime + ".xlsx");
     }
