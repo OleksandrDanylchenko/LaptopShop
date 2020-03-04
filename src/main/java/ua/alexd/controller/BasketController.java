@@ -6,15 +6,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
+import ua.alexd.excelUtils.imports.BasketExcelImporter;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BasketSpecification.*;
 
 @Controller
@@ -117,6 +122,36 @@ public class BasketController {
         basketRepo.save(editBasket);
 
         return "redirect:/basket";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newBaskets = BasketExcelImporter.importFiles(uploadedFilePath, employeeRepo, clientRepo);
+            newBaskets.forEach(basketRepo::save);
+            return "redirect:/basket";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "basket");
+        model.addAttribute("tableName", "кошиків");
     }
 
     @NotNull
