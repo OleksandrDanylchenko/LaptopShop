@@ -16,17 +16,17 @@ public class TypeExcelImporter {
     public static List<Type> importTypesFromExcel(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
-        var sheet = workbook.getSheetAt(0);
+        var typeSheet = workbook.getSheetAt(0);
 
         var typeTableFields = new String[]{"Id", "Назва"};
-        if (isValidTableStructure(sheet, typeTableFields)) {
+        if (isValidTableStructure(typeSheet, typeTableFields)) {
             var dataFormatter = new DataFormatter();
             var newTypes = new ArrayList<Type>();
 
             var name = "";
             var nameColNum = 1;
 
-            for (Row row : sheet) {
+            for (Row row : typeSheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row)
                         if (cell.getColumnIndex() == nameColNum)

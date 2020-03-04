@@ -12,22 +12,21 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class ShopExcelImporter {
-    private static DataFormatter dataFormatter = new DataFormatter();
-
     @NotNull
     public static List<Shop> importShopsFromExcel(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
-        var sheet = workbook.getSheetAt(0);
+        var shopSheet = workbook.getSheetAt(0);
 
         var typeTableFields = new String[]{"Id", "Адреса"};
-        if (isValidTableStructure(sheet, typeTableFields)) {
+        if (isValidTableStructure(shopSheet, typeTableFields)) {
+            var dataFormatter = new DataFormatter();
             var newShops = new ArrayList<Shop>();
 
             var address = "";
             var addressColNum = 1;
 
-            for (Row row : sheet) {
+            for (Row row : shopSheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row)
                         if (cell.getColumnIndex() == addressColNum)

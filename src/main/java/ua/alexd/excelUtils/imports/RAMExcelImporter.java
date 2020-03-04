@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.domain.RAM;
 import ua.alexd.domain.SSD;
 
 import java.io.File;
@@ -14,41 +15,41 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class SSDExcelImport {
+public class RAMExcelImporter {
     @NotNull
-    public static List<SSD> importSSDsFromExcel(String uploadedFilePath)
+    public static List<RAM> importRAMsFromExcel(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
-        var ssdSheet = workbook.getSheetAt(0);
+        var ramSheet = workbook.getSheetAt(0);
 
-        var ssdTableFields = new String[]{"Id", "Модель", "Обсяг пам'яті"};
-        if (isValidTableStructure(ssdSheet, ssdTableFields)) {
+        var ramTableFields = new String[]{"Id", "Модель", "Обсяг пам'яті"};
+        if (isValidTableStructure(ramSheet, ramTableFields)) {
             var dataFormatter = new DataFormatter();
-            var newSSDs = new ArrayList<SSD>();
+            var newRAMs = new ArrayList<RAM>();
 
-            var ssdModel = "";
+            var ramModel = "";
             var modelColNum = 1;
-            var ssdMemory = 0;
+            var ramMemory = 0;
             var memoryColNum = 2;
 
-            for (Row row : ssdSheet) {
+            for (Row row : ramSheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
-                            ssdModel = cellValue;
+                            ramModel = cellValue;
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
-                                ssdMemory = Integer.parseInt(cellValue);
+                                ramMemory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (ssdModel != null && !ssdModel.isBlank() && ssdMemory >= 1) {
-                    var newSSD = new SSD(ssdModel, ssdMemory);
-                    newSSDs.add(newSSD);
+                if (ramModel != null && !ramModel.isBlank() && ramMemory >= 1) {
+                    var newRAM = new RAM(ramModel, ramMemory);
+                    newRAMs.add(newRAM);
                 }
             }
             workbook.close();
-            return newSSDs;
+            return newRAMs;
         } else
             throw new IllegalArgumentException();
     }

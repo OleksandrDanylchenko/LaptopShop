@@ -6,9 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.RAM;
 import ua.alexd.repos.RAMRepo;
 
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.RAMExcelImporter.importRAMsFromExcel;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
@@ -74,6 +80,36 @@ public class RAMController {
             return "edit/ramEdit";
 
         return "redirect:/ram";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newRAMs = importRAMsFromExcel(uploadedFilePath);
+            newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
+            return "redirect:/ram";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці оперативної пам'яті!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "RAM");
+        model.addAttribute("tableName", "оперативної пам'яті");
     }
 
     @NotNull
