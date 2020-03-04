@@ -102,8 +102,8 @@ public class DisplayController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = DisplayExcelImporter.importFiles(uploadedFilePath);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            var newDisplays = DisplayExcelImporter.importFiles(uploadedFilePath);
+            newDisplays.forEach(newDisplay -> saveRecord(newDisplay, model));
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);

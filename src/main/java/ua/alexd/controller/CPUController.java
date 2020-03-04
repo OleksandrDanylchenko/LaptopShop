@@ -6,9 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.CPU;
+import ua.alexd.excelUtils.imports.CPUExcelImport;
 import ua.alexd.repos.CPURepo;
 
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.CPUSpecification.frequencyEqual;
 import static ua.alexd.specification.CPUSpecification.modelLike;
 
@@ -75,6 +81,36 @@ public class CPUController {
             return "edit/cpuEdit";
 
         return "redirect:/cpu";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newCPUs = CPUExcelImport.importFile(uploadedFilePath);
+            newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
+            return "redirect:/cpu";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "CPU");
+        model.addAttribute("tableName", "процесорів");
     }
 
     @NotNull
