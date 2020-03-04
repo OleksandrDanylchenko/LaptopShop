@@ -96,7 +96,7 @@ public class RAMController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newRAMs = new RAMExcelImporter().importFile(uploadedFilePath);
+            var newRAMs = RAMExcelImporter.importFile(uploadedFilePath);
             newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {

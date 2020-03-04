@@ -169,9 +169,9 @@ public class HardwareController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new HardwareExcelImporter(cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo)
-                    .importFile(uploadedFilePath);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            var newHardware = HardwareExcelImporter.importFile(uploadedFilePath,
+                    cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
+            newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);

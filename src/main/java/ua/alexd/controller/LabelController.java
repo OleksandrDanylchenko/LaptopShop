@@ -97,8 +97,8 @@ public class LabelController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new LabelExcelImporter().importFile(uploadedFilePath);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            var newLabels = LabelExcelImporter.importFile(uploadedFilePath);
+            newLabels.forEach(newType -> saveRecord(newType, model));
             return "redirect:/label";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);

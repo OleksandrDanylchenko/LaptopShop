@@ -126,8 +126,7 @@ public class LaptopController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newLaptops = new LaptopExcelImporter(labelRepo, typeRepo, hardwareRepo)
-                    .importFile(uploadedFilePath);
+            var newLaptops = LaptopExcelImporter.importFile(uploadedFilePath, labelRepo, typeRepo, hardwareRepo);
             newLaptops.forEach(newLaptop -> saveRecord(newLaptop, model));
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {

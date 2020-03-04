@@ -16,7 +16,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class LabelExcelImporter {
     @NotNull
-    public List<Label> importFile(String uploadedFilePath)
+    public static List<Label> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var labelSheet = workbook.getSheetAt(0);

@@ -17,7 +17,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class RAMExcelImporter {
     @NotNull
-    public List<RAM> importFile(String uploadedFilePath)
+    public static List<RAM> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var ramSheet = workbook.getSheetAt(0);

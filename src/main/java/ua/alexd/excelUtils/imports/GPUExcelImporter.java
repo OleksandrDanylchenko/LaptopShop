@@ -5,8 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.domain.SSD;
-import ua.alexd.domain.ShopDomain;
+import ua.alexd.domain.GPU;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,41 +14,41 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class SSDExcelImporter {
+public class GPUExcelImporter {
     @NotNull
-    public static List<SSD> importFile(String uploadedFilePath)
+    public static List<GPU> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
-        var ssdSheet = workbook.getSheetAt(0);
+        var gpuSheet = workbook.getSheetAt(0);
 
-        var ssdTableFields = new String[]{"Id", "Модель", "Обсяг пам'яті"};
-        if (isValidTableStructure(ssdSheet, ssdTableFields)) {
+        var gpuTableFields = new String[]{"Id", "Модель", "Обсяг пам'яті"};
+        if (isValidTableStructure(gpuSheet, gpuTableFields)) {
             var dataFormatter = new DataFormatter();
-            var newSSDs = new ArrayList<SSD>();
+            var newGPUs = new ArrayList<GPU>();
 
-            var ssdModel = "";
+            var model = "";
             var modelColNum = 1;
-            var ssdMemory = 0;
+            var memory = 0;
             var memoryColNum = 2;
 
-            for (Row row : ssdSheet) {
+            for (Row row : gpuSheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
-                            ssdModel = cellValue;
+                            model = cellValue;
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
-                                ssdMemory = Integer.parseInt(cellValue);
+                                memory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (ssdModel != null && !ssdModel.isBlank() && ssdMemory >= 1) {
-                    var newSSD = new SSD(ssdModel, ssdMemory);
-                    newSSDs.add(newSSD);
+                if (model != null && !model.isBlank() && memory >= 1) {
+                    var newGPU = new GPU(model, memory);
+                    newGPUs.add(newGPU);
                 }
             }
             workbook.close();
-            return newSSDs;
+            return newGPUs;
         } else
             throw new IllegalArgumentException();
     }

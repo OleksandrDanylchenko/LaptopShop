@@ -17,25 +17,10 @@ import java.util.Random;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class HardwareExcelImporter {
-    private final CPURepo cpuRepo;
-    private final RAMRepo ramRepo;
-    private final SSDRepo ssdRepo;
-    private final DisplayRepo displayRepo;
-    private final HDDRepo hddRepo;
-    private final GPURepo gpuRepo;
-
-    public HardwareExcelImporter(CPURepo cpuRepo, RAMRepo ramRepo, SSDRepo ssdRepo,
-                                 DisplayRepo displayRepo, HDDRepo hddRepo, GPURepo gpuRepo) {
-        this.cpuRepo = cpuRepo;
-        this.ramRepo = ramRepo;
-        this.ssdRepo = ssdRepo;
-        this.displayRepo = displayRepo;
-        this.hddRepo = hddRepo;
-        this.gpuRepo = gpuRepo;
-    }
-
     @NotNull
-    public List<Hardware> importFile(String uploadedFilePath)
+    public static List<Hardware> importFile(String uploadedFilePath,
+                                            CPURepo cpuRepo, RAMRepo ramRepo, SSDRepo ssdRepo,
+                                            DisplayRepo displayRepo, HDDRepo hddRepo, GPURepo gpuRepo)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var hardwareSheet = workbook.getSheetAt(0);

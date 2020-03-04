@@ -14,7 +14,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class ShopExcelImporter {
     @NotNull
-    public List<Shop> importFile(String uploadedFilePath)
+    public static List<Shop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var shopSheet = workbook.getSheetAt(0);

@@ -6,9 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.GPU;
+import ua.alexd.excelUtils.imports.GPUExcelImporter;
 import ua.alexd.repos.GPURepo;
 
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
 
@@ -74,6 +80,36 @@ public class GPUController {
             return "edit/gpuEdit";
 
         return "redirect:/gpu";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newGPUs = GPUExcelImporter.importFile(uploadedFilePath);
+            newGPUs.forEach(newType -> saveRecord(newType, model));
+            return "redirect:/gpu";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "GPU");
+        model.addAttribute("tableName", "відеокарт");
     }
 
     @NotNull

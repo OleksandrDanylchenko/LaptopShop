@@ -23,20 +23,10 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class LaptopExcelImporter {
-    private final LabelRepo labelRepo;
-    private final TypeRepo typeRepo;
-    private final HardwareRepo hardwareRepo;
-
-    public LaptopExcelImporter(LabelRepo labelRepo, TypeRepo typeRepo, HardwareRepo hardwareRepo) {
-        this.labelRepo = labelRepo;
-        this.typeRepo = typeRepo;
-        this.hardwareRepo = hardwareRepo;
-    }
-
     @NotNull
-    public List<Laptop> importFile(String uploadedFilePath)
+    public static List<Laptop> importFile(String uploadedFilePath,
+                                          LabelRepo labelRepo, TypeRepo typeRepo, HardwareRepo hardwareRepo)
             throws IOException, IllegalArgumentException {
-
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var laptopSheet = workbook.getSheetAt(0);
 
@@ -59,7 +49,7 @@ public class LaptopExcelImporter {
                         if (cell.getColumnIndex() == labelColNum)
                             label = labelRepo.findByModel(cellValue);
                         else if (cell.getColumnIndex() == typeColNum && typeRepo.findByName(cellValue).size() != 0)
-                                type = typeRepo.findByName(cellValue).get(0);
+                            type = typeRepo.findByName(cellValue).get(0);
                         else if (cell.getColumnIndex() == hardwareColNum)
                             hardware = hardwareRepo.findByAssemblyName(cellValue);
                     }

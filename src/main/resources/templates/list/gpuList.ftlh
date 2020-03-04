@@ -7,7 +7,7 @@
                 <i class="far fa-plus-square"></i> Додати нову відеокарту</a>
         </div>
         <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="" role="button">
+            <a class="btn btn-success" href="/gpu/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
         </div>
         <div class="col-sm-1 col-3">
@@ -41,7 +41,7 @@
 
     <div class="row mt-5">
         <#if gpus?has_content>
-            <div class="h1">Список процесорів:</div>
+            <div class="h1">Список відеокарт:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>

@@ -96,7 +96,7 @@ public class SSDController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newSSDs = new SSDExcelImporter().importFile(uploadedFilePath);
+            var newSSDs = SSDExcelImporter.importFile(uploadedFilePath);
             newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {

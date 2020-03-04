@@ -96,8 +96,8 @@ public class HDDController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new HDDExcelImporter().importFile(uploadedFilePath);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            var newHDDs = HDDExcelImporter.importFile(uploadedFilePath);
+            newHDDs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);

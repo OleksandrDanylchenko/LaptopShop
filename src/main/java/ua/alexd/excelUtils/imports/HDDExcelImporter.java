@@ -16,7 +16,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class HDDExcelImporter {
     @NotNull
-    public List<HDD> importFile(String uploadedFilePath)
+    public static List<HDD> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var hddSheet = workbook.getSheetAt(0);

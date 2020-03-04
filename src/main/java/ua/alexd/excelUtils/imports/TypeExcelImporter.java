@@ -12,7 +12,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class TypeExcelImporter {
-    public List<Type> importFile(String uploadedFilePath)
+    public static List<Type> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var typeSheet = workbook.getSheetAt(0);
