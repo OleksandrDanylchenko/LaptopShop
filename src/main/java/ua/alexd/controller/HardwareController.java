@@ -6,9 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Hardware;
+import ua.alexd.excelUtils.imports.HardwareExcelImporter;
 import ua.alexd.repos.*;
 
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
@@ -147,6 +153,37 @@ public class HardwareController {
             return "/edit/hardwareEdit";
 
         return "redirect:/hardware";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newTypes = new HardwareExcelImporter(cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo)
+                    .importFile(uploadedFilePath);
+            newTypes.forEach(newType -> saveRecord(newType, model));
+            return "redirect:/hardware";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "hardware");
+        model.addAttribute("tableName", "збірок");
     }
 
     @NotNull

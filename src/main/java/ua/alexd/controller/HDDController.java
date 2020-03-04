@@ -96,7 +96,7 @@ public class HDDController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new HDDExcelImporter().importSSDsFromExcel(uploadedFilePath);
+            var newTypes = new HDDExcelImporter().importFile(uploadedFilePath);
             newTypes.forEach(newType -> saveRecord(newType, model));
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {
@@ -108,7 +108,7 @@ public class HDDController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "hdd");
+        model.addAttribute("controllerName", "HDD");
         model.addAttribute("tableName", "HDD дисків");
     }
 
