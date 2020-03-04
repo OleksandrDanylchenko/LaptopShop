@@ -54,6 +54,8 @@ public class EmployeeExcelImporter {
                         shop != null) {
                     var newEmployee = new Employee(firstName, secondName, shop, isActive);
                     newEmployees.add(newEmployee);
+
+                    shop = null;
                 }
             }
             workbook.close();

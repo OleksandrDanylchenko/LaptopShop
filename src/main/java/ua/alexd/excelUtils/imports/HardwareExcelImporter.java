@@ -69,6 +69,13 @@ public class HardwareExcelImporter {
                         display != null && ram != null && ssd != null && hdd != null) {
                     var newAssembly = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
                     newHardware.add(newAssembly);
+
+                    cpu = null;
+                    gpu = null;
+                    display = null;
+                    ram = null;
+                    ssd = null;
+                    hdd = null;
                 }
             }
             workbook.close();

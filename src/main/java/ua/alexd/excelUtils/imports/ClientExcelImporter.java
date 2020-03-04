@@ -57,6 +57,8 @@ public class ClientExcelImporter {
                         dateReg != null) {
                     var newClient = new Client(firstName, secondName, dateReg);
                     newClients.add(newClient);
+
+                    dateReg = null;
                 }
             }
             workbook.close();

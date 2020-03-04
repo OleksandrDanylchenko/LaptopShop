@@ -5,8 +5,11 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
-import ua.alexd.domain.SSD;
+import ua.alexd.domain.Laptop;
+import ua.alexd.repos.BasketRepo;
+import ua.alexd.repos.LaptopRepo;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +20,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class BuyingExcelImporter {
     @NotNull
-    public static List<Buying> importSSDsFromExcel(String uploadedFilePath)
+    public static List<Buying> importFile(String uploadedFilePath, BasketRepo basketRepo, LaptopRepo laptopRepo)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var buyingSheet = workbook.getSheetAt(0);
@@ -26,31 +29,48 @@ public class BuyingExcelImporter {
                 "Id ноутбуку", "Модель ноутбуку"};
         if (isValidTableStructure(buyingSheet, buyingTableFields)) {
             var dataFormatter = new DataFormatter();
-            var newSSDs = new ArrayList<Buying>();
+            var newBuyings = new ArrayList<Buying>();
 
-            var model = "";
-            var modelColNum = 1;
-            var memory = 0;
-            var memoryColNum = 2;
+            var totalPrice = 0;
+            var totalPriceColNum = 1;
+            Basket basket = null;
+            var basketIdColNum = 2;
+            Laptop laptop = null;
+            var laptopIdColNum = 4;
 
             for (Row row : buyingSheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
-                        if (cell.getColumnIndex() == modelColNum)
-                            model = cellValue;
-                        else if (cell.getColumnIndex() == memoryColNum)
+                        if (cell.getColumnIndex() == totalPriceColNum)
                             try {
-                                memory = Integer.parseInt(cellValue);
+                                totalPrice = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
+                        else if (cell.getColumnIndex() == basketIdColNum) {
+                            try {
+                                var basketId = Integer.parseInt(cellValue);
+                                if (basketRepo.findById(basketId).isPresent())
+                                    basket = basketRepo.findById(basketId).get();
+                            } catch (NumberFormatException ignored) { }
+                        }
+                        else if (cell.getColumnIndex() == laptopIdColNum) {
+                            try {
+                                var laptopId = Integer.parseInt(cellValue);
+                                if (laptopRepo.findById(laptopId).isPresent())
+                                    laptop = laptopRepo.findById(laptopId).get();
+                            } catch (NumberFormatException ignored) { }
+                        }
                     }
-                if (model != null && !model.isBlank() && memory >= 1) {
-                    var newSSD = new SSD(model, memory);
-//                    newSSDs.add(newSSD);
+                if (totalPrice >= 5000 && laptop != null && basket != null) {
+                    var newBuying = new Buying(totalPrice, laptop, basket);
+                    newBuyings.add(newBuying);
+
+                    laptop = null;
+                    basket = null;
                 }
             }
             workbook.close();
-            return newSSDs;
+            return newBuyings;
         } else
             throw new IllegalArgumentException();
     }

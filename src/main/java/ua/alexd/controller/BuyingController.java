@@ -6,14 +6,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
+import ua.alexd.excelUtils.imports.BuyingExcelImporter;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
 import ua.alexd.repos.LaptopRepo;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BuyingSpecification.*;
 
 @Controller
@@ -104,6 +109,36 @@ public class BuyingController {
         buyingRepo.save(editBuying);
 
         return "redirect:/buying";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newBuyings = BuyingExcelImporter.importFile(uploadedFilePath, basketRepo, laptopRepo);
+            newBuyings.forEach(buyingRepo::save);
+            return "redirect:/buying";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "buying");
+        model.addAttribute("tableName", "покупок");
     }
 
     @NotNull

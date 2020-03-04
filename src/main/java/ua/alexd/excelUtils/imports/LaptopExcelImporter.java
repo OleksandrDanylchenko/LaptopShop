@@ -56,6 +56,10 @@ public class LaptopExcelImporter {
                 if (label != null && type != null && hardware != null) {
                     var newLaptop = new Laptop(label, type, hardware);
                     newLaptops.add(newLaptop);
+
+                    label = null;
+                    type = null;
+                    hardware = null;
                 }
             }
             workbook.close();
