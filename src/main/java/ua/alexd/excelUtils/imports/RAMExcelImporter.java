@@ -6,7 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.RAM;
-import ua.alexd.domain.SSD;
+import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class RAMExcelImporter {
     @NotNull
-    public static List<RAM> importRAMsFromExcel(String uploadedFilePath)
+    public List<RAM> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var ramSheet = workbook.getSheetAt(0);

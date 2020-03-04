@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Type;
+import ua.alexd.excelUtils.imports.TypeExcelImporter;
 import ua.alexd.repos.TypeRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.TypeExcelImporter.importTypesFromExcel;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 
@@ -92,7 +92,7 @@ public class TypeController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = importTypesFromExcel(uploadedFilePath);
+            var newTypes = new TypeExcelImporter().importFile(uploadedFilePath);
             newTypes.forEach(newType -> saveRecord(newType, model));
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {

@@ -8,11 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.RAM;
+import ua.alexd.excelUtils.imports.RAMExcelImporter;
 import ua.alexd.repos.RAMRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.RAMExcelImporter.importRAMsFromExcel;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
@@ -96,7 +96,7 @@ public class RAMController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newRAMs = importRAMsFromExcel(uploadedFilePath);
+            var newRAMs = new RAMExcelImporter().importFile(uploadedFilePath);
             newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {

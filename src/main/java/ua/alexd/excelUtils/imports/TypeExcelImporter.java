@@ -1,7 +1,7 @@
 package ua.alexd.excelUtils.imports;
 
 import org.apache.poi.ss.usermodel.*;
-import org.jetbrains.annotations.NotNull;
+import ua.alexd.domain.ShopDomain;
 import ua.alexd.domain.Type;
 
 import java.io.File;
@@ -12,8 +12,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class TypeExcelImporter {
-    @NotNull
-    public static List<Type> importTypesFromExcel(String uploadedFilePath)
+    public List<Type> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var typeSheet = workbook.getSheetAt(0);

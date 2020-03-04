@@ -3,6 +3,7 @@ package ua.alexd.excelUtils.imports;
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.Shop;
+import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +14,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class ShopExcelImporter {
     @NotNull
-    public static List<Shop> importShopsFromExcel(String uploadedFilePath)
+    public List<Shop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var shopSheet = workbook.getSheetAt(0);

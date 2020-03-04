@@ -7,7 +7,7 @@
                 <i class="far fa-plus-square"></i> Додати новий ноутбук</a>
         </div>
         <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="" role="button">
+            <a class="btn btn-success" href="/laptop/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
         </div>
         <div class="col-sm-1 col-3">

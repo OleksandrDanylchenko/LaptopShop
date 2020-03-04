@@ -8,11 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.SSD;
+import ua.alexd.excelUtils.imports.SSDExcelImporter;
 import ua.alexd.repos.SSDRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.SSDExcelImport.importSSDsFromExcel;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.SSDSpecification.memoryEqual;
@@ -96,7 +96,7 @@ public class SSDController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newSSDs = importSSDsFromExcel(uploadedFilePath);
+            var newSSDs = new SSDExcelImporter().importFile(uploadedFilePath);
             newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {

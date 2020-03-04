@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.SSD;
+import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,9 +15,9 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class SSDExcelImport {
+public class SSDExcelImporter {
     @NotNull
-    public static List<SSD> importSSDsFromExcel(String uploadedFilePath)
+    public List<SSD> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var ssdSheet = workbook.getSheetAt(0);
