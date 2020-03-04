@@ -6,9 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.SSD;
 import ua.alexd.repos.SSDRepo;
 
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.SSDExcelImport.importSSDsFromExcel;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.SSDSpecification.memoryEqual;
 import static ua.alexd.specification.SSDSpecification.modelLike;
 
@@ -74,6 +80,36 @@ public class SSDController {
             return "edit/ssdEdit";
 
         return "redirect:/ssd";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newSSDs = importSSDsFromExcel(uploadedFilePath);
+            newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
+            return "redirect:/ssd";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці SSD дисків!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "SSD");
+        model.addAttribute("tableName", "SSD дисків");
     }
 
     @NotNull

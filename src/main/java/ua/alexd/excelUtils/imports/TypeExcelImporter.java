@@ -23,8 +23,8 @@ public class TypeExcelImporter {
             var dataFormatter = new DataFormatter();
             var newTypes = new ArrayList<Type>();
 
-            String name = null;
-            int nameColNum = 1;
+            var name = "";
+            var nameColNum = 1;
 
             for (Row row : sheet) {
                 if (row.getRowNum() != 0)

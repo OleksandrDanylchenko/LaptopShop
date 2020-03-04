@@ -102,7 +102,7 @@ public class ShopController {
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці магазинів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

@@ -97,7 +97,7 @@ public class TypeController {
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці типів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

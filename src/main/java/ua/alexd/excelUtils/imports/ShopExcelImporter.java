@@ -24,8 +24,8 @@ public class ShopExcelImporter {
         if (isValidTableStructure(sheet, typeTableFields)) {
             var newShops = new ArrayList<Shop>();
 
-            String address = null;
-            int addressColNum = 1;
+            var address = "";
+            var addressColNum = 1;
 
             for (Row row : sheet) {
                 if (row.getRowNum() != 0)

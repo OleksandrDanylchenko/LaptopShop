@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class TableValidator {
+public final class TableValidator {
     private static DataFormatter dataFormatter = new DataFormatter();
 
     public static boolean isValidTableStructure(@NotNull Sheet sheet, @NotNull String... tableFields) {
