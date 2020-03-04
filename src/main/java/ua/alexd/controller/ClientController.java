@@ -5,14 +5,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Client;
+import ua.alexd.excelUtils.imports.ClientExcelImporter;
 import ua.alexd.repos.ClientRepo;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 
-import static ua.alexd.specification.ClientSpecification.*;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.specification.ClientSpecification.*;
 
 @Controller
 @RequestMapping("/client")
@@ -85,6 +90,36 @@ public class ClientController {
         clientRepo.save(editClient);
 
         return "redirect:/client";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newClients = ClientExcelImporter.importFile(uploadedFilePath);
+            newClients.forEach(clientRepo::save);
+            return "redirect:/client";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "client");
+        model.addAttribute("tableName", "клієнтів");
     }
 
     @NotNull

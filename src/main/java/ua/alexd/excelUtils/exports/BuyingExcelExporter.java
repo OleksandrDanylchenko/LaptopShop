@@ -54,18 +54,18 @@ public class BuyingExcelExporter extends AbstractXlsxView implements ExcelExport
             generalRow.createCell(0).setCellValue(buyingRow.getId());
             generalRow.createCell(1).setCellValue(buyingRow.getTotalPrice());
             if (buyingRow.getBasket() == null) {
-                generalRow.createCell(2).setCellValue("Видалено");
-                generalRow.createCell(3).setCellValue("Видалено");
-            } else {
-                generalRow.createCell(2).setCellValue(buyingRow.getLaptop().getId());
-                generalRow.createCell(3).setCellValue(buyingRow.getLaptop().getLabel().getModel());
-            }
-            if (buyingRow.getLaptop() == null) {
                 generalRow.createCell(4).setCellValue("Видалено");
                 generalRow.createCell(5).setCellValue("Видалено");
             } else {
                 generalRow.createCell(4).setCellValue(buyingRow.getBasket().getId());
                 generalRow.createCell(5).setCellValue(buyingRow.getBasket().getDateTime().toString());
+            }
+            if (buyingRow.getLaptop() == null) {
+                generalRow.createCell(2).setCellValue("Видалено");
+                generalRow.createCell(3).setCellValue("Видалено");
+            } else {
+                generalRow.createCell(2).setCellValue(buyingRow.getLaptop().getId());
+                generalRow.createCell(3).setCellValue(buyingRow.getLaptop().getLabel().getModel());
             }
             setGeneralRowStyle(workbook, generalRow);
         }

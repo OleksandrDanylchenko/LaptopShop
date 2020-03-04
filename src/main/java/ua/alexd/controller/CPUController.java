@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.CPU;
-import ua.alexd.excelUtils.imports.CPUExcelImport;
+import ua.alexd.excelUtils.imports.CPUExcelImporter;
 import ua.alexd.repos.CPURepo;
 
 import java.io.IOException;
@@ -97,7 +97,7 @@ public class CPUController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newCPUs = CPUExcelImport.importFile(uploadedFilePath);
+            var newCPUs = CPUExcelImporter.importFile(uploadedFilePath);
             newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {
