@@ -79,13 +79,6 @@ public class TypeController {
     }
 
     @NotNull
-    @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
-        model.addAttribute("types", lastOutputtedTypes);
-        return "typeExcelView";
-    }
-
-    @NotNull
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
@@ -113,6 +106,13 @@ public class TypeController {
     private static void initializeImportAttributes(@NotNull Model model) {
         model.addAttribute("controllerName", "type");
         model.addAttribute("tableName", "типів");
+    }
+
+    @NotNull
+    @GetMapping("/exportExcel")
+    private String exportExcel(@NotNull Model model) {
+        model.addAttribute("types", lastOutputtedTypes);
+        return "typeExcelView";
     }
 
     @NotNull

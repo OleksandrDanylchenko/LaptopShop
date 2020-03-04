@@ -6,9 +6,16 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Shop;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
+
+import java.io.IOException;
+
+import static ua.alexd.excelUtils.imports.ShopExcelImporter.importShopsFromExcel;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 
 @Controller
 @RequestMapping("/shop")
@@ -74,6 +81,36 @@ public class ShopController {
             return "edit/shopEdit";
 
         return "redirect:/shop";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newShops = importShopsFromExcel(uploadedFilePath);
+            newShops.forEach(newShop -> saveRecord(newShop, model));
+            return "redirect:/shop";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "shop");
+        model.addAttribute("tableName", "магазинів");
     }
 
     @NotNull

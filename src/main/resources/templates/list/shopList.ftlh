@@ -7,7 +7,7 @@
                 <i class="far fa-plus-square"></i> Додати новий магазин</a>
         </div>
         <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0 mr-3 mr-sm-0" href="" role="button">
+            <a class="btn btn-success my-2 my-md-0 mr-3 mr-sm-0" href="/shop/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
         </div>
         <div class="col-1">

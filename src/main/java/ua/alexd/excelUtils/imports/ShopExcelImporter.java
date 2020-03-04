@@ -2,7 +2,7 @@ package ua.alexd.excelUtils.imports;
 
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.domain.Type;
+import ua.alexd.domain.Shop;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,33 +11,35 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class TypeExcelImporter {
+public class ShopExcelImporter {
+    private static DataFormatter dataFormatter = new DataFormatter();
+
     @NotNull
-    public static List<Type> importTypesFromExcel(String uploadedFilePath)
+    public static List<Shop> importShopsFromExcel(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var sheet = workbook.getSheetAt(0);
 
-        var typeTableFields = new String[]{"Id", "Назва"};
+        var typeTableFields = new String[]{"Id", "Адреса"};
         if (isValidTableStructure(sheet, typeTableFields)) {
-            var dataFormatter = new DataFormatter();
-            var newTypes = new ArrayList<Type>();
+            var newShops = new ArrayList<Shop>();
 
-            String name = null;
-            int nameColNum = 1;
+            String address = null;
+            int addressColNum = 1;
 
             for (Row row : sheet) {
                 if (row.getRowNum() != 0)
                     for (Cell cell : row)
-                        if (cell.getColumnIndex() == nameColNum)
-                            name = dataFormatter.formatCellValue(cell);
+                        if (cell.getColumnIndex() == addressColNum)
+                            address = dataFormatter.formatCellValue(cell);
 
-                if (name != null && !name.isBlank()) {
-                    var newType = new Type(name);
-                    newTypes.add(newType);
+                if (address != null && !address.isBlank()) {
+                    var newShop = new Shop(address);
+                    newShops.add(newShop);
                 }
             }
-            return newTypes;
+            workbook.close();
+            return newShops;
         } else
             throw new IllegalArgumentException();
     }
