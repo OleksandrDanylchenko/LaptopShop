@@ -43,7 +43,7 @@ public class AvailabilityExcelExporter extends AbstractXlsxView implements Excel
         header.createCell(4).setCellValue("Номер магазину");
         header.createCell(5).setCellValue("Адреса магазину");
         header.createCell(6).setCellValue("Початок продаж");
-        header.createCell(7).setCellValue("Закінчення продаж<");
+        header.createCell(7).setCellValue("Закінчення продаж");
         setHeaderRowStyle(workbook, header, excelSheet);
     }
 

@@ -6,17 +6,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Availability;
+import ua.alexd.excelUtils.imports.AvailabilityExcelImporter;
 import ua.alexd.repos.AvailabilityRepo;
 import ua.alexd.repos.LaptopRepo;
 import ua.alexd.repos.ShopRepo;
 
+import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
 
-import static ua.alexd.specification.AvailabilitySpecification.*;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.specification.AvailabilitySpecification.*;
 
 @Controller
 @RequestMapping("/availability")
@@ -122,6 +126,36 @@ public class AvailabilityController {
             return "edit/availabilityEdit";
 
         return "redirect:/availability";
+    }
+
+    @NotNull
+    @GetMapping("/importExcel")
+    private String importExcel(@NotNull Model model) {
+        initializeImportAttributes(model);
+        return "parts/excelFilesUpload";
+    }
+
+    @NotNull
+    @PostMapping("/importExcel")
+    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+            throws IOException {
+        var uploadedFilePath = "";
+        try {
+            uploadedFilePath = saveUploadingFile(uploadingFile);
+            var newTypes = AvailabilityExcelImporter.importFile(uploadedFilePath, laptopRepo, shopRepo);
+            newTypes.forEach(newType -> saveRecord(newType, model));
+            return "redirect:/availability";
+        } catch (IllegalArgumentException ignored) {
+            deleteNonValidFile(uploadedFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            initializeImportAttributes(model);
+            return "parts/excelFilesUpload";
+        }
+    }
+
+    private static void initializeImportAttributes(@NotNull Model model) {
+        model.addAttribute("controllerName", "availability");
+        model.addAttribute("tableName", "записів про наявність");
     }
 
     @NotNull
