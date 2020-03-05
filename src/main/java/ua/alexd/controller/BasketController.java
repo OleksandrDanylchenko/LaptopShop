@@ -139,7 +139,8 @@ public class BasketController {
         var basketFilePath = "";
         try {
             basketFilePath = saveUploadingFile(uploadingFile);
-            var newBaskets = BasketExcelImporter.importFiles(basketFilePath, employeeRepo, clientRepo);
+            var importer = new BasketExcelImporter(employeeRepo, clientRepo);
+            var newBaskets = importer.importFile(basketFilePath);
             newBaskets.forEach(basketRepo::save);
             return "redirect:/basket";
         } catch (IllegalArgumentException ignored) {

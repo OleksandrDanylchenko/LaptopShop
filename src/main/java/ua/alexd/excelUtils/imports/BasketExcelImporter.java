@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
@@ -21,9 +22,19 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class BasketExcelImporter {
+@Service
+public class BasketExcelImporter extends Importer {
+    private EmployeeRepo employeeRepo;
+    private ClientRepo clientRepo;
+
+    public BasketExcelImporter(EmployeeRepo employeeRepo, ClientRepo clientRepo) {
+        this.employeeRepo = employeeRepo;
+        this.clientRepo = clientRepo;
+    }
+
     @NotNull
-    public static List<Basket> importFiles(String uploadedFilePath, EmployeeRepo employeeRepo, ClientRepo clientRepo)
+    @Override
+    public List<Basket> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var basketSheet = workbook.getSheetAt(0);
@@ -70,9 +81,7 @@ public class BasketExcelImporter {
                     var newBasket = new Basket(dateTime, employee, client);
                     newBaskets.add(newBasket);
 
-                    employee = null;
-                    client = null;
-                    dateTime = null;
+                    nullExtractedValues(employee, client, dateTime);
                 }
             }
             workbook.close();
