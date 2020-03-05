@@ -120,7 +120,8 @@ public class BuyingController {
         var buyingFilePath = "";
         try {
             buyingFilePath = saveUploadingFile(uploadingFile);
-            var newBuyings = BuyingExcelImporter.importFile(buyingFilePath, basketRepo, laptopRepo);
+            var importer = new BuyingExcelImporter(basketRepo, laptopRepo);
+            var newBuyings = importer.importFile(buyingFilePath);
             newBuyings.forEach(buyingRepo::save);
             return "redirect:/buying";
         } catch (IllegalArgumentException ignored) {
