@@ -28,6 +28,7 @@ public class HDDController {
         this.hddRepo = hddRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model,
@@ -96,7 +97,7 @@ public class HDDController {
         var HDDFilePath = "";
         try {
             HDDFilePath = saveUploadingFile(uploadingFile);
-            var newHDDs = HDDExcelImporter.importFile(HDDFilePath);
+            var newHDDs = new HDDExcelImporter().importFile(HDDFilePath);
             newHDDs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {

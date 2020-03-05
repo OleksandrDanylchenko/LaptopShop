@@ -14,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class HDDExcelImporter {
+public class HDDExcelImporter extends Importer {
     @NotNull
-    public static List<HDD> importFile(String uploadedFilePath)
+    @Override
+    public List<HDD> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var hddSheet = workbook.getSheetAt(0);
@@ -26,9 +27,9 @@ public class HDDExcelImporter {
             var dataFormatter = new DataFormatter();
             var newHDDs = new ArrayList<HDD>();
 
-            var model = "";
+            String model = null;
             var modelColNum = 1;
-            var memory = 0;
+            int memory = 0;
             var memoryColNum = 2;
 
             for (Row row : hddSheet) {
@@ -40,11 +41,14 @@ public class HDDExcelImporter {
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
                                 memory = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) { }
+                            } catch (NumberFormatException ignored) {
+                            }
                     }
                 if (model != null && !model.isBlank() && memory >= 1) {
                     var newHDD = new HDD(model, memory);
                     newHDDs.add(newHDD);
+
+                    nullExtractedValues(model);
                 }
             }
             workbook.close();
