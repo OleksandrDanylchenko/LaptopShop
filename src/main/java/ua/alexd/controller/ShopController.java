@@ -97,7 +97,7 @@ public class ShopController {
         var shopFilePath = "";
         try {
             shopFilePath = saveUploadingFile(uploadingFile);
-            var newShops = ShopExcelImporter.importFile(shopFilePath);
+            var newShops = new ShopExcelImporter().importFile(shopFilePath);
             newShops.forEach(newShop -> saveRecord(newShop, model));
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {

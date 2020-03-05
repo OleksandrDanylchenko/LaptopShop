@@ -14,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class ShopExcelImporter {
+public class ShopExcelImporter extends Importer {
     @NotNull
-    public static List<Shop> importFile(String uploadedFilePath)
+    @Override
+    public List<Shop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var shopSheet = workbook.getSheetAt(0);
@@ -38,6 +39,8 @@ public class ShopExcelImporter {
                 if (address != null && !address.isBlank()) {
                     var newShop = new Shop(address);
                     newShops.add(newShop);
+
+                    nullExtractedDomains(address);
                 }
             }
             workbook.close();
