@@ -51,8 +51,10 @@ public class HDDController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля нового HDD диску не можуть бути пустими!");
             return "add/hddAdd";
+        }
 
         var newHDD = new HDD(model, memory);
         if (!saveRecord(newHDD, siteModel))
@@ -72,8 +74,10 @@ public class HDDController {
     @PostMapping("/edit/{editHDD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного HDD диску не можуть бути пустими!");
             return "edit/hddEdit";
+        }
 
         editHDD.setModel(model);
         editHDD.setMemory(memory);
@@ -127,12 +131,8 @@ public class HDDController {
         return "redirect:/hdd";
     }
 
-    private boolean isFieldsEmpty(String model, Model siteModel) {
-        if (model == null || model.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля HDD диску не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model) {
+        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(HDD saveHDD, Model model) {

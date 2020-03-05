@@ -46,8 +46,10 @@ public class TypeController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String name, @NotNull Model model) {
-        if (isNameEmpty(name, model))
+        if (isNameEmpty(name)) {
+            model.addAttribute("errorMessage", "Назва нового типу не можу бути пустою!");
             return "add/typeAdd";
+        }
 
         var newType = new Type(name);
         if (!saveRecord(newType, model))
@@ -68,8 +70,10 @@ public class TypeController {
     private String editRecord(@RequestParam String name,
                               @NotNull @PathVariable Type editType,
                               @NotNull Model model) {
-        if (isNameEmpty(name, model))
+        if (isNameEmpty(name)) {
+            model.addAttribute("errorMessage", "Назва змінюваного типу не можу бути пустою!");
             return "edit/typeEdit";
+        }
 
         editType.setName(name);
         if (!saveRecord(editType, model))
@@ -123,12 +127,8 @@ public class TypeController {
     }
 
 
-    private boolean isNameEmpty(String name, Model model) {
-        if (name == null || name.isBlank()) {
-            model.addAttribute("errorMessage", "Назва типу не можу бути пустою!");
-            return true;
-        }
-        return false;
+    public static boolean isNameEmpty(String name) {
+        return name == null || name.isBlank();
     }
 
     private boolean saveRecord(Type saveType, Model model) {

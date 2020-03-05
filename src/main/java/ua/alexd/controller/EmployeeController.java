@@ -57,8 +57,11 @@ public class EmployeeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, String isActive, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, model))
+        if (isFieldsEmpty(firstName, secondName)) {
+            model.addAttribute("errorMessage", "Поля нового співробітника не можуть бути пустими!");
+            initDropDownChoices(model);
             return "add/employeeAdd";
+        }
 
         var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
         var newEmployee = new Employee(firstName, secondName, shop, true);
@@ -81,8 +84,11 @@ public class EmployeeController {
                               @RequestParam String firstName, @RequestParam String secondName,
                               @RequestParam String shopAddress, @RequestParam String isActive,
                               @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName, model))
+        if (isFieldsEmpty(firstName, secondName)) {
+            model.addAttribute("errorMessage", "Поля змінюваного співробітника не можуть бути пустими!");
+            initDropDownChoices(model);
             return "/edit/employeeEdit";
+        }
 
         editEmployee.setFirstName(firstName);
         editEmployee.setSecondName(secondName);
@@ -139,15 +145,9 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    private boolean isFieldsEmpty(String firstName, String secondName, Model model) {
-        if (firstName == null || secondName == null ||
-                firstName.isBlank() || secondName.isBlank()) {
-            model.addAttribute("errorMessage",
-                    "Поля співробітника не можуть бути пустими!");
-            initDropDownChoices(model);
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String firstName, String secondName) {
+        return firstName == null || secondName == null ||
+                firstName.isBlank() || secondName.isBlank();
     }
 
     private void initDropDownChoices(@NotNull Model model) {

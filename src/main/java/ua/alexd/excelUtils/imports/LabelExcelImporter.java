@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.LabelController;
 import ua.alexd.domain.Label;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class LabelExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == modelColNum)
                             model = cellValue;
                     }
-                if (brand != null && !brand.isBlank() && model != null && !model.isBlank()) {
+                if (!LabelController.isFieldsEmpty(brand, model)) {
                     var newLabel = new Label(brand, model);
                     newLabels.add(newLabel);
 

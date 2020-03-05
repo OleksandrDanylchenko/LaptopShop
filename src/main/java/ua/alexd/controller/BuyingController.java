@@ -36,6 +36,7 @@ public class BuyingController {
         this.laptopRepo = laptopRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) Integer basketId,
@@ -66,9 +67,6 @@ public class BuyingController {
                              @RequestParam(required = false) String laptopModel,
                              @RequestParam Integer totalPrice,
                              @NotNull Model model) {
-        if (isFieldsEmpty(totalPrice, model))
-            return "add/buyingAdd";
-
         Basket basket = null;
         if (basketRepo.findById(basketId).isPresent())
             basket = basketRepo.findById(basketId).get();
@@ -93,9 +91,6 @@ public class BuyingController {
                               @RequestParam(required = false, defaultValue = "0") Integer basketId,
                               @RequestParam(required = false) String laptopModel, @RequestParam Integer totalPrice,
                               @NotNull Model model) {
-        if (isFieldsEmpty(totalPrice, model))
-            return "/edit/buyingEdit";
-
         Basket basket = null;
         if (basketRepo.findById(basketId).isPresent())
             basket = basketRepo.findById(basketId).get();
@@ -153,15 +148,6 @@ public class BuyingController {
     private String deleteRecord(@NotNull @PathVariable Buying delBuying) {
         buyingRepo.delete(delBuying);
         return "redirect:/buying";
-    }
-
-    private boolean isFieldsEmpty(Integer totalPrice, Model model) {
-        if (totalPrice == null) {
-            model.addAttribute("errorMessage", "Поля покупки не можуть бути пустими!");
-            initializeDropDownChoices(model);
-            return true;
-        }
-        return false;
     }
 
     private void initializeDropDownChoices(@NotNull Model model) {

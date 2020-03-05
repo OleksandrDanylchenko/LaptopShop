@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.ShopController;
 import ua.alexd.domain.Shop;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class ShopExcelImporter extends Importer {
                         if (cell.getColumnIndex() == addressColNum)
                             address = dataFormatter.formatCellValue(cell);
 
-                if (address != null && !address.isBlank()) {
+                if (!ShopController.isAddressEmpty(address)) {
                     var newShop = new Shop(address);
                     newShops.add(newShop);
 

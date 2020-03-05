@@ -66,8 +66,11 @@ public class LaptopController {
                              @RequestParam(required = false) String typeName,
                              @RequestParam(required = false) String labelModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel)) {
+            model.addAttribute("errorMessage", "Поля нового ноутбука не можуть бути пустими!");
+            initializeAddingChoices(model);
             return "add/laptopAdd";
+        }
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName).get(0);
@@ -94,8 +97,11 @@ public class LaptopController {
                               @RequestParam(required = false) String typeName,
                               @RequestParam(required = false) String labelModel,
                               @PathVariable Laptop editLaptop, @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel, model))
+        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel)) {
+            model.addAttribute("errorMessage", "Поля змінюваного ноутбука не можуть бути пустими!");
+            initializeAddingChoices(model);
             return "edit/labelEdit";
+        }
 
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         editLaptop.setHardware(hardware);
@@ -157,15 +163,9 @@ public class LaptopController {
         return "redirect:/laptop";
     }
 
-    private boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel, Model model) {
-        if (hardwareAssemblyName == null || typeName == null || labelModel == null ||
-                typeName.isBlank() || labelModel.isBlank() || hardwareAssemblyName.isBlank()) {
-            model.addAttribute("errorMessage",
-                    "Поля ноутбуку не можуть бути пустими!");
-            initializeAddingChoices(model);
-            return true;
-        }
-        return false;
+    private static boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel) {
+        return hardwareAssemblyName == null || typeName == null || labelModel == null ||
+                typeName.isBlank() || labelModel.isBlank() || hardwareAssemblyName.isBlank();
     }
 
     private boolean saveRecord(Laptop saveLaptop, Model model) {

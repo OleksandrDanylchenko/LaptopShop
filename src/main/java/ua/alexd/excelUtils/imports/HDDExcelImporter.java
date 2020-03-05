@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.HDDController;
 import ua.alexd.domain.HDD;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class HDDExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newHDDs = new ArrayList<HDD>();
 
-            String model = null;
+            String hddModel = null;
             var modelColNum = 1;
             int memory = 0;
             var memoryColNum = 2;
@@ -37,18 +38,18 @@ public class HDDExcelImporter extends Importer {
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
-                            model = cellValue;
+                            hddModel = cellValue;
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
                                 memory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) {
                             }
                     }
-                if (model != null && !model.isBlank() && memory >= 1) {
-                    var newHDD = new HDD(model, memory);
+                if (!HDDController.isFieldsEmpty(hddModel) && memory >= 1) {
+                    var newHDD = new HDD(hddModel, memory);
                     newHDDs.add(newHDD);
 
-                    nullExtractedValues(model);
+                    nullExtractedValues(hddModel);
                 }
             }
             workbook.close();

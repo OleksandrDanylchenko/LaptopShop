@@ -92,8 +92,11 @@ public class HardwareController {
                              @RequestParam(required = false) String hddModel,
                              @RequestParam(required = false) String gpuModel,
                              @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName, model))
+        if (isFieldsEmpty(assemblyName)) {
+            model.addAttribute("errorMessage", "Назва нової збірки не може бути пустою!");
+            initializeDropDownChoices(model);
             return "add/hardwareAdd";
+        }
 
         var cpu = cpuRepo.findByModel(cpuModel);
         var ram = ramRepo.findByModel(ramModel);
@@ -127,8 +130,11 @@ public class HardwareController {
                               @RequestParam(required = false) String hddModel,
                               @RequestParam(required = false) String gpuModel,
                               @PathVariable Hardware editHardware, @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName, model))
+        if (isFieldsEmpty(assemblyName)) {
+            model.addAttribute("errorMessage", "Назва змінюваної збірки не може бути пустою!");
+            initializeDropDownChoices(model);
             return "/edit/hardwareEdit";
+        }
 
         editHardware.setAssemblyName(assemblyName);
 
@@ -201,13 +207,8 @@ public class HardwareController {
         return "redirect:/hardware";
     }
 
-    private boolean isFieldsEmpty(String assemblyName, @NotNull Model model) {
-        if (assemblyName == null || assemblyName.isBlank()) {
-            model.addAttribute("errorMessage", "Назва збірки не може бути пустою!");
-            initializeDropDownChoices(model);
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String assemblyName) {
+        return assemblyName == null || assemblyName.isBlank();
     }
 
     private boolean saveRecord(Hardware saveHardware, Model model) {

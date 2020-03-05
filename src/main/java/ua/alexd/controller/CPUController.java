@@ -28,6 +28,7 @@ public class CPUController {
         this.cpuRepo = cpuRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model,
@@ -51,8 +52,10 @@ public class CPUController {
     private String addRecord(@RequestParam(required = false) String model,
                              @RequestParam(required = false) String frequency,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency, siteModel))
+        if (isFieldsEmpty(model, frequency)) {
+            siteModel.addAttribute("errorMessage", "Поля нового процесора не можуть бути пустими!");
             return "add/cpuAdd";
+        }
 
         var newCpu = new CPU(model, frequency);
         if (!saveRecord(newCpu, siteModel))
@@ -72,8 +75,10 @@ public class CPUController {
     @PostMapping("/edit/{editCpu}")
     private String addRecord(@RequestParam String model, @RequestParam String frequency,
                              @NotNull @PathVariable CPU editCpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency, siteModel))
+        if (isFieldsEmpty(model, frequency)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного процесора не можуть бути пустими!");
             return "edit/cpuEdit";
+        }
 
         editCpu.setModel(model);
         editCpu.setFrequency(frequency);
@@ -127,13 +132,9 @@ public class CPUController {
         return "redirect:/cpu";
     }
 
-    private boolean isFieldsEmpty(String model, String frequency, Model siteModel) {
-        if (frequency == null || model == null ||
-                frequency.isBlank() || model.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля процесора не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model, String frequency) {
+        return frequency == null || model == null ||
+                frequency.isBlank() || model.isBlank();
     }
 
     private boolean saveRecord(CPU saveCPU, Model model) {

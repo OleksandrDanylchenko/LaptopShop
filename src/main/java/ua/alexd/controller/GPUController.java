@@ -51,8 +51,10 @@ public class GPUController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля нової відеокарти не можуть бути пустими!");
             return "add/gpuAdd";
+        }
 
         var newGpu = new GPU(model, memory);
         if (!saveRecord(newGpu, siteModel))
@@ -72,8 +74,10 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, memory, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваної відеокарти не можуть бути пустими!");
             return "edit/gpuEdit";
+        }
 
         editGpu.setModel(model);
         editGpu.setMemory(memory);
@@ -127,12 +131,8 @@ public class GPUController {
         return "redirect:/gpu";
     }
 
-    private boolean isFieldsEmpty(String model, Integer memory, Model siteModel) {
-        if (memory == null || model == null || model.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля відеокарти не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model) {
+        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(GPU saveGpu, Model model) {

@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
+import ua.alexd.controller.EmployeeController;
 import ua.alexd.domain.Employee;
 import ua.alexd.domain.Shop;
 import ua.alexd.repos.ShopRepo;
@@ -59,8 +60,7 @@ public class EmployeeExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == isActiveColNum)
                             isActive = cellValue.equalsIgnoreCase("працюючий");
                     }
-                if (firstName != null && !firstName.isBlank() && secondName != null && !secondName.isBlank() &&
-                        shop != null) {
+                if (!EmployeeController.isFieldsEmpty(firstName, secondName) && shop != null) {
                     var newEmployee = new Employee(firstName, secondName, shop, isActive);
                     newEmployees.add(newEmployee);
 

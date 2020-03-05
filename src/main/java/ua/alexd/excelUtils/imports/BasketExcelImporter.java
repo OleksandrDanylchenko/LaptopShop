@@ -4,12 +4,10 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
-import ua.alexd.domain.SSD;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
 
@@ -65,7 +63,8 @@ public class BasketExcelImporter {
                             try {
                                 var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
                                 dateTime = LocalDateTime.parse(cellValue, dateTimeFormat);
-                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
                 if (employee != null && client != null && dateTime != null) {
                     var newBasket = new Basket(dateTime, employee, client);

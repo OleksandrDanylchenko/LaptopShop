@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.SSDController;
 import ua.alexd.domain.SSD;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class SSDExcelImporter extends Importer {
                                 ssdMemory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (ssdModel != null && !ssdModel.isBlank() && ssdMemory >= 1) {
+                if (!SSDController.isFieldsEmpty(ssdModel) && ssdMemory >= 1) {
                     var newSSD = new SSD(ssdModel, ssdMemory);
                     newSSDs.add(newSSD);
 

@@ -58,11 +58,13 @@ public class AvailabilityExcelImporter {
                         else if (cell.getColumnIndex() == priceColNum)
                             try {
                                 price = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) { }
+                            } catch (NumberFormatException ignored) {
+                            }
                         else if (cell.getColumnIndex() == quantityColNum)
                             try {
                                 quantity = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) { }
+                            } catch (NumberFormatException ignored) {
+                            }
                         else if (cell.getColumnIndex() == shopColNum && shopRepo.findByAddress(cellValue).size() != 0)
                             shop = shopRepo.findByAddress(cellValue).get(0);
                         else if (cell.getColumnIndex() == dateStartColNum)
@@ -70,13 +72,15 @@ public class AvailabilityExcelImporter {
                                 cellValue = normalizeDate(cellValue);
                                 dateStart = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                         else if (cell.getColumnIndex() == dateEndColNum)
                             try {
                                 cellValue = normalizeDate(cellValue);
                                 dateEnd = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
                 if (laptop != null && price >= 5000 && quantity >= 1 && shop != null &&
                         dateStart != null && dateEnd != null && isDateStartPrevDateEnd(dateStart, dateEnd)) {

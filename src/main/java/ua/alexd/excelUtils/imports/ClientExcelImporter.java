@@ -4,18 +4,18 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.hibernate.mapping.Collection;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.ClientController;
 import ua.alexd.domain.Client;
-import ua.alexd.domain.SSD;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
@@ -51,10 +51,10 @@ public class ClientExcelImporter {
                                 cellValue = normalizeDate(cellValue);
                                 dateReg = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
-                if (firstName != null && !firstName.isBlank() && secondName != null && !secondName.isBlank() &&
-                        dateReg != null) {
+                if (!ClientController.isFieldsEmpty(firstName, secondName, dateReg)) {
                     var newClient = new Client(firstName, secondName, dateReg);
                     newClients.add(newClient);
 

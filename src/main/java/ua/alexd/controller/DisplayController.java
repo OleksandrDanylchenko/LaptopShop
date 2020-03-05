@@ -28,6 +28,7 @@ public class DisplayController {
         this.displayRepo = displayRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model, @RequestParam(required = false) String type,

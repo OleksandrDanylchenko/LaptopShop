@@ -52,8 +52,10 @@ public class LabelController {
     private String addRecord(@RequestParam(required = false) String brand,
                              @RequestParam(required = false) String model,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model, siteModel))
+        if (isFieldsEmpty(brand, model)) {
+            siteModel.addAttribute("errorMessage", "Поля нового найменування не можуть бути пустими!");
             return "add/labelAdd";
+        }
 
         var newLabel = new Label(brand, model);
         if (!saveRecord(newLabel, siteModel))
@@ -73,8 +75,10 @@ public class LabelController {
     @PostMapping("/edit/{editLabel}")
     private String editRecord(@RequestParam String brand, @RequestParam String model,
                               @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model, siteModel))
+        if (isFieldsEmpty(brand, model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного найменування не можуть бути пустими!");
             return "edit/labelEdit";
+        }
 
         editLabel.setBrand(brand);
         editLabel.setModel(model);
@@ -128,13 +132,9 @@ public class LabelController {
         return "redirect:/label";
     }
 
-    private boolean isFieldsEmpty(String brand, String model, Model siteModel) {
-        if (brand == null || model == null ||
-                brand.isBlank() || model.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля найменування не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String brand, String model) {
+        return brand == null || model == null ||
+                brand.isBlank() || model.isBlank();
     }
 
     private boolean saveRecord(Label saveLabel, Model model) {

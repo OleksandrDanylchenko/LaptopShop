@@ -1,10 +1,12 @@
 package ua.alexd.excelUtils.imports;
 
+import freemarker.ext.util.ModelCache;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.GPUController;
 import ua.alexd.domain.GPU;
 
 import java.io.File;
@@ -27,7 +29,7 @@ public class GPUExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newGPUs = new ArrayList<GPU>();
 
-            String model = null;
+            String gpuModel = null;
             var modelColNum = 1;
             int memory = 0;
             var memoryColNum = 2;
@@ -37,14 +39,14 @@ public class GPUExcelImporter extends Importer {
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
-                            model = cellValue;
+                            gpuModel = cellValue;
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
                                 memory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (model != null && !model.isBlank() && memory >= 1) {
-                    var newGPU = new GPU(model, memory);
+                if (!GPUController.isFieldsEmpty(gpuModel) && memory >= 1) {
+                    var newGPU = new GPU(gpuModel, memory);
                     newGPUs.add(newGPU);
                 }
             }

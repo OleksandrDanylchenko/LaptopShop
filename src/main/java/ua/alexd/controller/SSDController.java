@@ -51,8 +51,10 @@ public class SSDController {
     @PostMapping("/add")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля нового SSD диску не можуть бути пустими!");
             return "add/ssdAdd";
+        }
 
         var newSSD = new SSD(model, memory);
         if (!saveRecord(newSSD, siteModel))
@@ -72,8 +74,10 @@ public class SSDController {
     @PostMapping("/edit/{editSSD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного SSD диску не можуть бути пустими!");
             return "edit/ssdEdit";
+        }
 
         editSSD.setModel(model);
         editSSD.setMemory(memory);
@@ -127,12 +131,8 @@ public class SSDController {
         return "redirect:/ssd";
     }
 
-    private boolean isFieldsEmpty(String model, Model siteModel) {
-        if (model == null || model.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля SSD диску не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model) {
+        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(SSD saveSSD, Model model) {

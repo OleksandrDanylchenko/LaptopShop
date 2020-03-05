@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.TypeController;
 import ua.alexd.domain.Type;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class TypeExcelImporter extends Importer {
                         if (cell.getColumnIndex() == nameColNum)
                             name = dataFormatter.formatCellValue(cell);
 
-                if (name != null && !name.isBlank()) {
+                if (!TypeController.isNameEmpty(name)) {
                     var newType = new Type(name);
                     newTypes.add(newType);
 

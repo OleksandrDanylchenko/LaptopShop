@@ -12,7 +12,6 @@ import ua.alexd.repos.ClientRepo;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
 
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
@@ -29,6 +28,7 @@ public class ClientController {
         this.clientRepo = clientRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String firstName,
@@ -54,11 +54,13 @@ public class ClientController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam(defaultValue = "0001-01-01") Date dateReg, @NotNull Model model) throws ParseException {
+                             @RequestParam(defaultValue = "0001-01-01") Date dateReg, @NotNull Model model) {
         if (isNonValidDate(dateReg))
             dateReg = null;
-        if (isFieldsEmpty(firstName, secondName, dateReg, model))
+        if (isFieldsEmpty(firstName, secondName, dateReg)) {
+            model.addAttribute("errorMessage", "Поля нового не можуть бути пустими!");
             return "add/clientAdd";
+        }
 
         var newClient = new Client(firstName, secondName, dateReg);
         clientRepo.save(newClient);
@@ -81,8 +83,10 @@ public class ClientController {
                               @NotNull Model model) {
         if (isNonValidDate(dateReg))
             dateReg = null;
-        if (isFieldsEmpty(firstName, secondName, dateReg, model))
+        if (isFieldsEmpty(firstName, secondName, dateReg)) {
+            model.addAttribute("errorMessage", "Поля змінюваного клієнта не можуть бути пустими!");
             return "/edit/clientEdit";
+        }
 
         editClient.setFirstName(firstName);
         editClient.setSecondName(secondName);
@@ -136,11 +140,7 @@ public class ClientController {
         return "redirect:/client";
     }
 
-    private boolean isFieldsEmpty(String firstName, String secondName, Date dateReg, Model model) {
-        if (firstName == null || secondName == null || dateReg == null || firstName.isBlank() || secondName.isBlank()) {
-            model.addAttribute("errorMessage", "Поля клієнта не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String firstName, String secondName, Date dateReg) {
+        return firstName == null || secondName == null || firstName.isBlank() || secondName.isBlank() || dateReg == null;
     }
 }

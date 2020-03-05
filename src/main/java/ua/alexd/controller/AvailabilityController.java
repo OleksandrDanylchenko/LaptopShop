@@ -37,6 +37,7 @@ public class AvailabilityController {
         this.shopRepo = shopRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) Integer price,

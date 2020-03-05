@@ -37,6 +37,7 @@ public class BasketController {
         this.employeeRepo = employeeRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) Integer employeeId,

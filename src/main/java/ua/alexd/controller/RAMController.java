@@ -51,8 +51,10 @@ public class RAMController {
     @PostMapping("/add")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля нової оперативної пам'яті не можуть бути пустими!");
             return "add/ramAdd";
+        }
 
         var newRam = new RAM(model, memory);
         if (!saveRecord(newRam, siteModel))
@@ -72,8 +74,10 @@ public class RAMController {
     @PostMapping("/edit/{editRam}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, siteModel))
+        if (isFieldsEmpty(model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваної оперативної пам'яті не можуть бути пустими!");
             return "edit/ramEdit";
+        }
 
         editRam.setModel(model);
         editRam.setMemory(memory);
@@ -127,13 +131,8 @@ public class RAMController {
         return "redirect:/ram";
     }
 
-    private boolean isFieldsEmpty(String model, Model siteModel) {
-        if (model == null || model.isBlank()) {
-            siteModel.addAttribute("errorMessage",
-                    "Поля оперативної пам'яті не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model) {
+        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(RAM saveRAM, Model model) {

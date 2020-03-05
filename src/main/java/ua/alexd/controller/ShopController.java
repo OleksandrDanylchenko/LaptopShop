@@ -51,8 +51,10 @@ public class ShopController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String address, @NotNull Model model) {
-        if (isAddressEmpty(address, model))
+        if (isAddressEmpty(address)) {
+            model.addAttribute("errorMessage", "Адреса нового магазину не можу бути пустою!");
             return "add/shopAdd";
+        }
 
         var newShop = new Shop(address);
         if (!saveRecord(newShop, model))
@@ -73,8 +75,10 @@ public class ShopController {
     private String editRecord(@RequestParam String address,
                               @NotNull @PathVariable Shop editShop,
                               @NotNull Model model) {
-        if (isAddressEmpty(address, model))
+        if (isAddressEmpty(address)) {
+            model.addAttribute("errorMessage", "Адреса змінюваного магазину не можу бути пустою!");
             return "edit/shopEdit";
+        }
 
         editShop.setAddress(address);
         if (!saveRecord(editShop, model))
@@ -128,12 +132,8 @@ public class ShopController {
         return "redirect:/shop";
     }
 
-    private boolean isAddressEmpty(String address, Model model) {
-        if (address == null || address.isBlank()) {
-            model.addAttribute("errorMessage", "Адреса магазину не можу бути пустою!");
-            return true;
-        }
-        return false;
+    public static boolean isAddressEmpty(String address) {
+        return address == null || address.isBlank();
     }
 
     private boolean saveRecord(Shop saveShop, Model model) {
