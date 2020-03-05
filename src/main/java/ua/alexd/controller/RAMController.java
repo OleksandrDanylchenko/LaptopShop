@@ -93,14 +93,14 @@ public class RAMController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var RAMFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newRAMs = RAMExcelImporter.importFile(uploadedFilePath);
+            RAMFilePath = saveUploadingFile(uploadingFile);
+            var newRAMs = RAMExcelImporter.importFile(RAMFilePath);
             newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
+            deleteNonValidFile(RAMFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці оперативної пам'яті!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";

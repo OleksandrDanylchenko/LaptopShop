@@ -99,15 +99,15 @@ public class DisplayController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var displayFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newDisplays = DisplayExcelImporter.importFiles(uploadedFilePath);
+            displayFilePath = saveUploadingFile(uploadingFile);
+            var newDisplays = DisplayExcelImporter.importFiles(displayFilePath);
             newDisplays.forEach(newDisplay -> saveRecord(newDisplay, model));
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(displayFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці дисплеїв!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

@@ -122,15 +122,15 @@ public class BuyingController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var buyingFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newBuyings = BuyingExcelImporter.importFile(uploadedFilePath, basketRepo, laptopRepo);
+            buyingFilePath = saveUploadingFile(uploadingFile);
+            var newBuyings = BuyingExcelImporter.importFile(buyingFilePath, basketRepo, laptopRepo);
             newBuyings.forEach(buyingRepo::save);
             return "redirect:/buying";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(buyingFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці покупок!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

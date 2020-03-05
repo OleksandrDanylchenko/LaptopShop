@@ -123,15 +123,15 @@ public class LaptopController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var laptopFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newLaptops = LaptopExcelImporter.importFile(uploadedFilePath, labelRepo, typeRepo, hardwareRepo);
+            laptopFilePath = saveUploadingFile(uploadingFile);
+            var newLaptops = LaptopExcelImporter.importFile(laptopFilePath, labelRepo, typeRepo, hardwareRepo);
             newLaptops.forEach(newLaptop -> saveRecord(newLaptop, model));
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(laptopFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці ноутбуків!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

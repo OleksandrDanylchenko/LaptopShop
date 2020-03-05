@@ -166,16 +166,16 @@ public class HardwareController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var hardwareFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newHardware = HardwareExcelImporter.importFile(uploadedFilePath,
+            hardwareFilePath = saveUploadingFile(uploadingFile);
+            var newHardware = HardwareExcelImporter.importFile(hardwareFilePath,
                     cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
             newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(hardwareFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці збірок!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

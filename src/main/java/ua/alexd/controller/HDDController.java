@@ -93,15 +93,15 @@ public class HDDController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var HDDFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newHDDs = HDDExcelImporter.importFile(uploadedFilePath);
+            HDDFilePath = saveUploadingFile(uploadingFile);
+            var newHDDs = HDDExcelImporter.importFile(HDDFilePath);
             newHDDs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(HDDFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці HDD дисків!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

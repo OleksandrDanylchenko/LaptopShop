@@ -104,15 +104,15 @@ public class EmployeeController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var employeeFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newEmployees = EmployeeExcelImporter.importFile(uploadedFilePath, shopRepo);
+            employeeFilePath = saveUploadingFile(uploadingFile);
+            var newEmployees = EmployeeExcelImporter.importFile(employeeFilePath, shopRepo);
             newEmployees.forEach(employeeRepo::save);
             return "redirect:/employee";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(employeeFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці співробітників!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

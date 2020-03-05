@@ -93,15 +93,15 @@ public class GPUController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var GPUFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newGPUs = GPUExcelImporter.importFile(uploadedFilePath);
+            GPUFilePath = saveUploadingFile(uploadingFile);
+            var newGPUs = GPUExcelImporter.importFile(GPUFilePath);
             newGPUs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/gpu";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(GPUFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці відеокарт!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

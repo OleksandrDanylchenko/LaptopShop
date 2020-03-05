@@ -94,15 +94,15 @@ public class CPUController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var cpuFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newCPUs = CPUExcelImporter.importFile(uploadedFilePath);
+            cpuFilePath = saveUploadingFile(uploadingFile);
+            var newCPUs = CPUExcelImporter.importFile(cpuFilePath);
             newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(cpuFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці процесорів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

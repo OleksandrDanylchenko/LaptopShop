@@ -94,14 +94,14 @@ public class ShopController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var shopFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newShops = ShopExcelImporter.importFile(uploadedFilePath);
+            shopFilePath = saveUploadingFile(uploadingFile);
+            var newShops = ShopExcelImporter.importFile(shopFilePath);
             newShops.forEach(newShop -> saveRecord(newShop, model));
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
+            deleteNonValidFile(shopFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці магазинів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";

@@ -135,15 +135,15 @@ public class BasketController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var basketFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newBaskets = BasketExcelImporter.importFiles(uploadedFilePath, employeeRepo, clientRepo);
+            basketFilePath = saveUploadingFile(uploadingFile);
+            var newBaskets = BasketExcelImporter.importFiles(basketFilePath, employeeRepo, clientRepo);
             newBaskets.forEach(basketRepo::save);
             return "redirect:/basket";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(basketFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці кошиків!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

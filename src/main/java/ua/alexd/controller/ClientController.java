@@ -103,15 +103,15 @@ public class ClientController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var clientFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newClients = ClientExcelImporter.importFile(uploadedFilePath);
+            clientFilePath = saveUploadingFile(uploadingFile);
+            var newClients = ClientExcelImporter.importFile(clientFilePath);
             newClients.forEach(clientRepo::save);
             return "redirect:/client";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(clientFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці клієнтів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

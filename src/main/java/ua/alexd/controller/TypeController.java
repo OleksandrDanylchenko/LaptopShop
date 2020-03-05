@@ -89,14 +89,14 @@ public class TypeController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var typeFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new TypeExcelImporter().importFile(uploadedFilePath);
+            typeFilePath = saveUploadingFile(uploadingFile);
+            var newTypes = TypeExcelImporter.importFile(typeFilePath);
             newTypes.forEach(newType -> saveRecord(newType, model));
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
+            deleteNonValidFile(typeFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці типів!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";

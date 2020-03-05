@@ -94,15 +94,15 @@ public class LabelController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var labelFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newLabels = LabelExcelImporter.importFile(uploadedFilePath);
+            labelFilePath = saveUploadingFile(uploadingFile);
+            var newLabels = LabelExcelImporter.importFile(labelFilePath);
             newLabels.forEach(newType -> saveRecord(newType, model));
             return "redirect:/label";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            deleteNonValidFile(labelFilePath);
+            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці найменувань!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

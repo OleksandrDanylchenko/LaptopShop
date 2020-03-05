@@ -93,14 +93,14 @@ public class SSDController {
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
-        var uploadedFilePath = "";
+        var SSDFilePath = "";
         try {
-            uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newSSDs = SSDExcelImporter.importFile(uploadedFilePath);
+            SSDFilePath = saveUploadingFile(uploadingFile);
+            var newSSDs = SSDExcelImporter.importFile(SSDFilePath);
             newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(uploadedFilePath);
+            deleteNonValidFile(SSDFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці SSD дисків!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";

@@ -142,8 +142,8 @@ public class AvailabilityController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = AvailabilityExcelImporter.importFile(uploadedFilePath, laptopRepo, shopRepo);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            var newAvailabilities = AvailabilityExcelImporter.importFile(uploadedFilePath, laptopRepo, shopRepo);
+            newAvailabilities.forEach(newAvailability -> saveRecord(newAvailability, model));
             return "redirect:/availability";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
