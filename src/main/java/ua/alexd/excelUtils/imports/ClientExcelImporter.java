@@ -4,7 +4,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.controller.ClientController;
 import ua.alexd.domain.Client;
@@ -17,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ua.alexd.dateTimeUtils.DateNormalizer.normalizeDate;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class ClientExcelImporter extends Importer {
@@ -49,7 +49,7 @@ public class ClientExcelImporter extends Importer {
                             secondName = cellValue;
                         else if (cell.getColumnIndex() == dateRegColNum)
                             try {
-                                cellValue = normalizeDate(cellValue);
+                                cellValue = normalizeDate(cellValue, "/");
                                 dateReg = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
@@ -66,18 +66,5 @@ public class ClientExcelImporter extends Importer {
             return newClients;
         } else
             throw new IllegalArgumentException();
-    }
-
-    // TODO Eliminate doubling
-    @NotNull
-    @Contract(pure = true)
-    private static String normalizeDate(@NotNull String initDate) {
-        var dateElements = initDate.split("/");
-
-        var temp = dateElements[0];
-        dateElements[0] = dateElements[1];
-        dateElements[1] = temp;
-
-        return String.join("-", dateElements);
     }
 }

@@ -4,8 +4,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.domain.Availability;
 import ua.alexd.domain.Laptop;
 import ua.alexd.domain.Shop;
@@ -20,9 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ua.alexd.dateTimeUtils.DateNormalizer.normalizeDate;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
+@Service
 public class AvailabilityExcelImporter extends Importer {
     private LaptopRepo laptopRepo;
     private ShopRepo shopRepo;
@@ -78,14 +80,14 @@ public class AvailabilityExcelImporter extends Importer {
                             shop = shopRepo.findByAddress(cellValue).get(0);
                         else if (cell.getColumnIndex() == dateStartColNum)
                             try {
-                                cellValue = normalizeDate(cellValue);
+                                cellValue = normalizeDate(cellValue, "-");
                                 dateStart = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
                             }
                         else if (cell.getColumnIndex() == dateEndColNum)
                             try {
-                                cellValue = normalizeDate(cellValue);
+                                cellValue = normalizeDate(cellValue, "-");
                                 dateEnd = new Date(new SimpleDateFormat("d-M-yy")
                                         .parse(cellValue).getTime());
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
@@ -103,18 +105,5 @@ public class AvailabilityExcelImporter extends Importer {
             return newAvailabilities;
         } else
             throw new IllegalArgumentException();
-    }
-
-    // TODO Eliminate doubling
-    @NotNull
-    @Contract(pure = true)
-    private static String normalizeDate(@NotNull String initDate) {
-        var dateElements = initDate.split("-");
-
-        var temp = dateElements[0];
-        dateElements[0] = dateElements[1];
-        dateElements[1] = temp;
-
-        return String.join("-", dateElements);
     }
 }
