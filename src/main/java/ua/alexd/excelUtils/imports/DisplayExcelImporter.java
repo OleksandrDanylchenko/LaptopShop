@@ -5,8 +5,8 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import ua.alexd.controller.DisplayController;
 import ua.alexd.domain.Display;
-import ua.alexd.domain.SSD;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +15,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class DisplayExcelImporter {
+public class DisplayExcelImporter extends Importer {
     @NotNull
-    public static List<Display> importFiles(String uploadedFilePath)
+    @Override
+    public List<Display> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var displaySheet = workbook.getSheetAt(0);
@@ -27,13 +28,13 @@ public class DisplayExcelImporter {
             var dataFormatter = new DataFormatter();
             var newDisplays = new ArrayList<Display>();
 
-            var model = "";
+            String model = null;
             var modelColNum = 1;
-            var type = "";
+            String type = null;
             var typeColNum = 2;
-            var diagonal = "";
+            String diagonal = null;
             var diagonalColNum = 3;
-            var resolution = "";
+            String resolution = null;
             var resolutionColNum = 4;
 
             for (Row row : displaySheet) {
@@ -49,11 +50,11 @@ public class DisplayExcelImporter {
                         else if (cell.getColumnIndex() == resolutionColNum)
                             resolution = cellValue;
                     }
-                if (model != null && !model.isBlank() && type != null && !type.isBlank() &&
-                        diagonal != null && !diagonal.isBlank() &&
-                        resolution != null && !resolution.isBlank()) {
+                if (!DisplayController.isFieldsEmpty(model, type, diagonal, resolution)) {
                     var newDisplay = new Display(model, type, diagonal, resolution);
                     newDisplays.add(newDisplay);
+
+                    nullExtractedValues(model, type, diagonal, resolution);
                 }
             }
             workbook.close();

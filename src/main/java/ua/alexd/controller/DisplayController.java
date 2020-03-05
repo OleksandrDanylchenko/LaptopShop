@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.alexd.domain.CPU;
 import ua.alexd.domain.Display;
 import ua.alexd.excelUtils.imports.DisplayExcelImporter;
 import ua.alexd.repos.DisplayRepo;
@@ -53,8 +52,10 @@ public class DisplayController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
                              @RequestParam String resolution, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel))
+        if (isFieldsEmpty(model, type, diagonal, resolution)) {
+            siteModel.addAttribute("errorMessage", "Поля нового дисплея не можуть бути пустими!");
             return "add/displayAdd";
+        }
 
         var newDisplay = new Display(model, type, diagonal, resolution);
         if (!saveRecord(newDisplay, siteModel))
@@ -75,8 +76,10 @@ public class DisplayController {
     private String editRecord(@RequestParam String model, @RequestParam String type,
                               @RequestParam String diagonal, @RequestParam String resolution,
                               @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, type, diagonal, resolution, siteModel))
+        if (isFieldsEmpty(model, type, diagonal, resolution)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного дисплея не можуть бути пустими!");
             return "edit/displayEdit";
+        }
 
         editDisplay.setModel(model);
         editDisplay.setType(type);
@@ -102,7 +105,7 @@ public class DisplayController {
         var displayFilePath = "";
         try {
             displayFilePath = saveUploadingFile(uploadingFile);
-            var newDisplays = DisplayExcelImporter.importFiles(displayFilePath);
+            var newDisplays = new DisplayExcelImporter().importFile(displayFilePath);
             newDisplays.forEach(newDisplay -> saveRecord(newDisplay, model));
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {
@@ -132,13 +135,9 @@ public class DisplayController {
         return "redirect:/display";
     }
 
-    private boolean isFieldsEmpty(String model, String type, String diagonal, String resolution, Model siteModel) {
-        if (model == null || type == null || diagonal == null || resolution == null ||
-                model.isBlank() || type.isBlank()|| diagonal.isBlank() || resolution.isBlank()) {
-            siteModel.addAttribute("errorMessage", "Поля дисплею не можуть бути пустими!");
-            return true;
-        }
-        return false;
+    public static boolean isFieldsEmpty(String model, String type, String diagonal, String resolution) {
+        return model == null || type == null || diagonal == null || resolution == null ||
+                model.isBlank() || type.isBlank() || diagonal.isBlank() || resolution.isBlank();
     }
 
     private boolean saveRecord(Display saveDisplay, Model model) {
