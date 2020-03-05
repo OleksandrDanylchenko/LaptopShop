@@ -1,8 +1,10 @@
 package ua.alexd.excelUtils.imports;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.domain.ShopDomain;
 import ua.alexd.domain.Type;
 
 import java.io.File;
@@ -12,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class TypeExcelImporter {
+public class TypeExcelImporter extends Importer {
     @NotNull
-    public static List<Type> importFile(String uploadedFilePath)
+    @Override
+    public List<Type> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var typeSheet = workbook.getSheetAt(0);
@@ -36,6 +39,8 @@ public class TypeExcelImporter {
                 if (name != null && !name.isBlank()) {
                     var newType = new Type(name);
                     newTypes.add(newType);
+
+                    nullExtractedDomains(name);
                 }
             }
             return newTypes;

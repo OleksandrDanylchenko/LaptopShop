@@ -92,7 +92,7 @@ public class TypeController {
         var typeFilePath = "";
         try {
             typeFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = TypeExcelImporter.importFile(typeFilePath);
+            var newTypes = new TypeExcelImporter().importFile(typeFilePath);
             newTypes.forEach(newType -> saveRecord(newType, model));
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {
