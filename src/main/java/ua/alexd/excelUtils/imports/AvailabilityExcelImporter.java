@@ -23,9 +23,18 @@ import java.util.List;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class AvailabilityExcelImporter {
+public class AvailabilityExcelImporter extends Importer {
+    private LaptopRepo laptopRepo;
+    private ShopRepo shopRepo;
+
+    public AvailabilityExcelImporter(LaptopRepo laptopRepo, ShopRepo shopRepo) {
+        this.laptopRepo = laptopRepo;
+        this.shopRepo = shopRepo;
+    }
+
     @NotNull
-    public static List<Availability> importFile(String uploadedFilePath, LaptopRepo laptopRepo, ShopRepo shopRepo)
+    @Override
+    public List<Availability> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var availabilitySheet = workbook.getSheetAt(0);
@@ -38,9 +47,9 @@ public class AvailabilityExcelImporter {
 
             Laptop laptop = null;
             var laptopColNum = 1;
-            var price = 0;
+            int price = 0;
             var priceColNum = 2;
-            var quantity = 0;
+            int quantity = 0;
             var quantityColNum = 3;
             Shop shop = null;
             var shopColNum = 5;
@@ -87,10 +96,7 @@ public class AvailabilityExcelImporter {
                     var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
                     newAvailabilities.add(newAvailability);
 
-                    laptop = null;
-                    shop = null;
-                    dateStart = null;
-                    dateEnd = null;
+                    nullExtractedValues(laptop, shop, dateStart, dateEnd);
                 }
             }
             workbook.close();
