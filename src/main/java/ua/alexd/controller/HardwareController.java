@@ -41,6 +41,7 @@ public class HardwareController {
         this.gpuRepo = gpuRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String displayModel,
@@ -169,8 +170,8 @@ public class HardwareController {
         var hardwareFilePath = "";
         try {
             hardwareFilePath = saveUploadingFile(uploadingFile);
-            var newHardware = HardwareExcelImporter.importFile(hardwareFilePath,
-                    cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
+            var importer = new HardwareExcelImporter(cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
+            var newHardware = importer.importFile(hardwareFilePath);
             newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {

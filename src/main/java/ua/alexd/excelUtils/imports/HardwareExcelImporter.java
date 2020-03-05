@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.domain.*;
 import ua.alexd.repos.*;
 
@@ -12,15 +13,31 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class HardwareExcelImporter {
+@Service
+public class HardwareExcelImporter extends Importer {
+    private CPURepo cpuRepo;
+    private RAMRepo ramRepo;
+    private SSDRepo ssdRepo;
+    private DisplayRepo displayRepo;
+    private HDDRepo hddRepo;
+    private GPURepo gpuRepo;
+
+    public HardwareExcelImporter(CPURepo cpuRepo, RAMRepo ramRepo, SSDRepo ssdRepo,
+                                 DisplayRepo displayRepo, HDDRepo hddRepo, GPURepo gpuRepo) {
+        this.cpuRepo = cpuRepo;
+        this.ramRepo = ramRepo;
+        this.ssdRepo = ssdRepo;
+        this.displayRepo = displayRepo;
+        this.hddRepo = hddRepo;
+        this.gpuRepo = gpuRepo;
+    }
+
     @NotNull
-    public static List<Hardware> importFile(String uploadedFilePath,
-                                            CPURepo cpuRepo, RAMRepo ramRepo, SSDRepo ssdRepo,
-                                            DisplayRepo displayRepo, HDDRepo hddRepo, GPURepo gpuRepo)
+    @Override
+    public List<Hardware> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var hardwareSheet = workbook.getSheetAt(0);
@@ -31,7 +48,7 @@ public class HardwareExcelImporter {
             var dataFormatter = new DataFormatter();
             var newHardware = new ArrayList<Hardware>();
 
-            var assemblyName = "";
+            String assemblyName = null;
             var assemblyNameColNum = 1;
             CPU cpu = null;
             var cpuColNum = 2;
@@ -70,12 +87,7 @@ public class HardwareExcelImporter {
                     var newAssembly = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
                     newHardware.add(newAssembly);
 
-                    cpu = null;
-                    gpu = null;
-                    display = null;
-                    ram = null;
-                    ssd = null;
-                    hdd = null;
+                    nullExtractedValues(assemblyName, cpu, gpu, display, ram, ssd, hdd);
                 }
             }
             workbook.close();
