@@ -7,10 +7,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.alexd.domain.Hardware;
-import ua.alexd.domain.Label;
-import ua.alexd.domain.Laptop;
-import ua.alexd.domain.Type;
+import ua.alexd.domain.*;
 import ua.alexd.repos.HardwareRepo;
 import ua.alexd.repos.LabelRepo;
 import ua.alexd.repos.TypeRepo;
@@ -22,10 +19,21 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class LaptopExcelImporter {
+@Service
+public class LaptopExcelImporter extends Importer {
+    private final LabelRepo labelRepo;
+    private final TypeRepo typeRepo;
+    private final HardwareRepo hardwareRepo;
+
+    public LaptopExcelImporter(LabelRepo labelRepo, TypeRepo typeRepo, HardwareRepo hardwareRepo) {
+        this.labelRepo = labelRepo;
+        this.typeRepo = typeRepo;
+        this.hardwareRepo = hardwareRepo;
+    }
+
     @NotNull
-    public static List<Laptop> importFile(String uploadedFilePath,
-                                          LabelRepo labelRepo, TypeRepo typeRepo, HardwareRepo hardwareRepo)
+    @Override
+    public List<Laptop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var laptopSheet = workbook.getSheetAt(0);
@@ -57,9 +65,7 @@ public class LaptopExcelImporter {
                     var newLaptop = new Laptop(label, type, hardware);
                     newLaptops.add(newLaptop);
 
-                    label = null;
-                    type = null;
-                    hardware = null;
+                    nullExtractedDomains(label, type, hardware);
                 }
             }
             workbook.close();

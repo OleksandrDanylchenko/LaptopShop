@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.Availability;
 import ua.alexd.domain.Laptop;
-import ua.alexd.domain.SSD;
 import ua.alexd.domain.Shop;
 import ua.alexd.repos.LaptopRepo;
 import ua.alexd.repos.ShopRepo;

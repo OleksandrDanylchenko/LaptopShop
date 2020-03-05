@@ -150,7 +150,7 @@ public class BasketController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "basket");
+        model.addAttribute("controllerName", Basket.class.getSimpleName());
         model.addAttribute("tableName", "кошиків");
     }
 

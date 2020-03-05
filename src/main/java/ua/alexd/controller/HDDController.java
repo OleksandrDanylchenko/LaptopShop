@@ -108,7 +108,7 @@ public class HDDController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "HDD");
+        model.addAttribute("controllerName", HDD.class.getSimpleName());
         model.addAttribute("tableName", "HDD дисків");
     }
 

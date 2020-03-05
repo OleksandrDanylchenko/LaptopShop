@@ -109,7 +109,7 @@ public class ShopController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "shop");
+        model.addAttribute("controllerName", Shop.class.getSimpleName());
         model.addAttribute("tableName", "магазинів");
     }
 

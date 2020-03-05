@@ -119,7 +119,7 @@ public class EmployeeController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "employee");
+        model.addAttribute("controllerName", Employee.class.getSimpleName());
         model.addAttribute("tableName", "співробітників");
     }
 

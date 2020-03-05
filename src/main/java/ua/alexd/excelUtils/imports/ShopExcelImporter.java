@@ -1,9 +1,11 @@
 package ua.alexd.excelUtils.imports;
 
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.Shop;
-import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class ShopExcelImporter {
             var dataFormatter = new DataFormatter();
             var newShops = new ArrayList<Shop>();
 
-            var address = "";
+            String address = null;
             var addressColNum = 1;
 
             for (Row row : shopSheet) {

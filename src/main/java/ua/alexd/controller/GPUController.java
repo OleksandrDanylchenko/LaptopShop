@@ -108,7 +108,7 @@ public class GPUController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "GPU");
+        model.addAttribute("controllerName", GPU.class.getSimpleName());
         model.addAttribute("tableName", "відеокарт");
     }
 

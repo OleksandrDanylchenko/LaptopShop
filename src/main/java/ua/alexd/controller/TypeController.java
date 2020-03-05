@@ -104,7 +104,7 @@ public class TypeController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "type");
+        model.addAttribute("controllerName", Type.class.getSimpleName());
         model.addAttribute("tableName", "типів");
     }
 

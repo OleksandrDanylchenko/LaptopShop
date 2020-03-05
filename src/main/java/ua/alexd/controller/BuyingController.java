@@ -137,7 +137,7 @@ public class BuyingController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "buying");
+        model.addAttribute("controllerName", Buying.class.getSimpleName());
         model.addAttribute("tableName", "покупок");
     }
 

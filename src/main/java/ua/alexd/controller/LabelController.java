@@ -109,7 +109,7 @@ public class LabelController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "label");
+        model.addAttribute("controllerName", Label.class.getSimpleName());
         model.addAttribute("tableName", "найменувань");
     }
 

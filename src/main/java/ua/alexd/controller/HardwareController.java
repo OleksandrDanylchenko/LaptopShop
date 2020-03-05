@@ -182,7 +182,7 @@ public class HardwareController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "hardware");
+        model.addAttribute("controllerName", Hardware.class.getSimpleName());
         model.addAttribute("tableName", "збірок");
     }
 

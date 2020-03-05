@@ -118,7 +118,7 @@ public class ClientController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "client");
+        model.addAttribute("controllerName", Client.class.getSimpleName());
         model.addAttribute("tableName", "клієнтів");
     }
 

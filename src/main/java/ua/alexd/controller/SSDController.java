@@ -108,7 +108,7 @@ public class SSDController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "SSD");
+        model.addAttribute("controllerName", SSD.class.getSimpleName());
         model.addAttribute("tableName", "SSD дисків");
     }
 

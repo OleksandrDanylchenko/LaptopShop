@@ -114,7 +114,7 @@ public class DisplayController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "display");
+        model.addAttribute("controllerName", Display.class.getSimpleName());
         model.addAttribute("tableName", "дисплеїв");
     }
 

@@ -154,7 +154,7 @@ public class AvailabilityController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "availability");
+        model.addAttribute("controllerName", Availability.class.getSimpleName());
         model.addAttribute("tableName", "записів про наявність");
     }
 

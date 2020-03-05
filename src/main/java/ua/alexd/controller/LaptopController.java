@@ -126,7 +126,8 @@ public class LaptopController {
         var laptopFilePath = "";
         try {
             laptopFilePath = saveUploadingFile(uploadingFile);
-            var newLaptops = LaptopExcelImporter.importFile(laptopFilePath, labelRepo, typeRepo, hardwareRepo);
+            var importer = new LaptopExcelImporter(labelRepo, typeRepo, hardwareRepo);
+            var newLaptops = importer.importFile(laptopFilePath);
             newLaptops.forEach(newLaptop -> saveRecord(newLaptop, model));
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {
@@ -138,7 +139,7 @@ public class LaptopController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "laptop");
+        model.addAttribute("controllerName", Laptop.class.getSimpleName());
         model.addAttribute("tableName", "ноутбуків");
     }
 

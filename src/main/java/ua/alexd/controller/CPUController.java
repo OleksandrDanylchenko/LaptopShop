@@ -109,7 +109,7 @@ public class CPUController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "CPU");
+        model.addAttribute("controllerName", CPU.class.getSimpleName());
         model.addAttribute("tableName", "процесорів");
     }
 

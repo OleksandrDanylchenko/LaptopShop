@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.RAM;
-import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +26,9 @@ public class RAMExcelImporter {
             var dataFormatter = new DataFormatter();
             var newRAMs = new ArrayList<RAM>();
 
-            var ramModel = "";
+            String ramModel = null;
             var modelColNum = 1;
-            var ramMemory = 0;
+            int ramMemory = 0;
             var memoryColNum = 2;
 
             for (Row row : ramSheet) {

@@ -108,7 +108,7 @@ public class RAMController {
     }
 
     private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", "RAM");
+        model.addAttribute("controllerName", RAM.class.getSimpleName());
         model.addAttribute("tableName", "оперативної пам'яті");
     }
 

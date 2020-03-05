@@ -27,9 +27,9 @@ public class SSDExcelImporter {
             var dataFormatter = new DataFormatter();
             var newSSDs = new ArrayList<SSD>();
 
-            var ssdModel = "";
+            String ssdModel = null;
             var modelColNum = 1;
-            var ssdMemory = 0;
+            int ssdMemory = 0;
             var memoryColNum = 2;
 
             for (Row row : ssdSheet) {
