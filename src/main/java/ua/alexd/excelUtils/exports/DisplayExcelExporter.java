@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelUtils.exports.RowStyleProvider.*;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("displayExcelView")
@@ -21,31 +20,31 @@ public class DisplayExcelExporter extends AbstractXlsxView implements ExcelExpor
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> displays = (List<ShopDomain>) model.get("displays");
+        @SuppressWarnings("unchecked") List<ShopDomain> displays = (List<ShopDomain>) model.get("displays");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Displays sheet");
         sheet.setFitToPage(true);
 
-        wipePreviousStyles();
-        setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, displays);
+        var styler = new RowsStyler(workbook);
+        setExcelHeader(sheet, styler);
+        setExcelRows(sheet, displays, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=displays-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
-    public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
+    public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Модель");
         header.createCell(2).setCellValue("Тип");
         header.createCell(3).setCellValue("Діагональ");
         header.createCell(4).setCellValue("Розширення");
-        setHeaderRowStyle(workbook, header, excelSheet);
+        styler.setHeaderRowStyle(header, excelSheet);
     }
 
     @Override
-    public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
             var displayRow = (Display) row;
@@ -55,7 +54,7 @@ public class DisplayExcelExporter extends AbstractXlsxView implements ExcelExpor
             generalRow.createCell(2).setCellValue(displayRow.getType());
             generalRow.createCell(3).setCellValue(displayRow.getDiagonal());
             generalRow.createCell(4).setCellValue(displayRow.getResolution());
-            setGeneralRowStyle(workbook, generalRow);
+            styler.setGeneralRowStyle(generalRow);
         }
     }
 }

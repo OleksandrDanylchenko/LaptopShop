@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelUtils.exports.RowStyleProvider.*;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("employeeExcelView")
@@ -26,15 +25,15 @@ public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExpo
         var sheet = workbook.createSheet("Employees sheet");
         sheet.setFitToPage(true);
 
-        wipePreviousStyles();
-        setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, employees);
+        var styler = new RowsStyler(workbook);
+        setExcelHeader(sheet, styler);
+        setExcelRows(sheet, employees, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=employees-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
-    public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
+    public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Ім'я");
@@ -42,11 +41,11 @@ public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExpo
         header.createCell(3).setCellValue("№ магазину");
         header.createCell(4).setCellValue("Адреса магазину");
         header.createCell(5).setCellValue("Статус");
-        setHeaderRowStyle(workbook, header, excelSheet);
+        styler.setHeaderRowStyle(header, excelSheet);
     }
 
     @Override
-    public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
             var employeeRow = (Employee) row;
@@ -62,7 +61,7 @@ public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExpo
                 generalRow.createCell(4).setCellValue(employeeRow.getShop().getAddress());
             }
             generalRow.createCell(5).setCellValue(employeeRow.getIsActive() ? "Працюючий" : "Звільнений");
-            setGeneralRowStyle(workbook, generalRow);
+            styler.setGeneralRowStyle(generalRow);
         }
     }
 }

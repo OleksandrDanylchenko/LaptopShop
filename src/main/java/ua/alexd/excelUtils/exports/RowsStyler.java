@@ -6,14 +6,20 @@ import org.jetbrains.annotations.NotNull;
 import static ua.alexd.excelUtils.exports.ExcelExportStructure.dataColumnWidth;
 import static ua.alexd.excelUtils.exports.ExcelExportStructure.idColumnWidth;
 
-public class RowStyleProvider {
-    private static CellStyle headerStyle;
-    private static CellStyle generalStyle;
-    private static Font headerFont;
-    private static Font generalFont;
-    private static String fontName = "Lato";
+public class RowsStyler {
+    private CellStyle headerStyle;
+    private CellStyle generalStyle;
+    private Font headerFont;
+    private Font generalFont;
+    private final String fontName = "Lato";
 
-    public static void setHeaderRowStyle(Workbook workbook, Row headerRow, Sheet sheet) {
+    private Workbook workbook;
+
+    public RowsStyler(Workbook workbook) {
+        this.workbook = workbook;
+    }
+
+    public void setHeaderRowStyle(Row headerRow, Sheet sheet) {
         if (headerStyle == null)
             initializeHeaderStyle(workbook);
         int i = 0;
@@ -27,7 +33,7 @@ public class RowStyleProvider {
         }
     }
 
-    public static void setGeneralRowStyle(Workbook workbook, Row generalRow) {
+    public void setGeneralRowStyle(Row generalRow) {
         if (generalStyle == null)
             initializeGeneralStyle(workbook);
         int i = 0;
@@ -40,7 +46,7 @@ public class RowStyleProvider {
         }
     }
 
-    private static void initializeHeaderStyle(Workbook workbook) {
+    private void initializeHeaderStyle(Workbook workbook) {
         if (headerFont == null)
             initializeHeaderFont(workbook);
         if (generalStyle == null)
@@ -54,7 +60,7 @@ public class RowStyleProvider {
         headerStyle.setBottomBorderColor(IndexedColors.RED.getIndex());
     }
 
-    private static void initializeGeneralStyle(@NotNull Workbook workbook) {
+    private void initializeGeneralStyle(@NotNull Workbook workbook) {
         if (generalFont == null)
             initializeGeneralFont(workbook);
         generalStyle = workbook.createCellStyle();
@@ -68,7 +74,7 @@ public class RowStyleProvider {
         generalStyle.setBorderBottom(BorderStyle.THIN);
     }
 
-    private static void initializeHeaderFont(@NotNull Workbook workbook) {
+    private void initializeHeaderFont(@NotNull Workbook workbook) {
         headerFont = workbook.createFont();
         headerFont.setFontName(fontName);
         headerFont.setBold(true);
@@ -76,13 +82,8 @@ public class RowStyleProvider {
         headerFont.setFontHeightInPoints((short) 12);
     }
 
-    private static void initializeGeneralFont(@NotNull Workbook workbook) {
+    private void initializeGeneralFont(@NotNull Workbook workbook) {
         generalFont = workbook.createFont();
         generalFont.setFontName(fontName);
-    }
-
-    public static void wipePreviousStyles() {
-        headerStyle = generalStyle = null;
-        headerFont = generalFont = null;
     }
 }

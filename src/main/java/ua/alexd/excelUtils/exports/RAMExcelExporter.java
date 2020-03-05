@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelUtils.exports.RowStyleProvider.*;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("ramExcelView")
@@ -21,29 +20,29 @@ public class RAMExcelExporter extends AbstractXlsxView implements ExcelExportStr
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> rams = (List<ShopDomain>) model.get("rams");
+        @SuppressWarnings("unchecked") List<ShopDomain> rams = (List<ShopDomain>) model.get("rams");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("RAMs sheet");
         sheet.setFitToPage(true);
 
-        wipePreviousStyles();
-        setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, rams);
+        var styler = new RowsStyler(workbook);
+        setExcelHeader(sheet, styler);
+        setExcelRows(sheet, rams, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=rams-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
-    public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
+    public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Модель");
         header.createCell(2).setCellValue("Обсяг пам'яті");
-        setHeaderRowStyle(workbook, header, excelSheet);
+        styler.setHeaderRowStyle(header, excelSheet);
     }
 
     @Override
-    public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
             var ramRow = (RAM) row;
@@ -51,7 +50,7 @@ public class RAMExcelExporter extends AbstractXlsxView implements ExcelExportStr
             generalRow.createCell(0).setCellValue(ramRow.getId());
             generalRow.createCell(1).setCellValue(ramRow.getModel());
             generalRow.createCell(2).setCellValue(ramRow.getMemory());
-            setGeneralRowStyle(workbook, generalRow);
+            styler.setGeneralRowStyle(generalRow);
         }
     }
 }

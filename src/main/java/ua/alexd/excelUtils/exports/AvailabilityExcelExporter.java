@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.excelUtils.exports.RowStyleProvider.*;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("availabilityExcelView")
@@ -21,20 +20,20 @@ public class AvailabilityExcelExporter extends AbstractXlsxView implements Excel
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> availabilities = (List<ShopDomain>) model.get("availabilities");
+        @SuppressWarnings("unchecked") List<ShopDomain> availabilities = (List<ShopDomain>) model.get("availabilities");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Availability sheet");
         sheet.setFitToPage(true);
 
-        wipePreviousStyles();
-        setExcelHeader(workbook, sheet);
-        setExcelRows(workbook, sheet, availabilities);
+        var styler = new RowsStyler(workbook);
+        setExcelHeader(sheet, styler);
+        setExcelRows(sheet, availabilities, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=availability-sheet " + currentDateTime + ".xlsx");
     }
 
     @Override
-    public void setExcelHeader(@NotNull Workbook workbook, @NotNull Sheet excelSheet) {
+    public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
         header.createCell(1).setCellValue("Модель");
@@ -44,11 +43,11 @@ public class AvailabilityExcelExporter extends AbstractXlsxView implements Excel
         header.createCell(5).setCellValue("Адреса магазину");
         header.createCell(6).setCellValue("Початок продаж");
         header.createCell(7).setCellValue("Закінчення продаж");
-        setHeaderRowStyle(workbook, header, excelSheet);
+        styler.setHeaderRowStyle(header, excelSheet);
     }
 
     @Override
-    public void setExcelRows(@NotNull Workbook workbook, @NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows) {
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
             var availabilityRow = (Availability) row;
@@ -61,7 +60,7 @@ public class AvailabilityExcelExporter extends AbstractXlsxView implements Excel
             generalRow.createCell(5).setCellValue(availabilityRow.getShop().getAddress());
             generalRow.createCell(6).setCellValue(availabilityRow.getDateStart().toString());
             generalRow.createCell(7).setCellValue(availabilityRow.getDateEnd().toString());
-            setGeneralRowStyle(workbook, generalRow);
+            styler.setGeneralRowStyle(generalRow);
         }
     }
 }
