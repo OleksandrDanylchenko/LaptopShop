@@ -28,6 +28,7 @@ public class GPUController {
         this.gpuRepo = gpuRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model,
@@ -96,7 +97,7 @@ public class GPUController {
         var GPUFilePath = "";
         try {
             GPUFilePath = saveUploadingFile(uploadingFile);
-            var newGPUs = GPUExcelImporter.importFile(GPUFilePath);
+            var newGPUs = new GPUExcelImporter().importFile(GPUFilePath);
             newGPUs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/gpu";
         } catch (IllegalArgumentException ignored) {

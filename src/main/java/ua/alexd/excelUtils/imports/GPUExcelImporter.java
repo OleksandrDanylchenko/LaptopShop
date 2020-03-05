@@ -14,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class GPUExcelImporter {
+public class GPUExcelImporter extends Importer {
     @NotNull
-    public static List<GPU> importFile(String uploadedFilePath)
+    @Override
+    public List<GPU> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var gpuSheet = workbook.getSheetAt(0);
@@ -26,9 +27,9 @@ public class GPUExcelImporter {
             var dataFormatter = new DataFormatter();
             var newGPUs = new ArrayList<GPU>();
 
-            var model = "";
+            String model = null;
             var modelColNum = 1;
-            var memory = 0;
+            int memory = 0;
             var memoryColNum = 2;
 
             for (Row row : gpuSheet) {
