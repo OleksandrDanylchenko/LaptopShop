@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.domain.Employee;
 import ua.alexd.domain.Shop;
 import ua.alexd.repos.ShopRepo;
@@ -16,9 +17,17 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class EmployeeExcelImporter {
+@Service
+public class EmployeeExcelImporter extends Importer {
+    private ShopRepo shopRepo;
+
+    public EmployeeExcelImporter(ShopRepo shopRepo) {
+        this.shopRepo = shopRepo;
+    }
+
     @NotNull
-    public static List<Employee> importFile(String uploadedFilePath, ShopRepo shopRepo)
+    @Override
+    public List<Employee> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var employeeSheet = workbook.getSheetAt(0);
@@ -28,13 +37,13 @@ public class EmployeeExcelImporter {
             var dataFormatter = new DataFormatter();
             var newEmployees = new ArrayList<Employee>();
 
-            var firstName = "";
+            String firstName = null;
             var firstNameColNum = 1;
-            var secondName = "";
+            String secondName = null;
             var secondNameColNum = 2;
             Shop shop = null;
             var shopColNum = 4;
-            var isActive = false;
+            boolean isActive = false;
             var isActiveColNum = 5;
 
             for (Row row : employeeSheet) {
@@ -55,7 +64,7 @@ public class EmployeeExcelImporter {
                     var newEmployee = new Employee(firstName, secondName, shop, isActive);
                     newEmployees.add(newEmployee);
 
-                    shop = null;
+                    nullExtractedValues(firstName, secondName, shop);
                 }
             }
             workbook.close();

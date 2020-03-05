@@ -30,6 +30,7 @@ public class EmployeeController {
         this.shopRepo = shopRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String firstName,
@@ -107,7 +108,8 @@ public class EmployeeController {
         var employeeFilePath = "";
         try {
             employeeFilePath = saveUploadingFile(uploadingFile);
-            var newEmployees = EmployeeExcelImporter.importFile(employeeFilePath, shopRepo);
+            var importer = new EmployeeExcelImporter(shopRepo);
+            var newEmployees = importer.importFile(employeeFilePath);
             newEmployees.forEach(employeeRepo::save);
             return "redirect:/employee";
         } catch (IllegalArgumentException ignored) {
