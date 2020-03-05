@@ -47,7 +47,7 @@ public class RAMExcelImporter extends Importer {
                     var newRAM = new RAM(ramModel, ramMemory);
                     newRAMs.add(newRAM);
 
-                    nullExtractedDomains(ramMemory);
+                    nullExtractedValues(ramMemory);
                 }
             }
             workbook.close();

@@ -40,7 +40,7 @@ public class ShopExcelImporter extends Importer {
                     var newShop = new Shop(address);
                     newShops.add(newShop);
 
-                    nullExtractedDomains(address);
+                    nullExtractedValues(address);
                 }
             }
             workbook.close();

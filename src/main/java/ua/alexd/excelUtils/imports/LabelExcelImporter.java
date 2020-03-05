@@ -14,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class LabelExcelImporter {
+public class LabelExcelImporter extends Importer {
     @NotNull
-    public static List<Label> importFile(String uploadedFilePath)
+    @Override
+    public List<Label> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var labelSheet = workbook.getSheetAt(0);
@@ -26,9 +27,9 @@ public class LabelExcelImporter {
             var dataFormatter = new DataFormatter();
             var newLabels = new ArrayList<Label>();
 
-            var brand = "";
+            String brand = null;
             var brandColNum = 1;
-            var model = "";
+            String model = null;
             var modelColNum = 2;
 
             for (Row row : labelSheet) {
@@ -43,6 +44,8 @@ public class LabelExcelImporter {
                 if (brand != null && !brand.isBlank() && model != null && !model.isBlank()) {
                     var newLabel = new Label(brand, model);
                     newLabels.add(newLabel);
+
+                    nullExtractedValues(brand, model);
                 }
             }
             workbook.close();

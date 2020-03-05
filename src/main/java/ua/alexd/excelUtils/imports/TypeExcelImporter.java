@@ -40,7 +40,7 @@ public class TypeExcelImporter extends Importer {
                     var newType = new Type(name);
                     newTypes.add(newType);
 
-                    nullExtractedDomains(name);
+                    nullExtractedValues(name);
                 }
             }
             return newTypes;

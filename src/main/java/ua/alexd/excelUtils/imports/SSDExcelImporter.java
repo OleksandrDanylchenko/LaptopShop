@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import ua.alexd.domain.SSD;
-import ua.alexd.domain.ShopDomain;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class SSDExcelImporter extends Importer {
                     var newSSD = new SSD(ssdModel, ssdMemory);
                     newSSDs.add(newSSD);
 
-                    nullExtractedDomains(ssdModel);
+                    nullExtractedValues(ssdModel);
                 }
             }
             workbook.close();

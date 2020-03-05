@@ -28,6 +28,7 @@ public class LabelController {
         this.labelRepo = labelRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String brand,
@@ -97,7 +98,7 @@ public class LabelController {
         var labelFilePath = "";
         try {
             labelFilePath = saveUploadingFile(uploadingFile);
-            var newLabels = LabelExcelImporter.importFile(labelFilePath);
+            var newLabels = new LabelExcelImporter().importFile(labelFilePath);
             newLabels.forEach(newType -> saveRecord(newType, model));
             return "redirect:/label";
         } catch (IllegalArgumentException ignored) {

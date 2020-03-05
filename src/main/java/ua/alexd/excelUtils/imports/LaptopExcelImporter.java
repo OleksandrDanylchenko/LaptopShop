@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.alexd.domain.*;
 import ua.alexd.repos.HardwareRepo;
@@ -65,7 +64,7 @@ public class LaptopExcelImporter extends Importer {
                     var newLaptop = new Laptop(label, type, hardware);
                     newLaptops.add(newLaptop);
 
-                    nullExtractedDomains(label, type, hardware);
+                    nullExtractedValues(label, type, hardware);
                 }
             }
             workbook.close();

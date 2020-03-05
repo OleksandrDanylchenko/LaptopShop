@@ -12,7 +12,7 @@ public abstract class Importer {
         return new ArrayList<>();
     }
 
-    protected void nullExtractedDomains(Object... extractedDomains) {
+    protected void nullExtractedValues(Object... extractedDomains) {
         Arrays.fill(extractedDomains, null);
     }
 }
