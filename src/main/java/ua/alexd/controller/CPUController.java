@@ -102,7 +102,7 @@ public class CPUController {
         var cpuFilePath = "";
         try {
             cpuFilePath = saveUploadingFile(uploadingFile);
-            var newCPUs = CPUExcelImporter.importFile(cpuFilePath);
+            var newCPUs = new CPUExcelImporter().importFile(cpuFilePath);
             newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {

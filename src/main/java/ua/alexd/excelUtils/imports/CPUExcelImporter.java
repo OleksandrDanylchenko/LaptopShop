@@ -15,9 +15,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class CPUExcelImporter {
+public class CPUExcelImporter extends Importer {
     @NotNull
-    public static List<CPU> importFile(String uploadedFilePath)
+    @Override
+    public List<CPU> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var cpuSheet = workbook.getSheetAt(0);
@@ -27,9 +28,9 @@ public class CPUExcelImporter {
             var dataFormatter = new DataFormatter();
             var newCPUs = new ArrayList<CPU>();
 
-            var cpuModel = "";
+            String cpuModel = null;
             var modelColNum = 1;
-            var frequency = "";
+            String frequency = null;
             var frequencyColNum = 2;
 
             for (Row row : cpuSheet) {
@@ -49,6 +50,8 @@ public class CPUExcelImporter {
                 if (!CPUController.isFieldsEmpty(cpuModel, frequency)) {
                     var newCPU = new CPU(cpuModel, frequency);
                     newCPUs.add(newCPU);
+
+                    nullExtractedValues(cpuModel, frequency);
                 }
             }
             workbook.close();
