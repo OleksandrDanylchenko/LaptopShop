@@ -19,9 +19,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class ClientExcelImporter {
+public class ClientExcelImporter extends Importer {
     @NotNull
-    public static List<Client> importFile(String uploadedFilePath)
+    @Override
+    public List<Client> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var clientSheet = workbook.getSheetAt(0);
@@ -31,9 +32,9 @@ public class ClientExcelImporter {
             var dataFormatter = new DataFormatter();
             var newClients = new ArrayList<Client>();
 
-            var firstName = "";
+            String firstName = null;
             var firstNameColNum = 1;
-            var secondName = "";
+            String secondName = null;
             var secondNameColNum = 2;
             Date dateReg = null;
             var dateRegColNum = 3;
@@ -58,7 +59,7 @@ public class ClientExcelImporter {
                     var newClient = new Client(firstName, secondName, dateReg);
                     newClients.add(newClient);
 
-                    dateReg = null;
+                    nullExtractedValues(firstName, secondName, dateReg);
                 }
             }
             workbook.close();

@@ -110,7 +110,7 @@ public class ClientController {
         var clientFilePath = "";
         try {
             clientFilePath = saveUploadingFile(uploadingFile);
-            var newClients = ClientExcelImporter.importFile(clientFilePath);
+            var newClients = new ClientExcelImporter().importFile(clientFilePath);
             newClients.forEach(clientRepo::save);
             return "redirect:/client";
         } catch (IllegalArgumentException ignored) {
