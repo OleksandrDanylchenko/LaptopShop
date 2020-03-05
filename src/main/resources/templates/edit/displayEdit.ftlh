@@ -9,29 +9,33 @@
         <form method="post" action="/display/edit/${editDisplay.id}" class="form-group needs-validation w-100" novalidate>
             <div class="form-row my-2">
                 <div class="col">
-                    <input type="text" class="form-control mr-1 mt-2" name="model"
-                           value="${editDisplay.model!}" placeholder="Нова модель" required/>
-                    <div class="invalid-feedback">Назва нової моделі не може бути пустою!</div>
+                    <label class="d-inline ml-2" for="model">Назва моделі:</label>
+                    <input type="text" class="form-control" name="model"
+                           value="${editDisplay.model!}" required/>
+                    <div class="invalid-feedback">Назва моделі не може бути пустою!</div>
                 </div>
             </div>
             <div class="form-row my-2">
                 <div class="col">
-                    <input type="text" class="form-control mr-1 mt-2" name="type"
-                           value="${editDisplay.type!}" placeholder="Тип" required/>
+                    <label class="d-inline ml-2" for="type">Назва типу:</label>
+                    <input type="text" class="form-control" name="type"
+                           value="${editDisplay.type!}" required/>
                     <div class="invalid-feedback">Назва типу не може бути пустою!</div>
                 </div>
             </div>
             <div class="form-row my-2">
                 <div class="col">
-                    <input type="number" class="form-control mr-1 mt-2" step="0.1" min="0.1" name="diagonal"
-                           value="${editDisplay.diagonal!}" placeholder="Діагональ" required/>
+                    <label class="d-inline ml-2" for="diagonal">Діагональ дисплею:</label>
+                    <input type="number" class="form-control" step="0.1" min="0.1" name="diagonal"
+                           value="${editDisplay.diagonal!}" required/>
                     <div class="invalid-feedback">Некоректно задана діагональ!</div>
                 </div>
             </div>
             <div class="form-row my-2">
                 <div class="col">
-                    <input type="text" class="form-control mr-1 mt-2" name="resolution"
-                           value="${editDisplay.resolution!}" placeholder="Розширення" required/>
+                    <label class="d-inline ml-2" for="resolution">Розширення дисплею:</label>
+                    <input type="text" class="form-control" name="resolution"
+                           value="${editDisplay.resolution!}" required/>
                     <div class="invalid-feedback">Некоректно задано розширення!</div>
                 </div>
             </div>
