@@ -15,9 +15,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class SSDExcelImporter {
+public class SSDExcelImporter extends Importer {
     @NotNull
-    public static List<SSD> importFile(String uploadedFilePath)
+    @Override
+    public List<SSD> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var ssdSheet = workbook.getSheetAt(0);
@@ -46,6 +47,8 @@ public class SSDExcelImporter {
                 if (ssdModel != null && !ssdModel.isBlank() && ssdMemory >= 1) {
                     var newSSD = new SSD(ssdModel, ssdMemory);
                     newSSDs.add(newSSD);
+
+                    nullExtractedDomains(ssdModel);
                 }
             }
             workbook.close();

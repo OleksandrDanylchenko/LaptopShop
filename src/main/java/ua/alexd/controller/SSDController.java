@@ -28,6 +28,7 @@ public class SSDController {
         this.ssdRepo = ssdRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model,
@@ -96,7 +97,7 @@ public class SSDController {
         var SSDFilePath = "";
         try {
             SSDFilePath = saveUploadingFile(uploadingFile);
-            var newSSDs = SSDExcelImporter.importFile(SSDFilePath);
+            var newSSDs = new SSDExcelImporter().importFile(SSDFilePath);
             newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {
