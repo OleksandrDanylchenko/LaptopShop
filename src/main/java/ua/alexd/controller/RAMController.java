@@ -28,6 +28,7 @@ public class RAMController {
         this.ramRepo = ramRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String model,
@@ -96,7 +97,7 @@ public class RAMController {
         var RAMFilePath = "";
         try {
             RAMFilePath = saveUploadingFile(uploadingFile);
-            var newRAMs = RAMExcelImporter.importFile(RAMFilePath);
+            var newRAMs = new RAMExcelImporter().importFile(RAMFilePath);
             newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {

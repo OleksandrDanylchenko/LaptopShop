@@ -14,9 +14,10 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class RAMExcelImporter {
+public class RAMExcelImporter extends Importer {
     @NotNull
-    public static List<RAM> importFile(String uploadedFilePath)
+    @Override
+    public List<RAM> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
         var ramSheet = workbook.getSheetAt(0);
@@ -45,6 +46,8 @@ public class RAMExcelImporter {
                 if (ramModel != null && !ramModel.isBlank() && ramMemory >= 1) {
                     var newRAM = new RAM(ramModel, ramMemory);
                     newRAMs.add(newRAM);
+
+                    nullExtractedDomains(ramMemory);
                 }
             }
             workbook.close();
