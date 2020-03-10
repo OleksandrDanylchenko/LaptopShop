@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
 
@@ -51,8 +52,8 @@ public class GPUController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля нової відеокарти не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель нової відеокарти задано некоректно!");
             return "add/gpuAdd";
         }
 
@@ -74,8 +75,8 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваної відеокарти не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель змінюваної відеокарти задано некоректно!");
             return "edit/gpuEdit";
         }
 
@@ -129,10 +130,6 @@ public class GPUController {
     private String deleteRecord(@NotNull @PathVariable GPU delGpu) {
         gpuRepo.delete(delGpu);
         return "redirect:/gpu";
-    }
-
-    public static boolean isFieldsEmpty(String model) {
-        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(GPU saveGpu, Model model) {

@@ -20,7 +20,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="cpuModel">Модель процесору:</label>
                     <select class="custom-select" name="cpuModel" required>
-                        <option value="" selected disabled></option>
                         <#list cpuModels as cpuModel>
                             <#if editHardware.cpu??>
                                 <option value="${cpuModel}"<#if cpuModel == editHardware.cpu.model>
@@ -40,7 +39,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="gpuModel">Модель відеокарти:</label>
                     <select class="custom-select" name="gpuModel" required>
-                        <option value="" selected disabled></option>
                         <#list gpuModels as gpuModel>
                             <#if editHardware.gpu??>
                                 <option value="${gpuModel}"<#if gpuModel == editHardware.gpu.model>
@@ -60,7 +58,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="displayModel">Модель дисплею:</label>
                     <select class="custom-select" name="displayModel" required>
-                        <option value="" selected disabled></option>
                         <#list displayModels as displayModel>
                             <#if editHardware.display??>
                                 <option value="${displayModel}"<#if displayModel == editHardware.display.model>
@@ -80,7 +77,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="ramModel">Модель оперативної пам'яті:</label>
                     <select class="custom-select" name="ramModel" required>
-                        <option value="" selected disabled></option>
                         <#list ramModels as ramModel>
                             <#if editHardware.ram??>
                                 <option value="${ramModel}"<#if ramModel == editHardware.ram.model>
@@ -100,7 +96,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="ssdModel">Модель SSD диску:</label>
                     <select class="custom-select" name="ssdModel" required>
-                        <option value="" selected disabled></option>
                         <#list ssdModels as ssdModel>
                             <#if editHardware.ssd??>
                                 <option value="${ssdModel}"<#if ssdModel == editHardware.ssd.model>
@@ -120,7 +115,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="ssdModel">Модель HDD диску:</label>
                     <select class="custom-select" name="hddModel" required>
-                        <option value="" selected disabled>Оберіть модель HDD диску</option>
                         <#list hddModels as hddModel>
                             <#if editHardware.hdd??>
                                 <option value="${hddModel}"<#if hddModel == editHardware.hdd.model>

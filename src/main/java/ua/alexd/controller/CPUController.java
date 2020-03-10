@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.CPUSpecification.frequencyEqual;
 import static ua.alexd.specification.CPUSpecification.modelLike;
 
@@ -49,11 +50,11 @@ public class CPUController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false) String model,
-                             @RequestParam(required = false) String frequency,
+    private String addRecord(@RequestParam String model,
+                             @RequestParam String frequency,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency)) {
-            siteModel.addAttribute("errorMessage", "Поля нового процесора не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель нового процесора задано некоректно!");
             return "add/cpuAdd";
         }
 
@@ -75,8 +76,8 @@ public class CPUController {
     @PostMapping("/edit/{editCpu}")
     private String addRecord(@RequestParam String model, @RequestParam String frequency,
                              @NotNull @PathVariable CPU editCpu, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, frequency)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного процесора не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель змінюваного процесора задано некоректно!");
             return "edit/cpuEdit";
         }
 
@@ -130,11 +131,6 @@ public class CPUController {
     private String deleteRecord(@NotNull @PathVariable CPU delCpu) {
         cpuRepo.delete(delCpu);
         return "redirect:/cpu";
-    }
-
-    public static boolean isFieldsEmpty(String model, String frequency) {
-        return frequency == null || model == null ||
-                frequency.isBlank() || model.isBlank();
     }
 
     private boolean saveRecord(CPU saveCPU, Model model) {

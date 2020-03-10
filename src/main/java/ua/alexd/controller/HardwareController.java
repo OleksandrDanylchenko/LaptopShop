@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
@@ -84,16 +85,12 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false) String assemblyName,
-                             @RequestParam(required = false) String cpuModel,
-                             @RequestParam(required = false) String ramModel,
-                             @RequestParam(required = false) String ssdModel,
-                             @RequestParam(required = false) String displayModel,
-                             @RequestParam(required = false) String hddModel,
-                             @RequestParam(required = false) String gpuModel,
-                             @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName)) {
-            model.addAttribute("errorMessage", "Назва нової збірки не може бути пустою!");
+    private String addRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
+                             @RequestParam String ramModel, @RequestParam String ssdModel,
+                             @RequestParam String displayModel, @RequestParam String hddModel,
+                             @RequestParam String gpuModel, @NotNull Model model) {
+        if (!stringContainsAlphabet(assemblyName)) {
+            model.addAttribute("errorMessage", "Назву нової збірки задано некоректно!");
             initializeDropDownChoices(model);
             return "add/hardwareAdd";
         }
@@ -122,16 +119,13 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/edit/{editHardware}")
-    private String editRecord(@RequestParam String assemblyName,
-                              @RequestParam(required = false) String cpuModel,
-                              @RequestParam(required = false) String ramModel,
-                              @RequestParam(required = false) String ssdModel,
-                              @RequestParam(required = false) String displayModel,
-                              @RequestParam(required = false) String hddModel,
-                              @RequestParam(required = false) String gpuModel,
-                              @PathVariable Hardware editHardware, @NotNull Model model) {
-        if (isFieldsEmpty(assemblyName)) {
-            model.addAttribute("errorMessage", "Назва змінюваної збірки не може бути пустою!");
+    private String editRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
+                              @RequestParam String ramModel, @RequestParam String ssdModel,
+                              @RequestParam String displayModel, @RequestParam String hddModel,
+                              @RequestParam String gpuModel, @PathVariable Hardware editHardware,
+                              @NotNull Model model) {
+        if (!stringContainsAlphabet(assemblyName)) {
+            model.addAttribute("errorMessage", "Назву змінюваної збірки задано некоректно!");
             initializeDropDownChoices(model);
             return "/edit/hardwareEdit";
         }
@@ -205,10 +199,6 @@ public class HardwareController {
     private String deleteRecord(@NotNull @PathVariable Hardware delHardware) {
         hardwareRepo.delete(delHardware);
         return "redirect:/hardware";
-    }
-
-    public static boolean isFieldsEmpty(String assemblyName) {
-        return assemblyName == null || assemblyName.isBlank();
     }
 
     private boolean saveRecord(Hardware saveHardware, Model model) {

@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.TypeController;
 import ua.alexd.domain.Type;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class TypeExcelImporter extends Importer {
     @NotNull
@@ -37,7 +37,7 @@ public class TypeExcelImporter extends Importer {
                         if (cell.getColumnIndex() == nameColNum)
                             name = dataFormatter.formatCellValue(cell);
 
-                if (!TypeController.isNameEmpty(name)) {
+                if (stringContainsAlphabet(name)) {
                     var newType = new Type(name);
                     newTypes.add(newType);
 

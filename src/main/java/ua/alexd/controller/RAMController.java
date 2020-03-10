@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
@@ -49,10 +50,9 @@ public class RAMController {
 
     @NotNull
     @PostMapping("/add")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
-                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля нової оперативної пам'яті не можуть бути пустими!");
+    private String editRecord(@RequestParam String model, @RequestParam Integer memory, @NotNull Model siteModel) {
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель нової оперативної пам'яті задано некоректно!");
             return "add/ramAdd";
         }
 
@@ -74,8 +74,8 @@ public class RAMController {
     @PostMapping("/edit/{editRam}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваної оперативної пам'яті не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель змінюваної оперативної пам'яті задано некоректно!");
             return "edit/ramEdit";
         }
 
@@ -129,10 +129,6 @@ public class RAMController {
     private String deleteRecord(@NotNull @PathVariable RAM delRam) {
         ramRepo.delete(delRam);
         return "redirect:/ram";
-    }
-
-    public static boolean isFieldsEmpty(String model) {
-        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(RAM saveRAM, Model model) {

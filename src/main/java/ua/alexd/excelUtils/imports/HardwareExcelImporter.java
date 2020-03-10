@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import ua.alexd.controller.HardwareController;
 import ua.alexd.domain.*;
 import ua.alexd.repos.*;
 
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
 public class HardwareExcelImporter extends Importer {
@@ -83,7 +83,7 @@ public class HardwareExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == hddColNum)
                             hdd = hddRepo.findByModel(cellValue);
                     }
-                if (!HardwareController.isFieldsEmpty(assemblyName) && cpu != null && gpu != null &&
+                if (stringContainsAlphabet(assemblyName) && cpu != null && gpu != null &&
                         display != null && ram != null && ssd != null && hdd != null) {
                     var newAssembly = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
                     newHardware.add(newAssembly);

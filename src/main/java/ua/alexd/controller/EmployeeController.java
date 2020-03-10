@@ -58,8 +58,8 @@ public class EmployeeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, String isActive, @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName)) {
-            model.addAttribute("errorMessage", "Поля нового співробітника не можуть бути пустими!");
+        if (isFieldsValid(firstName, secondName)) {
+            model.addAttribute("errorMessage", "Поля нового співробітника задано некоректно!");
             initDropDownChoices(model);
             return "add/employeeAdd";
         }
@@ -85,8 +85,8 @@ public class EmployeeController {
                               @RequestParam String firstName, @RequestParam String secondName,
                               @RequestParam String shopAddress, @RequestParam String isActive,
                               @NotNull Model model) {
-        if (isFieldsEmpty(firstName, secondName)) {
-            model.addAttribute("errorMessage", "Поля змінюваного співробітника не можуть бути пустими!");
+        if (isFieldsValid(firstName, secondName)) {
+            model.addAttribute("errorMessage", "Поля змінюваного співробітника задано некоректно!");
             initDropDownChoices(model);
             return "/edit/employeeEdit";
         }
@@ -146,7 +146,7 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    public static boolean isFieldsEmpty(String firstName, String secondName) {
+    public static boolean isFieldsValid(String firstName, String secondName) {
         return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName);
     }
 

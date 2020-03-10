@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.SSDSpecification.memoryEqual;
 import static ua.alexd.specification.SSDSpecification.modelLike;
 
@@ -51,8 +52,8 @@ public class SSDController {
     @PostMapping("/add")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля нового SSD диску не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель нового SSD диску задано некоректно!");
             return "add/ssdAdd";
         }
 
@@ -74,8 +75,8 @@ public class SSDController {
     @PostMapping("/edit/{editSSD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного SSD диску не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель змінюваного SSD диску задано некоректно!");
             return "edit/ssdEdit";
         }
 
@@ -129,10 +130,6 @@ public class SSDController {
     private String deleteRecord(@NotNull @PathVariable SSD delSSD) {
         ssdRepo.delete(delSSD);
         return "redirect:/ssd";
-    }
-
-    public static boolean isFieldsEmpty(String model) {
-        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(SSD saveSSD, Model model) {

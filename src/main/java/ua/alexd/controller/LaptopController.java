@@ -38,6 +38,7 @@ public class LaptopController {
         this.labelRepo = labelRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String hardwareAssemblyName,
@@ -62,16 +63,8 @@ public class LaptopController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false) String hardwareAssemblyName,
-                             @RequestParam(required = false) String typeName,
-                             @RequestParam(required = false) String labelModel,
-                             @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel)) {
-            model.addAttribute("errorMessage", "Поля нового ноутбука не можуть бути пустими!");
-            initializeAddingChoices(model);
-            return "add/laptopAdd";
-        }
-
+    private String addRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
+                             @RequestParam String labelModel, @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName).get(0);
         var label = labelRepo.findByModel(labelModel);
@@ -93,16 +86,8 @@ public class LaptopController {
 
     @NotNull
     @PostMapping("/edit/{editLaptop}")
-    private String editRecord(@RequestParam(required = false) String hardwareAssemblyName,
-                              @RequestParam(required = false) String typeName,
-                              @RequestParam(required = false) String labelModel,
-                              @PathVariable Laptop editLaptop, @NotNull Model model) {
-        if (isFieldsEmpty(hardwareAssemblyName, typeName, labelModel)) {
-            model.addAttribute("errorMessage", "Поля змінюваного ноутбука не можуть бути пустими!");
-            initializeAddingChoices(model);
-            return "edit/labelEdit";
-        }
-
+    private String editRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
+                              @RequestParam String labelModel, @NotNull @PathVariable Laptop editLaptop, @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         editLaptop.setHardware(hardware);
 
@@ -161,11 +146,6 @@ public class LaptopController {
     private String deleteRecord(@NotNull @PathVariable Laptop delLaptop) {
         laptopRepo.delete(delLaptop);
         return "redirect:/laptop";
-    }
-
-    private static boolean isFieldsEmpty(String hardwareAssemblyName, String typeName, String labelModel) {
-        return hardwareAssemblyName == null || typeName == null || labelModel == null ||
-                typeName.isBlank() || labelModel.isBlank() || hardwareAssemblyName.isBlank();
     }
 
     private boolean saveRecord(Laptop saveLaptop, Model model) {

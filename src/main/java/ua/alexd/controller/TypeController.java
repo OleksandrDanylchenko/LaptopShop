@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Controller
 @RequestMapping("/type")
@@ -27,8 +28,7 @@ public class TypeController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String name,
-                              @NotNull Model model) {
+    private String getRecords(@RequestParam(required = false) String name, @NotNull Model model) {
         var types = name != null && !name.isEmpty()
                 ? typeRepo.findByName(name)
                 : typeRepo.findAll();
@@ -46,8 +46,8 @@ public class TypeController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String name, @NotNull Model model) {
-        if (isNameEmpty(name)) {
-            model.addAttribute("errorMessage", "Назва нового типу не можу бути пустою!");
+        if (!stringContainsAlphabet(name)) {
+            model.addAttribute("errorMessage", "Назва нового типу задано некоректно!");
             return "add/typeAdd";
         }
 
@@ -67,11 +67,9 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/edit/{editType}")
-    private String editRecord(@RequestParam String name,
-                              @NotNull @PathVariable Type editType,
-                              @NotNull Model model) {
-        if (isNameEmpty(name)) {
-            model.addAttribute("errorMessage", "Назва змінюваного типу не можу бути пустою!");
+    private String editRecord(@RequestParam String name, @NotNull @PathVariable Type editType, @NotNull Model model) {
+        if (!stringContainsAlphabet(name)) {
+            model.addAttribute("errorMessage", "Назва змінюваного типу задано некоректно!");
             return "edit/typeEdit";
         }
 
@@ -124,11 +122,6 @@ public class TypeController {
     private String deleteRecord(@NotNull @PathVariable Type delType) {
         typeRepo.delete(delType);
         return "redirect:/type";
-    }
-
-
-    public static boolean isNameEmpty(String name) {
-        return name == null || name.isBlank();
     }
 
     private boolean saveRecord(Type saveType, Model model) {

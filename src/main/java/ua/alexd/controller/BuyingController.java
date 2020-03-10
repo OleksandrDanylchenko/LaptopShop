@@ -43,7 +43,7 @@ public class BuyingController {
                               @RequestParam(required = false) String laptopModel,
                               @RequestParam(required = false) Integer totalPrice,
                               @RequestParam(required = false)
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                               @NotNull Model model) {
         var buyingSpecification = Specification.where(basketIdEqual(basketId))
                 .and(laptopModelEqual(laptopModel)).and(totalPriceEqual(totalPrice)).and(dateTimeEqual(dateTime));
@@ -63,10 +63,8 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false, defaultValue = "0") Integer basketId,
-                             @RequestParam(required = false) String laptopModel,
-                             @RequestParam Integer totalPrice,
-                             @NotNull Model model) {
+    private String addRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
+                             @RequestParam Integer totalPrice, @NotNull Model model) {
         Basket basket = null;
         if (basketRepo.findById(basketId).isPresent())
             basket = basketRepo.findById(basketId).get();
@@ -87,9 +85,8 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/edit/{editBuying}")
-    private String editRecord(@PathVariable Buying editBuying,
-                              @RequestParam(required = false, defaultValue = "0") Integer basketId,
-                              @RequestParam(required = false) String laptopModel, @RequestParam Integer totalPrice,
+    private String editRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
+                              @RequestParam Integer totalPrice, @PathVariable Buying editBuying,
                               @NotNull Model model) {
         Basket basket = null;
         if (basketRepo.findById(basketId).isPresent())

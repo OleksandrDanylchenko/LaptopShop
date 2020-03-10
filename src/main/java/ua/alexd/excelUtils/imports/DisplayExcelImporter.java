@@ -50,7 +50,7 @@ public class DisplayExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == resolutionColNum)
                             resolution = cellValue;
                     }
-                if (!DisplayController.isFieldsEmpty(model, type, diagonal, resolution)) {
+                if (DisplayController.isFieldsValid(model, type, resolution)) {
                     var newDisplay = new Display(model, type, diagonal, resolution);
                     newDisplays.add(newDisplay);
 

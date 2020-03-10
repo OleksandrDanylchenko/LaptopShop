@@ -25,7 +25,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="shopAddress">Адреса магазину:</label>
                     <select class="custom-select" name="shopAddress">
-                        <option value="" selected disabled></option>
                         <#list shopAddresses as address>
                             <#if editEmployee.shop??>
                                 <option value="${address}"<#if address == editEmployee.shop.address>

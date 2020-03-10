@@ -11,7 +11,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="basketId">ID кошику:</label>
                     <select class="custom-select" name="basketId" required>
-                        <option value="" selected disabled></option>
                         <#list basketIds as basketId>
                             <#if editBuying.basket??>
                                 <option value="${basketId}"<#if basketId == editBuying.basket.id>
@@ -31,7 +30,6 @@
                 <div class="col">
                     <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
                     <select class="custom-select" name="laptopModel" required>
-                        <option value="" selected disabled></option>
                         <#list laptopModels as laptopModel>
                             <#if editBuying.laptop??>
                                 <option value="${laptopModel}"<#if laptopModel == editBuying.laptop.label.model>

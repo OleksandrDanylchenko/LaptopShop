@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.GPUController;
 import ua.alexd.domain.GPU;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class GPUExcelImporter extends Importer {
     @NotNull
@@ -44,9 +44,11 @@ public class GPUExcelImporter extends Importer {
                                 memory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (!GPUController.isFieldsEmpty(gpuModel) && memory >= 1) {
+                if (stringContainsAlphabet(gpuModel) && memory >= 1) {
                     var newGPU = new GPU(gpuModel, memory);
                     newGPUs.add(newGPU);
+
+                    nullExtractedValues(gpuModel);
                 }
             }
             workbook.close();

@@ -55,7 +55,7 @@ public class ClientExcelImporter extends Importer {
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
                             }
                     }
-                if (!ClientController.isFieldsEmpty(firstName, secondName, dateReg)) {
+                if (!ClientController.isFieldsValid(firstName, secondName, dateReg)) {
                     var newClient = new Client(firstName, secondName, dateReg);
                     newClients.add(newClient);
 

@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.LabelSpecification.brandEqual;
 import static ua.alexd.specification.LabelSpecification.modelLike;
 
@@ -49,11 +50,9 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false) String brand,
-                             @RequestParam(required = false) String model,
-                             @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model)) {
-            siteModel.addAttribute("errorMessage", "Поля нового найменування не можуть бути пустими!");
+    private String addRecord(@RequestParam String brand, @RequestParam String model, @NotNull Model siteModel) {
+        if (!isFieldsValid(brand, model)) {
+            siteModel.addAttribute("errorMessage", "Поля нового найменування задано некоректно!");
             return "add/labelAdd";
         }
 
@@ -75,8 +74,8 @@ public class LabelController {
     @PostMapping("/edit/{editLabel}")
     private String editRecord(@RequestParam String brand, @RequestParam String model,
                               @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
-        if (isFieldsEmpty(brand, model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного найменування не можуть бути пустими!");
+        if (!isFieldsValid(brand, model)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного найменування задано некоректно!");
             return "edit/labelEdit";
         }
 
@@ -132,9 +131,8 @@ public class LabelController {
         return "redirect:/label";
     }
 
-    public static boolean isFieldsEmpty(String brand, String model) {
-        return brand == null || model == null ||
-                brand.isBlank() || model.isBlank();
+    public static boolean isFieldsValid(String brand, String model) {
+        return stringContainsAlphabet(brand) && stringContainsAlphabet(model);
     }
 
     private boolean saveRecord(Label saveLabel, Model model) {

@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.ShopController;
 import ua.alexd.domain.Shop;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class ShopExcelImporter extends Importer {
     @NotNull
@@ -37,7 +37,7 @@ public class ShopExcelImporter extends Importer {
                         if (cell.getColumnIndex() == addressColNum)
                             address = dataFormatter.formatCellValue(cell);
 
-                if (!ShopController.isAddressEmpty(address)) {
+                if (stringContainsAlphabet(address)) {
                     var newShop = new Shop(address);
                     newShops.add(newShop);
 

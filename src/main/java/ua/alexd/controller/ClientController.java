@@ -55,10 +55,8 @@ public class ClientController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam(defaultValue = "0001-01-01") Date dateReg, @NotNull Model model) {
-        if (isNonValidDate(dateReg))
-            dateReg = null;
-        if (isFieldsEmpty(firstName, secondName, dateReg)) {
+                             @RequestParam Date dateReg, @NotNull Model model) {
+        if (isFieldsValid(firstName, secondName, dateReg)) {
             model.addAttribute("errorMessage", "Ім'я чи прізвище нового клієнта задано некоректно!");
             return "add/clientAdd";
         }
@@ -79,12 +77,10 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/edit/{editClient}")
-    private String editRecord(@PathVariable Client editClient, @RequestParam String firstName,
-                              @RequestParam String secondName, @RequestParam(defaultValue = "0001-01-01") Date dateReg,
+    private String editRecord(@RequestParam String firstName, @RequestParam String secondName,
+                              @PathVariable Client editClient, @RequestParam Date dateReg,
                               @NotNull Model model) {
-        if (isNonValidDate(dateReg))
-            dateReg = null;
-        if (isFieldsEmpty(firstName, secondName, dateReg)) {
+        if (isFieldsValid(firstName, secondName, dateReg)) {
             model.addAttribute("errorMessage", "Ім'я чи прізвище змінюваного клієнта задано некоректно!");
             return "/edit/clientEdit";
         }
@@ -141,7 +137,7 @@ public class ClientController {
         return "redirect:/client";
     }
 
-    public static boolean isFieldsEmpty(String firstName, String secondName, Date dateReg) {
+    public static boolean isFieldsValid(String firstName, String secondName, Date dateReg) {
         return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName) || dateReg == null;
     }
 }

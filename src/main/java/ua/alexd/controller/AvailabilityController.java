@@ -100,12 +100,10 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String editRecord(@PathVariable Availability editAvailability, @RequestParam Integer price,
-                              @RequestParam Integer quantity, @RequestParam String laptopModel,
-                              @RequestParam String shopAddress,
-                              @RequestParam Date dateStart,
-                              @RequestParam Date dateEnd,
-                              @NotNull Model model) {
+    private String editRecord(@RequestParam Integer price, @RequestParam Integer quantity,
+                              @RequestParam String laptopModel, @RequestParam String shopAddress,
+                              @RequestParam Date dateStart, @RequestParam Date dateEnd,
+                              @PathVariable Availability editAvailability, @NotNull Model model) {
         if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
             model.addAttribute("errorMessage",
                     "Дата закінчення продаж не може передувати даті початку продаж");

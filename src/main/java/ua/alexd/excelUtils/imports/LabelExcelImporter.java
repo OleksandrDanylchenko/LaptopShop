@@ -42,7 +42,7 @@ public class LabelExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == modelColNum)
                             model = cellValue;
                     }
-                if (!LabelController.isFieldsEmpty(brand, model)) {
+                if (LabelController.isFieldsValid(brand, model)) {
                     var newLabel = new Label(brand, model);
                     newLabels.add(newLabel);
 

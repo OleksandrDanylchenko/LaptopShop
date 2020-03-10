@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Controller
 @RequestMapping("/shop")
@@ -32,8 +33,7 @@ public class ShopController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String address,
-                              @NotNull Model model) {
+    private String getRecords(@RequestParam(required = false) String address, @NotNull Model model) {
         var shops = address != null && !address.isEmpty()
                 ? shopRepo.findByAddress(address)
                 : shopRepo.findAll();
@@ -51,8 +51,8 @@ public class ShopController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String address, @NotNull Model model) {
-        if (isAddressEmpty(address)) {
-            model.addAttribute("errorMessage", "Адреса нового магазину не можу бути пустою!");
+        if (!stringContainsAlphabet(address)) {
+            model.addAttribute("errorMessage", "Адресу нового магазину задано некоректно!");
             return "add/shopAdd";
         }
 
@@ -72,11 +72,9 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/edit/{editShop}")
-    private String editRecord(@RequestParam String address,
-                              @NotNull @PathVariable Shop editShop,
-                              @NotNull Model model) {
-        if (isAddressEmpty(address)) {
-            model.addAttribute("errorMessage", "Адреса змінюваного магазину не можу бути пустою!");
+    private String editRecord(@RequestParam String address, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
+        if (!stringContainsAlphabet(address)) {
+            model.addAttribute("errorMessage", "Адресу змінюваного магазину задано некоректно!");
             return "edit/shopEdit";
         }
 
@@ -130,10 +128,6 @@ public class ShopController {
         dismissEmployees(delShop);
         shopRepo.delete(delShop);
         return "redirect:/shop";
-    }
-
-    public static boolean isAddressEmpty(String address) {
-        return address == null || address.isBlank();
     }
 
     private boolean saveRecord(Shop saveShop, Model model) {

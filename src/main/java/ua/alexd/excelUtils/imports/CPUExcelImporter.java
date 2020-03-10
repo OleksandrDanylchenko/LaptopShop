@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.CPUController;
 import ua.alexd.domain.CPU;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class CPUExcelImporter extends Importer {
     @NotNull
@@ -47,7 +47,7 @@ public class CPUExcelImporter extends Importer {
                                 frequency = null;
                             }
                     }
-                if (!CPUController.isFieldsEmpty(cpuModel, frequency)) {
+                if (stringContainsAlphabet(cpuModel)) {
                     var newCPU = new CPU(cpuModel, frequency);
                     newCPUs.add(newCPU);
 

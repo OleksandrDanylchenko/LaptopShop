@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.DisplaySpecification.*;
 
 @Controller
@@ -31,7 +32,8 @@ public class DisplayController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String model, @RequestParam(required = false) String type,
+    private String getRecords(@RequestParam(required = false) String model,
+                              @RequestParam(required = false) String type,
                               @RequestParam(required = false) String diagonal,
                               @RequestParam(required = false) String resolution,
                               @NotNull Model siteModel) {
@@ -53,8 +55,8 @@ public class DisplayController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
                              @RequestParam String resolution, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, type, diagonal, resolution)) {
-            siteModel.addAttribute("errorMessage", "Поля нового дисплея не можуть бути пустими!");
+        if (!isFieldsValid(model, type, resolution)) {
+            siteModel.addAttribute("errorMessage", "Поля нового дисплея задано некоректно!");
             return "add/displayAdd";
         }
 
@@ -77,8 +79,8 @@ public class DisplayController {
     private String editRecord(@RequestParam String model, @RequestParam String type,
                               @RequestParam String diagonal, @RequestParam String resolution,
                               @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model, type, diagonal, resolution)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного дисплея не можуть бути пустими!");
+        if (!isFieldsValid(model, type, resolution)) {
+            siteModel.addAttribute("errorMessage", "Поля змінюваного дисплея задано некоректно!");
             return "edit/displayEdit";
         }
 
@@ -136,9 +138,8 @@ public class DisplayController {
         return "redirect:/display";
     }
 
-    public static boolean isFieldsEmpty(String model, String type, String diagonal, String resolution) {
-        return model == null || type == null || diagonal == null || resolution == null ||
-                model.isBlank() || type.isBlank() || diagonal.isBlank() || resolution.isBlank();
+    public static boolean isFieldsValid(String model, String type, String resolution) {
+        return stringContainsAlphabet(model) && stringContainsAlphabet(type) && stringContainsAlphabet(resolution);
     }
 
     private boolean saveRecord(Display saveDisplay, Model model) {

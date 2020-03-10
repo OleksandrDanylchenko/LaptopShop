@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.SSDController;
 import ua.alexd.domain.SSD;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class SSDExcelImporter extends Importer {
     @NotNull
@@ -44,7 +44,7 @@ public class SSDExcelImporter extends Importer {
                                 ssdMemory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (!SSDController.isFieldsEmpty(ssdModel) && ssdMemory >= 1) {
+                if (stringContainsAlphabet(ssdModel) && ssdMemory >= 1) {
                     var newSSD = new SSD(ssdModel, ssdMemory);
                     newSSDs.add(newSSD);
 

@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.RAMController;
 import ua.alexd.domain.RAM;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class RAMExcelImporter extends Importer {
     @NotNull
@@ -44,7 +44,7 @@ public class RAMExcelImporter extends Importer {
                                 ramMemory = Integer.parseInt(cellValue);
                             } catch (NumberFormatException ignored) { }
                     }
-                if (!RAMController.isFieldsEmpty(ramModel) && ramMemory >= 1) {
+                if (stringContainsAlphabet(ramModel) && ramMemory >= 1) {
                     var newRAM = new RAM(ramModel, ramMemory);
                     newRAMs.add(newRAM);
 

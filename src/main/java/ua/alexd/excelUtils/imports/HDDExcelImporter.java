@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
-import ua.alexd.controller.HDDController;
 import ua.alexd.domain.HDD;
 
 import java.io.File;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 public class HDDExcelImporter extends Importer {
     @NotNull
@@ -42,10 +42,9 @@ public class HDDExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == memoryColNum)
                             try {
                                 memory = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) {
-                            }
+                            } catch (NumberFormatException ignored) { }
                     }
-                if (!HDDController.isFieldsEmpty(hddModel) && memory >= 1) {
+                if (stringContainsAlphabet(hddModel) && memory >= 1) {
                     var newHDD = new HDD(hddModel, memory);
                     newHDDs.add(newHDD);
 

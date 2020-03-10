@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.HDDSpecification.memoryEqual;
 import static ua.alexd.specification.HDDSpecification.modelLike;
 
@@ -51,8 +52,8 @@ public class HDDController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String model, @RequestParam Integer memory,
                              @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля нового HDD диску не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель нового HDD диску задано некоректно!");
             return "add/hddAdd";
         }
 
@@ -74,8 +75,8 @@ public class HDDController {
     @PostMapping("/edit/{editHDD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
-        if (isFieldsEmpty(model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного HDD диску не можуть бути пустими!");
+        if (!stringContainsAlphabet(model)) {
+            siteModel.addAttribute("errorMessage", "Модель змінюваного HDD диску задано некоректно!");
             return "edit/hddEdit";
         }
 
@@ -129,10 +130,6 @@ public class HDDController {
     private String deleteRecord(@NotNull @PathVariable HDD delHDD) {
         hddRepo.delete(delHDD);
         return "redirect:/hdd";
-    }
-
-    public static boolean isFieldsEmpty(String model) {
-        return model == null || model.isBlank();
     }
 
     private boolean saveRecord(HDD saveHDD, Model model) {

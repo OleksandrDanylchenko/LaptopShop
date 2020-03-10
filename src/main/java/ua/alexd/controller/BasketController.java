@@ -73,10 +73,9 @@ public class BasketController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam(required = false, defaultValue = "0") Integer employeeId,
-                             @RequestParam(required = false, defaultValue = "0") Integer clientId,
-                             @RequestParam(required = false)
-                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+    private String addRecord(@RequestParam Integer employeeId,
+                             @RequestParam Integer clientId,
+                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                              @NotNull Model model) {
         Employee employee = null;
         if (employeeRepo.findById(employeeId).isPresent())
@@ -102,12 +101,9 @@ public class BasketController {
 
     @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String editRecord(@PathVariable Basket editBasket,
-                              @RequestParam(required = false, defaultValue = "0") Integer employeeId,
-                              @RequestParam(required = false, defaultValue = "0") Integer clientId,
-                              @RequestParam(required = false)
-                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                              @NotNull Model model) {
+    private String editRecord(@RequestParam Integer employeeId, @RequestParam Integer clientId,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                              @PathVariable Basket editBasket, @NotNull Model model) {
         Employee employee = null;
         if (employeeRepo.findById(employeeId).isPresent())
             employee = employeeRepo.findById(employeeId).get();

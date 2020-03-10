@@ -60,7 +60,7 @@ public class EmployeeExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == isActiveColNum)
                             isActive = cellValue.equalsIgnoreCase("працюючий");
                     }
-                if (!EmployeeController.isFieldsEmpty(firstName, secondName) && shop != null) {
+                if (!EmployeeController.isFieldsValid(firstName, secondName) && shop != null) {
                     var newEmployee = new Employee(firstName, secondName, shop, isActive);
                     newEmployees.add(newEmployee);
 

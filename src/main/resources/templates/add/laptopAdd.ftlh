@@ -57,7 +57,7 @@
             </#if>
         <#else>
             <div class="alert alert-warning" role="alert">
-                <div class="h1 text-center">>Не знайдено жодного типу.</div>
+                <div class="h1 text-center">Не знайдено жодного типу.</div>
                 <div class="h3 text-center"><a href="/type/add">Додайте новий тип</a>
                     для створення ноутбуку.
                 </div>
@@ -65,7 +65,7 @@
         </#if>
     <#else>
         <div class="alert alert-warning" role="alert">
-            <div class="h1 text-center">>Не знайдено жодної збірки.</div>
+            <div class="h1 text-center">Не знайдено жодної збірки.</div>
             <div class="h3 text-center"><a href="/hardware/add">Додайте нову збірку</a> для створення ноутбуку.</div>
         </div>
     </#if>
