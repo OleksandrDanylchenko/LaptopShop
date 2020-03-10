@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.alexd.dateTimeUtils.DateNormalizer.normalizeDate;
+import static ua.alexd.dateTimeUtils.DateFormatter.parseDate;
 import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
@@ -66,35 +67,24 @@ public class AvailabilityExcelImporter extends Importer {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == laptopColNum)
                             laptop = laptopRepo.findByLabelModel(cellValue);
-                        else if (cell.getColumnIndex() == priceColNum)
-                            try {
+                        else if (NumberUtils.isParsable(cellValue)) {
+                            if (cell.getColumnIndex() == priceColNum)
                                 price = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) {
-                            }
-                        else if (cell.getColumnIndex() == quantityColNum)
-                            try {
+                            else if (cell.getColumnIndex() == quantityColNum)
                                 quantity = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) {
-                            }
-                        else if (cell.getColumnIndex() == shopColNum && shopRepo.findByAddress(cellValue).size() != 0)
+                        } else if (cell.getColumnIndex() == shopColNum && shopRepo.findByAddress(cellValue).size() != 0)
                             shop = shopRepo.findByAddress(cellValue).get(0);
                         else if (cell.getColumnIndex() == dateStartColNum)
                             try {
-                                cellValue = normalizeDate(cellValue, "-");
-                                dateStart = new Date(new SimpleDateFormat("d-M-yy")
-                                        .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
-                            }
+                                dateStart = parseDate(cellValue);
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
                         else if (cell.getColumnIndex() == dateEndColNum)
                             try {
-                                cellValue = normalizeDate(cellValue, "-");
-                                dateEnd = new Date(new SimpleDateFormat("d-M-yy")
-                                        .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
-                            }
+                                dateEnd = parseDate(cellValue);
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
                     }
                 if (laptop != null && price >= 5000 && quantity >= 1 && shop != null &&
-                        dateStart != null && dateEnd != null && isDateStartPrevDateEnd(dateStart, dateEnd)) {
+                        dateStart != null && dateEnd != null && !isDateStartPrevDateEnd(dateStart, dateEnd)) {
                     var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
                     newAvailabilities.add(newAvailability);
 

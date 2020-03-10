@@ -61,21 +61,18 @@ public class BasketExcelImporter extends Importer {
                                 var employeeId = Integer.parseInt(cellValue);
                                 if (employeeRepo.findById(employeeId).isPresent())
                                     employee = employeeRepo.findById(employeeId).get();
-                            } catch (NumberFormatException ignored) {
-                            }
+                            } catch (NumberFormatException ignored) { }
                         else if (cell.getColumnIndex() == clientColNum)
                             try {
                                 var clientId = Integer.parseInt(cellValue);
                                 if (clientRepo.findById(clientId).isPresent())
                                     client = clientRepo.findById(clientId).get();
-                            } catch (NumberFormatException ignored) {
-                            }
+                            } catch (NumberFormatException ignored) { }
                         else if (cell.getColumnIndex() == dateTimeColNum)
                             try {
                                 var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
                                 dateTime = LocalDateTime.parse(cellValue, dateTimeFormat);
-                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) {
-                            }
+                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) { }
                     }
                 if (employee != null && client != null && dateTime != null) {
                     var newBasket = new Basket(dateTime, employee, client);

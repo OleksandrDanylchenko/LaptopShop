@@ -12,11 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.alexd.dateTimeUtils.DateNormalizer.normalizeDate;
+import static ua.alexd.dateTimeUtils.DateFormatter.parseDate;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 public class ClientExcelImporter extends Importer {
@@ -49,11 +48,8 @@ public class ClientExcelImporter extends Importer {
                             secondName = cellValue;
                         else if (cell.getColumnIndex() == dateRegColNum)
                             try {
-                                cellValue = normalizeDate(cellValue, "/");
-                                dateReg = new Date(new SimpleDateFormat("d-M-yy")
-                                        .parse(cellValue).getTime());
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
-                            }
+                                dateReg = parseDate(cellValue);
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
                     }
                 if (!ClientController.isFieldsValid(firstName, secondName, dateReg)) {
                     var newClient = new Client(firstName, secondName, dateReg);
