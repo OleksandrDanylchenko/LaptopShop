@@ -149,7 +149,7 @@ public class AvailabilityController {
             return "redirect:/availability";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл!");
+            model.addAttribute("errorMessage", "Завантажено некоректний файл таблиці записів про наявність!");
             initializeImportAttributes(model);
             return "parts/excelFilesUpload";
         }

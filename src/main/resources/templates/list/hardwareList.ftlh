@@ -14,7 +14,7 @@
             <a class="btn btn-success" href="/hardware/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
-        <div class="col-lg-4 col-sm-5 col-12">
+        <div class="col-lg-6 col-sm-7 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
                     data-target="#hardwareSearch" aria-expanded="false" aria-controls="hardwareSearch">
                 Знайти збірку

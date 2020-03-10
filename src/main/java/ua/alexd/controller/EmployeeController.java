@@ -1,5 +1,6 @@
 package ua.alexd.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -146,8 +147,7 @@ public class EmployeeController {
     }
 
     public static boolean isFieldsEmpty(String firstName, String secondName) {
-        return firstName == null || secondName == null ||
-                firstName.isBlank() || secondName.isBlank();
+        return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName);
     }
 
     private void initDropDownChoices(@NotNull Model model) {

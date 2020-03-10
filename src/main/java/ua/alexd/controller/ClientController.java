@@ -1,5 +1,6 @@
 package ua.alexd.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,7 @@ public class ClientController {
         if (isNonValidDate(dateReg))
             dateReg = null;
         if (isFieldsEmpty(firstName, secondName, dateReg)) {
-            model.addAttribute("errorMessage", "Поля нового не можуть бути пустими!");
+            model.addAttribute("errorMessage", "Ім'я чи прізвище нового клієнта задано некоректно!");
             return "add/clientAdd";
         }
 
@@ -84,7 +85,7 @@ public class ClientController {
         if (isNonValidDate(dateReg))
             dateReg = null;
         if (isFieldsEmpty(firstName, secondName, dateReg)) {
-            model.addAttribute("errorMessage", "Поля змінюваного клієнта не можуть бути пустими!");
+            model.addAttribute("errorMessage", "Ім'я чи прізвище змінюваного клієнта задано некоректно!");
             return "/edit/clientEdit";
         }
 
@@ -141,6 +142,6 @@ public class ClientController {
     }
 
     public static boolean isFieldsEmpty(String firstName, String secondName, Date dateReg) {
-        return firstName == null || secondName == null || firstName.isBlank() || secondName.isBlank() || dateReg == null;
+        return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName) || dateReg == null;
     }
 }
