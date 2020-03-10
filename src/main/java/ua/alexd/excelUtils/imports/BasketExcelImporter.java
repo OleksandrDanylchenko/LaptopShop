@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,7 +24,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
-public class BasketExcelImporter extends Importer {
+public class BasketExcelImporter {
     private EmployeeRepo employeeRepo;
     private ClientRepo clientRepo;
 
@@ -33,7 +34,6 @@ public class BasketExcelImporter extends Importer {
     }
 
     @NotNull
-    @Override
     public List<Basket> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -45,45 +45,49 @@ public class BasketExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newBaskets = new ArrayList<Basket>();
 
-            Employee employee = null;
             var employeeColNum = 1;
-            Client client = null;
             var clientColNum = 5;
-            LocalDateTime dateTime = null;
             var dateTimeColNum = 8;
 
             for (Row row : basketSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    Employee employee = null;
+                    Client client = null;
+                    LocalDateTime dateTime = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
-                        if (cell.getColumnIndex() == employeeColNum)
-                            try {
+                        if (NumberUtils.isParsable(cellValue)) {
+                            if (cell.getColumnIndex() == employeeColNum) {
                                 var employeeId = Integer.parseInt(cellValue);
                                 if (employeeRepo.findById(employeeId).isPresent())
                                     employee = employeeRepo.findById(employeeId).get();
-                            } catch (NumberFormatException ignored) { }
-                        else if (cell.getColumnIndex() == clientColNum)
-                            try {
+                            } else if (cell.getColumnIndex() == clientColNum) {
                                 var clientId = Integer.parseInt(cellValue);
                                 if (clientRepo.findById(clientId).isPresent())
                                     client = clientRepo.findById(clientId).get();
-                            } catch (NumberFormatException ignored) { }
-                        else if (cell.getColumnIndex() == dateTimeColNum)
+                            }
+                        } else if (cell.getColumnIndex() == dateTimeColNum)
                             try {
                                 var dateTimeFormat = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
                                 dateTime = LocalDateTime.parse(cellValue, dateTimeFormat);
-                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (DateTimeException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
-                if (employee != null && client != null && dateTime != null) {
-                    var newBasket = new Basket(dateTime, employee, client);
-                    newBaskets.add(newBasket);
-
-                    nullExtractedValues(employee, client, dateTime);
+                    addNewBasket(employee, client, dateTime, newBaskets);
                 }
             }
             workbook.close();
             return newBaskets;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewBasket(Employee employee, Client client, LocalDateTime dateTime,
+                                     ArrayList<Basket> newBaskets) {
+        if (employee != null && client != null && dateTime != null) {
+            var newBasket = new Basket(dateTime, employee, client);
+            newBaskets.add(newBasket);
+        }
     }
 }

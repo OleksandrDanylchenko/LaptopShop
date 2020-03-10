@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,9 +16,8 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class GPUExcelImporter extends Importer {
+public class GPUExcelImporter {
     @NotNull
-    @Override
     public List<GPU> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,32 +28,34 @@ public class GPUExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newGPUs = new ArrayList<GPU>();
 
-            String gpuModel = null;
             var modelColNum = 1;
-            int memory = 0;
             var memoryColNum = 2;
 
             for (Row row : gpuSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String gpuModel = null;
+                    int gpuMemory = 0;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
                             gpuModel = cellValue;
-                        else if (cell.getColumnIndex() == memoryColNum)
-                            try {
-                                memory = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) { }
+                        else if (cell.getColumnIndex() == memoryColNum && NumberUtils.isParsable(cellValue))
+                            gpuMemory = Integer.parseInt(cellValue);
                     }
-                if (stringContainsAlphabet(gpuModel) && memory >= 1) {
-                    var newGPU = new GPU(gpuModel, memory);
-                    newGPUs.add(newGPU);
-
-                    nullExtractedValues(gpuModel);
+                    addNewGPU(gpuModel, gpuMemory, newGPUs);
                 }
             }
             workbook.close();
             return newGPUs;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewGPU(String gpuModel, int gpuMemory, ArrayList<GPU> newGPUs) {
+        if (stringContainsAlphabet(gpuModel) && gpuMemory >= 1) {
+            var newGPU = new GPU(gpuModel, gpuMemory);
+            newGPUs.add(newGPU);
+        }
     }
 }

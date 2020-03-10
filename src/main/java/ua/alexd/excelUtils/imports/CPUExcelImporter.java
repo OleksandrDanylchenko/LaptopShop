@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -9,15 +10,17 @@ import ua.alexd.domain.CPU;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class CPUExcelImporter extends Importer {
+public class CPUExcelImporter {
+    private static DecimalFormat frequencyFormat = new DecimalFormat("#.#");
+
     @NotNull
-    @Override
     public List<CPU> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,35 +31,34 @@ public class CPUExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newCPUs = new ArrayList<CPU>();
 
-            String cpuModel = null;
             var modelColNum = 1;
-            String frequency = null;
             var frequencyColNum = 2;
 
             for (Row row : cpuSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String cpuModel = null;
+                    String frequency = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
                             cpuModel = cellValue;
-                        else if (cell.getColumnIndex() == frequencyColNum)
-                            try {
-                                Double.parseDouble(cellValue); // to prohibit any character in frequency value
-                                frequency = cellValue;
-                            } catch (NumberFormatException ignored) {
-                                frequency = null;
-                            }
+                        else if (cell.getColumnIndex() == frequencyColNum && NumberUtils.isParsable(cellValue))
+                            frequency = frequencyFormat.format(Double.parseDouble(cellValue));
                     }
-                if (stringContainsAlphabet(cpuModel)) {
-                    var newCPU = new CPU(cpuModel, frequency);
-                    newCPUs.add(newCPU);
-
-                    nullExtractedValues(cpuModel, frequency);
+                    addNewCPU(cpuModel, frequency, newCPUs);
                 }
             }
             workbook.close();
             return newCPUs;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewCPU(String cpuModel, String frequency, ArrayList<CPU> newCPUs) {
+        if (stringContainsAlphabet(cpuModel)) {
+            var newCPU = new CPU(cpuModel, frequency);
+            newCPUs.add(newCPU);
+        }
     }
 }

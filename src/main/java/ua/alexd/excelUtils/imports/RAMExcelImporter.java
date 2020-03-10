@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,9 +16,8 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class RAMExcelImporter extends Importer {
+public class RAMExcelImporter {
     @NotNull
-    @Override
     public List<RAM> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,32 +28,34 @@ public class RAMExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newRAMs = new ArrayList<RAM>();
 
-            String ramModel = null;
             var modelColNum = 1;
-            int ramMemory = 0;
             var memoryColNum = 2;
 
             for (Row row : ramSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String ramModel = null;
+                    int ramMemory = 0;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
                             ramModel = cellValue;
-                        else if (cell.getColumnIndex() == memoryColNum)
-                            try {
-                                ramMemory = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) { }
+                        else if (cell.getColumnIndex() == memoryColNum && NumberUtils.isParsable(cellValue))
+                            ramMemory = Integer.parseInt(cellValue);
                     }
-                if (stringContainsAlphabet(ramModel) && ramMemory >= 1) {
-                    var newRAM = new RAM(ramModel, ramMemory);
-                    newRAMs.add(newRAM);
-
-                    nullExtractedValues(ramMemory);
+                    addNewRAM(ramModel, ramMemory, newRAMs);
                 }
             }
             workbook.close();
             return newRAMs;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewRAM(String ramModel, int ramMemory, ArrayList<RAM> newRAMs) {
+        if (stringContainsAlphabet(ramModel) && ramMemory >= 1) {
+            var newRAM = new RAM(ramModel, ramMemory);
+            newRAMs.add(newRAM);
+        }
     }
 }

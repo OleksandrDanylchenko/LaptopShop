@@ -18,7 +18,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
-public class HardwareExcelImporter extends Importer {
+public class HardwareExcelImporter {
     private CPURepo cpuRepo;
     private RAMRepo ramRepo;
     private SSDRepo ssdRepo;
@@ -37,7 +37,6 @@ public class HardwareExcelImporter extends Importer {
     }
 
     @NotNull
-    @Override
     public List<Hardware> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -49,23 +48,24 @@ public class HardwareExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newHardware = new ArrayList<Hardware>();
 
-            String assemblyName = null;
             var assemblyNameColNum = 1;
-            CPU cpu = null;
             var cpuColNum = 2;
-            GPU gpu = null;
             var gpuColNum = 3;
-            Display display = null;
             var displayColNum = 4;
-            RAM ram = null;
             var ramColNum = 5;
-            SSD ssd = null;
             var ssdColNum = 6;
-            HDD hdd = null;
             var hddColNum = 7;
 
             for (Row row : hardwareSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String assemblyName = null;
+                    CPU cpu = null;
+                    GPU gpu = null;
+                    Display display = null;
+                    RAM ram = null;
+                    SSD ssd = null;
+                    HDD hdd = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == assemblyNameColNum)
@@ -83,17 +83,21 @@ public class HardwareExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == hddColNum)
                             hdd = hddRepo.findByModel(cellValue);
                     }
-                if (stringContainsAlphabet(assemblyName) && cpu != null && gpu != null &&
-                        display != null && ram != null && ssd != null && hdd != null) {
-                    var newAssembly = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
-                    newHardware.add(newAssembly);
-
-                    nullExtractedValues(assemblyName, cpu, gpu, display, ram, ssd, hdd);
+                    addNewHardware(assemblyName, cpu, gpu, display, ram, ssd, hdd, newHardware);
                 }
             }
             workbook.close();
             return newHardware;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewHardware(String assemblyName, CPU cpu, GPU gpu, Display display, RAM ram, SSD ssd, HDD hdd,
+                                       ArrayList<Hardware> newHardware) {
+        if (stringContainsAlphabet(assemblyName) && cpu != null && gpu != null &&
+                display != null && ram != null && ssd != null && hdd != null) {
+            var newAssembly = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
+            newHardware.add(newAssembly);
+        }
     }
 }

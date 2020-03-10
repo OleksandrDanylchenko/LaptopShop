@@ -15,9 +15,8 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class LabelExcelImporter extends Importer {
+public class LabelExcelImporter  {
     @NotNull
-    @Override
     public List<Label> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,13 +27,14 @@ public class LabelExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newLabels = new ArrayList<Label>();
 
-            String brand = null;
             var brandColNum = 1;
-            String model = null;
             var modelColNum = 2;
 
             for (Row row : labelSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String brand = null;
+                    String model = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == brandColNum)
@@ -42,16 +42,19 @@ public class LabelExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == modelColNum)
                             model = cellValue;
                     }
-                if (LabelController.isFieldsValid(brand, model)) {
-                    var newLabel = new Label(brand, model);
-                    newLabels.add(newLabel);
-
-                    nullExtractedValues(brand, model);
+                    addNewLabel(brand, model, newLabels);
                 }
             }
             workbook.close();
             return newLabels;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewLabel( String brand, String model, ArrayList<Label> newLabels) {
+        if (LabelController.isFieldsValid(brand, model)) {
+            var newLabel = new Label(brand, model);
+            newLabels.add(newLabel);
+        }
     }
 }

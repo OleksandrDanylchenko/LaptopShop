@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,7 +21,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
-public class BuyingExcelImporter extends Importer {
+public class BuyingExcelImporter {
     private BasketRepo basketRepo;
     private LaptopRepo laptopRepo;
 
@@ -30,7 +31,6 @@ public class BuyingExcelImporter extends Importer {
     }
 
     @NotNull
-    @Override
     public List<Buying> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -42,48 +42,46 @@ public class BuyingExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newBuyings = new ArrayList<Buying>();
 
-            int totalPrice = 0;
             var totalPriceColNum = 1;
-            Basket basket = null;
             var basketIdColNum = 2;
-            Laptop laptop = null;
             var laptopIdColNum = 4;
 
             for (Row row : buyingSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    int totalPrice = 0;
+                    Basket basket = null;
+                    Laptop laptop = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
-                        if (cell.getColumnIndex() == totalPriceColNum)
-                            try {
+                        if (NumberUtils.isParsable(cellValue)) {
+                            if (cell.getColumnIndex() == totalPriceColNum)
                                 totalPrice = Integer.parseInt(cellValue);
-                            } catch (NumberFormatException ignored) {
-                            }
-                        else if (cell.getColumnIndex() == basketIdColNum) {
-                            try {
+                            else if (cell.getColumnIndex() == basketIdColNum) {
                                 var basketId = Integer.parseInt(cellValue);
                                 if (basketRepo.findById(basketId).isPresent())
                                     basket = basketRepo.findById(basketId).get();
-                            } catch (NumberFormatException ignored) {
-                            }
-                        } else if (cell.getColumnIndex() == laptopIdColNum) {
-                            try {
+                            } else if (cell.getColumnIndex() == laptopIdColNum) {
                                 var laptopId = Integer.parseInt(cellValue);
                                 if (laptopRepo.findById(laptopId).isPresent())
                                     laptop = laptopRepo.findById(laptopId).get();
-                            } catch (NumberFormatException ignored) {
                             }
                         }
                     }
-                if (totalPrice >= 5000 && laptop != null && basket != null) {
-                    var newBuying = new Buying(totalPrice, laptop, basket);
-                    newBuyings.add(newBuying);
-
-                    nullExtractedValues(basket, laptop);
+                    addNewBuying(totalPrice, basket, laptop, newBuyings);
                 }
             }
             workbook.close();
             return newBuyings;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewBuying(int totalPrice, Basket basket, Laptop laptop,
+                                           ArrayList<Buying> newBuyings) {
+        if (totalPrice >= 5000 && laptop != null && basket != null) {
+            var newBuying = new Buying(totalPrice, laptop, basket);
+            newBuyings.add(newBuying);
+        }
     }
 }

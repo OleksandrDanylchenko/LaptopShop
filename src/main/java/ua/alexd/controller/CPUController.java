@@ -58,6 +58,7 @@ public class CPUController {
             return "add/cpuAdd";
         }
 
+        frequency = frequency.replace('.', ',');
         var newCpu = new CPU(model, frequency);
         if (!saveRecord(newCpu, siteModel))
             return "add/cpuAdd";
@@ -82,6 +83,7 @@ public class CPUController {
         }
 
         editCpu.setModel(model);
+        frequency = frequency.replace('.', ',');
         editCpu.setFrequency(frequency);
         if (!saveRecord(editCpu, siteModel))
             return "edit/cpuEdit";

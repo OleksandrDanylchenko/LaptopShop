@@ -18,9 +18,8 @@ import java.util.List;
 import static ua.alexd.dateTimeUtils.DateFormatter.parseDate;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class ClientExcelImporter extends Importer {
+public class ClientExcelImporter {
     @NotNull
-    @Override
     public List<Client> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -31,15 +30,16 @@ public class ClientExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newClients = new ArrayList<Client>();
 
-            String firstName = null;
             var firstNameColNum = 1;
-            String secondName = null;
             var secondNameColNum = 2;
-            Date dateReg = null;
             var dateRegColNum = 3;
 
             for (Row row : clientSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String firstName = null;
+                    String secondName = null;
+                    Date dateReg = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == firstNameColNum)
@@ -49,18 +49,23 @@ public class ClientExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == dateRegColNum)
                             try {
                                 dateReg = parseDate(cellValue);
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
-                if (!ClientController.isFieldsValid(firstName, secondName, dateReg)) {
-                    var newClient = new Client(firstName, secondName, dateReg);
-                    newClients.add(newClient);
-
-                    nullExtractedValues(firstName, secondName, dateReg);
+                    addNewClient(firstName, secondName, dateReg, newClients);
                 }
             }
             workbook.close();
             return newClients;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewClient(String firstName, String secondName, Date dateReg,
+                                     ArrayList<Client> newClients) {
+        if (!ClientController.isFieldsValid(firstName, secondName, dateReg)) {
+            var newClient = new Client(firstName, secondName, dateReg);
+            newClients.add(newClient);
+        }
     }
 }

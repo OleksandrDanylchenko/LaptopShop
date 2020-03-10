@@ -1,5 +1,6 @@
 package ua.alexd.excelUtils.imports;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,9 +16,8 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class DisplayExcelImporter extends Importer {
+public class DisplayExcelImporter {
     @NotNull
-    @Override
     public List<Display> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,38 +28,43 @@ public class DisplayExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newDisplays = new ArrayList<Display>();
 
-            String model = null;
             var modelColNum = 1;
-            String type = null;
             var typeColNum = 2;
-            String diagonal = null;
             var diagonalColNum = 3;
-            String resolution = null;
             var resolutionColNum = 4;
 
             for (Row row : displaySheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String model = null;
+                    String type = null;
+                    String diagonal = null;
+                    String resolution = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == modelColNum)
                             model = cellValue;
                         else if (cell.getColumnIndex() == typeColNum)
                             type = cellValue;
-                        else if (cell.getColumnIndex() == diagonalColNum)
+                        else if (cell.getColumnIndex() == diagonalColNum && NumberUtils.isParsable(cellValue))
                             diagonal = cellValue;
                         else if (cell.getColumnIndex() == resolutionColNum)
                             resolution = cellValue;
                     }
-                if (DisplayController.isFieldsValid(model, type, resolution)) {
-                    var newDisplay = new Display(model, type, diagonal, resolution);
-                    newDisplays.add(newDisplay);
-
-                    nullExtractedValues(model, type, diagonal, resolution);
+                    addNewDisplay(model, type, diagonal, resolution, newDisplays);
                 }
             }
             workbook.close();
             return newDisplays;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewDisplay(String model, String type, String diagonal, String resolution,
+                                      ArrayList<Display> newDisplays) {
+        if (DisplayController.isFieldsValid(model, type, resolution)) {
+            var newDisplay = new Display(model, type, diagonal, resolution);
+            newDisplays.add(newDisplay);
+        }
     }
 }

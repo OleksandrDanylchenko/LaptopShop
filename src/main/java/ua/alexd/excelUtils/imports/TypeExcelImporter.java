@@ -15,9 +15,9 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class TypeExcelImporter extends Importer {
+public class TypeExcelImporter {
     @NotNull
-    @Override
+
     public List<Type> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,24 +28,28 @@ public class TypeExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newTypes = new ArrayList<Type>();
 
-            String name = null;
             var nameColNum = 1;
 
             for (Row row : typeSheet) {
-                if (row.getRowNum() != 0)
+                String typeName = null;
+
+                if (row.getRowNum() != 0) {
                     for (Cell cell : row)
                         if (cell.getColumnIndex() == nameColNum)
-                            name = dataFormatter.formatCellValue(cell);
+                            typeName = dataFormatter.formatCellValue(cell);
 
-                if (stringContainsAlphabet(name)) {
-                    var newType = new Type(name);
-                    newTypes.add(newType);
-
-                    nullExtractedValues(name);
+                    addNewType(typeName, newTypes);
                 }
             }
             return newTypes;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewType(String name, ArrayList<Type> newTypes) {
+        if (stringContainsAlphabet(name)) {
+            var newType = new Type(name);
+            newTypes.add(newType);
+        }
     }
 }

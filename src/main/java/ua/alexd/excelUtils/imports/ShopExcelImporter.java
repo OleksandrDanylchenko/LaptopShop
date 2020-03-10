@@ -15,9 +15,8 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class ShopExcelImporter extends Importer {
+public class ShopExcelImporter {
     @NotNull
-    @Override
     public List<Shop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -28,25 +27,28 @@ public class ShopExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newShops = new ArrayList<Shop>();
 
-            String address = null;
             var addressColNum = 1;
 
             for (Row row : shopSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    String address = null;
+
                     for (Cell cell : row)
                         if (cell.getColumnIndex() == addressColNum)
                             address = dataFormatter.formatCellValue(cell);
-
-                if (stringContainsAlphabet(address)) {
-                    var newShop = new Shop(address);
-                    newShops.add(newShop);
-
-                    nullExtractedValues(address);
+                    addNewShop(address, newShops);
                 }
             }
             workbook.close();
             return newShops;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewShop(String address, ArrayList<Shop> newShops) {
+        if (stringContainsAlphabet(address)) {
+            var newShop = new Shop(address);
+            newShops.add(newShop);
+        }
     }
 }

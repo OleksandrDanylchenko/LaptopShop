@@ -6,7 +6,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
-import ua.alexd.domain.*;
+import ua.alexd.domain.Hardware;
+import ua.alexd.domain.Label;
+import ua.alexd.domain.Laptop;
+import ua.alexd.domain.Type;
 import ua.alexd.repos.HardwareRepo;
 import ua.alexd.repos.LabelRepo;
 import ua.alexd.repos.TypeRepo;
@@ -19,7 +22,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
-public class LaptopExcelImporter extends Importer {
+public class LaptopExcelImporter {
     private final LabelRepo labelRepo;
     private final TypeRepo typeRepo;
     private final HardwareRepo hardwareRepo;
@@ -31,7 +34,6 @@ public class LaptopExcelImporter extends Importer {
     }
 
     @NotNull
-    @Override
     public List<Laptop> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -42,15 +44,16 @@ public class LaptopExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newLaptops = new ArrayList<Laptop>();
 
-            Label label = null;
             var labelColNum = 2;
-            Type type = null;
             var typeColNum = 3;
-            Hardware hardware = null;
             var hardwareColNum = 4;
 
             for (Row row : laptopSheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    Label label = null;
+                    Type type = null;
+                    Hardware hardware = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == labelColNum)
@@ -60,16 +63,19 @@ public class LaptopExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == hardwareColNum)
                             hardware = hardwareRepo.findByAssemblyName(cellValue);
                     }
-                if (label != null && type != null && hardware != null) {
-                    var newLaptop = new Laptop(label, type, hardware);
-                    newLaptops.add(newLaptop);
-
-                    nullExtractedValues(label, type, hardware);
+                    addNewLaptop(label, type, hardware, newLaptops);
                 }
             }
             workbook.close();
             return newLaptops;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewLaptop(Label label, Type type, Hardware hardware, ArrayList<Laptop> newLaptops) {
+        if (label != null && type != null && hardware != null) {
+            var newLaptop = new Laptop(label, type, hardware);
+            newLaptops.add(newLaptop);
+        }
     }
 }

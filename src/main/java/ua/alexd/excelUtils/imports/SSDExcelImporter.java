@@ -15,9 +15,9 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
-public class SSDExcelImporter extends Importer {
+public class SSDExcelImporter  {
     @NotNull
-    @Override
+
     public List<SSD> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -48,7 +48,6 @@ public class SSDExcelImporter extends Importer {
                     var newSSD = new SSD(ssdModel, ssdMemory);
                     newSSDs.add(newSSD);
 
-                    nullExtractedValues(ssdModel);
                 }
             }
             workbook.close();

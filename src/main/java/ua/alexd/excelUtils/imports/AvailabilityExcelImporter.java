@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
-public class AvailabilityExcelImporter extends Importer {
+public class AvailabilityExcelImporter {
     private LaptopRepo laptopRepo;
     private ShopRepo shopRepo;
 
@@ -36,7 +35,6 @@ public class AvailabilityExcelImporter extends Importer {
     }
 
     @NotNull
-    @Override
     public List<Availability> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
         var workbook = WorkbookFactory.create(new File(uploadedFilePath));
@@ -48,21 +46,22 @@ public class AvailabilityExcelImporter extends Importer {
             var dataFormatter = new DataFormatter();
             var newAvailabilities = new ArrayList<Availability>();
 
-            Laptop laptop = null;
             var laptopColNum = 1;
-            int price = 0;
             var priceColNum = 2;
-            int quantity = 0;
             var quantityColNum = 3;
-            Shop shop = null;
             var shopColNum = 5;
-            Date dateStart = null;
             var dateStartColNum = 6;
-            Date dateEnd = null;
             var dateEndColNum = 7;
 
             for (Row row : availabilitySheet) {
-                if (row.getRowNum() != 0)
+                if (row.getRowNum() != 0) {
+                    Laptop laptop = null;
+                    int price = 0;
+                    int quantity = 0;
+                    Shop shop = null;
+                    Date dateStart = null;
+                    Date dateEnd = null;
+
                     for (Cell cell : row) {
                         var cellValue = dataFormatter.formatCellValue(cell);
                         if (cell.getColumnIndex() == laptopColNum)
@@ -77,23 +76,29 @@ public class AvailabilityExcelImporter extends Importer {
                         else if (cell.getColumnIndex() == dateStartColNum)
                             try {
                                 dateStart = parseDate(cellValue);
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                         else if (cell.getColumnIndex() == dateEndColNum)
                             try {
                                 dateEnd = parseDate(cellValue);
-                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) { }
+                            } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
+                            }
                     }
-                if (laptop != null && price >= 5000 && quantity >= 1 && shop != null &&
-                        dateStart != null && dateEnd != null && !isDateStartPrevDateEnd(dateStart, dateEnd)) {
-                    var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
-                    newAvailabilities.add(newAvailability);
-
-                    nullExtractedValues(laptop, shop, dateStart, dateEnd);
+                    addNewAvailability(laptop, price, quantity, shop, dateStart, dateEnd, newAvailabilities);
                 }
             }
             workbook.close();
             return newAvailabilities;
         } else
             throw new IllegalArgumentException();
+    }
+
+    private static void addNewAvailability(Laptop laptop, int price, int quantity, Shop shop,
+                                           Date dateStart, Date dateEnd, ArrayList<Availability> newAvailabilities) {
+        if (laptop != null && price >= 5000 && quantity >= 1 && shop != null &&
+                dateStart != null && dateEnd != null && !isDateStartPrevDateEnd(dateStart, dateEnd)) {
+            var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
+            newAvailabilities.add(newAvailability);
+        }
     }
 }
