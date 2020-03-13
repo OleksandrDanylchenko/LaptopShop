@@ -25,8 +25,11 @@ public class SSDController {
     private final SSDRepo ssdRepo;
     private static Iterable<SSD> lastOutputtedSSDs;
 
-    public SSDController(SSDRepo ssdRepo) {
+    private final SSDExcelImporter excelImporter;
+
+    public SSDController(SSDRepo ssdRepo, SSDExcelImporter excelImporter) {
         this.ssdRepo = ssdRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -102,7 +105,7 @@ public class SSDController {
         var SSDFilePath = "";
         try {
             SSDFilePath = saveUploadingFile(uploadingFile);
-            var newSSDs = new SSDExcelImporter().importFile(SSDFilePath);
+            var newSSDs = excelImporter.importFile(SSDFilePath);
             newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {

@@ -31,10 +31,14 @@ public class BasketController {
     private final ClientRepo clientRepo;
     private final EmployeeRepo employeeRepo;
 
-    public BasketController(BasketRepo basketRepo, ClientRepo clientRepo, EmployeeRepo employeeRepo) {
+    private final BasketExcelImporter excelImporter;
+
+    public BasketController(BasketRepo basketRepo, ClientRepo clientRepo, EmployeeRepo employeeRepo,
+                            BasketExcelImporter excelImporter) {
         this.basketRepo = basketRepo;
         this.clientRepo = clientRepo;
         this.employeeRepo = employeeRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -135,8 +139,7 @@ public class BasketController {
         var basketFilePath = "";
         try {
             basketFilePath = saveUploadingFile(uploadingFile);
-            var importer = new BasketExcelImporter(employeeRepo, clientRepo);
-            var newBaskets = importer.importFile(basketFilePath);
+            var newBaskets = excelImporter.importFile(basketFilePath);
             newBaskets.forEach(basketRepo::save);
             return "redirect:/basket";
         } catch (IllegalArgumentException ignored) {

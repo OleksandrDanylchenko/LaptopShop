@@ -25,8 +25,11 @@ public class ClientController {
     private final ClientRepo clientRepo;
     private static Iterable<Client> lastOutputtedClients;
 
-    public ClientController(ClientRepo clientRepo) {
+    private final ClientExcelImporter excelImporter;
+
+    public ClientController(ClientRepo clientRepo, ClientExcelImporter excelImporter) {
         this.clientRepo = clientRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -107,7 +110,7 @@ public class ClientController {
         var clientFilePath = "";
         try {
             clientFilePath = saveUploadingFile(uploadingFile);
-            var newClients = new ClientExcelImporter().importFile(clientFilePath);
+            var newClients = excelImporter.importFile(clientFilePath);
             newClients.forEach(clientRepo::save);
             return "redirect:/client";
         } catch (IllegalArgumentException ignored) {

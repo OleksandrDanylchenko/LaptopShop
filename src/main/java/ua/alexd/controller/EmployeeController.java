@@ -26,9 +26,12 @@ public class EmployeeController {
 
     private final ShopRepo shopRepo;
 
-    public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo) {
+    private final EmployeeExcelImporter excelImporter;
+
+    public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo, EmployeeExcelImporter excelImporter) {
         this.employeeRepo = employeeRepo;
         this.shopRepo = shopRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -115,8 +118,7 @@ public class EmployeeController {
         var employeeFilePath = "";
         try {
             employeeFilePath = saveUploadingFile(uploadingFile);
-            var importer = new EmployeeExcelImporter(shopRepo);
-            var newEmployees = importer.importFile(employeeFilePath);
+            var newEmployees = excelImporter.importFile(employeeFilePath);
             newEmployees.forEach(employeeRepo::save);
             return "redirect:/employee";
         } catch (IllegalArgumentException ignored) {

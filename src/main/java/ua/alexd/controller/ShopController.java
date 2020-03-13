@@ -26,9 +26,12 @@ public class ShopController {
 
     private final EmployeeRepo employeeRepo;
 
-    public ShopController(final ShopRepo shopRepo, EmployeeRepo employeeRepo) {
+    private final ShopExcelImporter excelImporter;
+
+    public ShopController(ShopRepo shopRepo, EmployeeRepo employeeRepo, ShopExcelImporter excelImporter) {
         this.shopRepo = shopRepo;
         this.employeeRepo = employeeRepo;
+        this.excelImporter = excelImporter;
     }
 
     @NotNull
@@ -99,7 +102,7 @@ public class ShopController {
         var shopFilePath = "";
         try {
             shopFilePath = saveUploadingFile(uploadingFile);
-            var newShops = new ShopExcelImporter().importFile(shopFilePath);
+            var newShops = excelImporter.importFile(shopFilePath);
             newShops.forEach(newShop -> saveRecord(newShop, model));
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {

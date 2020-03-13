@@ -25,8 +25,11 @@ public class CPUController {
     private final CPURepo cpuRepo;
     private static Iterable<CPU> lastOutputtedCPUs;
 
-    public CPUController(CPURepo cpuRepo) {
+    private final CPUExcelImporter excelImporter;
+
+    public CPUController(CPURepo cpuRepo, CPUExcelImporter excelImporter) {
         this.cpuRepo = cpuRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -105,7 +108,7 @@ public class CPUController {
         var cpuFilePath = "";
         try {
             cpuFilePath = saveUploadingFile(uploadingFile);
-            var newCPUs = new CPUExcelImporter().importFile(cpuFilePath);
+            var newCPUs = excelImporter.importFile(cpuFilePath);
             newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {

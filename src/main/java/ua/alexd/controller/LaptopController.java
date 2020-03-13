@@ -31,11 +31,15 @@ public class LaptopController {
     private final TypeRepo typeRepo;
     private final LabelRepo labelRepo;
 
-    public LaptopController(LaptopRepo laptopRepo, HardwareRepo hardwareRepo, TypeRepo typeRepo, LabelRepo labelRepo) {
+    private final LaptopExcelImporter excelImporter;
+
+    public LaptopController(LaptopRepo laptopRepo, HardwareRepo hardwareRepo, TypeRepo typeRepo, LabelRepo labelRepo,
+                            LaptopExcelImporter excelImporter) {
         this.laptopRepo = laptopRepo;
         this.hardwareRepo = hardwareRepo;
         this.typeRepo = typeRepo;
         this.labelRepo = labelRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -117,8 +121,7 @@ public class LaptopController {
         var laptopFilePath = "";
         try {
             laptopFilePath = saveUploadingFile(uploadingFile);
-            var importer = new LaptopExcelImporter(labelRepo, typeRepo, hardwareRepo);
-            var newLaptops = importer.importFile(laptopFilePath);
+            var newLaptops = excelImporter.importFile(laptopFilePath);
             newLaptops.forEach(newLaptop -> saveRecord(newLaptop, model));
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {

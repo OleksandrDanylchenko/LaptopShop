@@ -25,8 +25,11 @@ public class LabelController {
     private final LabelRepo labelRepo;
     private static Iterable<Label> lastOutputtedLabel;
 
-    public LabelController(LabelRepo labelRepo) {
+    private final LabelExcelImporter excelImporter;
+
+    public LabelController(LabelRepo labelRepo, LabelExcelImporter excelImporter) {
         this.labelRepo = labelRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -101,7 +104,7 @@ public class LabelController {
         var labelFilePath = "";
         try {
             labelFilePath = saveUploadingFile(uploadingFile);
-            var newLabels = new LabelExcelImporter().importFile(labelFilePath);
+            var newLabels = excelImporter.importFile(labelFilePath);
             newLabels.forEach(newType -> saveRecord(newType, model));
             return "redirect:/label";
         } catch (IllegalArgumentException ignored) {

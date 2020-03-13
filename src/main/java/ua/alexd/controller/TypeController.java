@@ -22,8 +22,11 @@ public class TypeController {
     private final TypeRepo typeRepo;
     private static Iterable<Type> lastOutputtedTypes;
 
-    public TypeController(TypeRepo typeRepo) {
+    private final TypeExcelImporter excelImporter;
+
+    public TypeController(TypeRepo typeRepo, TypeExcelImporter excelImporter) {
         this.typeRepo = typeRepo;
+        this.excelImporter = excelImporter;
     }
 
     @NotNull
@@ -94,7 +97,7 @@ public class TypeController {
         var typeFilePath = "";
         try {
             typeFilePath = saveUploadingFile(uploadingFile);
-            var newTypes = new TypeExcelImporter().importFile(typeFilePath);
+            var newTypes = excelImporter.importFile(typeFilePath);
             newTypes.forEach(newType -> saveRecord(newType, model));
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {

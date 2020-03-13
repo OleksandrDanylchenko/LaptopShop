@@ -31,8 +31,11 @@ public class HardwareController {
     private final HDDRepo hddRepo;
     private final GPURepo gpuRepo;
 
-    public HardwareController(HardwareRepo hardwareRepo, CPURepo cpuRepo, RAMRepo ramRepo, SSDRepo ssdRepo,
-                              DisplayRepo displayRepo, HDDRepo hddRepo, GPURepo gpuRepo) {
+    private final HardwareExcelImporter excelImporter;
+
+    public HardwareController(HardwareRepo hardwareRepo, CPURepo cpuRepo, RAMRepo ramRepo,
+                              SSDRepo ssdRepo, DisplayRepo displayRepo, HDDRepo hddRepo,
+                              GPURepo gpuRepo, HardwareExcelImporter excelImporter) {
         this.hardwareRepo = hardwareRepo;
         this.cpuRepo = cpuRepo;
         this.ramRepo = ramRepo;
@@ -40,6 +43,7 @@ public class HardwareController {
         this.displayRepo = displayRepo;
         this.hddRepo = hddRepo;
         this.gpuRepo = gpuRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -170,9 +174,7 @@ public class HardwareController {
         var hardwareFilePath = "";
         try {
             hardwareFilePath = saveUploadingFile(uploadingFile);
-            // TODO Rework in DI
-            var importer = new HardwareExcelImporter(cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
-            var newHardware = importer.importFile(hardwareFilePath);
+            var newHardware = excelImporter.importFile(hardwareFilePath);
             newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {

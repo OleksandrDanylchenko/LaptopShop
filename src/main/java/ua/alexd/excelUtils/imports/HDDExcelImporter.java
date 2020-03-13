@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.domain.HDD;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
+@Service
 public class HDDExcelImporter {
     @NotNull
     public List<HDD> importFile(String uploadedFilePath)

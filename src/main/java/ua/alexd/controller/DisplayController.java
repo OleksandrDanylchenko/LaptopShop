@@ -13,7 +13,6 @@ import ua.alexd.repos.DisplayRepo;
 
 import java.io.IOException;
 
-
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
@@ -25,8 +24,11 @@ public class DisplayController {
     private final DisplayRepo displayRepo;
     private Iterable<Display> lastOutputtedDisplay;
 
-    public DisplayController(DisplayRepo displayRepo) {
+    private final DisplayExcelImporter excelImporter;
+
+    public DisplayController(DisplayRepo displayRepo, DisplayExcelImporter excelImporter) {
         this.displayRepo = displayRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -108,7 +110,7 @@ public class DisplayController {
         var displayFilePath = "";
         try {
             displayFilePath = saveUploadingFile(uploadingFile);
-            var newDisplays = new DisplayExcelImporter().importFile(displayFilePath);
+            var newDisplays = excelImporter.importFile(displayFilePath);
             newDisplays.forEach(newDisplay -> saveRecord(newDisplay, model));
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {

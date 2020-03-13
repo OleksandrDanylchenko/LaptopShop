@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ua.alexd.controller.LabelController;
 import ua.alexd.domain.Label;
 
@@ -15,7 +16,8 @@ import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
-public class LabelExcelImporter  {
+@Service
+public class LabelExcelImporter {
     @NotNull
     public List<Label> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
@@ -51,7 +53,7 @@ public class LabelExcelImporter  {
             throw new IllegalArgumentException();
     }
 
-    private static void addNewLabel( String brand, String model, ArrayList<Label> newLabels) {
+    private static void addNewLabel(String brand, String model, ArrayList<Label> newLabels) {
         if (LabelController.isFieldsValid(brand, model)) {
             var newLabel = new Label(brand, model);
             newLabels.add(newLabel);

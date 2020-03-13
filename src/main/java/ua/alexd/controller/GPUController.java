@@ -25,8 +25,11 @@ public class GPUController {
     private final GPURepo gpuRepo;
     private static Iterable<GPU> lastOutputtedGPUs;
 
-    public GPUController(GPURepo gpuRepo) {
+    private final GPUExcelImporter excelImporter;
+
+    public GPUController(GPURepo gpuRepo, GPUExcelImporter excelImporter) {
         this.gpuRepo = gpuRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -102,7 +105,7 @@ public class GPUController {
         var GPUFilePath = "";
         try {
             GPUFilePath = saveUploadingFile(uploadingFile);
-            var newGPUs = new GPUExcelImporter().importFile(GPUFilePath);
+            var newGPUs = excelImporter.importFile(GPUFilePath);
             newGPUs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/gpu";
         } catch (IllegalArgumentException ignored) {

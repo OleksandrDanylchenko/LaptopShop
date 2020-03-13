@@ -31,10 +31,14 @@ public class AvailabilityController {
     private final LaptopRepo laptopRepo;
     private final ShopRepo shopRepo;
 
-    public AvailabilityController(AvailabilityRepo availabilityRepo, LaptopRepo laptopRepo, ShopRepo shopRepo) {
+    private final AvailabilityExcelImporter excelImporter;
+
+    public AvailabilityController(AvailabilityRepo availabilityRepo, LaptopRepo laptopRepo, ShopRepo shopRepo,
+                                  AvailabilityExcelImporter excelImporter) {
         this.availabilityRepo = availabilityRepo;
         this.laptopRepo = laptopRepo;
         this.shopRepo = shopRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -141,8 +145,7 @@ public class AvailabilityController {
         var uploadedFilePath = "";
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
-            var importer = new AvailabilityExcelImporter(laptopRepo, shopRepo);
-            var newAvailabilities = importer.importFile(uploadedFilePath);
+            var newAvailabilities = excelImporter.importFile(uploadedFilePath);
             newAvailabilities.forEach(newAvailability -> saveRecord(newAvailability, model));
             return "redirect:/availability";
         } catch (IllegalArgumentException ignored) {

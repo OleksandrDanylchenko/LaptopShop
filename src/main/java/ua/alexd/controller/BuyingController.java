@@ -30,10 +30,14 @@ public class BuyingController {
     private final BasketRepo basketRepo;
     private final LaptopRepo laptopRepo;
 
-    public BuyingController(BuyingRepo buyingRepo, BasketRepo basketRepo, LaptopRepo laptopRepo) {
+    private final BuyingExcelImporter excelImporter;
+
+    public BuyingController(BuyingRepo buyingRepo, BasketRepo basketRepo, LaptopRepo laptopRepo,
+                            BuyingExcelImporter excelImporter) {
         this.buyingRepo = buyingRepo;
         this.basketRepo = basketRepo;
         this.laptopRepo = laptopRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -117,8 +121,7 @@ public class BuyingController {
         var buyingFilePath = "";
         try {
             buyingFilePath = saveUploadingFile(uploadingFile);
-            var importer = new BuyingExcelImporter(basketRepo, laptopRepo);
-            var newBuyings = importer.importFile(buyingFilePath);
+            var newBuyings = excelImporter.importFile(buyingFilePath);
             newBuyings.forEach(buyingRepo::save);
             return "redirect:/buying";
         } catch (IllegalArgumentException ignored) {

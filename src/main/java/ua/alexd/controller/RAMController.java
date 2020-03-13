@@ -25,8 +25,11 @@ public class RAMController {
     private final RAMRepo ramRepo;
     private static Iterable<RAM> lastOutputtedRams;
 
-    public RAMController(RAMRepo ramRepo) {
+    private final RAMExcelImporter excelImporter;
+
+    public RAMController(RAMRepo ramRepo, RAMExcelImporter excelImporter) {
         this.ramRepo = ramRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -101,7 +104,7 @@ public class RAMController {
         var RAMFilePath = "";
         try {
             RAMFilePath = saveUploadingFile(uploadingFile);
-            var newRAMs = new RAMExcelImporter().importFile(RAMFilePath);
+            var newRAMs = excelImporter.importFile(RAMFilePath);
             newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {

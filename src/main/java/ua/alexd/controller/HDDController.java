@@ -25,8 +25,11 @@ public class HDDController {
     private final HDDRepo hddRepo;
     private static Iterable<HDD> lastOutputtedHDDs;
 
-    public HDDController(HDDRepo hddRepo) {
+    private final HDDExcelImporter excelImporter;
+
+    public HDDController(HDDRepo hddRepo, HDDExcelImporter excelImporter) {
         this.hddRepo = hddRepo;
+        this.excelImporter = excelImporter;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -102,7 +105,7 @@ public class HDDController {
         var HDDFilePath = "";
         try {
             HDDFilePath = saveUploadingFile(uploadingFile);
-            var newHDDs = new HDDExcelImporter().importFile(HDDFilePath);
+            var newHDDs = excelImporter.importFile(HDDFilePath);
             newHDDs.forEach(newType -> saveRecord(newType, model));
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {
