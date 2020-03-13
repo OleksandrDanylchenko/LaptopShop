@@ -16,6 +16,12 @@ import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("buyingExcelView")
 public class BuyingExcelExporter extends AbstractXlsxView {
+    private final RowsStylerBuilder rowsStylerBuilder;
+
+    public BuyingExcelExporter(RowsStylerBuilder rowsStylerBuilder) {
+        this.rowsStylerBuilder = rowsStylerBuilder;
+    }
+
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
@@ -24,7 +30,7 @@ public class BuyingExcelExporter extends AbstractXlsxView {
         var sheet = workbook.createSheet("Buyings sheet");
         sheet.setFitToPage(true);
 
-        var styler = new RowsStylerBuilder().getRowStyler(workbook);
+        var styler = rowsStylerBuilder.getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, buyings, styler);
 

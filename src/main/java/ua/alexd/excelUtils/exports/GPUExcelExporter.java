@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.GPU;
-import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +16,12 @@ import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("gpuExcelView")
 public class GPUExcelExporter extends AbstractXlsxView {
+    private final RowsStylerBuilder rowsStylerBuilder;
+
+    public GPUExcelExporter(RowsStylerBuilder rowsStylerBuilder) {
+        this.rowsStylerBuilder = rowsStylerBuilder;
+    }
+
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
@@ -25,7 +30,7 @@ public class GPUExcelExporter extends AbstractXlsxView {
         var sheet = workbook.createSheet("GPUs sheet");
         sheet.setFitToPage(true);
 
-        var styler =new RowsStylerBuilder().getRowStyler(workbook);
+        var styler = rowsStylerBuilder.getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, gpus, styler);
 

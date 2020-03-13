@@ -16,15 +16,21 @@ import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("hardwareExcelView")
 public class HardwareExcelExporter extends AbstractXlsxView {
+    private final RowsStylerBuilder rowsStylerBuilder;
+
+    public HardwareExcelExporter(RowsStylerBuilder rowsStylerBuilder) {
+        this.rowsStylerBuilder = rowsStylerBuilder;
+    }
+
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<Hardware> hardware = (List<Hardware>) model.get("hardware");
+        @SuppressWarnings("unchecked") List<Hardware> hardware = (List<Hardware>) model.get("hardware");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Hardware sheet");
         sheet.setFitToPage(true);
 
-        var styler = new RowsStylerBuilder().getRowStyler(workbook);
+        var styler = rowsStylerBuilder.getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, hardware, styler);
 
