@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.Employee;
-import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,23 +15,23 @@ import java.util.Map;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("employeeExcelView")
-public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
+public class EmployeeExcelExporter extends AbstractXlsxView  {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> employees = (List<ShopDomain>) model.get("employees");
+        @SuppressWarnings("unchecked") List<Employee> employees = (List<Employee>) model.get("employees");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Employees sheet");
         sheet.setFitToPage(true);
 
-        var styler = new RowsStyler(workbook);
+        var styler = new RowsStylerBuilder().getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, employees, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=employees-sheet " + currentDateTime + ".xlsx");
     }
 
-    @Override
+
     public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
@@ -44,23 +43,22 @@ public class EmployeeExcelExporter extends AbstractXlsxView implements ExcelExpo
         styler.setHeaderRowStyle(header, excelSheet);
     }
 
-    @Override
-    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
+
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<Employee> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
-            var employeeRow = (Employee) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(employeeRow.getId());
-            generalRow.createCell(1).setCellValue(employeeRow.getFirstName());
-            generalRow.createCell(2).setCellValue(employeeRow.getSecondName());
-            if (employeeRow.getShop() == null) {
+            generalRow.createCell(0).setCellValue(row.getId());
+            generalRow.createCell(1).setCellValue(row.getFirstName());
+            generalRow.createCell(2).setCellValue(row.getSecondName());
+            if (row.getShop() == null) {
                 generalRow.createCell(3).setCellValue("Закрито");
                 generalRow.createCell(4).setCellValue("Закрито");
             } else {
-                generalRow.createCell(3).setCellValue(employeeRow.getShop().getId());
-                generalRow.createCell(4).setCellValue(employeeRow.getShop().getAddress());
+                generalRow.createCell(3).setCellValue(row.getShop().getId());
+                generalRow.createCell(4).setCellValue(row.getShop().getAddress());
             }
-            generalRow.createCell(5).setCellValue(employeeRow.getIsActive() ? "Працюючий" : "Звільнений");
+            generalRow.createCell(5).setCellValue(row.getIsActive() ? "Працюючий" : "Звільнений");
             styler.setGeneralRowStyle(generalRow);
         }
     }

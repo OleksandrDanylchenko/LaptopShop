@@ -16,23 +16,23 @@ import java.util.Map;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("gpuExcelView")
-public class GPUExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
+public class GPUExcelExporter extends AbstractXlsxView {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        List<ShopDomain> gpus = (List<ShopDomain>) model.get("gpus");
+        @SuppressWarnings("unchecked") List<GPU> gpus = (List<GPU>) model.get("gpus");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("GPUs sheet");
         sheet.setFitToPage(true);
 
-        var styler = new RowsStyler(workbook);
+        var styler =new RowsStylerBuilder().getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, gpus, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=gpus-sheet " + currentDateTime + ".xlsx");
     }
 
-    @Override
+
     public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
@@ -41,15 +41,14 @@ public class GPUExcelExporter extends AbstractXlsxView implements ExcelExportStr
         styler.setHeaderRowStyle(header, excelSheet);
     }
 
-    @Override
-    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
+
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<GPU> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
-            var gpuRow = (GPU) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(gpuRow.getId());
-            generalRow.createCell(1).setCellValue(gpuRow.getModel());
-            generalRow.createCell(2).setCellValue(gpuRow.getMemory());
+            generalRow.createCell(0).setCellValue(row.getId());
+            generalRow.createCell(1).setCellValue(row.getModel());
+            generalRow.createCell(2).setCellValue(row.getMemory());
             styler.setGeneralRowStyle(generalRow);
         }
     }

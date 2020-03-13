@@ -2,9 +2,20 @@ package ua.alexd.excelUtils.exports;
 
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-import static ua.alexd.excelUtils.exports.ExcelExportStructure.dataColumnWidth;
-import static ua.alexd.excelUtils.exports.ExcelExportStructure.idColumnWidth;
+@Service
+class RowsStylerBuilder {
+    @Value("${excelExport.idColumnWidth}")
+    private int idColumnWidth;
+    @Value("${excelExport.dataColumnWidth}")
+    private int dataColumnWidth;
+
+    public RowsStyler getRowStyler(Workbook workbook) {
+        return new RowsStyler(workbook, idColumnWidth, dataColumnWidth);
+    }
+}
 
 public class RowsStyler {
     private CellStyle headerStyle;
@@ -12,11 +23,15 @@ public class RowsStyler {
     private Font headerFont;
     private Font generalFont;
     private final String fontName = "Lato";
+    private final int idColumnWidth;
+    private final int dataColumnWidth;
 
     private Workbook workbook;
 
-    public RowsStyler(Workbook workbook) {
+    public RowsStyler(Workbook workbook, int idColumnWidth, int dataColumnWidth) {
         this.workbook = workbook;
+        this.idColumnWidth = idColumnWidth;
+        this.dataColumnWidth = dataColumnWidth;
     }
 
     public void setHeaderRowStyle(Row headerRow, Sheet sheet) {

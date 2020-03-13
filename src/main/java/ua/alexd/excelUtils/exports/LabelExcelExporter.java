@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.Label;
-import ua.alexd.domain.ShopDomain;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,23 +15,23 @@ import java.util.Map;
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
 @Component("labelExcelView")
-public class LabelExcelExporter extends AbstractXlsxView implements ExcelExportStructure {
+public class LabelExcelExporter extends AbstractXlsxView {
     @Override
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
-        @SuppressWarnings("unchecked") List<ShopDomain> labels = (List<ShopDomain>) model.get("labels");
+        @SuppressWarnings("unchecked") List<Label> labels = (List<Label>) model.get("labels");
         var currentDateTime = getCurrentDateTime();
         var sheet = workbook.createSheet("Labels sheet");
         sheet.setFitToPage(true);
 
-        var styler = new RowsStyler(workbook);
+        var styler = new RowsStylerBuilder().getRowStyler(workbook);
         setExcelHeader(sheet, styler);
         setExcelRows(sheet, labels, styler);
 
         response.setHeader("Content-Disposition", "attachment; filename=labels-sheet " + currentDateTime + ".xlsx");
     }
 
-    @Override
+
     public void setExcelHeader(@NotNull Sheet excelSheet, @NotNull RowsStyler styler) {
         var header = excelSheet.createRow(0);
         header.createCell(0).setCellValue("Id");
@@ -41,15 +40,14 @@ public class LabelExcelExporter extends AbstractXlsxView implements ExcelExportS
         styler.setHeaderRowStyle(header, excelSheet);
     }
 
-    @Override
-    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<ShopDomain> rows, RowsStyler styler) {
+
+    public void setExcelRows(@NotNull Sheet excelSheet, @NotNull List<Label> rows, RowsStyler styler) {
         var rowCount = 1;
         for (var row : rows) {
-            var labelRow = (Label) row;
             var generalRow = excelSheet.createRow(rowCount++);
-            generalRow.createCell(0).setCellValue(labelRow.getId());
-            generalRow.createCell(1).setCellValue(labelRow.getBrand());
-            generalRow.createCell(2).setCellValue(labelRow.getModel());
+            generalRow.createCell(0).setCellValue(row.getId());
+            generalRow.createCell(1).setCellValue(row.getBrand());
+            generalRow.createCell(2).setCellValue(row.getModel());
             styler.setGeneralRowStyle(generalRow);
         }
     }

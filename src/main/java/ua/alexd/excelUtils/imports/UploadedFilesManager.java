@@ -11,7 +11,7 @@ public class UploadedFilesManager {
     @NotNull
     public static String saveUploadingFile(@NotNull MultipartFile uploadFile)
             throws IOException, IllegalArgumentException {
-        if (isUploadFileXSLX(uploadFile)) {
+        if (isUploadFileValid(uploadFile)) {
             var uploadPath = "D:\\Studying\\2_Course\\ISTAP\\LaptopShop\\uploadedExcelFiles";
             var uploadDir = new File(uploadPath);
             if (!uploadDir.exists())
@@ -29,11 +29,11 @@ public class UploadedFilesManager {
         }
     }
 
-    private static boolean isUploadFileXSLX(@NotNull MultipartFile uploadFile) {
+    private static boolean isUploadFileValid(@NotNull MultipartFile uploadFile) {
         var uploadFilename = uploadFile.getOriginalFilename();
         var uploadFileType = uploadFile.getContentType();
         return uploadFilename != null && uploadFilename.length() >= 6 &&
-                uploadFileType != null && uploadFileType.equals("application/octet-stream");
+                uploadFileType != null && uploadFileType.equals("application/octet-stream"); // has .xlsx extension
     }
 
     public static void deleteNonValidFile(String delFilepath) {

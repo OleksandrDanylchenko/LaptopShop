@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "uploadedFilesManager.uploadPath",
+      "type": "java.lang.String",
+      "description": "Description for uploadedFilesManager.uploadPath."
+  }
+] }

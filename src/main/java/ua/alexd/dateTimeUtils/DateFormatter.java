@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 
 public class DateFormatter {
-    private static SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat abridgedDateFormat = new SimpleDateFormat("d-M-yy");
+    private static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat abridgedDateFormat = new SimpleDateFormat("d-M-yy");
 
     @NotNull
     @Contract(pure = true)

@@ -170,6 +170,7 @@ public class HardwareController {
         var hardwareFilePath = "";
         try {
             hardwareFilePath = saveUploadingFile(uploadingFile);
+            // TODO Rework in DI
             var importer = new HardwareExcelImporter(cpuRepo, ramRepo, ssdRepo, displayRepo, hddRepo, gpuRepo);
             var newHardware = importer.importFile(hardwareFilePath);
             newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
