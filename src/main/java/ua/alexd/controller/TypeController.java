@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Controller
 @RequestMapping("/type")
@@ -48,16 +47,11 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String name, @NotNull Model model) {
-        if (!stringContainsAlphabet(name)) {
-            model.addAttribute("errorMessage", "Назва нового типу задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
+        if (!saveRecord(newType, model)) {
+            model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
             return "add/typeAdd";
         }
-
-        var newType = new Type(name);
-        if (!saveRecord(newType, model))
-            return "add/typeAdd";
-
         return "redirect:/type";
     }
 
@@ -71,15 +65,11 @@ public class TypeController {
     @NotNull
     @PostMapping("/edit/{editType}")
     private String editRecord(@RequestParam String name, @NotNull @PathVariable Type editType, @NotNull Model model) {
-        if (!stringContainsAlphabet(name)) {
-            model.addAttribute("errorMessage", "Назва змінюваного типу задано некоректно!");
+        editType.setName(name);
+        if (!saveRecord(editType, model)) {
+            model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
             return "edit/typeEdit";
         }
-
-        editType.setName(name);
-        if (!saveRecord(editType, model))
-            return "edit/typeEdit";
-
         return "redirect:/type";
     }
 
