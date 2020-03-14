@@ -2,25 +2,32 @@
 
 <@pad.page "Shops">
     <div class="row">
-        <div class="col-md-7">
+        <div class="col">
             <a class="btn btn-outline-danger float-left" href="/shop/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий магазин</a>
         </div>
-        <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0 mr-3 mr-sm-0" href="/shop/importExcel" role="button">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/shop/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0 ml-3 ml-sm-0" href="/shop/exportExcel" role="button">
+            <a class="btn btn-success" id="fixedBtnHeight" href="/shop/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
-        <div class="col-md-3">
-            <div class="form-group" id="shopSearch">
-                <form method="get" action="/shop" class="form-inline">
-                    <input type="text" class="form-control" name="address" value="${RequestParameters.address!}"
-                           placeholder="Адреса"/>
-                    <button type="submit" class="btn btn-danger mt-2 mt-sm-0 mt-md-2 mt-xl-0
-                    ml-0 ml-sm-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
+        <div class="col-lg-4 col-sm-5 col-12">
+            <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
+                    data-target="#shopSearch" aria-expanded="false" aria-controls="shopSearch">
+                Знайти магазин
+            </button>
+            <div class="collapse form-group" id="shopSearch">
+                <form method="get" action="/shop">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="address"
+                                   value="${RequestParameters.address!}" placeholder="Адреса магазину"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </form>
             </div>
         </div>

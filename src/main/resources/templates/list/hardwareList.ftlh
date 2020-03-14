@@ -6,12 +6,10 @@
             <a class="btn btn-outline-danger" href="/hardware/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову збірку</a>
         </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/hardware/importExcel" role="button">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/hardware/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/hardware/exportExcel" role="button">
+            <a class="btn btn-success" id="fixedBtnHeight" href="/hardware/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-6 col-sm-7 col-12">

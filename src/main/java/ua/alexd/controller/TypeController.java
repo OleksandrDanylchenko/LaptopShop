@@ -31,9 +31,9 @@ public class TypeController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String name, @NotNull Model model) {
-        var types = name != null && !name.isEmpty()
-                ? typeRepo.findByName(name)
+    private String getRecords(@RequestParam(required = false) String typeName, @NotNull Model model) {
+        var types = typeName != null && !typeName.isEmpty()
+                ? typeRepo.findByName(typeName)
                 : typeRepo.findAll();
         lastOutputtedTypes = types;
         model.addAttribute("types", types);

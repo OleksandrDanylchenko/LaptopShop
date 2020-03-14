@@ -7,12 +7,10 @@
             <a class="btn btn-outline-danger" href="/availability/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий запис про наявність</a>
         </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/availability/importExcel" role="button">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/availability/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/availability/exportExcel" role="button">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/availability/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">

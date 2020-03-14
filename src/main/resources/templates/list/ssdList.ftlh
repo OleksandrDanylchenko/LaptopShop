@@ -6,13 +6,11 @@
             <a class="btn btn-outline-danger" href="/ssd/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нове найменування</a>
         </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/ssd/importExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/ssd/exportExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+        <div class="d-flex justify-content-center">
+                <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ssd/importExcel" role="button">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+                <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"

@@ -1,31 +1,38 @@
 <#import "../parts/htmlPad.ftlh" as pad>
 
 <@pad.page "Type">
-    <div class="row">
-        <div class="col-md-7">
+
+    <div class="d-flex flex-wrap">
+        <div>
             <a class="btn btn-outline-danger" href="/type/add" role="button">
                 <i class="far fa-plus-square"></i> Додати новий тип ноутбуків</a>
         </div>
-        <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0 mr-3 mr-sm-0" href="/type/importExcel" role="button">
+        <div class="d-flex justify-content-end flex-grow-1">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/type/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-1">
-            <a class="btn btn-success my-2 my-md-0 ml-3 ml-sm-0" href="/type/exportExcel" role="button">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/type/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
-        <div class="col-md-3">
-            <div class="form-group" id="typeSearch">
-                <form method="get" action="/type" class="form-inline">
-                    <input type="text" class="form-control" name="name" value="${RequestParameters.name!}"
-                           placeholder="Назва"/>
-                    <button type="submit" class="btn btn-danger mt-2 mt-sm-0 mt-md-2 mt-xl-0
-                    ml-0 ml-sm-2 ml-md-0 ml-xl-2"><i class="fa fa-search"></i></button>
+        <div class="flex-grow-1">
+            <button class="btn btn-dark ml-0 ml-sm-2 mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
+                    data-target="#typeSearch" aria-expanded="false" aria-controls="typeSearch">
+                Знайти тип
+            </button>
+            <div class="collapse form-group" id="typeSearch">
+                <form method="get" action="/type">
+                    <div class="form-row my-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="typeName"
+                                   value="${RequestParameters.typeName!}" placeholder="Назва типу"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger float-right">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
-
     <div class="row mt-2">
         <#if types?has_content>
             <div class="h1">Список типів:</div>

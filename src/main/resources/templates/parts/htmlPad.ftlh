@@ -8,6 +8,7 @@
         <title>${title}</title>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
         <link rel="stylesheet" href="/styles/navbarStyle.css">
+        <link rel="stylesheet" href="/styles/fixBtnStyle.css">
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"

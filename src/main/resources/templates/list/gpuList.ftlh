@@ -6,12 +6,10 @@
             <a class="btn btn-outline-danger float-left" href="/gpu/add" role="button">
                 <i class="far fa-plus-square"></i> Додати нову відеокарту</a>
         </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/gpu/importExcel" role="button">
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/gpu/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-        </div>
-        <div class="col-sm-1 col-3">
-            <a class="btn btn-success" href="/gpu/exportExcel" role="button">
+            <a class="btn btn-success" id="fixedBtnHeight" href="/gpu/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
