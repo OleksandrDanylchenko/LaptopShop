@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ua.alexd.domain.Shop;
 
@@ -17,6 +18,7 @@ import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
+@Lazy
 public class ShopExcelImporter {
     @NotNull
     public List<Shop> importFile(String uploadedFilePath)

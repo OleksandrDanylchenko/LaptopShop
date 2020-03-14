@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ua.alexd.domain.Availability;
 import ua.alexd.domain.Laptop;
@@ -25,6 +26,7 @@ import static ua.alexd.dateTimeUtils.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
+@Lazy
 public class AvailabilityExcelImporter {
     private LaptopRepo laptopRepo;
     private ShopRepo shopRepo;

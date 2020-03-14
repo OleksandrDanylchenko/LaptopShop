@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ua.alexd.domain.Hardware;
 import ua.alexd.domain.Label;
@@ -22,6 +23,7 @@ import java.util.List;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
+@Lazy
 public class LaptopExcelImporter {
     private final LabelRepo labelRepo;
     private final TypeRepo typeRepo;

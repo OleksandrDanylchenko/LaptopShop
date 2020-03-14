@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ua.alexd.controller.ClientController;
 import ua.alexd.domain.Client;
@@ -20,6 +21,7 @@ import static ua.alexd.dateTimeUtils.DateFormatter.parseDate;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
 
 @Service
+@Lazy
 public class ClientExcelImporter {
     @NotNull
     public List<Client> importFile(String uploadedFilePath)

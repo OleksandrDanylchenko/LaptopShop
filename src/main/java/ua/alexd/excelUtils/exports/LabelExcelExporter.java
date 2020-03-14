@@ -3,7 +3,8 @@ package ua.alexd.excelUtils.exports;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.Label;
 
@@ -14,7 +15,8 @@ import java.util.Map;
 
 import static ua.alexd.dateTimeUtils.DateTimeProvider.getCurrentDateTime;
 
-@Component("labelExcelView")
+@Service("labelExcelView")
+@Lazy
 public class LabelExcelExporter extends AbstractXlsxView {
     private final RowsStylerBuilder rowsStylerBuilder;
 
