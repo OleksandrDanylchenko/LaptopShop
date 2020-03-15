@@ -1,6 +1,5 @@
 package ua.alexd.controller;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -61,16 +60,9 @@ public class EmployeeController {
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, String isActive, @NotNull Model model) {
-        if (isFieldsValid(firstName, secondName)) {
-            model.addAttribute("errorMessage", "Поля нового співробітника задано некоректно!");
-            initDropDownChoices(model);
-            return "add/employeeAdd";
-        }
-
         var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
         var newEmployee = new Employee(firstName, secondName, shop, true);
         employeeRepo.save(newEmployee);
-
         return "redirect:/employee";
     }
 
@@ -86,21 +78,14 @@ public class EmployeeController {
     @PostMapping("/edit/{editEmployee}")
     private String editRecord(@NotNull @PathVariable Employee editEmployee,
                               @RequestParam String firstName, @RequestParam String secondName,
-                              @RequestParam String shopAddress, @RequestParam String isActive,
+                              @RequestParam String shopAddress, @NotNull @RequestParam String isActive,
                               @NotNull Model model) {
-        if (isFieldsValid(firstName, secondName)) {
-            model.addAttribute("errorMessage", "Поля змінюваного співробітника задано некоректно!");
-            initDropDownChoices(model);
-            return "/edit/employeeEdit";
-        }
-
         editEmployee.setFirstName(firstName);
         editEmployee.setSecondName(secondName);
         var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
         editEmployee.setShop(employeeShop);
         editEmployee.setActive(isActive.equals("Працюючий"));
         employeeRepo.save(editEmployee);
-
         return "redirect:/employee";
     }
 
@@ -146,10 +131,6 @@ public class EmployeeController {
     private String deleteRecord(@NotNull @PathVariable Employee delEmployee) {
         employeeRepo.delete(delEmployee);
         return "redirect:/employee";
-    }
-
-    public static boolean isFieldsValid(String firstName, String secondName) {
-        return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName);
     }
 
     private void initDropDownChoices(@NotNull Model model) {

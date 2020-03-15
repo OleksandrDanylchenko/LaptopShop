@@ -1,25 +1,28 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../parts/errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../parts/errorsHandlers/valueConsistentBreaker.ftlh" as vC>
 
 <@pad.page "Employee adding">
     <#if shopAddresses?has_content>
-        <@error.errorOutput errorMessage!/>
+        <@eO.errorOutput errorMessage!/>
 
         <div>
             <div class="h1">Додати нового співробітника:</div>
-            <form method="post" action="/employee/add" class="form-group needs-validation w-100" novalidate>
+            <form method="post" action="/employee/add" class="form-group needs-validation w-100" novalidate
+                  onsubmit="return validateForm()">
                 <div class="form-row my-2">
                     <div class="col">
                         <label class="d-inline ml-2" for="firstName">Ім'я нового співробітника:</label>
                         <input type="text" class="form-control" name="firstName"
                                value="${RequestParameters.firstName!}" required/>
-                        <div class="invalid-feedback">Ім'я нового співробітника не може бути пустим!</div>
+                        <div class="invalid-feedback">Ім'я нового співробітника задано некоректно!</div>
                     </div>
                     <div class="col">
                         <label class="d-inline ml-2" for="secondName">Прізвище нового співробітника:</label>
                         <input type="text" class="form-control" name="secondName"
                                value="${RequestParameters.secondName!}" required/>
-                        <div class="invalid-feedback">Прізвище нового співробітника не може бути пустим!</div>
+                        <div class="invalid-feedback">Прізвище нового співробітника задано некоректно!</div>
                     </div>
                 </div>
                 <div class="form-row my-2">
@@ -36,6 +39,9 @@
                 </div>
                 <button type="submit" class="btn btn-danger float-right">Додати</button>
             </form>
+
+            <@eB.emptyBreaker inputNames=["firstName", "secondName"]/>
+            <@vC.valueBreaker inputNames=["firstName", "secondName"]/>
         </div>
     <#else>
         <div class="alert alert-warning" role="alert">
