@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import ua.alexd.controller.DisplayController;
 import ua.alexd.domain.Display;
 
 import java.io.File;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
 @Lazy
@@ -66,7 +66,7 @@ public class DisplayExcelImporter {
 
     private static void addNewDisplay(String model, String type, String diagonal, String resolution,
                                       ArrayList<Display> newDisplays) {
-        if (DisplayController.isFieldsValid(model, type, resolution)) {
+        if (stringContainsAlphabet(model) && stringContainsAlphabet(type) && stringContainsAlphabet(resolution)) {
             var newDisplay = new Display(model, type, diagonal, resolution);
             newDisplays.add(newDisplay);
         }

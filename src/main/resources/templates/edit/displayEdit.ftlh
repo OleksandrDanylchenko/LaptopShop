@@ -1,12 +1,16 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../parts/errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../parts/errorsHandlers/valueConsistentBreaker.ftlh" as vC>
+
 
 <@pad.page "Display editing">
-    <@error.errorOutput errorMessage!/>
+    <@eO.errorOutput errorMessage!/>
 
     <div>
         <div class="h1">Зміна інформації дисплея:</div>
-        <form method="post" action="/display/edit/${editDisplay.id}" class="form-group needs-validation w-100" novalidate>
+        <form method="post" action="/display/edit/${editDisplay.id}" class="form-group needs-validation w-100" novalidate
+              onsubmit="return validateForm()">
             <div class="form-row my-2">
                 <div class="col">
                     <label class="d-inline ml-2" for="model">Назва моделі:</label>
@@ -41,5 +45,8 @@
             </div>
             <button type="submit" class="btn btn-danger float-right">Зберегти</button>
         </form>
+
+        <@eB.emptyBreaker inputNames=["model", "type", "resolution"]/>
+        <@vC.valueBreaker inputNames=["model", "type", "resolution"]/>
     </div>
 </@pad.page>

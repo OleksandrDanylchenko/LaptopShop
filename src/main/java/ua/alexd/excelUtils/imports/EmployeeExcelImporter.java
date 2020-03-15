@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import ua.alexd.controller.EmployeeController;
 import ua.alexd.domain.Employee;
 import ua.alexd.domain.Shop;
 import ua.alexd.repos.ShopRepo;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
 @Lazy
@@ -73,7 +73,7 @@ public class EmployeeExcelImporter {
 
     private static void addNewEmployee(String firstName, String secondName, Shop shop, boolean isActive,
                                        ArrayList<Employee> newEmployees) {
-        if (!EmployeeController.isFieldsValid(firstName, secondName) && shop != null) {
+        if (stringContainsAlphabet(firstName) && stringContainsAlphabet(secondName) && shop != null) {
             var newEmployee = new Employee(firstName, secondName, shop, isActive);
             newEmployees.add(newEmployee);
         }

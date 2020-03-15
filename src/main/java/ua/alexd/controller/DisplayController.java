@@ -55,17 +55,11 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String model, @RequestParam String type, @RequestParam String diagonal,
-                             @RequestParam String resolution, @NotNull Model siteModel) {
-        if (!isFieldsValid(model, type, resolution)) {
-            siteModel.addAttribute("errorMessage", "Поля нового дисплея задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newDisplay") Display newDisplay, @NotNull Model model) {
+        if (!saveRecord(newDisplay)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/displayAdd";
         }
-
-        var newDisplay = new Display(model, type, diagonal, resolution);
-        if (!saveRecord(newDisplay, siteModel))
-            return "add/displayAdd";
-
         return "redirect:/display";
     }
 
@@ -81,18 +75,14 @@ public class DisplayController {
     private String editRecord(@RequestParam String model, @RequestParam String type,
                               @RequestParam String diagonal, @RequestParam String resolution,
                               @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
-        if (!isFieldsValid(model, type, resolution)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного дисплея задано некоректно!");
-            return "edit/displayEdit";
-        }
-
         editDisplay.setModel(model);
         editDisplay.setType(type);
         editDisplay.setDiagonal(diagonal);
         editDisplay.setResolution(resolution);
-        if (!saveRecord(editDisplay, siteModel))
+        if (!saveRecord(editDisplay)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/displayEdit";
-
+        }
         return "redirect:/display";
     }
 
@@ -111,7 +101,7 @@ public class DisplayController {
         try {
             displayFilePath = saveUploadingFile(uploadingFile);
             var newDisplays = excelImporter.importFile(displayFilePath);
-            newDisplays.forEach(newDisplay -> saveRecord(newDisplay, model));
+            newDisplays.forEach(this::saveRecord);
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(displayFilePath);
@@ -140,16 +130,10 @@ public class DisplayController {
         return "redirect:/display";
     }
 
-    public static boolean isFieldsValid(String model, String type, String resolution) {
-        return stringContainsAlphabet(model) && stringContainsAlphabet(type) && stringContainsAlphabet(resolution);
-    }
-
-    private boolean saveRecord(Display saveDisplay, Model model) {
+    private boolean saveRecord(Display saveDisplay) {
         try {
             displayRepo.save(saveDisplay);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель дисплею " + saveDisplay.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
