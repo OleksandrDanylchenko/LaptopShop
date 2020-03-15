@@ -1,11 +1,14 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../parts/errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../parts/errorsHandlers/valueConsistentBreaker.ftlh" as vC>
 
 <@pad.page "Hardware editing">
-    <@error.errorOutput errorMessage!/>
+    <@eO.errorOutput errorMessage!/>
 
     <p class="h1">Змінити збірку:</p>
-    <form method="post" action="/hardware/edit/${editHardware.id}" class="form-group needs-validation w-100" novalidate>
+    <form method="post" action="/hardware/edit/${editHardware.id}" class="form-group needs-validation w-100" novalidate
+          onsubmit="return validateForm()">
         <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="assemblyName">Назва збірки:</label>
@@ -131,4 +134,7 @@
 
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
+
+    <@eB.emptyBreaker inputNames=["assemblyName"]/>
+    <@vC.valueBreaker inputNames=["assemblyName"]/>
 </@pad.page>

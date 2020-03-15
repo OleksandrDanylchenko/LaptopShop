@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
@@ -93,12 +92,6 @@ public class HardwareController {
                              @RequestParam String ramModel, @RequestParam String ssdModel,
                              @RequestParam String displayModel, @RequestParam String hddModel,
                              @RequestParam String gpuModel, @NotNull Model model) {
-        if (!stringContainsAlphabet(assemblyName)) {
-            model.addAttribute("errorMessage", "Назву нової збірки задано некоректно!");
-            initializeDropDownChoices(model);
-            return "add/hardwareAdd";
-        }
-
         var cpu = cpuRepo.findByModel(cpuModel);
         var ram = ramRepo.findByModel(ramModel);
         var ssd = ssdRepo.findByModel(ssdModel);
@@ -107,9 +100,11 @@ public class HardwareController {
         var display = displayRepo.findByModel(displayModel);
 
         var newHardware = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
-        if (!saveRecord(newHardware, model))
+        if (!saveRecord(newHardware)) {
+            model.addAttribute("errorMessage", "Представлена назва збірки уже присутня в базі!");
+            initializeDropDownChoices(model);
             return "add/hardwareAdd";
-
+        }
         return "redirect:/hardware";
     }
 
@@ -126,37 +121,27 @@ public class HardwareController {
     private String editRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
                               @RequestParam String ramModel, @RequestParam String ssdModel,
                               @RequestParam String displayModel, @RequestParam String hddModel,
-                              @RequestParam String gpuModel, @PathVariable Hardware editHardware,
+                              @RequestParam String gpuModel, @NotNull @PathVariable Hardware editHardware,
                               @NotNull Model model) {
-        if (!stringContainsAlphabet(assemblyName)) {
-            model.addAttribute("errorMessage", "Назву змінюваної збірки задано некоректно!");
-            initializeDropDownChoices(model);
-            return "/edit/hardwareEdit";
-        }
-
         editHardware.setAssemblyName(assemblyName);
-
         var cpu = cpuRepo.findByModel(cpuModel);
         editHardware.setCpu(cpu);
-
         var gpu = gpuRepo.findByModel(gpuModel);
         editHardware.setGpu(gpu);
-
         var ram = ramRepo.findByModel(ramModel);
         editHardware.setRam(ram);
-
         var ssd = ssdRepo.findByModel(ssdModel);
         editHardware.setSsd(ssd);
-
         var hdd = hddRepo.findByModel(hddModel);
         editHardware.setHdd(hdd);
-
         var display = displayRepo.findByModel(displayModel);
         editHardware.setDisplay(display);
 
-        if (!saveRecord(editHardware, model))
+        if (!saveRecord(editHardware)) {
+            model.addAttribute("errorMessage", "Представлена назва збірки уже присутня в базі!");
+            initializeDropDownChoices(model);
             return "/edit/hardwareEdit";
-
+        }
         return "redirect:/hardware";
     }
 
@@ -175,7 +160,7 @@ public class HardwareController {
         try {
             hardwareFilePath = saveUploadingFile(uploadingFile);
             var newHardware = excelImporter.importFile(hardwareFilePath);
-            newHardware.forEach(newAssembly -> saveRecord(newAssembly, model));
+            newHardware.forEach(this::saveRecord);
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(hardwareFilePath);
@@ -204,13 +189,10 @@ public class HardwareController {
         return "redirect:/hardware";
     }
 
-    private boolean saveRecord(Hardware saveHardware, Model model) {
+    private boolean saveRecord(Hardware saveHardware) {
         try {
             hardwareRepo.save(saveHardware);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Збірка " + saveHardware.getAssemblyName() + " уже присутня в базі");
-            initializeDropDownChoices(model);
             return false;
         }
         return true;

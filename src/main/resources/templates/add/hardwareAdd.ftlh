@@ -1,5 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../parts/errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../parts/errorsHandlers/valueConsistentBreaker.ftlh" as vC>
 
 <@pad.page "Hardware adding">
     <#if cpuModels?has_content>
@@ -8,11 +10,11 @@
                 <#if displayModels?has_content>
                     <#if hddModels?has_content>
                         <#if gpuModels?has_content>
-                            <@error.errorOutput errorMessage!/>
+                            <@eO.errorOutput errorMessage!/>
 
                             <p class="h1">Додати нову збірку:</p>
                             <form method="post" action="/hardware/add" class="form-group needs-validation w-100"
-                                  novalidate>
+                                  novalidate onsubmit="return validateForm()">
                                 <div class="form-row my-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="assemblyName">Назва нової збірки:</label>
@@ -96,6 +98,9 @@
                                 </div>
                                 <button type="submit" class="btn btn-danger float-right">Додати</button>
                             </form>
+
+                            <@eB.emptyBreaker inputNames=["assemblyName"]/>
+                            <@vC.valueBreaker inputNames=["assemblyName"]/>
                         <#else>
                             <div class="alert alert-warning" role="alert">
                                 <div class="h1 text-center">Не знайдено жодної моделі відеокарти.</div>
