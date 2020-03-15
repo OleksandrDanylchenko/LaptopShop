@@ -19,6 +19,6 @@
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
 
-    <@eB.emptyBreaker "address"/>
-    <@vC.valueBreaker "address"/>
+    <@eB.emptyBreaker inputNames=["address"]/>
+    <@vC.valueBreaker inputNames=["address"]/>
 </@pad.page>

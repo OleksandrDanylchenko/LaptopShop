@@ -19,6 +19,6 @@
         <button type="submit" class="btn btn-danger float-right">Додати</button>
     </form>
 
-    <@eB.emptyBreaker "name"/>
-    <@vC.valueBreaker "name"/>
+    <@eB.emptyBreaker inputNames=["name"]/>
+    <@vC.valueBreaker inputNames=["name"]/>
 </@pad.page>

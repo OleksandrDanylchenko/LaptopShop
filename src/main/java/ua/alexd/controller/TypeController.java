@@ -48,7 +48,7 @@ public class TypeController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
-        if (!saveRecord(newType, model)) {
+        if (!saveRecord(newType)) {
             model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
             return "add/typeAdd";
         }
@@ -66,7 +66,7 @@ public class TypeController {
     @PostMapping("/edit/{editType}")
     private String editRecord(@RequestParam String name, @NotNull @PathVariable Type editType, @NotNull Model model) {
         editType.setName(name);
-        if (!saveRecord(editType, model)) {
+        if (!saveRecord(editType)) {
             model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
             return "edit/typeEdit";
         }
@@ -88,7 +88,7 @@ public class TypeController {
         try {
             typeFilePath = saveUploadingFile(uploadingFile);
             var newTypes = excelImporter.importFile(typeFilePath);
-            newTypes.forEach(newType -> saveRecord(newType, model));
+            newTypes.forEach(this::saveRecord);
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(typeFilePath);
@@ -117,11 +117,10 @@ public class TypeController {
         return "redirect:/type";
     }
 
-    private boolean saveRecord(Type saveType, Model model) {
+    private boolean saveRecord(Type saveType) {
         try {
             typeRepo.save(saveType);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage", "Тип " + saveType.getName() + " уже присутній в базі");
             return false;
         }
         return true;

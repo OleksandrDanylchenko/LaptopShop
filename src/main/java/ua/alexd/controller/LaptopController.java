@@ -76,7 +76,6 @@ public class LaptopController {
 
         if (!saveRecord(newLaptop, model))
             return "add/laptopAdd";
-
         return "redirect:/laptop";
     }
 
@@ -94,16 +93,13 @@ public class LaptopController {
                               @RequestParam String labelModel, @NotNull @PathVariable Laptop editLaptop, @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         editLaptop.setHardware(hardware);
-
         var type = typeRepo.findByName(typeName).get(0);
         editLaptop.setType(type);
-
         var label = labelRepo.findByModel(labelModel);
         editLaptop.setLabel(label);
 
         if (!saveRecord(editLaptop, model))
             return "edit/laptopEdit";
-
         return "redirect:/laptop";
     }
 

@@ -2,7 +2,6 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +52,7 @@ public class ShopController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
-        if (!saveRecord(newShop, model)) {
+        if (!saveRecord(newShop)) {
             model.addAttribute("Представлена адреса уже уже присутня в базі!");
             return "add/shopAdd";
         }
@@ -71,7 +70,7 @@ public class ShopController {
     @PostMapping("/edit/{editShop}")
     private String editRecord(@RequestParam String address, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
         editShop.setAddress(address);
-        if (!saveRecord(editShop, model)) {
+        if (!saveRecord(editShop)) {
             model.addAttribute("Представлена адреса уже уже присутня в базі!");
             return "edit/shopEdit";
         }
@@ -93,7 +92,7 @@ public class ShopController {
         try {
             shopFilePath = saveUploadingFile(uploadingFile);
             var newShops = excelImporter.importFile(shopFilePath);
-            newShops.forEach(newShop -> saveRecord(newShop, model));
+            newShops.forEach(this::saveRecord);
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(shopFilePath);
@@ -123,16 +122,10 @@ public class ShopController {
         return "redirect:/shop";
     }
 
-    private boolean saveRecord(Shop saveShop, Model model) {
+    private boolean saveRecord(Shop saveShop) {
         try {
             shopRepo.save(saveShop);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Адреса \"" + saveShop.getAddress() + "\" уже присутня в базі");
-            return false;
-        } catch (InvalidDataAccessResourceUsageException ignored) {
-            model.addAttribute("errorMessage",
-                    "Уведена адреса задовга для зберігання");
             return false;
         }
         return true;

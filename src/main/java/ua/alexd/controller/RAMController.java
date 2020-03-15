@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
@@ -53,9 +52,9 @@ public class RAMController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newRAM") RAM newRAM, @NotNull Model siteModel) {
-        if (!saveRecord(newRAM, siteModel)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+    private String addRecord(@NotNull @ModelAttribute("newRAM") RAM newRAM, @NotNull Model model) {
+        if (!saveRecord(newRAM)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/ramAdd";
         }
         return "redirect:/ram";
@@ -74,7 +73,7 @@ public class RAMController {
                               @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
         editRam.setModel(model);
         editRam.setMemory(memory);
-        if (!saveRecord(editRam, siteModel)) {
+        if (!saveRecord(editRam)) {
             siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/ramEdit";
         }
@@ -96,7 +95,7 @@ public class RAMController {
         try {
             RAMFilePath = saveUploadingFile(uploadingFile);
             var newRAMs = excelImporter.importFile(RAMFilePath);
-            newRAMs.forEach(newRAM -> saveRecord(newRAM, model));
+            newRAMs.forEach(this::saveRecord);
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(RAMFilePath);
@@ -125,12 +124,10 @@ public class RAMController {
         return "redirect:/ram";
     }
 
-    private boolean saveRecord(RAM saveRAM, Model model) {
+    private boolean saveRecord(RAM saveRAM) {
         try {
             ramRepo.save(saveRAM);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель оперативної пам'яті " + saveRAM.getModel() + " уже присутня в базі");
             return false;
         }
         return true;

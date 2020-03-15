@@ -1,10 +1,11 @@
-<#macro emptyBreaker inputName>
+<#macro emptyBreaker inputNames>
     <script>
-        const ${inputName} = document.querySelector('[name = "${inputName}"]');
-        ${inputName}.onkeyup = function() {
-            if (this.value.match(/^[ ]+$/))
-                this.value = "";
-        };
-        ${inputName}.focus();
+         <#list inputNames as inputName>
+            const ${inputName} = document.querySelector('[name = "${inputName}"]');
+            ${inputName}.onkeyup = function() {
+                if (this.value.match(/^[ ]+$/))
+                    this.value = "";
+            };
+         </#list>
     </script>
 </#macro>

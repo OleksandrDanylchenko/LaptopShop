@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.LabelSpecification.brandEqual;
 import static ua.alexd.specification.LabelSpecification.modelLike;
 
@@ -53,16 +52,11 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String brand, @RequestParam String model, @NotNull Model siteModel) {
-        if (!isFieldsValid(brand, model)) {
-            siteModel.addAttribute("errorMessage", "Поля нового найменування задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newLabel") Label newLabel, @NotNull Model model) {
+        if (!saveRecord(newLabel)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/labelAdd";
         }
-
-        var newLabel = new Label(brand, model);
-        if (!saveRecord(newLabel, siteModel))
-            return "add/labelAdd";
-
         return "redirect:/label";
     }
 
@@ -77,16 +71,12 @@ public class LabelController {
     @PostMapping("/edit/{editLabel}")
     private String editRecord(@RequestParam String brand, @RequestParam String model,
                               @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
-        if (!isFieldsValid(brand, model)) {
-            siteModel.addAttribute("errorMessage", "Поля змінюваного найменування задано некоректно!");
-            return "edit/labelEdit";
-        }
-
         editLabel.setBrand(brand);
         editLabel.setModel(model);
-        if (!saveRecord(editLabel, siteModel))
+        if (!saveRecord(editLabel)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/labelEdit";
-
+        }
         return "redirect:/label";
     }
 
@@ -105,7 +95,7 @@ public class LabelController {
         try {
             labelFilePath = saveUploadingFile(uploadingFile);
             var newLabels = excelImporter.importFile(labelFilePath);
-            newLabels.forEach(newType -> saveRecord(newType, model));
+            newLabels.forEach(this::saveRecord);
             return "redirect:/label";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(labelFilePath);
@@ -134,16 +124,10 @@ public class LabelController {
         return "redirect:/label";
     }
 
-    public static boolean isFieldsValid(String brand, String model) {
-        return stringContainsAlphabet(brand) && stringContainsAlphabet(model);
-    }
-
-    private boolean saveRecord(Label saveLabel, Model model) {
+    private boolean saveRecord(Label saveLabel) {
         try {
             labelRepo.save(saveLabel);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель " + saveLabel.getModel() + " уже присутня в базі");
             return false;
         }
         return true;

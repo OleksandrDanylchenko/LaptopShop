@@ -53,8 +53,8 @@ public class SSDController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD,
-                              @NotNull Model model) {
-        if (!saveRecord(newSSD, model)) {
+                             @NotNull Model model) {
+        if (!saveRecord(newSSD)) {
             model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/ssdAdd";
         }
@@ -74,7 +74,7 @@ public class SSDController {
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
         editSSD.setModel(model);
         editSSD.setMemory(memory);
-        if (!saveRecord(editSSD, siteModel)) {
+        if (!saveRecord(editSSD)) {
             siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/ssdEdit";
         }
@@ -96,7 +96,7 @@ public class SSDController {
         try {
             SSDFilePath = saveUploadingFile(uploadingFile);
             var newSSDs = excelImporter.importFile(SSDFilePath);
-            newSSDs.forEach(newSSD -> saveRecord(newSSD, model));
+            newSSDs.forEach(this::saveRecord);
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(SSDFilePath);
@@ -125,12 +125,10 @@ public class SSDController {
         return "redirect:/ssd";
     }
 
-    private boolean saveRecord(SSD saveSSD, Model model) {
+    private boolean saveRecord(SSD saveSSD) {
         try {
             ssdRepo.save(saveSSD);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель дисплею " + saveSSD.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
