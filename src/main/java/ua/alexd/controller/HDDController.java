@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.HDDSpecification.memoryEqual;
 import static ua.alexd.specification.HDDSpecification.modelLike;
 
@@ -53,17 +52,12 @@ public class HDDController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String model, @RequestParam Integer memory,
-                             @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель нового HDD диску задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newHDD") HDD newHDD,
+                             @NotNull Model model) {
+        if (!saveRecord(newHDD)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/hddAdd";
         }
-
-        var newHDD = new HDD(model, memory);
-        if (!saveRecord(newHDD, siteModel))
-            return "add/hddAdd";
-
         return "redirect:/hdd";
     }
 
@@ -78,16 +72,12 @@ public class HDDController {
     @PostMapping("/edit/{editHDD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель змінюваного HDD диску задано некоректно!");
-            return "edit/hddEdit";
-        }
-
         editHDD.setModel(model);
         editHDD.setMemory(memory);
-        if (!saveRecord(editHDD, siteModel))
+        if (!saveRecord(editHDD)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/hddEdit";
-
+        }
         return "redirect:/hdd";
     }
 
@@ -106,7 +96,7 @@ public class HDDController {
         try {
             HDDFilePath = saveUploadingFile(uploadingFile);
             var newHDDs = excelImporter.importFile(HDDFilePath);
-            newHDDs.forEach(newType -> saveRecord(newType, model));
+            newHDDs.forEach(this::saveRecord);
             return "redirect:/hdd";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(HDDFilePath);
@@ -135,12 +125,10 @@ public class HDDController {
         return "redirect:/hdd";
     }
 
-    private boolean saveRecord(HDD saveHDD, Model model) {
+    private boolean saveRecord(HDD saveHDD) {
         try {
             hddRepo.save(saveHDD);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель HDD диску " + saveHDD.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
