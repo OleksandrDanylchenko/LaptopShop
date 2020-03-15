@@ -135,7 +135,7 @@ public class AvailabilityController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -152,7 +152,7 @@ public class AvailabilityController {
             deleteNonValidFile(uploadedFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл таблиці записів про наявність!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

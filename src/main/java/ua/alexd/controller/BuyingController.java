@@ -75,7 +75,6 @@ public class BuyingController {
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         var newBuying = new Buying(totalPrice, laptop, basket);
         buyingRepo.save(newBuying);
-
         return "redirect:/buying";
     }
 
@@ -96,14 +95,11 @@ public class BuyingController {
         if (basketRepo.findById(basketId).isPresent())
             basket = basketRepo.findById(basketId).get();
         editBuying.setBasket(basket);
-
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editBuying.setLaptop(laptop);
-
         editBuying.setTotalPrice(totalPrice);
 
         buyingRepo.save(editBuying);
-
         return "redirect:/buying";
     }
 
@@ -111,7 +107,7 @@ public class BuyingController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -128,7 +124,7 @@ public class BuyingController {
             deleteNonValidFile(buyingFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці покупок!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

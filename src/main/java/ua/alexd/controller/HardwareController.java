@@ -149,7 +149,7 @@ public class HardwareController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -166,7 +166,7 @@ public class HardwareController {
             deleteNonValidFile(hardwareFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці збірок!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

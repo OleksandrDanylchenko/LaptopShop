@@ -37,7 +37,7 @@
         <#nested>
     </div>
 
-    <#include "errorsHandlers/errorSubmissionBreaker.ftlh">
+    <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
 
     </body>
     </html>

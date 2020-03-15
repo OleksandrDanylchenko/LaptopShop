@@ -84,7 +84,7 @@ public class GPUController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -101,7 +101,7 @@ public class GPUController {
             deleteNonValidFile(GPUFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці відеокарт!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

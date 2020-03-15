@@ -90,7 +90,7 @@ public class DisplayController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -107,7 +107,7 @@ public class DisplayController {
             deleteNonValidFile(displayFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці дисплеїв!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

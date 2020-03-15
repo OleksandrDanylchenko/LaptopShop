@@ -77,7 +77,7 @@ public class TypeController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -94,7 +94,7 @@ public class TypeController {
             deleteNonValidFile(typeFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці типів!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

@@ -93,7 +93,7 @@ public class EmployeeController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -110,7 +110,7 @@ public class EmployeeController {
             deleteNonValidFile(employeeFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці співробітників!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

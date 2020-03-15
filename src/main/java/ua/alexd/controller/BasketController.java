@@ -129,7 +129,7 @@ public class BasketController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -146,7 +146,7 @@ public class BasketController {
             deleteNonValidFile(basketFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці кошиків!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

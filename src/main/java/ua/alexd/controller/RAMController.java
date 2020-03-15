@@ -84,7 +84,7 @@ public class RAMController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -101,7 +101,7 @@ public class RAMController {
             deleteNonValidFile(RAMFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці оперативної пам'яті!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

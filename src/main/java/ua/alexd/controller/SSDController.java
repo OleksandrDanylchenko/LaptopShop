@@ -85,7 +85,7 @@ public class SSDController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -102,7 +102,7 @@ public class SSDController {
             deleteNonValidFile(SSDFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці SSD дисків!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

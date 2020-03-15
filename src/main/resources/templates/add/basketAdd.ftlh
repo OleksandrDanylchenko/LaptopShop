@@ -1,5 +1,5 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as error>
+<#import "../errorsHandlers/errorOutput.ftlh" as error>
 
 <@pad.page "Basket adding">
     <#if clientIds?has_content>

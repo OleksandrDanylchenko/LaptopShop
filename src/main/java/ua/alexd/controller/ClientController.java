@@ -84,7 +84,7 @@ public class ClientController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -101,7 +101,7 @@ public class ClientController {
             deleteNonValidFile(clientFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці клієнтів!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

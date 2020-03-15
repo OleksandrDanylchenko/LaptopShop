@@ -85,7 +85,7 @@ public class HDDController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -102,7 +102,7 @@ public class HDDController {
             deleteNonValidFile(HDDFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці HDD дисків!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

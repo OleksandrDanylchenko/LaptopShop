@@ -1,7 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as pad>
-<#import "../parts/errorsHandlers/errorOutput.ftlh" as eO>
-<#import "../parts/errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
-<#import "../parts/errorsHandlers/valueConsistentBreaker.ftlh" as vC>
+<#import "../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
 
 <@pad.page "Label adding">
     <@eO.errorOutput errorMessage!/>

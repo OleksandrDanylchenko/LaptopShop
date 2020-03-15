@@ -81,7 +81,7 @@ public class ShopController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -98,7 +98,7 @@ public class ShopController {
             deleteNonValidFile(shopFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці магазинів!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

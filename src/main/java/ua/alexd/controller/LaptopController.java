@@ -107,7 +107,7 @@ public class LaptopController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -124,7 +124,7 @@ public class LaptopController {
             deleteNonValidFile(laptopFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці ноутбуків!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 

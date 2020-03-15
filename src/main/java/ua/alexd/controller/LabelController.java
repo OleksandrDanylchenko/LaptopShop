@@ -84,7 +84,7 @@ public class LabelController {
     @GetMapping("/importExcel")
     private String importExcel(@NotNull Model model) {
         initializeImportAttributes(model);
-        return "parts/excelFilesUpload";
+        return "excel/excelFilesUpload";
     }
 
     @NotNull
@@ -101,7 +101,7 @@ public class LabelController {
             deleteNonValidFile(labelFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці найменувань!");
             initializeImportAttributes(model);
-            return "parts/excelFilesUpload";
+            return "excel/excelFilesUpload";
         }
     }
 
