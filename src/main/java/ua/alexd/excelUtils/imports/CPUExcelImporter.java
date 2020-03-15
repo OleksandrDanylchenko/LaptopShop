@@ -48,7 +48,8 @@ public class CPUExcelImporter {
                         if (cell.getColumnIndex() == modelColNum)
                             cpuModel = cellValue;
                         else if (cell.getColumnIndex() == frequencyColNum && NumberUtils.isParsable(cellValue))
-                            frequency = frequencyFormat.format(Double.parseDouble(cellValue));
+                            frequency = frequencyFormat.format(Double.parseDouble(cellValue))
+                                    .replace(',', '.');
                     }
                     addNewCPU(cpuModel, frequency, newCPUs);
                 }

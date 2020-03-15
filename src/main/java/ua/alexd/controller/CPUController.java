@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.CPUSpecification.frequencyEqual;
 import static ua.alexd.specification.CPUSpecification.modelLike;
 
@@ -53,19 +52,11 @@ public class CPUController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String model,
-                             @RequestParam String frequency,
-                             @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель нового процесора задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
+        if (!saveRecord(newCPU)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/cpuAdd";
         }
-
-        frequency = frequency.replace('.', ',');
-        var newCpu = new CPU(model, frequency);
-        if (!saveRecord(newCpu, siteModel))
-            return "add/cpuAdd";
-
         return "redirect:/cpu";
     }
 
@@ -80,17 +71,12 @@ public class CPUController {
     @PostMapping("/edit/{editCpu}")
     private String addRecord(@RequestParam String model, @RequestParam String frequency,
                              @NotNull @PathVariable CPU editCpu, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель змінюваного процесора задано некоректно!");
+        editCpu.setModel(model);
+        editCpu.setFrequency(frequency);
+        if (!saveRecord(editCpu)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/cpuEdit";
         }
-
-        editCpu.setModel(model);
-        frequency = frequency.replace('.', ',');
-        editCpu.setFrequency(frequency);
-        if (!saveRecord(editCpu, siteModel))
-            return "edit/cpuEdit";
-
         return "redirect:/cpu";
     }
 
@@ -109,7 +95,7 @@ public class CPUController {
         try {
             cpuFilePath = saveUploadingFile(uploadingFile);
             var newCPUs = excelImporter.importFile(cpuFilePath);
-            newCPUs.forEach(newCPU -> saveRecord(newCPU, model));
+            newCPUs.forEach(this::saveRecord);
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(cpuFilePath);
@@ -138,12 +124,10 @@ public class CPUController {
         return "redirect:/cpu";
     }
 
-    private boolean saveRecord(CPU saveCPU, Model model) {
+    private boolean saveRecord(CPU saveCPU) {
         try {
             cpuRepo.save(saveCPU);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель процесора " + saveCPU.getModel() + " уже присутня в базі");
             return false;
         }
         return true;

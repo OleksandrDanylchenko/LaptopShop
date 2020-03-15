@@ -13,10 +13,10 @@
               onsubmit="return validateForm()">
             <div class="form-row my-2">
                 <div class="col">
-                    <label class="d-inline ml-2" for="model">Назва моделі:</label>
+                    <label class="d-inline ml-2" for="model">Назва змінюваної моделі:</label>
                     <input type="text" class="form-control" name="model"
                            value="${editDisplay.model!}" required/>
-                    <div class="invalid-feedback">Назва моделі не може бути пустою!</div>
+                    <div class="invalid-feedback">Назва змінюваної моделі не може бути пустою!</div>
                 </div>
             </div>
             <div class="form-row my-2">
