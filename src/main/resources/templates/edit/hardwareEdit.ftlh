@@ -14,7 +14,7 @@
                 <label class="d-inline ml-2" for="assemblyName">Назва збірки:</label>
                 <input type="text" class="form-control mr-1 mt-2" name="assemblyName"
                        value="${editHardware.assemblyName}" required/>
-                <div class="invalid-feedback">Назва збірки не може бути пустою!</div>
+                <div class="invalid-feedback">Назву нової збірки задано некоректно!</div>
             </div>
         </div>
 

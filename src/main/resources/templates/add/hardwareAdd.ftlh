@@ -20,7 +20,7 @@
                                         <label class="d-inline ml-2" for="assemblyName">Назва нової збірки:</label>
                                         <input type="text" class="form-control" name="assemblyName"
                                                value="${RequestParameters.assemblyName!}" required/>
-                                        <div class="invalid-feedback">Назва нової збірки не може бути пустою!</div>
+                                        <div class="invalid-feedback">Назву нової збірки задано некоректно!</div>
                                     </div>
                                 </div>
                                 <div class="form-row my-2">

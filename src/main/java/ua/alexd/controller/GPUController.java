@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
 
@@ -53,17 +52,11 @@ public class GPUController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String model, @RequestParam Integer memory,
-                             @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель нової відеокарти задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newGPU") GPU newGPU, @NotNull Model model) {
+        if (!saveRecord(newGPU)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/gpuAdd";
         }
-
-        var newGpu = new GPU(model, memory);
-        if (!saveRecord(newGpu, siteModel))
-            return "add/gpuAdd";
-
         return "redirect:/gpu";
     }
 
@@ -78,16 +71,12 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель змінюваної відеокарти задано некоректно!");
-            return "edit/gpuEdit";
-        }
-
         editGpu.setModel(model);
         editGpu.setMemory(memory);
-        if (!saveRecord(editGpu, siteModel))
+        if (!saveRecord(editGpu)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/gpuEdit";
-
+        }
         return "redirect:/gpu";
     }
 
@@ -106,7 +95,7 @@ public class GPUController {
         try {
             GPUFilePath = saveUploadingFile(uploadingFile);
             var newGPUs = excelImporter.importFile(GPUFilePath);
-            newGPUs.forEach(newType -> saveRecord(newType, model));
+            newGPUs.forEach(this::saveRecord);
             return "redirect:/gpu";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(GPUFilePath);
@@ -135,11 +124,10 @@ public class GPUController {
         return "redirect:/gpu";
     }
 
-    private boolean saveRecord(GPU saveGpu, Model model) {
+    private boolean saveRecord(GPU saveGpu) {
         try {
             gpuRepo.save(saveGpu);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage", "Модель відеокарти " + saveGpu.getModel() + " уже присутня в базі");
             return false;
         }
         return true;
