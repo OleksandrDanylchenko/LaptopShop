@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Shop;
-import ua.alexd.domain.Type;
 import ua.alexd.excelUtils.imports.ShopExcelImporter;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
@@ -17,7 +16,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Controller
 @RequestMapping("/shop")

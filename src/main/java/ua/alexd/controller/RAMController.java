@@ -53,16 +53,11 @@ public class RAMController {
 
     @NotNull
     @PostMapping("/add")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель нової оперативної пам'яті задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newRAM") RAM newRAM, @NotNull Model siteModel) {
+        if (!saveRecord(newRAM, siteModel)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/ramAdd";
         }
-
-        var newRam = new RAM(model, memory);
-        if (!saveRecord(newRam, siteModel))
-            return "add/ramAdd";
-
         return "redirect:/ram";
     }
 
@@ -77,16 +72,12 @@ public class RAMController {
     @PostMapping("/edit/{editRam}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель змінюваної оперативної пам'яті задано некоректно!");
-            return "edit/ramEdit";
-        }
-
         editRam.setModel(model);
         editRam.setMemory(memory);
-        if (!saveRecord(editRam, siteModel))
+        if (!saveRecord(editRam, siteModel)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/ramEdit";
-
+        }
         return "redirect:/ram";
     }
 
