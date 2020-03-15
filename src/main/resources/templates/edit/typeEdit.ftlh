@@ -8,7 +8,7 @@
 
     <p class="h1">Зміна назви типу:</p>
     <form method="post" action="/type/edit/${editType.id}" class="form-group needs-validation w-100" novalidate
-          modelAttribute="editType" onsubmit="return validateForm()">
+          onsubmit="return validateForm()">
         <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="name">Назва змінюваного типу:</label>

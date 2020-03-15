@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 import static ua.alexd.specification.SSDSpecification.memoryEqual;
 import static ua.alexd.specification.SSDSpecification.modelLike;
 
@@ -53,17 +52,12 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/add")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
-                              @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель нового SSD диску задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD,
+                              @NotNull Model model) {
+        if (!saveRecord(newSSD, model)) {
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "add/ssdAdd";
         }
-
-        var newSSD = new SSD(model, memory);
-        if (!saveRecord(newSSD, siteModel))
-            return "add/ssdAdd";
-
         return "redirect:/ssd";
     }
 
@@ -78,16 +72,12 @@ public class SSDController {
     @PostMapping("/edit/{editSSD}")
     private String editRecord(@RequestParam String model, @RequestParam Integer memory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
-        if (!stringContainsAlphabet(model)) {
-            siteModel.addAttribute("errorMessage", "Модель змінюваного SSD диску задано некоректно!");
-            return "edit/ssdEdit";
-        }
-
         editSSD.setModel(model);
         editSSD.setMemory(memory);
-        if (!saveRecord(editSSD, siteModel))
+        if (!saveRecord(editSSD, siteModel)) {
+            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
             return "edit/ssdEdit";
-
+        }
         return "redirect:/ssd";
     }
 
