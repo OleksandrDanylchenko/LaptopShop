@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import ua.alexd.controller.ClientController;
 import ua.alexd.domain.Client;
 
 import java.io.File;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import static ua.alexd.dateTimeUtils.DateFormatter.parseDate;
 import static ua.alexd.excelUtils.imports.TableValidator.isValidTableStructure;
+import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
 
 @Service
 @Lazy
@@ -67,7 +67,7 @@ public class ClientExcelImporter {
 
     private static void addNewClient(String firstName, String secondName, Date dateReg,
                                      ArrayList<Client> newClients) {
-        if (!ClientController.isFieldsValid(firstName, secondName, dateReg)) {
+        if (stringContainsAlphabet(firstName) && stringContainsAlphabet(secondName) && dateReg != null) {
             var newClient = new Client(firstName, secondName, dateReg);
             newClients.add(newClient);
         }

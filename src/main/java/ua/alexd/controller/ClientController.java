@@ -1,6 +1,5 @@
 package ua.alexd.controller;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -57,19 +56,10 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam Date dateReg, @NotNull Model model) {
-        if (isFieldsValid(firstName, secondName, dateReg)) {
-            model.addAttribute("errorMessage", "Ім'я чи прізвище нового клієнта задано некоректно!");
-            return "add/clientAdd";
-        }
-
-        var newClient = new Client(firstName, secondName, dateReg);
+    private String addRecord(@NotNull @ModelAttribute("newClient") Client newClient, @NotNull Model model) {
         clientRepo.save(newClient);
-
         return "redirect:/client";
     }
-
 
     @NotNull
     @GetMapping("/edit/{editClient}")
@@ -81,18 +71,12 @@ public class ClientController {
     @NotNull
     @PostMapping("/edit/{editClient}")
     private String editRecord(@RequestParam String firstName, @RequestParam String secondName,
-                              @PathVariable Client editClient, @RequestParam Date dateReg,
+                              @RequestParam Date dateReg, @NotNull @PathVariable Client editClient,
                               @NotNull Model model) {
-        if (isFieldsValid(firstName, secondName, dateReg)) {
-            model.addAttribute("errorMessage", "Ім'я чи прізвище змінюваного клієнта задано некоректно!");
-            return "/edit/clientEdit";
-        }
-
         editClient.setFirstName(firstName);
         editClient.setSecondName(secondName);
         editClient.setDateReg(dateReg);
         clientRepo.save(editClient);
-
         return "redirect:/client";
     }
 
@@ -138,9 +122,5 @@ public class ClientController {
     private String deleteRecord(@NotNull @PathVariable Client delClient) {
         clientRepo.delete(delClient);
         return "redirect:/client";
-    }
-
-    public static boolean isFieldsValid(String firstName, String secondName, Date dateReg) {
-        return !StringUtils.isAlpha(firstName) || !StringUtils.isAlpha(secondName) || dateReg == null;
     }
 }

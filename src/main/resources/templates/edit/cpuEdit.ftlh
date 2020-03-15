@@ -14,7 +14,7 @@
                 <label class="d-inline ml-2" for="model">Назва змінюваної моделі:</label>
                 <input type="text" class="form-control" name="model"
                        value="${editCpu.model!}" required/>
-                <div class="invalid-feedback">Назва моделі не може бути пустою!</div>
+                <div class="invalid-feedback">Назву змінюваної моделі задано некоректно!</div>
             </div>
         </div>
         <div class="form-row my-2">
