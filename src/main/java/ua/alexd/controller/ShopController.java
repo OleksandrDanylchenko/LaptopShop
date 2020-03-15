@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Shop;
+import ua.alexd.domain.Type;
 import ua.alexd.excelUtils.imports.ShopExcelImporter;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
@@ -53,16 +54,11 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String address, @NotNull Model model) {
-        if (!stringContainsAlphabet(address)) {
-            model.addAttribute("errorMessage", "Адресу нового магазину задано некоректно!");
+    private String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
+        if (!saveRecord(newShop, model)) {
+            model.addAttribute("Представлена адреса уже уже присутня в базі!");
             return "add/shopAdd";
         }
-
-        var newShop = new Shop(address);
-        if (!saveRecord(newShop, model))
-            return "add/shopAdd";
-
         return "redirect:/shop";
     }
 
@@ -76,15 +72,11 @@ public class ShopController {
     @NotNull
     @PostMapping("/edit/{editShop}")
     private String editRecord(@RequestParam String address, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
-        if (!stringContainsAlphabet(address)) {
-            model.addAttribute("errorMessage", "Адресу змінюваного магазину задано некоректно!");
+        editShop.setAddress(address);
+        if (!saveRecord(editShop, model)) {
+            model.addAttribute("Представлена адреса уже уже присутня в базі!");
             return "edit/shopEdit";
         }
-
-        editShop.setAddress(address);
-        if (!saveRecord(editShop, model))
-            return "edit/shopEdit";
-
         return "redirect:/shop";
     }
 
