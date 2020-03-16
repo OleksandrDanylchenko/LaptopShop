@@ -131,7 +131,9 @@ public class BasketController {
     @GetMapping("/graph")
     private String graphBaskets(@NotNull Model model) {
         var employeesDataPoints = basketGraphService.getEmployeesDataPoints();
+        var clientsDataPoints = basketGraphService.getClientsDataPoints();
         model.addAttribute("employeesDataPoints", employeesDataPoints);
+        model.addAttribute("clientsDataPoints", clientsDataPoints);
         return "graph/basketGraphs";
     }
 

@@ -21,6 +21,7 @@
                     showInLegend: "true",
                     legendText: "{label}",
                     indexLabelFontSize: 16,
+                    indexLabel: "{label} - {y} ${units}",
                     toolTipContent: "{y} ${units} - #percent %",
                     dataPoints: dps
                 }]

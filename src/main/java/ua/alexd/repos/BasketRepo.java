@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import ua.alexd.domain.Basket;
+import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface BasketRepo extends CrudRepository<Basket, Integer>, JpaSpecific
 
     @Query(value = "SELECT b.employee FROM Basket b")
     List<Employee> getEmployees();
+
+    @Query(value = "SELECT b.client FROM Basket b")
+    List<Client> getClients();
 }

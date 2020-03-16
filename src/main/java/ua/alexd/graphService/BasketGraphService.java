@@ -19,7 +19,7 @@ public class BasketGraphService {
         this.basketRepo = basketRepo;
     }
 
-    public List<Map<Object,Object>> getEmployeesDataPoints() {
+    public List<Map<Object, Object>> getEmployeesDataPoints() {
         var employeesDataPoints = new ArrayList<Map<Object, Object>>();
 
         var employeesSells = getEmployeesAndSells();
@@ -30,6 +30,19 @@ public class BasketGraphService {
             employeesDataPoints.add(recordMap);
         });
         return employeesDataPoints;
+    }
+
+    public List<Map<Object, Object>> getClientsDataPoints() {
+        var clientsDataPoints = new ArrayList<Map<Object, Object>>();
+
+        var clientsBuyings = getClientsAndBuyings();
+        clientsBuyings.forEach((clientName, buyNum) -> {
+            var recordMap = new HashMap<>();
+            recordMap.put("label", clientName);
+            recordMap.put("y", buyNum);
+            clientsDataPoints.add(recordMap);
+        });
+        return clientsDataPoints;
     }
 
     @NotNull
@@ -44,5 +57,19 @@ public class BasketGraphService {
             employeeSells.compute(employeeFullName, (key, value) -> ++value);
         }
         return employeeSells;
+    }
+
+    @NotNull
+    private Map<String, Integer> getClientsAndBuyings() {
+        var clientBuyings = new HashMap<String, Integer>();
+
+        var clientBasketRecords = basketRepo.getClients();
+        for (var client : clientBasketRecords) {
+            var clientFullName = client.getFirstName() + ' ' + client.getSecondName();
+            clientBuyings.putIfAbsent(clientFullName, 0);
+            //noinspection ConstantConditions
+            clientBuyings.compute(clientFullName, (key, value) -> ++value);
+        }
+        return clientBuyings;
     }
 }
