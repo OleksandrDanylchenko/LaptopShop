@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Label;
-import ua.alexd.excelUtils.imports.LabelExcelImporter;
+import ua.alexd.excelInteraction.imports.LabelExcelImporter;
 import ua.alexd.repos.LabelRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.LabelSpecification.brandEqual;
 import static ua.alexd.specification.LabelSpecification.modelLike;
 

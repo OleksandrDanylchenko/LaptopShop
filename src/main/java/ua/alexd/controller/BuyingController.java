@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
-import ua.alexd.excelUtils.imports.BuyingExcelImporter;
+import ua.alexd.excelInteraction.imports.BuyingExcelImporter;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
 import ua.alexd.repos.LaptopRepo;
@@ -17,8 +17,8 @@ import ua.alexd.repos.LaptopRepo;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BuyingSpecification.*;
 
 @Controller

@@ -7,13 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Type;
-import ua.alexd.excelUtils.imports.TypeExcelImporter;
+import ua.alexd.excelInteraction.imports.TypeExcelImporter;
 import ua.alexd.repos.TypeRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 
 @Controller
 @RequestMapping("/type")

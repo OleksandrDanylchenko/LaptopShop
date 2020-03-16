@@ -25,7 +25,7 @@
                             <label class="d-inline ml-2" for="laptopModel">Ціна:</label>
                             <input type="number" min="5000" class="form-control" name="price"
                                    value="${RequestParameters.price!}" required/>
-                            <div class="invalid-feedback">Уведено некоректну ціну!</div>
+                            <div class="invalid-feedback">Уведено некоректну ціну! (<5000)</div>
                         </div>
                         <div class="col">
                             <label class="d-inline ml-2" for="laptopModel">Кількість:</label>

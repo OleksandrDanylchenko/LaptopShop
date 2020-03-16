@@ -7,15 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Client;
-import ua.alexd.excelUtils.imports.ClientExcelImporter;
+import ua.alexd.excelInteraction.imports.ClientExcelImporter;
 import ua.alexd.repos.ClientRepo;
 
 import java.io.IOException;
 import java.sql.Date;
 
-import static ua.alexd.dateTimeUtils.DateTimeChecker.isNonValidDate;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.dateTimeService.DateTimeChecker.isNonValidDate;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.ClientSpecification.*;
 
 @Controller

@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
-import ua.alexd.excelUtils.imports.BasketExcelImporter;
+import ua.alexd.excelInteraction.imports.BasketExcelImporter;
+import ua.alexd.graphService.BasketGraphService;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
@@ -18,8 +19,8 @@ import ua.alexd.repos.EmployeeRepo;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BasketSpecification.*;
 
 @Controller
@@ -32,13 +33,15 @@ public class BasketController {
     private final EmployeeRepo employeeRepo;
 
     private final BasketExcelImporter excelImporter;
+    private final BasketGraphService basketGraphService;
 
     public BasketController(BasketRepo basketRepo, ClientRepo clientRepo, EmployeeRepo employeeRepo,
-                            BasketExcelImporter excelImporter) {
+                            BasketExcelImporter excelImporter, BasketGraphService basketGraphService) {
         this.basketRepo = basketRepo;
         this.clientRepo = clientRepo;
         this.employeeRepo = employeeRepo;
         this.excelImporter = excelImporter;
+        this.basketGraphService = basketGraphService;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -117,12 +120,19 @@ public class BasketController {
         if (clientRepo.findById(clientId).isPresent())
             client = clientRepo.findById(clientId).get();
         editBasket.setClient(client);
-
         editBasket.setDateTime(dateTime);
 
         basketRepo.save(editBasket);
 
         return "redirect:/basket";
+    }
+
+    @NotNull
+    @GetMapping("/graph")
+    private String graphBaskets(@NotNull Model model) {
+        var employeesDataPoints = basketGraphService.getEmployeesDataPoints();
+        model.addAttribute("employeesDataPoints", employeesDataPoints);
+        return "graph/basketGraphs";
     }
 
     @NotNull

@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.GPU;
-import ua.alexd.excelUtils.imports.GPUExcelImporter;
+import ua.alexd.excelInteraction.imports.GPUExcelImporter;
 import ua.alexd.repos.GPURepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
 

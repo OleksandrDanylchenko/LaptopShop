@@ -49,7 +49,7 @@
                 <label class="d-inline ml-2" for="totalPrice">Загальна ціна:</label>
                 <input type="number" min="5000" class="form-control" name="totalPrice"
                        value="${(editBuying.totalPrice??)?then(editBuying.totalPrice?c, '')}" required/>
-                <div class="invalid-feedback">Уведено некоректну ціну!</div>
+                <div class="invalid-feedback">Уведено некоректну ціну! (<5000)</div>
             </div>
         </div>
 

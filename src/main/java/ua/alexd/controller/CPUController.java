@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.CPU;
-import ua.alexd.excelUtils.imports.CPUExcelImporter;
+import ua.alexd.excelInteraction.imports.CPUExcelImporter;
 import ua.alexd.repos.CPURepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.CPUSpecification.frequencyEqual;
 import static ua.alexd.specification.CPUSpecification.modelLike;
 

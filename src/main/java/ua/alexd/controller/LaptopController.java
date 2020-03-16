@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Laptop;
-import ua.alexd.excelUtils.imports.LaptopExcelImporter;
+import ua.alexd.excelInteraction.imports.LaptopExcelImporter;
 import ua.alexd.repos.HardwareRepo;
 import ua.alexd.repos.LabelRepo;
 import ua.alexd.repos.LaptopRepo;
@@ -17,8 +17,8 @@ import ua.alexd.repos.TypeRepo;
 import java.io.IOException;
 import java.util.List;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.LaptopSpecification.*;
 
 @Controller

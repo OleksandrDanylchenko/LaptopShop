@@ -8,14 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Display;
-import ua.alexd.excelUtils.imports.DisplayExcelImporter;
+import ua.alexd.excelInteraction.imports.DisplayExcelImporter;
 import ua.alexd.repos.DisplayRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
-import static ua.alexd.inputUtils.inputValidator.stringContainsAlphabet;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.DisplaySpecification.*;
 
 @Controller

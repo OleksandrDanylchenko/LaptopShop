@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.RAM;
-import ua.alexd.excelUtils.imports.RAMExcelImporter;
+import ua.alexd.excelInteraction.imports.RAMExcelImporter;
 import ua.alexd.repos.RAMRepo;
 
 import java.io.IOException;
 
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelUtils.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
+import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
