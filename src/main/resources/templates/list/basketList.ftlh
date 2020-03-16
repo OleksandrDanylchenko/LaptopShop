@@ -8,6 +8,8 @@
                 <i class="far fa-plus-square"></i> Додати новий кошик</a>
         </div>
         <div class="d-flex justify-content-center">
+            <a class="btn btn-outline-danger mr-5" id="fixedBtnHeight" href="/basket/graph" role="button">
+                <i class="fas fa-chart-pie"></i></a>
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/basket/importExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
             <a class="btn btn-success" id="fixedBtnHeight" href="/basket/exportExcel" role="button">
