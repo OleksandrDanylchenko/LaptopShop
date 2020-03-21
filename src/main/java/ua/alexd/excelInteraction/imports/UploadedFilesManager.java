@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 public class UploadedFilesManager {
@@ -12,14 +13,15 @@ public class UploadedFilesManager {
     public static String saveUploadingFile(@NotNull MultipartFile uploadFile)
             throws IOException, IllegalArgumentException {
         if (isUploadFileValid(uploadFile)) {
-            var uploadPath = "D:\\Studying\\2_Course\\ISTAP\\LaptopShop\\uploadedExcelFiles";
-            var uploadDir = new File(uploadPath);
+            var programPath = Paths.get(System.getProperty("user.dir"));
+            var uploadPath = programPath.resolve("uploadedExcelFiles");
+            var uploadDir = new File(uploadPath.toString());
             if (!uploadDir.exists())
                 //noinspection ResultOfMethodCallIgnored
                 uploadDir.mkdir();
 
             var uuidFile = UUID.randomUUID().toString();
-            var resultFilename = uploadPath + '\\' + uuidFile + '.' + uploadFile.getOriginalFilename();
+            var resultFilename = uploadPath.toString() + '\\' + uuidFile + '.' + uploadFile.getOriginalFilename();
 
             uploadFile.transferTo(new File(resultFilename));
 
