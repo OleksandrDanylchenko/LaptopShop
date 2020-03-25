@@ -1,7 +1,7 @@
 <#import "../parts/htmlPad.ftlh" as htmlPad>
 <#import "../type/addModal.ftlh" as addModal>
 <#import "../type/editModal.ftlh" as editModal>
-<#import "../type/deleteModal.ftlh" as deleteModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 <#import "../errorsHandlers/errorOutput.ftlh" as eO>
 
 <@htmlPad.page "Type">
@@ -38,13 +38,13 @@
             </div>
         </div>
     </div>
-    <div class="my-2">
-        <#if types?has_content>
-            <div class="row">
-                <div class="col">
-                    <@eO.errorOutput errorMessage!/>
-                </div>
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
             </div>
+        </div>
+        <#if types?has_content>
             <div class="row">
                 <div class="col">
                     <div class="h1">Список типів:</div>
@@ -69,15 +69,14 @@
                                     data-target="#typeEditModal${type.id}" id="typeEditButton${type.id}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.typeEdit id="${type.id}" editName="${type.name}"
-                            editButtonId="typeEditButton${type.id}"/>
+                            <@editModal.typeEdit id="${type.id}" editName="${type.name}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#typeDeleteModal${type.id}">
+                                    data-target="#deleteModal${type.id}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.typeEdit "${type.id}"/>
+                            <@deleteModal.delete "${type.id}"/>
                         </td>
                     </tr>
                 </#list>

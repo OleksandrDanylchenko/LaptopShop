@@ -59,16 +59,10 @@ public class AvailabilityController {
                 .and(laptopModelLike(laptopModel)).and(shopAddressLike(shopAddress)).and(dateStartEqual(dateStart))
                 .and(dateEndEqual(dateEnd));
         var availabilities = availabilityRepo.findAll(availabilitySpecification);
-        model.addAttribute("availabilities", availabilities);
         lastOutputtedAvailabilities = availabilities;
-        return "/list/availabilityList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
+        model.addAttribute("availabilities", availabilities);
         initializeDropDownChoices(model);
-        return "add/availabilityAdd";
+        return "/availability/table";
     }
 
     @NotNull
@@ -78,19 +72,16 @@ public class AvailabilityController {
                              @RequestParam Date dateStart,
                              @RequestParam Date dateEnd,
                              @NotNull Model model) {
-        if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
-            model.addAttribute("errorMessage",
-                    "Дата закінчення продаж не може передувати даті початку продаж");
-            initializeDropDownChoices(model);
-            return "add/availabilityAdd";
-        }
-
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         var shop = shopRepo.findByAddress(shopAddress).get(0);
         var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
-        if (!saveRecord(newAvailability, model))
-            return "add/availabilityAdd";
-
+        if (!saveRecord(newAvailability)) {
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель ноутбуку уже присутня в записах про наявність!");
+            initializeDropDownChoices(model);
+            model.addAttribute("availabilities", lastOutputtedAvailabilities);
+            return "/availability/table";
+        }
         return "redirect:/availability";
     }
 
@@ -108,6 +99,7 @@ public class AvailabilityController {
                               @RequestParam String laptopModel, @RequestParam String shopAddress,
                               @RequestParam Date dateStart, @RequestParam Date dateEnd,
                               @PathVariable Availability editAvailability, @NotNull Model model) {
+        // TODO transfer to frond-end
         if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
             model.addAttribute("errorMessage",
                     "Дата закінчення продаж не може передувати даті початку продаж");
@@ -125,7 +117,7 @@ public class AvailabilityController {
         editAvailability.setDateStart(dateStart);
         editAvailability.setDateEnd(dateEnd);
 
-        if (!saveRecord(editAvailability, model))
+        if (!saveRecord(editAvailability))
             return "edit/availabilityEdit";
 
         return "redirect:/availability";
@@ -146,7 +138,7 @@ public class AvailabilityController {
         try {
             uploadedFilePath = saveUploadingFile(uploadingFile);
             var newAvailabilities = excelImporter.importFile(uploadedFilePath);
-            newAvailabilities.forEach(newAvailability -> saveRecord(newAvailability, model));
+            newAvailabilities.forEach(this::saveRecord);
             return "redirect:/availability";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
@@ -175,14 +167,10 @@ public class AvailabilityController {
         return "redirect:/availability";
     }
 
-    private boolean saveRecord(Availability saveAvailability, Model model) {
+    private boolean saveRecord(Availability saveAvailability) {
         try {
             availabilityRepo.save(saveAvailability);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель ноутбуку " + saveAvailability.getLaptop().getLabel().getModel()
-                            + " уже присутня в базі");
-            initializeDropDownChoices(model);
             return false;
         }
         return true;

@@ -1,6 +1,7 @@
-<#macro typeEdit id editName editButtonId>
+<#macro typeEdit id editName>
     <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
     <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
+    <#import "../modalInputManage/fieldsCleaner.ftlh" as fC>
 
     <div class="modal fade" id="typeEditModal${id}" data-backdrop="static" tabindex="-1"
          role="dialog" aria-labelledby="typeEditLabel" aria-hidden="true">
@@ -27,6 +28,8 @@
                     </form>
                     <@eB.emptyBreaker inputIds=["editNameInput${id}"]/>
                     <@vC.valueBreaker type="Edit${id}" inputIds=["editNameInput${id}"]/>
+                    <@fC.fieldsCleaner modalId="typeEditModal${id}" formId="typeEditForm${id}"
+                    inputIds=["editNameInput${id}"]/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark closeFooter" data-dismiss="modal">Скасувати</button>
@@ -38,8 +41,8 @@
 
     <!-- Restore initial value after closing of modal -->
     <script>
-        $("#${editButtonId}").click(function () {
+        $('#typeEditModal${id}').on('show.bs.modal', function () {
             document.getElementById("editNameInput${id}").value = "${editName}";
-        });
+        })
     </script>
 </#macro>

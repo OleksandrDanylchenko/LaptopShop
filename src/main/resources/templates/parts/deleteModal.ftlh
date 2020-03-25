@@ -1,5 +1,5 @@
-<#macro typeEdit id>
-    <div class="modal fade" id="typeDeleteModal${id}" tabindex="-1"
+<#macro delete id>
+    <div class="modal fade" id="deleteModal${id}" tabindex="-1"
          role="dialog" aria-labelledby="typeDeleteLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
