@@ -36,39 +36,28 @@ public class TypeController {
                 : typeRepo.findAll();
         lastOutputtedTypes = types;
         model.addAttribute("types", types);
-        return "list/typeList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/typeAdd";
+        return "type/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
         if (!saveRecord(newType)) {
-            model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
-            return "add/typeAdd";
+            model.addAttribute("errorMessage", "Представлена нова назва уже присутня в базі!");
+            model.addAttribute("types", lastOutputtedTypes);
+            return "type/table";
         }
         return "redirect:/type";
     }
 
     @NotNull
-    @GetMapping("/edit/{editType}")
-    private String editRecord(@PathVariable Type editType, @NotNull Model model) {
-        model.addAttribute("editType", editType);
-        return "/edit/typeEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editType}")
-    private String editRecord(@RequestParam String name, @NotNull @PathVariable Type editType, @NotNull Model model) {
-        editType.setName(name);
+    private String editRecord(@RequestParam String editName, @NotNull @PathVariable Type editType, @NotNull Model model) {
+        editType.setName(editName);
         if (!saveRecord(editType)) {
-            model.addAttribute("errorMessage", "Представлена назва уже присутня в базі!");
-            return "edit/typeEdit";
+            model.addAttribute("errorMessage", "Представлена змінювана назва уже присутня в базі!");
+            model.addAttribute("types", lastOutputtedTypes);
+            return "type/table";
         }
         return "redirect:/type";
     }

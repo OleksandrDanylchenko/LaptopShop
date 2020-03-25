@@ -1,11 +1,9 @@
-<#macro valueBreaker inputNames>
+<#macro valueBreaker type inputIds>
     <script>
-        function validateForm() {
-            <#list inputNames as inputName>
-                const ${inputName} = document.querySelector('[name = "${inputName}"]');
-                if (!${inputName}.value.match(/^\d*.*[a-zа-яA-ZА-Я]+.*/)) {
-                    ${inputName}.value = "";
-                }
+        function validate${type}Form() {
+            <#list inputIds as inputId>
+                if (!${inputId}.value.match(/^\d*.*[a-zа-яA-ZА-Я]+.*/))
+                    ${inputId}.value = "";
             </#list>
         }
     </script>

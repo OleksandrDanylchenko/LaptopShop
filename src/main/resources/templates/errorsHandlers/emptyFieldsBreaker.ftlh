@@ -1,11 +1,10 @@
-<#macro emptyBreaker inputNames>
+<#macro emptyBreaker inputIds>
     <script>
-         <#list inputNames as inputName>
-            const ${inputName} = document.querySelector('[name = "${inputName}"]');
-            ${inputName}.onkeyup = function() {
-                if (this.value.match(/^[ ]+$/))
-                    this.value = "";
-            };
-         </#list>
+        <#list inputIds as inputId>
+        document.getElementById("${inputId}").onkeyup = function () {
+            if (this.value.match(/^[ ]+$/))
+                this.value = "";
+        };
+        </#list>
     </script>
 </#macro>

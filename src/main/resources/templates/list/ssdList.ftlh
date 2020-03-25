@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-outline-danger" href="/ssd/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нове найменування</a>
+                <i class="far fa-plus-square"></i> Додати новий SSD диск</a>
         </div>
         <div class="d-flex justify-content-center">
                 <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ssd/importExcel" role="button">
