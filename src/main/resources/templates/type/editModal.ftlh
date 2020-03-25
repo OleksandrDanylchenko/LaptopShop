@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <!-- Restore initial value after closing of modal -->
+    <!-- Restore initial value on opening of modal -->
     <script>
         $('#typeEditModal${id}').on('show.bs.modal', function () {
             document.getElementById("editNameInput${id}").value = "${editName}";

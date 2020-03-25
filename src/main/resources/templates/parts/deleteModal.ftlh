@@ -1,4 +1,4 @@
-<#macro delete id>
+<#macro delete id deletionLink>
     <div class="modal fade" id="deleteModal${id}" tabindex="-1"
          role="dialog" aria-labelledby="typeDeleteLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-dismiss="modal">Скасувати</button>
-                    <a class="btn btn-danger" href="/type/delete/${id}" role="button">Видалити</a>
+                    <a class="btn btn-danger" href="${deletionLink}" role="button">Видалити</a>
                 </div>
             </div>
         </div>

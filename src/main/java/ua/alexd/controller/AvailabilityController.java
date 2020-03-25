@@ -16,7 +16,6 @@ import ua.alexd.repos.ShopRepo;
 import java.io.IOException;
 import java.sql.Date;
 
-import static ua.alexd.dateTimeService.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.dateTimeService.DateTimeChecker.isNonValidDate;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
@@ -90,7 +89,7 @@ public class AvailabilityController {
     private String editRecord(@NotNull @PathVariable Availability editAvailability, @NotNull Model model) {
         model.addAttribute("editAvailability", editAvailability);
         initializeDropDownChoices(model);
-        return "/edit/availabilityEdit";
+        return "/availability/editPage";
     }
 
     @NotNull
@@ -99,13 +98,6 @@ public class AvailabilityController {
                               @RequestParam String laptopModel, @RequestParam String shopAddress,
                               @RequestParam Date dateStart, @RequestParam Date dateEnd,
                               @PathVariable Availability editAvailability, @NotNull Model model) {
-        // TODO transfer to frond-end
-        if (isDateStartPrevDateEnd(dateStart, dateEnd)) {
-            model.addAttribute("errorMessage",
-                    "Дата закінчення продаж не може передувати даті початку продаж");
-            return "/edit/availabilityEdit";
-        }
-
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editAvailability.setLaptop(laptop);
 
@@ -117,9 +109,12 @@ public class AvailabilityController {
         editAvailability.setDateStart(dateStart);
         editAvailability.setDateEnd(dateEnd);
 
-        if (!saveRecord(editAvailability))
-            return "edit/availabilityEdit";
-
+        if (!saveRecord(editAvailability)) {
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель ноутбуку уже присутня в записах про наявність!");
+            initializeDropDownChoices(model);
+            return "availability/editPage";
+        }
         return "redirect:/availability";
     }
 

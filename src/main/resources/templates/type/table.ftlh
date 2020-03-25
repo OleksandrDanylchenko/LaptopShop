@@ -76,7 +76,7 @@
                                     data-target="#deleteModal${type.id}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete "${type.id}"/>
+                            <@deleteModal.delete id="${type.id}" deletionLink="/type/delete/${type.id}"/>
                         </td>
                     </tr>
                 </#list>

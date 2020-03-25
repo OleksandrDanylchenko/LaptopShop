@@ -1,12 +1,13 @@
-<#import "../parts/htmlPad.ftlh" as pad>
-<#import "../errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../errorsHandlers/datesOrderBreaker.ftlh" as dO>
 
-<@pad.page "Availability editing">
-    <@error.errorOutput errorMessage!/>
+<@htmlPad.page "Availability editing">
+    <@eO.errorOutput errorMessage!/>
 
     <div class="h1">Змінити запис про наявність:</div>
     <form method="post" action="/availability/edit/${editAvailability.id}" class="form-group needs-validation w-100"
-          novalidate>
+          novalidate onsubmit="return validateDates()">
         <#if laptopModels?has_content>
             <div class="form-row my-2">
                 <div class="col">
@@ -63,18 +64,19 @@
         <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="dateStart">Дата початку продаж:</label>
-                <input type="date" class="form-control" name="dateStart" min="2019-02-16"
+                <input type="date" id="editDateStart" class="form-control" name="dateStart" min="2019-02-16"
                        value="${editAvailability.dateStart?iso_utc}" required/>
                 <div class="invalid-feedback">Уведено некоректну дату початку продаж!</div>
             </div>
             <div class="col">
                 <label class="d-inline ml-2" for="dateEnd">Дата закінчення продаж:</label>
-                <input type="date" class="form-control" name="dateEnd" min="2019-02-16"
+                <input type="date" id="editDateEnd"  class="form-control" name="dateEnd" min="2019-02-16"
                        value="${editAvailability.dateEnd?iso_utc}" required/>
                 <div class="invalid-feedback">Уведено некоректну дату закінчення продаж!</div>
             </div>
+            <@dO.datesBreaker "editDateStart" "editDateEnd"/>
         </div>
 
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
-</@pad.page>
+</@htmlPad.page>

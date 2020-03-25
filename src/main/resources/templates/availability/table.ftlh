@@ -1,11 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../availability/addModal.ftlh" as addModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
+<#import "../errorsHandlers/errorOutput.ftlh" as eO>
 <#setting locale="uk">
 
-<@pad.page "Availability">
+<@htmlPad.page "Availability">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/availability/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий запис про наявність</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#availabilityAddModal">
+                <i class="far fa-plus-square"></i> Додати новий запис про наявність
+            </button>
+            <@addModal.availabilityAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/availability/importExcel" role="button">
@@ -62,9 +68,18 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if availabilities?has_content>
-            <div class="h1">Список записів про наявність:</div>
+            <div class="row">
+                <div class="col">
+                    <div class="h1">Список записів про наявність:</div>
+                </div>
+            </div>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -93,8 +108,13 @@
                         <td>${availability.dateEnd}</td>
                         <td><a class="btn btn-outline-dark" href="/availability/edit/${availability.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/availability/delete/${availability.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${availability.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${availability.id}"
+                            deletionLink="/availability/delete/${availability.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -104,4 +124,4 @@
             <div class="h3">Не знайдено жодного запису про наявність.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
