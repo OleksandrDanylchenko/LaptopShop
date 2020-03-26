@@ -15,8 +15,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="clientEditForm${id}" action="/client/edit/${id}"
-                          class="form-group needs-validation w-100" novalidate
-                          modelAttribute="newClient" onsubmit="return validateForm${id}()">
+                          class="form-group needs-validation w-100" novalidate onsubmit="return validateForm${id}()">
                         <div class="form-row mb-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="firstName">Ім'я змінюваного покупця:</label>

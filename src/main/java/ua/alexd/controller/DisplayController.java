@@ -43,13 +43,7 @@ public class DisplayController {
         var displays = displayRepo.findAll(displaySpecification);
         lastOutputtedDisplay = displays;
         siteModel.addAttribute("displays", displays);
-        return "/list/displayList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/displayAdd";
+        return "/display/table";
     }
 
     @NotNull
@@ -57,29 +51,24 @@ public class DisplayController {
     private String addRecord(@NotNull @ModelAttribute("newDisplay") Display newDisplay, @NotNull Model model) {
         if (!saveRecord(newDisplay)) {
             model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/displayAdd";
+            model.addAttribute("displays", lastOutputtedDisplay);
+            return "/display/table";
         }
         return "redirect:/display";
     }
 
     @NotNull
-    @GetMapping("/edit/{editDisplay}")
-    private String editRecord(@NotNull @PathVariable Display editDisplay, @NotNull Model model) {
-        model.addAttribute("editDisplay", editDisplay);
-        return "/edit/displayEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editDisplay}")
-    private String editRecord(@RequestParam String model, @RequestParam String type,
-                              @RequestParam String diagonal, @RequestParam String resolution,
-                              @NotNull @PathVariable Display editDisplay, @NotNull Model siteModel) {
-        editDisplay.setModel(model);
-        editDisplay.setType(type);
-        editDisplay.setDiagonal(diagonal);
-        editDisplay.setResolution(resolution);
+    private String editRecord(@RequestParam String editModel, @RequestParam String editType,
+                              @RequestParam String editDiagonal, @RequestParam String editResolution,
+                              @NotNull @PathVariable Display editDisplay, @NotNull Model model) {
+        editDisplay.setModel(editModel);
+        editDisplay.setType(editType);
+        editDisplay.setDiagonal(editDiagonal);
+        editDisplay.setResolution(editResolution);
         if (!saveRecord(editDisplay)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+            model.addAttribute("displays", lastOutputtedDisplay);
             return "edit/displayEdit";
         }
         return "redirect:/display";

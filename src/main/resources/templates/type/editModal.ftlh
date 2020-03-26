@@ -16,8 +16,7 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="typeEditForm${id}" action="/type/edit/${id}"
-                          class="form-group needs-validation w-100" novalidate modelAttribute="newType"
-                          onsubmit="return validateForm${id}()">
+                          class="form-group needs-validation w-100" novalidate onsubmit="return validateForm${id}()">
                         <label class="d-inline ml-2" for="editName">Назва змінюваного типу:</label>
                         <input type="text" class="form-control" name="editName" id="editNameInput${id}"
                                required/>

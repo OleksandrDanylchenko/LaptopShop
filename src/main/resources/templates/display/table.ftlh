@@ -1,10 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../display/addModal.ftlh" as addModal>
+<#import "../display/editModal.ftlh" as editModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "Display">
+<@htmlPad.page "Display">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/display/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий дисплей</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#displayAddModal">
+                <i class="far fa-plus-square"></i> Додати новий дисплей
+            </button>
+            <@addModal.displayAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/display/importExcel" role="button">
@@ -47,7 +54,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if displays?has_content>
             <div class="h1">Список співробітників:</div>
             <table class="table table-hover">
@@ -70,10 +82,22 @@
                         <td>${display.type}</td>
                         <td>${display.diagonal}</td>
                         <td>${display.resolution}</td>
-                        <td><a class="btn btn-outline-dark" href="/display/edit/${display.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/display/delete/${display.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#displayEditModal${display.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.displayEdit id="${display.id}" displayModel="${display.model}"
+                            displayType="${display.type}" displayDiagonal="${display.diagonal}"
+                            displayResolution="${display.resolution}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${display.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${display.id}"
+                            deletionLink="/display/delete/${display.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -83,4 +107,4 @@
             <div class="h3">Не знайдено жодного дисплею.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

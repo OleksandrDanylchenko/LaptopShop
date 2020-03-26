@@ -6,10 +6,6 @@
 
 <@htmlPad.page "CPU">
     <div class="row">
-        <#--        <div class="col">-->
-        <#--            <a class="btn btn-outline-danger" href="/cpu/add" role="button">-->
-        <#--                <i class="far fa-plus-square"></i> Додати новий процесор</a>-->
-        <#--        </div>-->
         <div class="col">
             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                     data-target="#cpuAddModal">
