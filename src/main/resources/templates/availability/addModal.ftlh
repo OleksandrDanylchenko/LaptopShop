@@ -20,7 +20,7 @@
                             <form method="post" id="availabilityAddForm" action="/availability/add"
                                   class="form-group needs-validation w-100" novalidate
                                   onsubmit="return validateDates()">
-                                <div class="form-row my-2">
+                                <div class="form-row mb-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
                                         <select class="custom-select" id="laptopSelect" name="laptopModel" required>
@@ -35,14 +35,14 @@
                                 <div class="form-row my-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Ціна:</label>
-                                        <input type="number" id="priceInput" min="5000" class="form-control"
-                                               name="price" required/>
+                                        <input type="number" id="priceInput" min="5000" max="2147483646"
+                                               class="form-control" name="price" required/>
                                         <div class="invalid-feedback">Уведено некоректну ціну! (<5000)</div>
                                     </div>
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Кількість:</label>
-                                        <input type="number" id="quantityInput" min="1" class="form-control"
-                                               name="quantity" required/>
+                                        <input type="number" id="quantityInput" min="1" max="2147483646"
+                                               class="form-control" name="quantity" required/>
                                         <div class="invalid-feedback">Уведено некоректну кількість!</div>
                                     </div>
                                 </div>

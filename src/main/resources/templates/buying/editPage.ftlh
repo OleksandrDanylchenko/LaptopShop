@@ -1,9 +1,6 @@
-<#import "../parts/htmlPad.ftlh" as pad>
-<#import "../errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
 
-<@pad.page "Buying editing">
-    <@error.errorOutput errorMessage!/>
-
+<@htmlPad.page "Buying editing">
     <p class="h1">Зміна інформації про покупку:</p>
     <form method="post" action="/buying/edit/${editBuying.id}" class="form-group needs-validation w-100" novalidate>
         <#if basketIds?has_content>
@@ -47,12 +44,12 @@
         <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="totalPrice">Загальна ціна:</label>
-                <input type="number" min="5000" class="form-control" name="totalPrice"
+                <input type="number" min="5000" max="2147483646" class="form-control" name="totalPrice"
                        value="${(editBuying.totalPrice??)?then(editBuying.totalPrice?c, '')}" required/>
-                <div class="invalid-feedback">Уведено некоректну ціну! (<5000)</div>
+                <div class="invalid-feedback">Уведено некоректну ціну! (<5000 aбо >2147483646)</div>
             </div>
         </div>
 
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
-</@pad.page>
+</@htmlPad.page>

@@ -1,9 +1,6 @@
-<#import "../parts/htmlPad.ftlh" as pad>
-<#import "../errorsHandlers/errorOutput.ftlh" as error>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
 
-<@pad.page "Basket editing">
-    <@error.errorOutput errorMessage!/>
-
+<@htmlPad.page "Basket editing">
     <div class="h1">Зміна інформації кошика:</div>
     <form method="post" action="/basket/edit/${editBasket.id}" class="form-group needs-validation w-100" novalidate>
         <#if employeeIds?has_content>
@@ -54,4 +51,4 @@
 
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
-</@pad.page>
+</@htmlPad.page>

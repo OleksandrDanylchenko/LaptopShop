@@ -30,13 +30,13 @@
         <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="laptopModel">Ціна:</label>
-                <input type="number" min="5000" class="form-control" name="price"
+                <input type="number" min="5000" max="2147483646" class="form-control" name="price"
                        value="${(editAvailability.price??)?then(editAvailability.price?c, '')}" required/>
-                <div class="invalid-feedback">Уведено некоректну ціну! (<5000)</div>
+                <div class="invalid-feedback">Уведено некоректну ціну! (<5000 aбо >2147483646)</div>
             </div>
             <div class="col">
                 <label class="d-inline ml-2" for="laptopModel">Кількість:</label>
-                <input type="number" min="1" class="form-control" name="quantity"
+                <input type="number" min="1" max="2147483646" class="form-control" name="quantity"
                        value="${(editAvailability.quantity??)?then(editAvailability.quantity?c, '')}" required/>
                 <div class="invalid-feedback">Уведено некоректну кількість!</div>
             </div>

@@ -54,15 +54,8 @@ public class BuyingController {
         var buyings = buyingRepo.findAll(buyingSpecification);
         lastOutputtedBuyings = buyings;
         model.addAttribute("buyings", buyings);
-
-        return "/list/buyingList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
         initializeDropDownChoices(model);
-        return "add/buyingAdd";
+        return "/buying/table";
     }
 
     @NotNull
@@ -83,7 +76,7 @@ public class BuyingController {
     private String editRecord(@NotNull @PathVariable Buying editBuying, @NotNull Model model) {
         model.addAttribute("editBuying", editBuying);
         initializeDropDownChoices(model);
-        return "/edit/buyingEdit";
+        return "/buying/editPage";
     }
 
     @NotNull

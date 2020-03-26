@@ -1,10 +1,15 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../buying/addModal.ftlh" as addModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "Buying">
+<@htmlPad.page "Buying">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/buying/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нову покупку</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#buyingAddModal">
+                <i class="far fa-plus-square"></i> Додати нову покупку
+            </button>
+            <@addModal.buyingAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/buying/importExcel" role="button">
@@ -52,7 +57,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
         <#if buyings?has_content>
             <div class="h1">Список покупок:</div>
             <table class="table table-hover">
@@ -90,8 +95,13 @@
                         </#if>
                         <td><a class="btn btn-outline-dark" href="/buying/edit/${buying.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/buying/delete/${buying.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${buying.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${buying.id}"
+                            deletionLink="/buying/delete/${buying.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -101,4 +111,4 @@
             <h3>Не знайдено жодної покупки.</h3>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

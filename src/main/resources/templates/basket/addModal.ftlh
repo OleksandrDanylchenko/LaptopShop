@@ -19,7 +19,7 @@
                         <div class="modal-body">
                             <form method="post" id="basketAddForm" action="/basket/add"
                                   class="form-group needs-validation w-100" novalidate>
-                                <div class="form-row mt-4">
+                                <div class="form-row mb-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="employeeId">ID співробітника:</label>
                                         <select class="custom-select" id="employeeSelect" name="employeeId" required>
