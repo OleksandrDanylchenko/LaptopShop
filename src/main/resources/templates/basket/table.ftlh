@@ -1,11 +1,16 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../basket/addModal.ftlh" as addModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 <#setting locale="uk">
 
-<@pad.page "Basket">
+<@htmlPad.page "Basket">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/basket/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий кошик</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#basketAddModal">
+                <i class="far fa-plus-square"></i> Додати новий кошик
+            </button>
+            <@addModal.basketAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-outline-danger mr-5" id="fixedBtnHeight" href="/basket/graph" role="button">
@@ -75,7 +80,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
         <#if baskets?has_content>
             <div class="h1">Список кошиків:</div>
             <table class="table table-hover">
@@ -119,12 +124,16 @@
                             <td>Видалено</td>
                             <td>Видалено</td>
                         </#if>
-
                         <td>${basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
                         <td><a class="btn btn-outline-dark" href="/basket/edit/${basket.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/basket/delete/${basket.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${basket.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${basket.id}"
+                            deletionLink="/basket/delete/${basket.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -134,4 +143,4 @@
             <div class="h3">Не знайдено жодного кошика.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

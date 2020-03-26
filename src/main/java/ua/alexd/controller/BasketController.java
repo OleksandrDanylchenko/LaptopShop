@@ -66,16 +66,10 @@ public class BasketController {
                 .and(clientSecondNameEqual(clientSecondName))
                 .and(dateTimeEqual(dateTime));
         var baskets = basketRepo.findAll(basketSpecification);
-        model.addAttribute("baskets", baskets);
         lastOutputtedBaskets = baskets;
-        return "/list/basketList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
+        model.addAttribute("baskets", baskets);
         initializeDropDownChoices(model);
-        return "add/basketAdd";
+        return "/basket/table";
     }
 
     @NotNull
@@ -103,7 +97,7 @@ public class BasketController {
     private String editRecord(@NotNull @PathVariable Basket editBasket, @NotNull Model model) {
         model.addAttribute("editBasket", editBasket);
         initializeDropDownChoices(model);
-        return "/edit/basketEdit";
+        return "/basket/editPage";
     }
 
     @NotNull
