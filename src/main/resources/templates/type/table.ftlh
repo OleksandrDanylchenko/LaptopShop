@@ -66,10 +66,10 @@
                         <td>${type.name}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#typeEditModal${type.id}" id="typeEditButton${type.id}">
+                                    data-target="#typeEditModal${type.id}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.typeEdit id="${type.id}" editName="${type.name}"/>
+                            <@editModal.typeEdit id="${type.id}" typeName="${type.name}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"

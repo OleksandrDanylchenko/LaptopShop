@@ -45,13 +45,7 @@ public class ClientController {
         var clients = clientRepo.findAll(clientSpecification);
         lastOutputtedClients = clients;
         model.addAttribute("clients", clients);
-        return "/list/clientList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
-        return "add/clientAdd";
+        return "/client/table";
     }
 
     @NotNull
@@ -62,20 +56,13 @@ public class ClientController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editClient}")
-    private String editRecord(@NotNull @PathVariable Client editClient, @NotNull Model model) {
-        model.addAttribute("editClient", editClient);
-        return "/edit/clientEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editClient}")
-    private String editRecord(@RequestParam String firstName, @RequestParam String secondName,
-                              @RequestParam Date dateReg, @NotNull @PathVariable Client editClient,
+    private String editRecord(@RequestParam String editFirstName, @RequestParam String editSecondName,
+                              @RequestParam Date editDateReg, @NotNull @PathVariable Client editClient,
                               @NotNull Model model) {
-        editClient.setFirstName(firstName);
-        editClient.setSecondName(secondName);
-        editClient.setDateReg(dateReg);
+        editClient.setFirstName(editFirstName);
+        editClient.setSecondName(editSecondName);
+        editClient.setDateReg(editDateReg);
         clientRepo.save(editClient);
         return "redirect:/client";
     }

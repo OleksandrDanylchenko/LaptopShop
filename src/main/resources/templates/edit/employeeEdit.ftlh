@@ -55,6 +55,6 @@
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
 
-    <@eB.emptyBreaker inputNames=["firstName", "secondName"]/>
-    <@vC.valueBreaker inputNames=["firstName", "secondName"]/>
+    <@eB.emptyBreaker inputIds=["firstName", "secondName"]/>
+    <@vC.valueBreaker inputIds=["firstName", "secondName"]/>
 </@pad.page>

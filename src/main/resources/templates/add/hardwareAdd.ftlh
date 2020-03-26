@@ -99,8 +99,8 @@
                                 <button type="submit" class="btn btn-danger float-right">Додати</button>
                             </form>
 
-                            <@eB.emptyBreaker inputNames=["assemblyName"]/>
-                            <@vC.valueBreaker inputNames=["assemblyName"]/>
+                            <@eB.emptyBreaker inputIds=["assemblyName"]/>
+                            <@vC.valueBreaker inputIds=["assemblyName"]/>
                         <#else>
                             <div class="alert alert-warning" role="alert">
                                 <div class="h1 text-center">Не знайдено жодної моделі відеокарти.</div>

@@ -1,15 +1,15 @@
-<#macro typeEdit id editName>
-    <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
-    <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
-    <#import "../modalInputManage/inputsCleaner.ftlh" as fC>
-    <#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
+<#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
+<#import "../modalInputManage/inputsCleaner.ftlh" as fC>
+<#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
+<#macro typeEdit id typeName>
     <div class="modal fade" id="typeEditModal${id}" data-backdrop="static" tabindex="-1"
-         role="dialog" aria-labelledby="typeEditLabel" aria-hidden="true">
+         role="dialog" aria-labelledby="typeEditLabel${id}" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title h3" id="typeEditLabel">Змінити тип ноутбуків</div>
+                    <div class="modal-title h3" id="typeEditLabel${id}">Змінити тип ноутбуків</div>
                     <button type="button" class="close closeHeader" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -18,14 +18,10 @@
                     <form method="post" id="typeEditForm${id}" action="/type/edit/${id}"
                           class="form-group needs-validation w-100" novalidate modelAttribute="newType"
                           onsubmit="return validateEdit${id}Form()">
-                        <div class="form-row">
-                            <div class="col">
-                                <label class="d-inline ml-2" for="editName">Назва змінюваного типу:</label>
-                                <input type="text" class="form-control" name="editName" id="editNameInput${id}"
-                                       value="${editName}" required/>
-                                <div class="invalid-feedback">Назву змінюваного типу задано некоректно!</div>
-                            </div>
-                        </div>
+                        <label class="d-inline ml-2" for="editName">Назва змінюваного типу:</label>
+                        <input type="text" class="form-control" name="editName" id="editNameInput${id}"
+                               required/>
+                        <div class="invalid-feedback">Назву змінюваного типу задано некоректно!</div>
                     </form>
                     <@eB.emptyBreaker inputIds=["editNameInput${id}"]/>
                     <@vC.valueBreaker type="Edit${id}" inputIds=["editNameInput${id}"]/>
@@ -33,7 +29,7 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#typeEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editNameInput${id}").value = "${editName}";
+                            document.getElementById("editNameInput${id}").value = "${typeName}";
                         })
                     </script>
                 </div>

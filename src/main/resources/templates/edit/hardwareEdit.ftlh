@@ -135,6 +135,6 @@
         <button type="submit" class="btn btn-danger float-right">Зберегти</button>
     </form>
 
-    <@eB.emptyBreaker inputNames=["assemblyName"]/>
-    <@vC.valueBreaker inputNames=["assemblyName"]/>
+    <@eB.emptyBreaker inputIds=["assemblyName"]/>
+    <@vC.valueBreaker inputIds=["assemblyName"]/>
 </@pad.page>

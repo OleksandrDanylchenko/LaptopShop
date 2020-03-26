@@ -1,11 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../client/addModal.ftlh" as addModal>
+<#import "../client/editModal.ftlh" as editModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 <#setting locale="uk">
 
-<@pad.page "Client">
+<@htmlPad.page "Client">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/client/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нового клієнта</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#clientAddModal">
+                <i class="far fa-plus-square"></i> Додати нового клієнта
+            </button>
+            <@addModal.clientAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/client/importExcel" role="button">
@@ -45,7 +51,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
         <#if clients?has_content>
             <div class="h1">Список клієнтів:</div>
             <table class="table table-hover">
@@ -66,10 +72,21 @@
                         <td>${client.firstName}</td>
                         <td>${client.secondName}</td>
                         <td>${client.dateReg}</td>
-                        <td><a class="btn btn-outline-dark" href="/client/edit/${client.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/client/delete/${client.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#clientEditModal${client.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.clientEdit id="${client.id}"clientFirstName="${client.firstName}"
+                            clientSecondName="${client.secondName}" clientDateReg="${client.dateReg?iso_utc}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${client.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${client.id}"
+                            deletionLink="/client/delete/${client.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -79,4 +96,4 @@
             <div class="h3">Не знайдено жодного покупця.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

@@ -1,9 +1,9 @@
-<#macro typeAdd>
-    <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
-    <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
-    <#import "../modalInputManage/inputsCleaner.ftlh" as fC>
-    <#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
+<#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
+<#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
+<#import "../modalInputManage/inputsCleaner.ftlh" as fC>
+<#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
+<#macro typeAdd>
     <div class="modal fade" id="typeAddModal" data-backdrop="static" tabindex="-1"
          role="dialog" aria-labelledby="typeAddLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -18,7 +18,7 @@
                     <form method="post" id="typeAddForm" action="/type/add" class="form-group needs-validation w-100"
                           novalidate modelAttribute="newType" onsubmit="return validateAddForm()">
                         <label class="d-inline ml-2" for="name">Назва нового типу:</label>
-                        <input type="text" class="form-control" name="name" id="newNameInput" required/>
+                        <input type="text" id="newNameInput" class="form-control" name="name" required/>
                         <div class="invalid-feedback">Назву нового типу задано некоректно!</div>
                     </form>
                     <@eB.emptyBreaker inputIds=["newNameInput"]/>
