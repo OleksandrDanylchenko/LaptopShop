@@ -1,5 +1,7 @@
 <#import "../errorsHandlers/datesOrderBreaker.ftlh" as dO>
-<#import "../modalInputManage/fieldsCleaner.ftlh" as fC>
+<#import "../modalInputManage/inputsCleaner.ftlh" as fC>
+<#import "../modalInputManage/selectCleaner.ftlh" as sC>
+<#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
 <#macro availabilityAdd>
     <div class="modal fade" id="availabilityAddModal" data-backdrop="static" tabindex="-1"
@@ -7,7 +9,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title h3" id="availabilityAddLabel">Додати запис про наявність</div>
+                    <div class="modal-title h3" id="availabilityAddLabel">Додати новий запис про наявність</div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -21,7 +23,8 @@
                                 <div class="form-row my-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
-                                        <select class="custom-select" name="laptopModel" required>
+                                        <select class="custom-select" id="laptopSelect" name="laptopModel" required>
+                                            <option value="" selected disabled></option>
                                             <#list laptopModels as model>
                                                 <option>${model}</option>
                                             </#list>
@@ -46,7 +49,8 @@
                                 <div class="form-row my-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Адресу магазину:</label>
-                                        <select class="custom-select" name="shopAddress" required>
+                                        <select class="custom-select" id="shopSelect" name="shopAddress" required>
+                                            <option value="" selected disabled></option>
                                             <#list shopAddresses as address>
                                                 <option>${address}</option>
                                             </#list>
@@ -71,10 +75,13 @@
                                         </div>
                                     </div>
                                     <@dO.datesBreaker "newDateStart" "newDateEnd"/>
-                                    <@fC.fieldsCleaner modalId="availabilityAddModal" formId="availabilityAddForm"
-                                    inputIds=["priceInput", "quantityInput", "newDateStart", "newDateEnd"]/>
                                 </div>
                             </form>
+                            <@fC.inputsCleaner modalId="availabilityAddModal"
+                            inputIds=["priceInput", "quantityInput", "newDateStart", "newDateEnd"]/>
+                            <@sC.selectsCleaner modalId="availabilityAddModal"
+                            selectIds=["laptopSelect", "shopSelect"]/>
+                            <@fSc.fieldsStatusCleaner modalId="availabilityAddModal" formId="availabilityAddForm"/>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-dark" data-dismiss="modal">Скасувати</button>

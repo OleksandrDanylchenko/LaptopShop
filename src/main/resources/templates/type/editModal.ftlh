@@ -1,7 +1,8 @@
 <#macro typeEdit id editName>
     <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
     <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
-    <#import "../modalInputManage/fieldsCleaner.ftlh" as fC>
+    <#import "../modalInputManage/inputsCleaner.ftlh" as fC>
+    <#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
     <div class="modal fade" id="typeEditModal${id}" data-backdrop="static" tabindex="-1"
          role="dialog" aria-labelledby="typeEditLabel" aria-hidden="true">
@@ -28,8 +29,13 @@
                     </form>
                     <@eB.emptyBreaker inputIds=["editNameInput${id}"]/>
                     <@vC.valueBreaker type="Edit${id}" inputIds=["editNameInput${id}"]/>
-                    <@fC.fieldsCleaner modalId="typeEditModal${id}" formId="typeEditForm${id}"
-                    inputIds=["editNameInput${id}"]/>
+                    <@fSc.fieldsStatusCleaner modalId="typeEditModal${id}" formId="typeEditForm${id}"/>
+                    <!-- Restore initial value on opening of modal -->
+                    <script>
+                        $('#typeEditModal${id}').on('show.bs.modal', function () {
+                            document.getElementById("editNameInput${id}").value = "${editName}";
+                        })
+                    </script>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark closeFooter" data-dismiss="modal">Скасувати</button>
@@ -38,11 +44,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Restore initial value on opening of modal -->
-    <script>
-        $('#typeEditModal${id}').on('show.bs.modal', function () {
-            document.getElementById("editNameInput${id}").value = "${editName}";
-        })
-    </script>
 </#macro>

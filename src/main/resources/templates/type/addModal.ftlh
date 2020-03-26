@@ -1,7 +1,8 @@
 <#macro typeAdd>
     <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
     <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
-    <#import "../modalInputManage/fieldsCleaner.ftlh" as fC>
+    <#import "../modalInputManage/inputsCleaner.ftlh" as fC>
+    <#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
     <div class="modal fade" id="typeAddModal" data-backdrop="static" tabindex="-1"
          role="dialog" aria-labelledby="typeAddLabel" aria-hidden="true">
@@ -22,7 +23,8 @@
                     </form>
                     <@eB.emptyBreaker inputIds=["newNameInput"]/>
                     <@vC.valueBreaker type="Add" inputIds=["newNameInput"]/>
-                    <@fC.fieldsCleaner modalId="typeAddModal" formId="typeAddForm" inputIds=["newNameInput"]/>
+                    <@fC.inputsCleaner modalId="typeAddModal" inputIds=["newNameInput"]/>
+                    <@fSc.fieldsStatusCleaner modalId="typeAddModal" formId="typeAddForm"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-dismiss="modal">Скасувати</button>

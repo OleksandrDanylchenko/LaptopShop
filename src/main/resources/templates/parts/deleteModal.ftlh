@@ -6,7 +6,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <img src="https://lh3.googleusercontent.com/proxy/whxF-MlKpIN8dOtC42zuMUyR7MifuNKXu3bGX9lTo9vpt1zWXZ-r9ymmg3guSHS152TBHuks-Eo_GS6foiM8RuLiUWBMO3lvlGgyp8cFeSwbuCKnHIbWo9DkkCSCgO2XcUfGvicqJdaRjOpbKZIkYYp-pg"
+                            <img src="https://i.ibb.co/rd7bMFp/red-Trash-Can.png"
                                  class="rounded mx-auto d-block" alt="trashBin">
                         </div>
                     </div>
