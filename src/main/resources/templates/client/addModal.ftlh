@@ -17,7 +17,7 @@
                 <div class="modal-body">
                     <form method="post" id="clientAddForm" action="/client/add"
                           class="form-group needs-validation w-100"
-                          novalidate modelAttribute="newClient" onsubmit="return validateAddForm()">
+                          novalidate modelAttribute="newClient" onsubmit="return validateFormAdd()">
                         <div class="form-row mb-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="firstName">Ім'я нового покупця:</label>
@@ -44,7 +44,7 @@
                         </div>
                     </form>
                     <@eB.emptyBreaker inputIds=["newFirstNameInput", "newSecondNameInput"]/>
-                    <@vC.valueBreaker type="Add" inputIds=["newFirstNameInput", "newSecondNameInput"]/>
+                    <@vC.valueBreaker id="Add" inputIds=["newFirstNameInput", "newSecondNameInput"]/>
                     <@fC.inputsCleaner modalId="clientAddModal"
                     inputIds=["newFirstNameInput", "newSecondNameInput", "newDateRegInput"]/>
                     <@fSc.fieldsStatusCleaner modalId="clientAddModal" formId="clientAddForm"/>

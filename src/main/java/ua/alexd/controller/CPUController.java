@@ -41,41 +41,30 @@ public class CPUController {
         var cpus = cpuRepo.findAll(cpuSpecification);
         lastOutputtedCPUs = cpus;
         siteModel.addAttribute("cpus", cpus);
-        return "/list/cpuList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/cpuAdd";
+        return "/cpu/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
         if (!saveRecord(newCPU)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/cpuAdd";
+            model.addAttribute("errorMessage", "Представлена нова модель уже присутня в базі!");
+            model.addAttribute("cpus", lastOutputtedCPUs);
+            return "/cpu/table";
         }
         return "redirect:/cpu";
     }
 
     @NotNull
-    @GetMapping("/edit/{editCpu}")
-    private String editRecord(@PathVariable CPU editCpu, @NotNull Model model) {
-        model.addAttribute("editCpu", editCpu);
-        return "/edit/cpuEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editCpu}")
-    private String addRecord(@RequestParam String model, @RequestParam String frequency,
-                             @NotNull @PathVariable CPU editCpu, @NotNull Model siteModel) {
-        editCpu.setModel(model);
-        editCpu.setFrequency(frequency);
+    private String addRecord(@RequestParam String editModel, @RequestParam String editFrequency,
+                             @NotNull @PathVariable CPU editCpu, @NotNull Model model) {
+        editCpu.setModel(editModel);
+        editCpu.setFrequency(editFrequency);
         if (!saveRecord(editCpu)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "edit/cpuEdit";
+            model.addAttribute("errorMessage", "Представлена змінювана модель уже присутня в базі!");
+            model.addAttribute("cpus", lastOutputtedCPUs);
+            return "/cpu/table";
         }
         return "redirect:/cpu";
     }

@@ -16,13 +16,13 @@
                 </div>
                 <div class="modal-body">
                     <form method="post" id="typeAddForm" action="/type/add" class="form-group needs-validation w-100"
-                          novalidate modelAttribute="newType" onsubmit="return validateAddForm()">
+                          novalidate modelAttribute="newType" onsubmit="return validateFormAdd()">
                         <label class="d-inline ml-2" for="name">Назва нового типу:</label>
                         <input type="text" id="newNameInput" class="form-control" name="name" required/>
                         <div class="invalid-feedback">Назву нового типу задано некоректно!</div>
                     </form>
                     <@eB.emptyBreaker inputIds=["newNameInput"]/>
-                    <@vC.valueBreaker type="Add" inputIds=["newNameInput"]/>
+                    <@vC.valueBreaker id="Add" inputIds=["newNameInput"]/>
                     <@fC.inputsCleaner modalId="typeAddModal" inputIds=["newNameInput"]/>
                     <@fSc.fieldsStatusCleaner modalId="typeAddModal" formId="typeAddForm"/>
                 </div>

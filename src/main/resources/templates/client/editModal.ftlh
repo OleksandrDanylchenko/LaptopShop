@@ -1,6 +1,5 @@
 <#import "../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
 <#import "../errorsHandlers/valueConsistentBreaker.ftlh" as vC>
-<#import "../modalInputManage/inputsCleaner.ftlh" as fC>
 <#import "../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
 <#macro clientEdit id clientFirstName clientSecondName clientDateReg>
@@ -17,7 +16,7 @@
                 <div class="modal-body">
                     <form method="post" id="clientEditForm${id}" action="/client/edit/${id}"
                           class="form-group needs-validation w-100" novalidate
-                          modelAttribute="newClient" onsubmit="return validateEdit${id}Form()">
+                          modelAttribute="newClient" onsubmit="return validateForm${id}()">
                         <div class="form-row mb-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="firstName">Ім'я змінюваного покупця:</label>
@@ -44,7 +43,7 @@
                         </div>
                     </form>
                     <@eB.emptyBreaker inputIds=["editFirstNameInput${id}", "editSecondNameInput${id}"]/>
-                    <@vC.valueBreaker type="Edit${id}" inputIds=["editFirstNameInput${id}", "editSecondNameInput${id}"]/>
+                    <@vC.valueBreaker id="${id}" inputIds=["editFirstNameInput${id}", "editSecondNameInput${id}"]/>
                     <@fSc.fieldsStatusCleaner modalId="clientEditModal${id}" formId="clientEditForm${id}"/>
                     <!-- Restore initial value on opening of modal -->
                     <script>
