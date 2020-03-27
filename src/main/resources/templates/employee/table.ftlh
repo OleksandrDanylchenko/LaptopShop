@@ -1,10 +1,15 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../employee/addModal.ftlh" as addModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "Employee">
+<@htmlPad.page "Employee">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/employee/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нового співробітника</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#employeeAddModal">
+                <i class="far fa-plus-square"></i> Додати нового співробітника
+            </button>
+            <@addModal.employeeAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/employee/importExcel" role="button">
@@ -52,7 +57,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
         <#if employees?has_content>
             <div class="h1">Список співробітників:</div>
             <table class="table table-hover">
@@ -84,8 +89,13 @@
                         <td>${employee.isActive?then("Працюючий", "Звільнений")}</td>
                         <td><a class="btn btn-outline-dark" href="/employee/edit/${employee.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/employee/delete/${employee.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${employee.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${employee.id}"
+                            deletionLink="/employee/delete/${employee.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -95,4 +105,4 @@
             <div class="h3">Не знайдено жодного співробітника.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

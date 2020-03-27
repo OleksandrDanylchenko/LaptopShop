@@ -46,14 +46,8 @@ public class EmployeeController {
         var employees = employeeRepo.findAll(employeesSpecification);
         lastOutputtedEmployees = employees;
         model.addAttribute("employees", employees);
-        return "/list/employeeList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
         initDropDownChoices(model);
-        return "add/employeeAdd";
+        return "/employee/table";
     }
 
     @NotNull
@@ -71,7 +65,7 @@ public class EmployeeController {
     private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
         model.addAttribute("editEmployee", editEmployee);
         initDropDownChoices(model);
-        return "/edit/employeeEdit";
+        return "/employee/editPage";
     }
 
     @NotNull

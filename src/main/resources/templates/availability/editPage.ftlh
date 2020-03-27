@@ -34,6 +34,8 @@
                        value="${(editAvailability.price??)?then(editAvailability.price?c, '')}" required/>
                 <div class="invalid-feedback">Уведено некоректну ціну! (<5000 aбо >2147483646)</div>
             </div>
+        </div>
+        <div class="form-row my-2">
             <div class="col">
                 <label class="d-inline ml-2" for="laptopModel">Кількість:</label>
                 <input type="number" min="1" max="2147483646" class="form-control" name="quantity"
@@ -70,7 +72,7 @@
             </div>
             <div class="col">
                 <label class="d-inline ml-2" for="dateEnd">Дата закінчення продаж:</label>
-                <input type="date" id="editDateEnd"  class="form-control" name="dateEnd" min="2019-02-16"
+                <input type="date" id="editDateEnd" class="form-control" name="dateEnd" min="2019-02-16"
                        value="${editAvailability.dateEnd?iso_utc}" required/>
                 <div class="invalid-feedback">Уведено некоректну дату закінчення продаж!</div>
             </div>

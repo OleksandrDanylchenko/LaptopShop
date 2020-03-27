@@ -57,7 +57,6 @@
                             <@sC.selectsCleaner modalId="basketAddModal"
                             selectIds=["employeeSelect", "clientSelect"]/>
                             <@fSc.fieldsStatusCleaner modalId="basketAddModal" formId="basketAddForm"/>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-dark" data-dismiss="modal">Скасувати</button>
