@@ -41,13 +41,7 @@ public class HDDController {
         var hdds = hddRepo.findAll(hddSpecification);
         lastOutputtedHDDs = hdds;
         siteModel.addAttribute("hdds", hdds);
-        return "/list/hddList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/hddAdd";
+        return "view/hdd/table";
     }
 
     @NotNull
@@ -55,28 +49,24 @@ public class HDDController {
     private String addRecord(@NotNull @ModelAttribute("newHDD") HDD newHDD,
                              @NotNull Model model) {
         if (!saveRecord(newHDD)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/hddAdd";
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель HDD диску уже присутня в базі!");
+            model.addAttribute("hdds", lastOutputtedHDDs);
+            return "view/hdd/table";
         }
         return "redirect:/hdd";
     }
 
     @NotNull
-    @GetMapping("/edit/{editHDD}")
-    private String editRecord(@PathVariable HDD editHDD, @NotNull Model model) {
-        model.addAttribute("editHDD", editHDD);
-        return "/edit/hddEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editHDD}")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
-                              @NotNull @PathVariable HDD editHDD, @NotNull Model siteModel) {
-        editHDD.setModel(model);
-        editHDD.setMemory(memory);
+    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
+                              @NotNull @PathVariable HDD editHDD, @NotNull Model model) {
+        editHDD.setModel(editModel);
+        editHDD.setMemory(editMemory);
         if (!saveRecord(editHDD)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "edit/hddEdit";
+            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+            model.addAttribute("hdds", lastOutputtedHDDs);
+            return "view/hdd/table";
         }
         return "redirect:/hdd";
     }
