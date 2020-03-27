@@ -41,41 +41,30 @@ public class LabelController {
         var labels = labelRepo.findAll(labelSpecification);
         lastOutputtedLabel = labels;
         siteModel.addAttribute("labels", labels);
-        return "/list/labelList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/labelAdd";
+        return "view/label/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newLabel") Label newLabel, @NotNull Model model) {
         if (!saveRecord(newLabel)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/labelAdd";
+            model.addAttribute("errorMessage", "Представлена нова модель уже присутня в базі!");
+            model.addAttribute("labels", lastOutputtedLabel);
+            return "view/label/table";
         }
         return "redirect:/label";
     }
 
     @NotNull
-    @GetMapping("/edit/{editLabel}")
-    private String editRecord(@PathVariable Label editLabel, @NotNull Model model) {
-        model.addAttribute("editLabel", editLabel);
-        return "/edit/labelEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editLabel}")
-    private String editRecord(@RequestParam String brand, @RequestParam String model,
-                              @NotNull @PathVariable Label editLabel, @NotNull Model siteModel) {
-        editLabel.setBrand(brand);
-        editLabel.setModel(model);
+    private String editRecord(@RequestParam String editBrand, @RequestParam String editModel,
+                              @NotNull @PathVariable Label editLabel, @NotNull Model model) {
+        editLabel.setBrand(editBrand);
+        editLabel.setModel(editModel);
         if (!saveRecord(editLabel)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/labelEdit";
+            model.addAttribute("errorMessage", "Представлена змінювана модель уже присутня в базі!");
+            model.addAttribute("labels", lastOutputtedLabel);
+            return "view/label/table";
         }
         return "redirect:/label";
     }

@@ -1,10 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
+<#import "../../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "Label">
+<@htmlPad.page "Label">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger float-left" href="/label/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нове найменування</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#labelAddModal">
+                <i class="far fa-plus-square"></i> Додати нове найменування
+            </button>
+            <@addModal.labelAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/label/importExcel" role="button">
@@ -38,7 +45,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if labels?has_content>
             <div class="h1">Список найменувань:</div>
             <table class="table table-hover">
@@ -57,10 +69,20 @@
                         <th class="text-danger" scope="row">${label.id}</th>
                         <td>${label.brand}</td>
                         <td>${label.model}</td>
-                        <td><a class="btn btn-outline-dark" href="/label/edit/${label.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/label/delete/${label.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#labelEditModal${label.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.labelEdit id="${label.id}" labelBrand="${label.brand}" labelModel="${label.model}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${label.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${label.id}"
+                            deletionLink="/label/delete/${label.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -70,4 +92,4 @@
             <div class="h3">Не знайдено жодного найменування.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
