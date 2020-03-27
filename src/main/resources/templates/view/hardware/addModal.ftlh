@@ -192,7 +192,7 @@
                     <div class="modal-body">
                         <div class="alert alert-warning" role="alert">
                             <div class="h1 text-center">Не знайдено жодної моделі процесору.</div>
-                            <div class="h3 text-center"><a href="/cpu/add">Додайте новий процесор</a> для створення
+                            <div class="h3 text-center"><a href="/cpu">Додайте новий процесор</a> для створення
                                 збірки.
                             </div>
                         </div>

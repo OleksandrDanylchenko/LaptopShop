@@ -1,8 +1,8 @@
-<#import "../parts/htmlPad.ftlh" as pad>
-<#import "../errorsHandlers/errorOutput.ftlh" as error>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 
-<@pad.page "Hardware editing">
-    <@error.errorOutput errorMessage!/>
+<@htmlPad.page "Laptop editing">
+    <@eO.errorOutput errorMessage!/>
 
     <p class="h1">Змінити ноутбук:</p>
     <form method="post" action="/laptop/edit/${editLaptop.id}" class="form-group">
@@ -59,6 +59,6 @@
                 </div>
             </div>
         </#if>
-        <button type="submit" class="btn btn-danger float-right">Зберегти</button>
+        <button type="submit" class="btn btn-danger float-right">Змінити</button>
     </form>
-</@pad.page>
+</@htmlPad.page>

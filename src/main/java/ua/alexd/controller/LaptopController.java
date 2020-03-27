@@ -55,14 +55,8 @@ public class LaptopController {
         var laptops = laptopRepo.findAll(laptopSpecification);
         lastOutputtedLaptops = laptops;
         model.addAttribute("laptops", laptops);
-        return "/list/laptopList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
         initializeAddingChoices(model);
-        return "add/laptopAdd";
+        return "view/laptop/table";
     }
 
     @NotNull
@@ -74,8 +68,12 @@ public class LaptopController {
         var label = labelRepo.findByModel(labelModel);
         var newLaptop = new Laptop(label, type, hardware);
 
-        if (!saveRecord(newLaptop, model))
-            return "add/laptopAdd";
+        if (!saveRecord(newLaptop)) {
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель ноутбука уже присутня в базі!");
+            initializeAddingChoices(model);
+            return "view/laptop/table";
+        }
         return "redirect:/laptop";
     }
 
@@ -84,7 +82,7 @@ public class LaptopController {
     private String editRecord(@PathVariable Laptop editLaptop, @NotNull Model model) {
         model.addAttribute("editLaptop", editLaptop);
         initializeEditingChoices(editLaptop, model);
-        return "/edit/laptopEdit";
+        return "view/laptop/editPage";
     }
 
     @NotNull
@@ -98,8 +96,12 @@ public class LaptopController {
         var label = labelRepo.findByModel(labelModel);
         editLaptop.setLabel(label);
 
-        if (!saveRecord(editLaptop, model))
-            return "edit/laptopEdit";
+        if (!saveRecord(editLaptop)) {
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель ноутбука уже присутня в базі!");
+            initializeAddingChoices(model);
+            return "view/laptop/editPage";
+        }
         return "redirect:/laptop";
     }
 
@@ -118,7 +120,7 @@ public class LaptopController {
         try {
             laptopFilePath = saveUploadingFile(uploadingFile);
             var newLaptops = excelImporter.importFile(laptopFilePath);
-            newLaptops.forEach(newLaptop -> saveRecord(newLaptop, model));
+            newLaptops.forEach(this::saveRecord);
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(laptopFilePath);
@@ -147,13 +149,10 @@ public class LaptopController {
         return "redirect:/laptop";
     }
 
-    private boolean saveRecord(Laptop saveLaptop, Model model) {
+    private boolean saveRecord(Laptop saveLaptop) {
         try {
             laptopRepo.save(saveLaptop);
         } catch (DataIntegrityViolationException ignored) {
-            model.addAttribute("errorMessage",
-                    "Модель ноутбуку " + saveLaptop.getLabel().getModel() + " уже присутня в базі");
-            initializeAddingChoices(model);
             return false;
         }
         return true;

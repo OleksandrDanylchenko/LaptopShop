@@ -1,10 +1,16 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "addModal.ftlh" as addModal>
+<#import "../../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "Laptop">
+<@htmlPad.page "Laptop">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/laptop/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий ноутбук</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#laptopAddModal">
+                <i class="far fa-plus-square"></i> Додати новий ноутбук
+            </button>
+            <@addModal.laptopAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/laptop/importExcel" role="button">
@@ -51,7 +57,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if laptops?has_content>
             <div class="h1">Список ноутбуків:</div>
             <table class="table table-hover">
@@ -76,8 +87,13 @@
                         <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Відсутній</#if></td>
                         <td><a class="btn btn-outline-dark" href="/laptop/edit/${laptop.id}"
                                role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/laptop/delete/${laptop.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${laptop.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${laptop.id}"
+                            deletionLink="/laptop/delete/${laptop.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -87,4 +103,4 @@
             <div class="h3">Не знайдено жодного ноутбуку.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
