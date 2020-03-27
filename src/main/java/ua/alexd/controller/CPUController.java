@@ -48,7 +48,8 @@ public class CPUController {
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
         if (!saveRecord(newCPU)) {
-            model.addAttribute("errorMessage", "Представлена нова модель уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
             return "/cpu/table";
         }
@@ -62,7 +63,8 @@ public class CPUController {
         editCpu.setModel(editModel);
         editCpu.setFrequency(editFrequency);
         if (!saveRecord(editCpu)) {
-            model.addAttribute("errorMessage", "Представлена змінювана модель уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
             return "/cpu/table";
         }

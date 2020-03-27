@@ -66,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-dismiss="modal">Скасувати</button>
-                    <button type="submit" form="displayEditForm${id}" class="btn btn-danger">Додати</button>
+                    <button type="submit" form="displayEditForm${id}" class="btn btn-danger">Змінити</button>
                 </div>
             </div>
         </div>

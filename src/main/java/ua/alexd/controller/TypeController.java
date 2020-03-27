@@ -43,7 +43,8 @@ public class TypeController {
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
         if (!saveRecord(newType)) {
-            model.addAttribute("errorMessage", "Представлена нова назва уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена нова назва типу уже присутня в базі!");
             model.addAttribute("types", lastOutputtedTypes);
             return "type/table";
         }
@@ -55,7 +56,8 @@ public class TypeController {
     private String editRecord(@RequestParam String editName, @NotNull @PathVariable Type editType, @NotNull Model model) {
         editType.setName(editName);
         if (!saveRecord(editType)) {
-            model.addAttribute("errorMessage", "Представлена змінювана назва уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана назва типу уже присутня в базі!");
             model.addAttribute("types", lastOutputtedTypes);
             return "type/table";
         }

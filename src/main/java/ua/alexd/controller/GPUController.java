@@ -41,41 +41,32 @@ public class GPUController {
         var gpus = gpuRepo.findAll(gpuSpecification);
         lastOutputtedGPUs = gpus;
         siteModel.addAttribute("gpus", gpus);
-        return "/list/gpuList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/gpuAdd";
+        return "/gpu/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newGPU") GPU newGPU, @NotNull Model model) {
         if (!saveRecord(newGPU)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/gpuAdd";
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель відеокарти уже присутня в базі!");
+            model.addAttribute("gpus", lastOutputtedGPUs);
+            return "gpu/table";
         }
         return "redirect:/gpu";
     }
 
     @NotNull
-    @GetMapping("/edit/{editGpu}")
-    private String editRecord(@PathVariable GPU editGpu, @NotNull Model model) {
-        model.addAttribute("editGpu", editGpu);
-        return "/edit/gpuEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editGpu}")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
-                              @NotNull @PathVariable GPU editGpu, @NotNull Model siteModel) {
-        editGpu.setModel(model);
-        editGpu.setMemory(memory);
+    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
+                              @NotNull @PathVariable GPU editGpu, @NotNull Model model) {
+        editGpu.setModel(editModel);
+        editGpu.setMemory(editMemory);
         if (!saveRecord(editGpu)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "edit/gpuEdit";
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель відеокарти уже присутня в базі!");
+            model.addAttribute("gpus", lastOutputtedGPUs);
+            return "gpu/table";
         }
         return "redirect:/gpu";
     }

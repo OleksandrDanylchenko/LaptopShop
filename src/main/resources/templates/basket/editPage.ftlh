@@ -49,6 +49,6 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-danger float-right">Зберегти</button>
+        <button type="submit" class="btn btn-danger float-right">Змінити</button>
     </form>
 </@htmlPad.page>

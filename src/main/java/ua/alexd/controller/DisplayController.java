@@ -50,7 +50,8 @@ public class DisplayController {
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newDisplay") Display newDisplay, @NotNull Model model) {
         if (!saveRecord(newDisplay)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель дисплею уже присутня в базі!");
             model.addAttribute("displays", lastOutputtedDisplay);
             return "/display/table";
         }
@@ -67,7 +68,8 @@ public class DisplayController {
         editDisplay.setDiagonal(editDiagonal);
         editDisplay.setResolution(editResolution);
         if (!saveRecord(editDisplay)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель дисплею уже присутня в базі!");
             model.addAttribute("displays", lastOutputtedDisplay);
             return "edit/displayEdit";
         }

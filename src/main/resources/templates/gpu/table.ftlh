@@ -1,10 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../parts/htmlPad.ftlh" as htmlPad>
+<#import "../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../gpu/addModal.ftlh" as addModal>
+<#import "../gpu/editModal.ftlh" as editModal>
+<#import "../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "GPU">
+<@htmlPad.page "GPU">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger float-left" href="/gpu/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нову відеокарту</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#gpuAddModal">
+                <i class="far fa-plus-square"></i> Додати нову відеокарту
+            </button>
+            <@addModal.gpuAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/gpu/importExcel" role="button">
@@ -37,7 +44,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if gpus?has_content>
             <div class="h1">Список відеокарт:</div>
             <table class="table table-hover">
@@ -56,10 +68,20 @@
                         <th class="text-danger" scope="row">${gpu.id}</th>
                         <td>${gpu.model}</td>
                         <td>${gpu.memory}</td>
-                        <td><a class="btn btn-outline-dark" href="/gpu/edit/${gpu.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/gpu/delete/${gpu.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#gpuEditModal${gpu.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.gpuEdit id="${gpu.id}" gpuModel="${gpu.model}" gpuMemory="${gpu.memory}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${gpu.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${gpu.id}"
+                            deletionLink="/gpu/delete/${gpu.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -69,4 +91,4 @@
             <div class="h3">Не знайдено жодної відеокарти.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
