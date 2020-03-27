@@ -61,7 +61,7 @@ public class AvailabilityController {
         lastOutputtedAvailabilities = availabilities;
         model.addAttribute("availabilities", availabilities);
         initializeDropDownChoices(model);
-        return "/availability/table";
+        return "view/availability/table";
     }
 
     @NotNull
@@ -79,7 +79,7 @@ public class AvailabilityController {
                     "Представлена нова модель ноутбуку уже присутня в записах про наявність!");
             initializeDropDownChoices(model);
             model.addAttribute("availabilities", lastOutputtedAvailabilities);
-            return "/availability/table";
+            return "view/availability/table";
         }
         return "redirect:/availability";
     }
@@ -89,7 +89,7 @@ public class AvailabilityController {
     private String editRecord(@NotNull @PathVariable Availability editAvailability, @NotNull Model model) {
         model.addAttribute("editAvailability", editAvailability);
         initializeDropDownChoices(model);
-        return "/availability/editPage";
+        return "view/availability/editPage";
     }
 
     @NotNull
@@ -113,7 +113,7 @@ public class AvailabilityController {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель ноутбуку уже присутня в записах про наявність!");
             initializeDropDownChoices(model);
-            return "availability/editPage";
+            return "view/availability/editPage";
         }
         return "redirect:/availability";
     }

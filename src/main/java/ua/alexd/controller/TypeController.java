@@ -36,7 +36,7 @@ public class TypeController {
                 : typeRepo.findAll();
         lastOutputtedTypes = types;
         model.addAttribute("types", types);
-        return "type/table";
+        return "view/type/table";
     }
 
     @NotNull
@@ -46,7 +46,7 @@ public class TypeController {
             model.addAttribute("errorMessage",
                     "Представлена нова назва типу уже присутня в базі!");
             model.addAttribute("types", lastOutputtedTypes);
-            return "type/table";
+            return "view/type/table";
         }
         return "redirect:/type";
     }
@@ -59,7 +59,7 @@ public class TypeController {
             model.addAttribute("errorMessage",
                     "Представлена змінювана назва типу уже присутня в базі!");
             model.addAttribute("types", lastOutputtedTypes);
-            return "type/table";
+            return "view/type/table";
         }
         return "redirect:/type";
     }

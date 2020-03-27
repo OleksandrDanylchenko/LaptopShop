@@ -47,7 +47,7 @@ public class EmployeeController {
         lastOutputtedEmployees = employees;
         model.addAttribute("employees", employees);
         initDropDownChoices(model);
-        return "/employee/table";
+        return "view/employee/table";
     }
 
     @NotNull
@@ -65,7 +65,7 @@ public class EmployeeController {
     private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
         model.addAttribute("editEmployee", editEmployee);
         initDropDownChoices(model);
-        return "/employee/editPage";
+        return "view/employee/editPage";
     }
 
     @NotNull

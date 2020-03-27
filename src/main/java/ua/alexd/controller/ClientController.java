@@ -45,7 +45,7 @@ public class ClientController {
         var clients = clientRepo.findAll(clientSpecification);
         lastOutputtedClients = clients;
         model.addAttribute("clients", clients);
-        return "/client/table";
+        return "view/client/table";
     }
 
     @NotNull

@@ -41,7 +41,7 @@ public class GPUController {
         var gpus = gpuRepo.findAll(gpuSpecification);
         lastOutputtedGPUs = gpus;
         siteModel.addAttribute("gpus", gpus);
-        return "/gpu/table";
+        return "view/gpu/table";
     }
 
     @NotNull
@@ -51,7 +51,7 @@ public class GPUController {
             model.addAttribute("errorMessage",
                     "Представлена нова модель відеокарти уже присутня в базі!");
             model.addAttribute("gpus", lastOutputtedGPUs);
-            return "gpu/table";
+            return "view/gpu/table";
         }
         return "redirect:/gpu";
     }
@@ -66,7 +66,7 @@ public class GPUController {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель відеокарти уже присутня в базі!");
             model.addAttribute("gpus", lastOutputtedGPUs);
-            return "gpu/table";
+            return "view/gpu/table";
         }
         return "redirect:/gpu";
     }

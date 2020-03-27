@@ -41,7 +41,7 @@ public class CPUController {
         var cpus = cpuRepo.findAll(cpuSpecification);
         lastOutputtedCPUs = cpus;
         siteModel.addAttribute("cpus", cpus);
-        return "/cpu/table";
+        return "view/cpu/table";
     }
 
     @NotNull
@@ -51,7 +51,7 @@ public class CPUController {
             model.addAttribute("errorMessage",
                     "Представлена нова модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
-            return "/cpu/table";
+            return "view/cpu/table";
         }
         return "redirect:/cpu";
     }
@@ -66,7 +66,7 @@ public class CPUController {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
-            return "/cpu/table";
+            return "view/cpu/table";
         }
         return "redirect:/cpu";
     }

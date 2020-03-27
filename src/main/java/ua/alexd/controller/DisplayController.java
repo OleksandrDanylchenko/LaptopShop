@@ -43,7 +43,7 @@ public class DisplayController {
         var displays = displayRepo.findAll(displaySpecification);
         lastOutputtedDisplay = displays;
         siteModel.addAttribute("displays", displays);
-        return "/display/table";
+        return "view/display/table";
     }
 
     @NotNull
@@ -53,7 +53,7 @@ public class DisplayController {
             model.addAttribute("errorMessage",
                     "Представлена нова модель дисплею уже присутня в базі!");
             model.addAttribute("displays", lastOutputtedDisplay);
-            return "/display/table";
+            return "view/display/table";
         }
         return "redirect:/display";
     }
@@ -71,7 +71,7 @@ public class DisplayController {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель дисплею уже присутня в базі!");
             model.addAttribute("displays", lastOutputtedDisplay);
-            return "edit/displayEdit";
+            return "view/display/table";
         }
         return "redirect:/display";
     }

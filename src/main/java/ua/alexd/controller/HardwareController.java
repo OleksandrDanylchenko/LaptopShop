@@ -76,14 +76,8 @@ public class HardwareController {
         var hardware = hardwareRepo.findAll(hardwareSpecification);
         lastOutputtedHardware = hardware;
         model.addAttribute("hardware", hardware);
-        return "/list/hardwareList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord(@NotNull Model model) {
         initializeDropDownChoices(model);
-        return "add/hardwareAdd";
+        return "view/hardware/table";
     }
 
     @NotNull
@@ -101,9 +95,11 @@ public class HardwareController {
 
         var newHardware = new Hardware(assemblyName, cpu, gpu, ram, ssd, hdd, display);
         if (!saveRecord(newHardware)) {
-            model.addAttribute("errorMessage", "Представлена назва збірки уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена нова назва збірки уже присутня в базі!");
             initializeDropDownChoices(model);
-            return "add/hardwareAdd";
+            model.addAttribute("hardware", lastOutputtedHardware);
+            return "view/hardware/table";
         }
         return "redirect:/hardware";
     }
@@ -113,7 +109,7 @@ public class HardwareController {
     private String editRecord(@PathVariable Hardware editHardware, @NotNull Model model) {
         model.addAttribute("editHardware", editHardware);
         initializeDropDownChoices(model);
-        return "/edit/hardwareEdit";
+        return "view/hardware/editPage";
     }
 
     @NotNull
@@ -138,9 +134,11 @@ public class HardwareController {
         editHardware.setDisplay(display);
 
         if (!saveRecord(editHardware)) {
-            model.addAttribute("errorMessage", "Представлена назва збірки уже присутня в базі!");
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана назва збірки уже присутня в базі!");
             initializeDropDownChoices(model);
-            return "/edit/hardwareEdit";
+            model.addAttribute("hardware", lastOutputtedHardware);
+            return "view/hardware/editPage";
         }
         return "redirect:/hardware";
     }

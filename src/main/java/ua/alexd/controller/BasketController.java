@@ -69,7 +69,7 @@ public class BasketController {
         lastOutputtedBaskets = baskets;
         model.addAttribute("baskets", baskets);
         initializeDropDownChoices(model);
-        return "/basket/table";
+        return "view/basket/table";
     }
 
     @NotNull
@@ -97,7 +97,7 @@ public class BasketController {
     private String editRecord(@NotNull @PathVariable Basket editBasket, @NotNull Model model) {
         model.addAttribute("editBasket", editBasket);
         initializeDropDownChoices(model);
-        return "/basket/editPage";
+        return "view/basket/editPage";
     }
 
     @NotNull

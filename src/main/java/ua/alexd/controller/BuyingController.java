@@ -55,7 +55,7 @@ public class BuyingController {
         lastOutputtedBuyings = buyings;
         model.addAttribute("buyings", buyings);
         initializeDropDownChoices(model);
-        return "/buying/table";
+        return "view/buying/table";
     }
 
     @NotNull
@@ -76,7 +76,7 @@ public class BuyingController {
     private String editRecord(@NotNull @PathVariable Buying editBuying, @NotNull Model model) {
         model.addAttribute("editBuying", editBuying);
         initializeDropDownChoices(model);
-        return "/buying/editPage";
+        return "view/buying/editPage";
     }
 
     @NotNull
