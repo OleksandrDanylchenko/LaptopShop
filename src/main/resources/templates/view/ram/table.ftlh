@@ -7,8 +7,7 @@
 <@htmlPad.page "RAM">
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                    data-target="#ramAddModal">
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ramAddModal">
                 <i class="far fa-plus-square"></i> Додати нову оперативну пам'ять
             </button>
             <@addModal.ramAdd/>

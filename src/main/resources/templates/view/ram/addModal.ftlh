@@ -29,7 +29,7 @@
                                 <label class="d-inline ml-2" for="memory">Обсяг пам'яті (GiB):</label>
                                 <input type="number" id="newMemoryInput" min="1" max="225" class="form-control"
                                        name="memory" required/>
-                                <div class="invalid-feedback">Некоректно задано обсяг пам'яті!</div>
+                                <div class="invalid-feedback">Обсяг пам'яті задано некоректно!</div>
                             </div>
                         </div>
                     </form>

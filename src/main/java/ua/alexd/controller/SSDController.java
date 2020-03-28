@@ -41,22 +41,17 @@ public class SSDController {
         var ssds = ssdRepo.findAll(ssdSpecification);
         lastOutputtedSSDs = ssds;
         siteModel.addAttribute("ssds", ssds);
-        return "/list/ssdList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/ssdAdd";
+        return "view/ssd/table";
     }
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD,
-                             @NotNull Model model) {
+    private String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD, @NotNull Model model) {
         if (!saveRecord(newSSD)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/ssdAdd";
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель SSD диску уже присутня в базі!");
+            model.addAttribute("ssds", lastOutputtedSSDs);
+            return "view/ssd/table";
         }
         return "redirect:/ssd";
     }
@@ -70,13 +65,15 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/edit/{editSSD}")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
+    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
-        editSSD.setModel(model);
-        editSSD.setMemory(memory);
+        editSSD.setModel(editModel);
+        editSSD.setMemory(editMemory);
         if (!saveRecord(editSSD)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "edit/ssdEdit";
+            siteModel.addAttribute("errorMessage",
+                    "Представлена змінювана модель SSD диску уже присутня в базі!");
+            siteModel.addAttribute("ssds", lastOutputtedSSDs);
+            return "view/ssd/table";
         }
         return "redirect:/ssd";
     }

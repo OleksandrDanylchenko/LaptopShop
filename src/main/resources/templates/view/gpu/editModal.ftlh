@@ -21,7 +21,7 @@
                                 <label class="d-inline ml-2" for="model">Назва змінюваної моделі:</label>
                                 <input type="text" id="editModelInput${id}" class="form-control" name="editModel"
                                        required/>
-                                <div class="invalid-feedback">Назва змінюваної моделі не може бути пустою!</div>
+                                <div class="invalid-feedback">Назва змінюваної моделі задано некоректно!</div>
                             </div>
                         </div>
                         <div class="form-row my-2">
@@ -29,7 +29,7 @@
                                 <label class="d-inline ml-2" for="memory">Обсяг пам'яті (GiB):</label>
                                 <input type="number" id="editMemoryInput${id}" min="1" max="225" class="form-control"
                                        name="editMemory" required/>
-                                <div class="invalid-feedback">Некоректно задано обсяг пам'яті!</div>
+                                <div class="invalid-feedback">Обсяг пам'яті задано некоректно!</div>
                             </div>
                         </div>
                     </form>

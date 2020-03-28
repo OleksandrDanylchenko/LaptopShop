@@ -1,16 +1,22 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
+<#import "../../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "SSD">
+<@htmlPad.page "SSD">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/ssd/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий SSD диск</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ssdAddModal">
+                <i class="far fa-plus-square"></i> Додати новий SSD диск
+            </button>
+            <@addModal.ssdAdd/>
         </div>
         <div class="d-flex justify-content-center">
-                <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ssd/importExcel" role="button">
-                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
-                <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
-                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ssd/importExcel" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+            <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
@@ -37,7 +43,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if ssds?has_content>
             <div class="h1">Список SSD дисків:</div>
             <table class="table table-hover">
@@ -56,10 +67,20 @@
                         <th class="text-danger" scope="row">${ssd.id}</th>
                         <td>${ssd.model}</td>
                         <td>${ssd.memory}</td>
-                        <td><a class="btn btn-outline-dark" href="/ssd/edit/${ssd.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/ssd/delete/${ssd.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#ssdEditModal${ssd.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.ssdEdit id="${ssd.id}" ssdModel="${ssd.model}" ssdMemory="${ssd.memory?c}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${ssd.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${ssd.id}"
+                            deletionLink="/ssd/delete/${ssd.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -69,4 +90,4 @@
             <div class="h3">Не знайдено жодного SSD диску.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
