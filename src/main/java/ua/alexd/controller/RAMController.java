@@ -41,41 +41,32 @@ public class RAMController {
         var rams = ramRepo.findAll(ramSpecification);
         lastOutputtedRams = rams;
         siteModel.addAttribute("rams", rams);
-        return "/list/ramList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/ramAdd";
+        return "view/ram/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newRAM") RAM newRAM, @NotNull Model model) {
         if (!saveRecord(newRAM)) {
-            model.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "add/ramAdd";
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель оперативної пам'яті уже присутня в базі!");
+            model.addAttribute("rams", lastOutputtedRams);
+            return "view/ram/table";
         }
         return "redirect:/ram";
     }
 
     @NotNull
-    @GetMapping("/edit/{editRam}")
-    private String editRecord(@PathVariable RAM editRam, @NotNull Model model) {
-        model.addAttribute("editRam", editRam);
-        return "/edit/ramEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editRam}")
-    private String editRecord(@RequestParam String model, @RequestParam Integer memory,
+    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                               @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
-        editRam.setModel(model);
-        editRam.setMemory(memory);
+        editRam.setModel(editModel);
+        editRam.setMemory(editMemory);
         if (!saveRecord(editRam)) {
-            siteModel.addAttribute("errorMessage", "Представлена модель уже присутня в базі!");
-            return "edit/ramEdit";
+            siteModel.addAttribute("errorMessage",
+                    "Представлена змінювана модель оперативної пам'яті уже присутня в базі!");
+            siteModel.addAttribute("rams", lastOutputtedRams);
+            return "view/ram/table";
         }
         return "redirect:/ram";
     }

@@ -1,10 +1,17 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
+<#import "../../parts/deleteModal.ftlh" as deleteModal>
 
-<@pad.page "RAM">
+<@htmlPad.page "RAM">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger" href="/ram/add" role="button">
-                <i class="far fa-plus-square"></i> Додати нову оперативну пам'ять</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                    data-target="#ramAddModal">
+                <i class="far fa-plus-square"></i> Додати нову оперативну пам'ять
+            </button>
+            <@addModal.ramAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ram/importExcel" role="button">
@@ -37,7 +44,12 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if rams?has_content>
             <div class="h1">Список оперативної пам'яті:</div>
             <table class="table table-hover">
@@ -56,10 +68,20 @@
                         <th class="text-danger" scope="row">${ram.id}</th>
                         <td>${ram.model}</td>
                         <td>${ram.memory}</td>
-                        <td><a class="btn btn-outline-dark" href="/ram/edit/${ram.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/ram/delete/${ram.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#ramEditModal${ram.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.ramEdit id="${ram.id}" ramModel="${ram.model}" ramMemory="${ram.memory}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${ram.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${ram.id}"
+                            deletionLink="/ram/delete/${ram.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -69,4 +91,4 @@
             <div class="h3">Не знайдено жодної оперативної пам'яті.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>
