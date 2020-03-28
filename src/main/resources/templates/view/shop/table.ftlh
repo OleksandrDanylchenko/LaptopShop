@@ -1,10 +1,16 @@
-<#import "../parts/htmlPad.ftlh" as pad>
+<#import "../../parts/htmlPad.ftlh" as htmlPad>
+<#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
+<#import "../../parts/deleteModal.ftlh" as deleteModal>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 
-<@pad.page "Shops">
+<@htmlPad.page "Shops">
     <div class="row">
         <div class="col">
-            <a class="btn btn-outline-danger float-left" href="/shop/add" role="button">
-                <i class="far fa-plus-square"></i> Додати новий магазин</a>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#shopAddModal">
+                <i class="far fa-plus-square"></i> Додати новий магазин
+            </button>
+            <@addModal.shopAdd/>
         </div>
         <div class="d-flex justify-content-center">
             <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/shop/importExcel" role="button">
@@ -33,7 +39,12 @@
         </div>
     </div>
 
-    <div class="row mt-2">
+    <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if shops?has_content>
             <div class="h1">Список магазинів:</div>
             <table class="table table-hover">
@@ -50,10 +61,19 @@
                     <tr>
                         <th class="text-danger" scope="row">${shop.id}</th>
                         <td>${shop.address}</td>
-                        <td><a class="btn btn-outline-dark" href="/shop/edit/${shop.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline-danger" href="/shop/delete/${shop.id}"
-                               role="button" onclick="return confirm('Ви впевнені?')"><i class="fa fa-trash"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#shopEditModal${shop.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.shopEdit id="${shop.id}" shopAddress="${shop.address}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${shop.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${shop.id}" deletionLink="/shop/delete/${shop.id}"/>
                         </td>
                     </tr>
                 </#list>
@@ -63,4 +83,4 @@
             <div class="h3">Не знайдено жодного магазину.</div>
         </#if>
     </div>
-</@pad.page>
+</@htmlPad.page>

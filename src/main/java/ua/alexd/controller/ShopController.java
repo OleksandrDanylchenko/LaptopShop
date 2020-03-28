@@ -40,39 +40,28 @@ public class ShopController {
                 : shopRepo.findAll();
         lastOutputtedShops = shops;
         model.addAttribute("shops", shops);
-        return "list/shopList";
-    }
-
-    @NotNull
-    @GetMapping("/add")
-    private String addRecord() {
-        return "add/shopAdd";
+        return "view/shop/table";
     }
 
     @NotNull
     @PostMapping("/add")
     private String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
         if (!saveRecord(newShop)) {
-            model.addAttribute("Представлена адреса уже уже присутня в базі!");
-            return "add/shopAdd";
+            model.addAttribute("Представлена нова адреса магазину уже уже присутня в базі!");
+            model.addAttribute("shops", lastOutputtedShops);
+            return "view/shop/table";
         }
         return "redirect:/shop";
     }
 
     @NotNull
-    @GetMapping("/edit/{editShop}")
-    private String editRecord(@PathVariable Shop editShop, @NotNull Model model) {
-        model.addAttribute("editShop", editShop);
-        return "/edit/shopEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editShop}")
-    private String editRecord(@RequestParam String address, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
-        editShop.setAddress(address);
+    private String editRecord(@RequestParam String editAddress, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
+        editShop.setAddress(editAddress);
         if (!saveRecord(editShop)) {
-            model.addAttribute("Представлена адреса уже уже присутня в базі!");
-            return "edit/shopEdit";
+            model.addAttribute("Представлена змінювана адреса магазину уже присутня в базі!");
+            model.addAttribute("shops", lastOutputtedShops);
+            return "view/shop/table";
         }
         return "redirect:/shop";
     }
