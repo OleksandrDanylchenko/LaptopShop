@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -17,6 +18,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan
 @PropertySource("classpath:excelExport.properties")
 public class MvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(@NotNull ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("security/login");
+    }
+
     @Override
     public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static/public/images/favicon.ico");
@@ -33,7 +39,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Bean
     public ViewResolver jspViewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        var viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/resources/templates/list/");
         viewResolver.setSuffix(".ftlh");
         return viewResolver;

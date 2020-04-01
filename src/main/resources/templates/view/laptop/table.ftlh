@@ -86,7 +86,8 @@
                         <td><#if laptop.type??>${laptop.type.name}<#else>Відсутній</#if></td>
                         <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Відсутній</#if></td>
                         <td><a class="btn btn-outline-dark" href="/laptop/edit/${laptop.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                               role="button"><i class="fa fa-edit"></i></a>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${laptop.id}">

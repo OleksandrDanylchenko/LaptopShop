@@ -20,6 +20,7 @@
                         <label class="d-inline ml-2" for="name">Назва нового типу:</label>
                         <input type="text" id="newNameInput" class="form-control" name="name" required/>
                         <div class="invalid-feedback">Назву нового типу задано некоректно!</div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["newNameInput"]/>
                     <@vC.valueBreaker id="Add" inputIds=["newNameInput"]/>

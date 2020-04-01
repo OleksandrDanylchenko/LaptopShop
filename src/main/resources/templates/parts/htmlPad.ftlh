@@ -7,7 +7,6 @@
 
         <title>${title}</title>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
-        <link rel="stylesheet" href="/styles/navbarStyle.css">
         <link rel="stylesheet" href="/styles/fixBtnStyle.css">
 
         <!-- Bootstrap CSS -->
@@ -32,11 +31,9 @@
     <body>
 
     <#include "navBar.ftlh">
-
     <div class="container-fluid mt-lg-3 mt-2 px-5">
         <#nested>
     </div>
-
     <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
 
     </body>
