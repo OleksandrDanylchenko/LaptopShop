@@ -30,6 +30,7 @@
                                 <div class="invalid-feedback">Назву змінюваної моделі задано некоректно!</div>
                             </div>
                         </div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["editBrandInput${id}", "editModelInput${id}"]/>
                     <@vC.valueBreaker id="${id}" inputIds=["editBrandInput${id}", "editModelInput${id}"]/>

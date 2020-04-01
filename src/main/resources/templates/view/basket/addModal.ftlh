@@ -50,6 +50,7 @@
                                         <div class="invalid-feedback">Некоректна дата/час покупки!</div>
                                     </div>
                                 </div>
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             </form>
                             <@fC.inputsCleaner modalId="basketAddModal"
                             inputIds=["dateTimeInput"]/>

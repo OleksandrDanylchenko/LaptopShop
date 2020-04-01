@@ -123,6 +123,7 @@
                                                         <div class="invalid-feedback">Не обрано модель HDD диску!</div>
                                                     </div>
                                                 </div>
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                                             </form>
                                             <@eB.emptyBreaker inputIds=["newAssemblyNameInput"]/>
                                             <@vC.valueBreaker id="Add" inputIds=["newAssemblyNameInput"]/>

@@ -2,7 +2,7 @@
     <script>
         $("#${modalId}").on('hidden.bs.modal', function () {
             <#list selectIds as selectId>
-            document.getElementById('${selectId}').selectedIndex = 0;
+                document.getElementById('${selectId}').selectedIndex = 0;
             </#list>
         });
     </script>

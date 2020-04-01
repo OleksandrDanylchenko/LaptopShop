@@ -56,6 +56,7 @@
                                             <div class="invalid-feedback">Не обрано збірки!</div>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                                 </form>
                                 <@sC.selectsCleaner modalId="laptopAddModal"
                                 selectIds=["labelSelect", "typeSelect", "hardwareSelect"]/>

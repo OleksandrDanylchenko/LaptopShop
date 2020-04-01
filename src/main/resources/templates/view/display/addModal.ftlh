@@ -48,6 +48,7 @@
                                 <div class="invalid-feedback">Розширення задано некоректно!</div>
                             </div>
                         </div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["newModelInput", "newTypeInput", "newResolutionInput"]/>
                     <@vC.valueBreaker id="Add" inputIds=["newModelInput", "newTypeInput", "newResolutionInput"]/>

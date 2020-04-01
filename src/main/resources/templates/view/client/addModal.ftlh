@@ -42,6 +42,7 @@
                                 <div class="invalid-feedback">Уведено некоректну дату реєстрації!</div>
                             </div>
                         </div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["newFirstNameInput", "newSecondNameInput"]/>
                     <@vC.valueBreaker id="Add" inputIds=["newFirstNameInput", "newSecondNameInput"]/>

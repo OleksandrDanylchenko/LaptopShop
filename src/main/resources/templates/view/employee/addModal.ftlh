@@ -49,6 +49,7 @@
                                     <div class="invalid-feedback">Не обрано магазину!</div>
                                 </div>
                             </div>
+                            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                         </form>
                         <@eB.emptyBreaker inputIds=["newFirstNameInput", "newSecondNameInput"]/>
                         <@vC.valueBreaker id="Add" inputIds=["newFirstNameInput", "newSecondNameInput"]/>

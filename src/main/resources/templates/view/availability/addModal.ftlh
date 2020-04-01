@@ -76,6 +76,7 @@
                                     </div>
                                     <@dO.datesBreaker "newDateStart" "newDateEnd"/>
                                 </div>
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             </form>
                             <@fC.inputsCleaner modalId="availabilityAddModal"
                             inputIds=["priceInput", "quantityInput", "newDateStart", "newDateEnd"]/>

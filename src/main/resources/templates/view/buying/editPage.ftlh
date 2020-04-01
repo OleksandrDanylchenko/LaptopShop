@@ -52,6 +52,7 @@
             </div>
 
             <button type="submit" class="btn btn-danger float-right">Змінити</button>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         </form>
     </div>
 </@htmlPad.page>

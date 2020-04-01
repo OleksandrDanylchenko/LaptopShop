@@ -51,6 +51,7 @@
                                         <div class="invalid-feedback">Уведено некоректну ціну! (<5000 aбо >2147483646)</div>
                                     </div>
                                 </div>
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             </form>
                             <@fC.inputsCleaner modalId="buyingAddModal"
                             inputIds=["priceInput"]/>

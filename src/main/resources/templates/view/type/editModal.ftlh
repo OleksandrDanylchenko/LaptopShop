@@ -20,6 +20,7 @@
                         <label class="d-inline ml-2" for="editName">Назва змінюваного типу:</label>
                         <input type="text" id="editNameInput${id}" class="form-control" name="editName" required/>
                         <div class="invalid-feedback">Назву змінюваного типу задано некоректно!</div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["editNameInput${id}"]/>
                     <@vC.valueBreaker id="${id}" inputIds=["editNameInput${id}"]/>

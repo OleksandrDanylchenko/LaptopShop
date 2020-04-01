@@ -20,6 +20,7 @@
                         <label class="d-inline ml-2" for="editAddress">Адреса змінюваного магазину:</label>
                         <input type="text" id="editAddressInput${id}" class="form-control" name="editAddress" required/>
                         <div class="invalid-feedback">Адресу змінюваного магазину задано некоректно!</div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["editAddressInput${id}"]/>
                     <@vC.valueBreaker id="${id}" inputIds=["editAddressInput${id}"]/>

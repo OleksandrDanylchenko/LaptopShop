@@ -49,6 +49,7 @@
                     <button type="submit" class="btn btn-danger ml-md-2 my-2 float-right">
                         <i class="fa fa-search"></i>
                     </button>
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>

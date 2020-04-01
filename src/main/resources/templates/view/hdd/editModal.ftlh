@@ -32,6 +32,7 @@
                                 <div class="invalid-feedback">Обсяг пам'яті задано некоректно!</div>
                             </div>
                         </div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["editModelInput${id}"]/>
                     <@vC.valueBreaker id="${id}" inputIds=["editModelInput${id}"]/>

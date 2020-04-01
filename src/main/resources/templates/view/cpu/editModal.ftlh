@@ -33,6 +33,7 @@
                                 <div class="invalid-feedback">Тактову частоту задано некоректно!</div>
                             </div>
                         </div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["editModelInput${id}"]/>
                     <@vC.valueBreaker id="${id}" inputIds=["editModelInput${id}"]/>

@@ -17,9 +17,10 @@
                 <div class="modal-body">
                     <form method="post" id="shopAddForm" action="/shop/add" class="form-group needs-validation w-100"
                           novalidate modelAttribute="newShop" onsubmit="return validateFormAdd()">
-                                <label class="d-inline ml-2" for="name">Адреса нового магазину:</label>
-                                <input type="text" id="newAddressInput" class="form-control" name="address" required/>
-                                <div class="invalid-feedback">Адресу нового магазину задано некоректно!</div>
+                        <label class="d-inline ml-2" for="name">Адреса нового магазину:</label>
+                        <input type="text" id="newAddressInput" class="form-control" name="address" required/>
+                        <div class="invalid-feedback">Адресу нового магазину задано некоректно!</div>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                     </form>
                     <@eB.emptyBreaker inputIds=["newAddressInput"]/>
                     <@vC.valueBreaker id="Add" inputIds=["newAddressInput"]/>
