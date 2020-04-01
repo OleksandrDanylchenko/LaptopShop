@@ -5,7 +5,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "Clients")
-public class Client implements ShopDomain {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

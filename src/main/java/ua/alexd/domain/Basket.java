@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Baskets")
-public class Basket implements ShopDomain {
+public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
