@@ -1,4 +1,4 @@
-package ua.alexd.controller;
+package ua.alexd.security;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.alexd.domain.Admin;
-import ua.alexd.domain.Role;
-import ua.alexd.repos.AdminRepo;
 
 import java.util.Collections;
 
@@ -38,7 +35,7 @@ public class RegistrationController {
             return "/security/registration";
         }
         newAdmin.setActive(true);
-        newAdmin.setRoles(Collections.singleton(Role.ADMIN));
+        newAdmin.setRoles(Collections.singleton(Role.MANAGER));
         adminRepo.save(newAdmin);
         return "redirect:/login";
     }

@@ -7,16 +7,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-
-import javax.sql.DataSource;
+import ua.alexd.security.AdminService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final DataSource dataSource;
+    private AdminService adminService;
 
-    public WebSecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public WebSecurityConfig(AdminService adminService) {
+        this.adminService = adminService;
     }
 
     @Override
@@ -45,12 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select username, password, is_active from admins where username=?")
-                .authoritiesByUsernameQuery("select a.username, ar.roles from admins a " +
-                        "inner join admin_role ar on a.id = ar.admin_id " +
-                        "where username=?");
+        auth.userDetailsService(adminService)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 }
