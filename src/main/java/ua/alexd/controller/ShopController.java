@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.specification.ShopSpecification.addressLike;
 
 @Controller
 @RequestMapping("/shop")
@@ -35,9 +37,8 @@ public class ShopController {
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String address, @NotNull Model model) {
-        var shops = address != null && !address.isEmpty()
-                ? shopRepo.findByAddress(address)
-                : shopRepo.findAll();
+        var shopSpecification = Specification.where(addressLike(address));
+        var shops = shopRepo.findAll(shopSpecification);
         lastOutputtedShops = shops;
         model.addAttribute("shops", shops);
         return "view/shop/table";

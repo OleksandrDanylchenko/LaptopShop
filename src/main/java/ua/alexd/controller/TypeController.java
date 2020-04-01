@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
+import static ua.alexd.specification.TypeSpecification.typeNameLike;
 
 @Controller
 @RequestMapping("/type")
@@ -31,9 +33,8 @@ public class TypeController {
     @NotNull
     @GetMapping
     private String getRecords(@RequestParam(required = false) String typeName, @NotNull Model model) {
-        var types = typeName != null && !typeName.isEmpty()
-                ? typeRepo.findByName(typeName)
-                : typeRepo.findAll();
+        var typeSpecification = Specification.where(typeNameLike(typeName));
+        var types = typeRepo.findAll(typeSpecification);
         lastOutputtedTypes = types;
         model.addAttribute("types", types);
         return "view/type/table";
