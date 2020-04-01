@@ -138,8 +138,11 @@
                         <td><#if assembly.ram??>${assembly.ram.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Відсутня</#if></td>
-                        <td><a class="btn btn-outline-dark" href="/hardware/edit/${assembly.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td>
+                            <a class="btn btn-outline-dark" href="/hardware/edit/${assembly.id}" role="button">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${assembly.id}">
