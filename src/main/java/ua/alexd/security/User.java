@@ -5,11 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Collections;
 
 @Entity
-@Table(name = "Admins")
-public class Admin implements UserDetails {
+@Table(name = "Users")
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -27,19 +27,17 @@ public class Admin implements UserDetails {
     @Column(name = "isActive")
     private boolean isActive;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "admin_role", joinColumns = @JoinColumn(name = "admin_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private Role role;
 
-    public Admin() {
+    public User() {
     }
 
-    public Admin(String username, String password, boolean isActive, Set<Role> roles) {
+    public User(String username, String password, boolean isActive, Role role) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;
-        this.roles = roles;
+        this.role = role;
     }
 
     public int getId() {
@@ -74,12 +72,12 @@ public class Admin implements UserDetails {
         isActive = active;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -104,6 +102,6 @@ public class Admin implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return Collections.singleton(getRole());
     }
 }

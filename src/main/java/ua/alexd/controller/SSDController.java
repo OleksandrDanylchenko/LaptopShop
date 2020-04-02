@@ -57,13 +57,6 @@ public class SSDController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editSSD}")
-    private String editRecord(@PathVariable SSD editSSD, @NotNull Model model) {
-        model.addAttribute("editSSD", editSSD);
-        return "/edit/ssdEdit";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editSSD}")
     private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {

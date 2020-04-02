@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    MANAGER;
+    USER, MANAGER, CEO;
 
     @NotNull
     @Contract(pure = true)

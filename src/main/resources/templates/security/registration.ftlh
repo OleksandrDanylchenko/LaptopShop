@@ -8,12 +8,12 @@
 
         <p class="h1 text-center">Реєстрація:</p>
         <form method="post" action="/registration" class="form-group needs-validation w-100" novalidate
-              modelAttribute="newAdmin">
+              modelAttribute="newUser">
             <div class="form-row my-2">
                 <div class="col">
                     <label class="d-inline ml-2" for="loginInput">Новий логін:</label>
                     <input type="text" id="loginInput" class="form-control" name="username"
-                           value="${RequestParameters.login!}" required/>
+                           value="${RequestParameters.username!}" required/>
                     <div class="invalid-feedback">Новий логін уведено некоректно!</div>
                 </div>
             </div>

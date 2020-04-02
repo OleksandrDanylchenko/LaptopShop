@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collections;
-
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-    private final AdminRepo adminRepo;
+    private final UserRepo userRepo;
 
-    public RegistrationController(AdminRepo adminRepo) {
-        this.adminRepo = adminRepo;
+    public RegistrationController(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
     @NotNull
@@ -27,16 +25,16 @@ public class RegistrationController {
 
     @NotNull
     @PostMapping
-    public String registration(@NotNull @ModelAttribute("newAdmin") Admin newAdmin, @NotNull Model model) {
-        var foundedAdmin = adminRepo.findByUsername(newAdmin.getUsername());
-        if (foundedAdmin != null) {
+    private String registration(@NotNull @ModelAttribute("newUser") User newUser, @NotNull Model model) {
+        var foundedUser = userRepo.findByUsername(newUser.getUsername());
+        if (foundedUser != null) {
             model.addAttribute("errorMessage",
                     "Представлений логін уже присутній в базі даних!");
             return "/security/registration";
         }
-        newAdmin.setActive(true);
-        newAdmin.setRoles(Collections.singleton(Role.MANAGER));
-        adminRepo.save(newAdmin);
+        newUser.setActive(true);
+        newUser.setRole(Role.USER);
+        userRepo.save(newUser);
         return "redirect:/login";
     }
 }
