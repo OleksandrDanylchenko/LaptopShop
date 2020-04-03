@@ -72,13 +72,6 @@ public class CPUController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -90,15 +83,11 @@ public class CPUController {
             return "redirect:/cpu";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(cpuFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці процесорів!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці процесорів!");
+            model.addAttribute("cpus", lastOutputtedCPUs);
+            return "view/cpu/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", CPU.class.getSimpleName());
-        model.addAttribute("tableName", "процесорів");
     }
 
     @NotNull

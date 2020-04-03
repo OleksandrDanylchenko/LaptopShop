@@ -2,6 +2,8 @@
 <#import "addModal.ftlh" as addModal>
 <#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../../excel/excelUploadModal.ftlh" as eU>
 <#setting locale="uk">
 
 <@htmlPad.page "Client">
@@ -14,8 +16,11 @@
             <@addModal.clientAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/client/importExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                    data-target="#ClientExcelUploadModal">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+            </button>
+            <@eU.excelUpload tableNameEn="Client" tableNameUk="клієнтів"/>
             <a class="btn btn-success" id="fixedBtnHeight" href="/client/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
@@ -53,6 +58,11 @@
     </div>
 
     <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if clients?has_content>
             <div class="h1">Список клієнтів:</div>
             <table class="table table-hover">

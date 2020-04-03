@@ -100,13 +100,6 @@ public class LaptopController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -118,9 +111,11 @@ public class LaptopController {
             return "redirect:/laptop";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(laptopFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці ноутбуків!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці ноутбуків!");
+            model.addAttribute("laptops", lastOutputtedLaptops);
+            initializeDropDownChoices(model);
+            return "view/laptop/table";
         }
     }
 

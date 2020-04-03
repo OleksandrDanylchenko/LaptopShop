@@ -3,6 +3,7 @@
 <#import "addModal.ftlh" as addModal>
 <#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
+<#import "../../excel/excelUploadModal.ftlh" as eU>
 
 <@htmlPad.page "Display">
     <div class="row">
@@ -14,8 +15,11 @@
             <@addModal.displayAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/display/importExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                    data-target="#DisplayExcelUploadModal">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+            </button>
+            <@eU.excelUpload tableNameEn="Display" tableNameUk="дисплеїв"/>
             <a class="btn btn-success" id="fixedBtnHeight" href="/display/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>

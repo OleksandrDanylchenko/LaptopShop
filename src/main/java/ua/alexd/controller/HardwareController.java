@@ -136,13 +136,6 @@ public class HardwareController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -154,15 +147,12 @@ public class HardwareController {
             return "redirect:/hardware";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(hardwareFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці збірок!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці збірок!");
+            model.addAttribute("hardware", lastOutputtedHardware);
+            initializeDropDownChoices(model);
+            return "view/hardware/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Hardware.class.getSimpleName());
-        model.addAttribute("tableName", "збірок");
     }
 
     @NotNull

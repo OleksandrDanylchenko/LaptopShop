@@ -2,6 +2,8 @@
 <#import "addModal.ftlh" as addModal>
 <#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
+<#import "../../errorsHandlers/errorOutput.ftlh" as eO>
+<#import "../../excel/excelUploadModal.ftlh" as eU>
 
 <@htmlPad.page "Buying">
     <div class="row">
@@ -13,8 +15,11 @@
             <@addModal.buyingAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/buying/importExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                    data-target="#BuyingExcelUploadModal">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+            </button>
+            <@eU.excelUpload tableNameEn="Buying" tableNameUk="записів про покупки"/>
             <a class="btn btn-success" id="fixedBtnHeight" href="/buying/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
@@ -60,6 +65,11 @@
     </div>
 
     <div class="mt-4">
+        <div class="row">
+            <div class="col">
+                <@eO.errorOutput errorMessage!/>
+            </div>
+        </div>
         <#if buyings?has_content>
             <div class="h1">Список покупок:</div>
             <table class="table table-hover">

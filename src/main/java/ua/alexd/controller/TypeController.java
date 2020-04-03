@@ -66,13 +66,6 @@ public class TypeController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -84,15 +77,11 @@ public class TypeController {
             return "redirect:/type";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(typeFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці типів!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці типів!");
+            model.addAttribute("types", lastOutputtedTypes);
+            return "view/type/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Type.class.getSimpleName());
-        model.addAttribute("tableName", "типів");
     }
 
     @NotNull

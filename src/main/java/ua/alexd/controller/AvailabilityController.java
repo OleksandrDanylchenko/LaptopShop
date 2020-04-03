@@ -112,13 +112,6 @@ public class AvailabilityController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -130,15 +123,12 @@ public class AvailabilityController {
             return "redirect:/availability";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл таблиці записів про наявність!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл таблиці записів про наявність!");
+            initializeDropDownChoices(model);
+            model.addAttribute("availabilities", lastOutputtedAvailabilities);
+            return "view/availability/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Availability.class.getSimpleName());
-        model.addAttribute("tableName", "записів про наявність");
     }
 
     @NotNull

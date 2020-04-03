@@ -89,13 +89,6 @@ public class BuyingController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -107,15 +100,12 @@ public class BuyingController {
             return "redirect:/buying";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(buyingFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці покупок!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці покупок!");
+            model.addAttribute("buyings", lastOutputtedBuyings);
+            initializeDropDownChoices(model);
+            return "view/buying/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Buying.class.getSimpleName());
-        model.addAttribute("tableName", "покупок");
     }
 
     @NotNull

@@ -77,13 +77,6 @@ public class DisplayController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -95,15 +88,11 @@ public class DisplayController {
             return "redirect:/display";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(displayFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці дисплеїв!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці дисплеїв!");
+            model.addAttribute("displays", lastOutputtedDisplay);
+            return "view/display/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Display.class.getSimpleName());
-        model.addAttribute("tableName", "дисплеїв");
     }
 
     @NotNull

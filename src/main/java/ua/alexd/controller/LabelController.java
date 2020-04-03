@@ -70,13 +70,6 @@ public class LabelController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -89,14 +82,9 @@ public class LabelController {
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(labelFilePath);
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці найменувань!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("labels", lastOutputtedLabel);
+            return "view/label/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Label.class.getSimpleName());
-        model.addAttribute("tableName", "найменувань");
     }
 
     @NotNull

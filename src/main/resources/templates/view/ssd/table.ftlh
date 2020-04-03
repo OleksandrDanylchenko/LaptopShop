@@ -3,6 +3,7 @@
 <#import "addModal.ftlh" as addModal>
 <#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
+<#import "../../excel/excelUploadModal.ftlh" as eU>
 
 <@htmlPad.page "SSD">
     <div class="row">
@@ -13,8 +14,11 @@
             <@addModal.ssdAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/ssd/importExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i></a>
+            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                    data-target="#SsdExcelUploadModal">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+            </button>
+            <@eU.excelUpload tableNameEn="Ssd" tableNameUk="SSD дисків"/>
             <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>

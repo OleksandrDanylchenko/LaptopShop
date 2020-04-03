@@ -68,13 +68,6 @@ public class ShopController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -86,15 +79,11 @@ public class ShopController {
             return "redirect:/shop";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(shopFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці магазинів!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці магазинів!");
+            model.addAttribute("shops", lastOutputtedShops);
+            return "view/shop/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Shop.class.getSimpleName());
-        model.addAttribute("tableName", "магазинів");
     }
 
     @NotNull

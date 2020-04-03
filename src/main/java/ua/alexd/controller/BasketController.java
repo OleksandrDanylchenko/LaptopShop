@@ -124,13 +124,6 @@ public class BasketController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -142,15 +135,12 @@ public class BasketController {
             return "redirect:/basket";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(basketFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці кошиків!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці кошиків!");
+            model.addAttribute("baskets", lastOutputtedBaskets);
+            initializeDropDownChoices(model);
+            return "view/basket/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Basket.class.getSimpleName());
-        model.addAttribute("tableName", "кошиків");
     }
 
     @NotNull

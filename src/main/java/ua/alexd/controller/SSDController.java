@@ -72,13 +72,6 @@ public class SSDController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -90,15 +83,11 @@ public class SSDController {
             return "redirect:/ssd";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(SSDFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці SSD дисків!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці SSD дисків!");
+            model.addAttribute("ssds", lastOutputtedSSDs);
+            return "view/ssd/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", SSD.class.getSimpleName());
-        model.addAttribute("tableName", "SSD дисків");
     }
 
     @NotNull

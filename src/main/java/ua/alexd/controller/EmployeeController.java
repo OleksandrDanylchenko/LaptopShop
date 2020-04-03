@@ -76,13 +76,6 @@ public class EmployeeController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -96,14 +89,10 @@ public class EmployeeController {
             deleteNonValidFile(employeeFilePath);
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці співробітників!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("employees", lastOutputtedEmployees);
+            initDropDownChoices(model);
+            return "view/employee/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Employee.class.getSimpleName());
-        model.addAttribute("tableName", "співробітників");
     }
 
     @NotNull

@@ -68,13 +68,6 @@ public class ClientController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -86,15 +79,11 @@ public class ClientController {
             return "redirect:/client";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(clientFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці клієнтів!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці клієнтів!");
+            model.addAttribute("clients", lastOutputtedClients);
+            return "view/client/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Client.class.getSimpleName());
-        model.addAttribute("tableName", "клієнтів");
     }
 
     @NotNull

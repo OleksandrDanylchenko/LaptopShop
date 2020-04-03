@@ -72,13 +72,6 @@ public class RAMController {
     }
 
     @NotNull
-    @GetMapping("/importExcel")
-    private String importExcel(@NotNull Model model) {
-        initializeImportAttributes(model);
-        return "excel/excelFilesUpload";
-    }
-
-    @NotNull
     @PostMapping("/importExcel")
     private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
@@ -90,15 +83,11 @@ public class RAMController {
             return "redirect:/ram";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(RAMFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці оперативної пам'яті!");
-            initializeImportAttributes(model);
-            return "excel/excelFilesUpload";
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці оперативної пам'яті!");
+            model.addAttribute("rams", lastOutputtedRams);
+            return "view/ram/table";
         }
-    }
-
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", RAM.class.getSimpleName());
-        model.addAttribute("tableName", "оперативної пам'яті");
     }
 
     @NotNull
