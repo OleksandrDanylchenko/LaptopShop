@@ -15,7 +15,6 @@ import ua.alexd.repos.LaptopRepo;
 import ua.alexd.repos.TypeRepo;
 
 import java.io.IOException;
-import java.util.List;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
@@ -55,7 +54,7 @@ public class LaptopController {
         var laptops = laptopRepo.findAll(laptopSpecification);
         lastOutputtedLaptops = laptops;
         model.addAttribute("laptops", laptops);
-        initializeAddingChoices(model);
+        initializeDropDownChoices(model);
         return "view/laptop/table";
     }
 
@@ -71,36 +70,31 @@ public class LaptopController {
         if (!saveRecord(newLaptop)) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель ноутбука уже присутня в базі!");
-            initializeAddingChoices(model);
+            model.addAttribute("laptops", lastOutputtedLaptops);
+            initializeDropDownChoices(model);
             return "view/laptop/table";
         }
         return "redirect:/laptop";
     }
 
     @NotNull
-    @GetMapping("/edit/{editLaptop}")
-    private String editRecord(@PathVariable Laptop editLaptop, @NotNull Model model) {
-        model.addAttribute("editLaptop", editLaptop);
-        initializeEditingChoices(editLaptop, model);
-        return "view/laptop/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editLaptop}")
-    private String editRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
-                              @RequestParam String labelModel, @NotNull @PathVariable Laptop editLaptop, @NotNull Model model) {
-        var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
+    private String editRecord(@RequestParam String editAssemblyName, @RequestParam String editTypeName,
+                              @RequestParam String editLabelModel, @NotNull @PathVariable Laptop editLaptop,
+                              @NotNull Model model) {
+        var hardware = hardwareRepo.findByAssemblyName(editAssemblyName);
         editLaptop.setHardware(hardware);
-        var type = typeRepo.findByName(typeName).get(0);
+        var type = typeRepo.findByName(editTypeName).get(0);
         editLaptop.setType(type);
-        var label = labelRepo.findByModel(labelModel);
+        var label = labelRepo.findByModel(editLabelModel);
         editLaptop.setLabel(label);
 
         if (!saveRecord(editLaptop)) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель ноутбука уже присутня в базі!");
-            initializeAddingChoices(model);
-            return "view/laptop/editPage";
+            model.addAttribute("laptops", lastOutputtedLaptops);
+            initializeDropDownChoices(model);
+            return "view/laptop/table";
         }
         return "redirect:/laptop";
     }
@@ -158,22 +152,9 @@ public class LaptopController {
         return true;
     }
 
-    private void initializeEditingChoices(@NotNull Laptop editLaptop, @NotNull Model model) {
-        var addedLaptopModels = laptopRepo.getAllModels();
-        addedLaptopModels.remove(editLaptop.getLabel().getModel());
-        initializeDropDownChoices(addedLaptopModels, model);
-    }
-
-    private void initializeAddingChoices(@NotNull Model model) {
-        initializeDropDownChoices(laptopRepo.getAllModels(), model);
-    }
-
-    private void initializeDropDownChoices(List<String> addedLaptopModels, @NotNull Model model) {
-        var availableModels = labelRepo.getAllModels();
-        availableModels.removeAll(addedLaptopModels);
-
+    private void initializeDropDownChoices(@NotNull Model model) {
         model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
                 .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", availableModels);
+                .addAttribute("labelModels", labelRepo.getAllModels());
     }
 }

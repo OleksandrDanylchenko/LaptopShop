@@ -1,6 +1,7 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 <#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 
 <@htmlPad.page "Laptop">
@@ -84,8 +85,16 @@
                         <td>${laptop.label.model}</td>
                         <td><#if laptop.type??>${laptop.type.name}<#else>Відсутній</#if></td>
                         <td><#if laptop.hardware??>${laptop.hardware.assemblyName}<#else>Відсутній</#if></td>
-                        <td><a class="btn btn-outline-dark" href="/laptop/edit/${laptop.id}"
-                               role="button"><i class="fa fa-edit"></i></a>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#laptopEditModal${laptop.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.laptopEdit id="${laptop.id}"
+                            currentLabelModel = "${(laptop.label??)?then(laptop.label.model, '')}"
+                            currentType = "${(laptop.type??)?then(laptop.type.name, '')}"
+                            currentAssembly = "${(laptop.hardware??)?then(laptop.hardware.assemblyName, '')}"
+                            />
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
