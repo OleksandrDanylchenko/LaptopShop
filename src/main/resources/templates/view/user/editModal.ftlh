@@ -34,7 +34,7 @@
                         <div class="form-row my-2">
                             <div class="col">
                                 <#assign isActiveChoises = ["Активний", "Неактивний"]>
-                                <label class="d-inline ml-2" for="editActive">Статус користувача:</label>
+                                <label class="d-inline ml-2" for="activeSelect${id}">Статус користувача:</label>
                                 <select class="custom-select" id="activeSelect${id}" name="editActive">
                                     <#list isActiveChoises as choice>
                                         <option value="${choice}">${choice}</option>

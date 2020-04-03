@@ -1,5 +1,6 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "addModal.ftlh" as addModal>
+<#import 'editModal.ftlh' as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 
 <@htmlPad.page "Employee">
@@ -42,7 +43,7 @@
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
-                            <select class="custom-select" name="isActive">
+                            <select class="custom-select" name="isWorking">
                                 <option value="" selected disabled>Статус співробітника</option>
                                 <option>Працюючий</option>
                                 <option>Звільнений</option>
@@ -87,9 +88,17 @@
                             <td>Закрито</td>
                             <td>Закрито</td>
                         </#if>
-                        <td>${employee.isActive?then("Працюючий", "Звільнений")}</td>
-                        <td><a class="btn btn-outline-dark" href="/employee/edit/${employee.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td>${employee.isWorking?then("Працюючий", "Звільнений")}</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#employeeEditModal${employee.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.employeeEdit id="${employee.id}" currentFirstName="${employee.firstName}"
+                            currentSecondName="${employee.secondName}"
+                            currentShopAddress="${(employee.shop??)?then(employee.shop.address, '')}"
+                            currentWorkingStatus="${employee.isWorking?string('Працюючий', 'Звільнений')}"/>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${employee.id}">

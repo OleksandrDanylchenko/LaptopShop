@@ -18,11 +18,13 @@
                             <div class="form-row mb-2">
                                 <div class="col">
                                     <label class="d-inline ml-2" for="employeeSelect${id}">ID співробітника:</label>
-                                    <select class="custom-select" id="employeeSelect${id}" name="editEmployeeId">
+                                    <select class="custom-select" id="employeeSelect${id}" name="editEmployeeId"
+                                            required>
                                         <#list employeeIds as employeeId>
                                             <option value="${employeeId}">${employeeId}</option>
                                         </#list>
                                     </select>
+                                    <div class="invalid-feedback">Не обрано ID співробітника!</div>
                                 </div>
                             </div>
                         </#if>
@@ -31,11 +33,12 @@
                             <div class="form-row my-2">
                                 <div class="col">
                                     <label class="d-inline ml-2" for="clientSelect${id}">ID покупця:</label>
-                                    <select class="custom-select" id="clientSelect${id}" name="editClientId">
+                                    <select class="custom-select" id="clientSelect${id}" name="editClientId" required>
                                         <#list clientIds as clientId>
                                             <option value="${clientId}">${clientId}</option>
                                         </#list>
                                     </select>
+                                    <div class="invalid-feedback">Не обрано ID клієнта!</div>
                                 </div>
                             </div>
                         </#if>
@@ -54,12 +57,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $("#basketEditModal${id}").on("show.bs.modal", function () {
-                            <#if currentEmployeeId != "">
                             $("#employeeSelect${id}").val("${currentEmployeeId}").change();
-                            </#if>
-                            <#if currentClientId != "">
                             $("#clientSelect${id}").val("${currentClientId}").change();
-                            </#if>
                             $("#dateTimeSelect${id}").val("${currentDateTime}").change();
                         })
                     </script>

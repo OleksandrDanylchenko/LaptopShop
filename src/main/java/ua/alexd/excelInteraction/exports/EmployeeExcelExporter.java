@@ -66,7 +66,7 @@ public class EmployeeExcelExporter extends AbstractXlsxView  {
                 generalRow.createCell(3).setCellValue(row.getShop().getId());
                 generalRow.createCell(4).setCellValue(row.getShop().getAddress());
             }
-            generalRow.createCell(5).setCellValue(row.getIsActive() ? "Працюючий" : "Звільнений");
+            generalRow.createCell(5).setCellValue(row.getIsWorking() ? "Працюючий" : "Звільнений");
             styler.setGeneralRowStyle(generalRow);
         }
     }

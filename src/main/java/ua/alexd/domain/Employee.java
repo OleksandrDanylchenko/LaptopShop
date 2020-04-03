@@ -19,8 +19,8 @@ public class Employee {
     private String secondName;
 
     @Basic
-    @Column(name = "isActive")
-    private Boolean isActive;
+    @Column(name = "isWorking")
+    private Boolean isWorking;
 
     @ManyToOne
     @JoinColumn(name = "shopId")
@@ -29,11 +29,11 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String firstName, String secondName, Shop shop, boolean isActive) {
+    public Employee(String firstName, String secondName, Shop shop, boolean isWorking) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.shop = shop;
-        this.isActive = isActive;
+        this.isWorking = isWorking;
     }
 
     public int getId() {
@@ -68,11 +68,11 @@ public class Employee {
         this.shop = shop;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    public Boolean getIsWorking() {
+        return isWorking;
     }
 
     public void setActive(Boolean active) {
-        isActive = active;
+        isWorking = active;
     }
 }

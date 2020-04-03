@@ -39,10 +39,10 @@ public class EmployeeController {
     private String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false) String shopAddress,
-                              @RequestParam(required = false) String isActive,
+                              @RequestParam(required = false) String isWorking,
                               @NotNull Model model) {
         var employeesSpecification = Specification.where(firstNameEqual(firstName)).and(secondNameEqual(secondName))
-                .and(shopAddressLike(shopAddress)).and(isActiveEqual(isActive));
+                .and(shopAddressLike(shopAddress)).and(isWorkingEqual(isWorking));
         var employees = employeeRepo.findAll(employeesSpecification);
         lastOutputtedEmployees = employees;
         model.addAttribute("employees", employees);
@@ -53,7 +53,7 @@ public class EmployeeController {
     @NotNull
     @PostMapping("/add")
     private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam String shopAddress, String isActive, @NotNull Model model) {
+                             @RequestParam String shopAddress, @NotNull Model model) {
         var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
         var newEmployee = new Employee(firstName, secondName, shop, true);
         employeeRepo.save(newEmployee);
@@ -61,24 +61,16 @@ public class EmployeeController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editEmployee}")
-    private String editRecord(@PathVariable Employee editEmployee, @NotNull Model model) {
-        model.addAttribute("editEmployee", editEmployee);
-        initDropDownChoices(model);
-        return "view/employee/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editEmployee}")
     private String editRecord(@NotNull @PathVariable Employee editEmployee,
-                              @RequestParam String firstName, @RequestParam String secondName,
-                              @RequestParam String shopAddress, @NotNull @RequestParam String isActive,
+                              @RequestParam String editFirstName, @RequestParam String editSecondName,
+                              @RequestParam String editShopAddress, @NotNull @RequestParam String editIsWorking,
                               @NotNull Model model) {
-        editEmployee.setFirstName(firstName);
-        editEmployee.setSecondName(secondName);
-        var employeeShop = shopRepo.findByAddress(shopAddress).get(0);
+        editEmployee.setFirstName(editFirstName);
+        editEmployee.setSecondName(editSecondName);
+        var employeeShop = shopRepo.findByAddress(editShopAddress).get(0);
         editEmployee.setShop(employeeShop);
-        editEmployee.setActive(isActive.equals("Працюючий"));
+        editEmployee.setActive(editIsWorking.equals("Працюючий"));
         employeeRepo.save(editEmployee);
         return "redirect:/employee";
     }
@@ -102,7 +94,8 @@ public class EmployeeController {
             return "redirect:/employee";
         } catch (IllegalArgumentException ignored) {
             deleteNonValidFile(employeeFilePath);
-            model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці співробітників!");
+            model.addAttribute("errorMessage",
+                    "Завантажено некоректний файл для таблиці співробітників!");
             initializeImportAttributes(model);
             return "excel/excelFilesUpload";
         }

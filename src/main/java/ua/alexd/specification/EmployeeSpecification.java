@@ -33,10 +33,9 @@ public final class EmployeeSpecification {
 
     @Nullable
     @Contract(pure = true)
-    public static Specification<Employee> isActiveEqual(String expression) {
+    public static Specification<Employee> isWorkingEqual(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
-        // TODO Rework name of isActive
-        return (root, query, builder) -> builder.equal(root.get("isActive"), expression.equals("Працюючий"));
+        return (root, query, builder) -> builder.equal(root.get("isWorking"), expression.equals("Працюючий"));
     }
 }
