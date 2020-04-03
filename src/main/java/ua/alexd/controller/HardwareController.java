@@ -105,32 +105,24 @@ public class HardwareController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editHardware}")
-    private String editRecord(@PathVariable Hardware editHardware, @NotNull Model model) {
-        model.addAttribute("editHardware", editHardware);
-        initializeDropDownChoices(model);
-        return "view/hardware/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editHardware}")
-    private String editRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
-                              @RequestParam String ramModel, @RequestParam String ssdModel,
-                              @RequestParam String displayModel, @RequestParam String hddModel,
-                              @RequestParam String gpuModel, @NotNull @PathVariable Hardware editHardware,
+    private String editRecord(@RequestParam String editAssemblyName, @RequestParam String editCpuModel,
+                              @RequestParam String editRamModel, @RequestParam String editSsdModel,
+                              @RequestParam String editDisplayModel, @RequestParam String editHddModel,
+                              @RequestParam String editGpuModel, @NotNull @PathVariable Hardware editHardware,
                               @NotNull Model model) {
-        editHardware.setAssemblyName(assemblyName);
-        var cpu = cpuRepo.findByModel(cpuModel);
+        editHardware.setAssemblyName(editAssemblyName);
+        var cpu = cpuRepo.findByModel(editCpuModel);
         editHardware.setCpu(cpu);
-        var gpu = gpuRepo.findByModel(gpuModel);
+        var gpu = gpuRepo.findByModel(editGpuModel);
         editHardware.setGpu(gpu);
-        var ram = ramRepo.findByModel(ramModel);
+        var ram = ramRepo.findByModel(editRamModel);
         editHardware.setRam(ram);
-        var ssd = ssdRepo.findByModel(ssdModel);
+        var ssd = ssdRepo.findByModel(editSsdModel);
         editHardware.setSsd(ssd);
-        var hdd = hddRepo.findByModel(hddModel);
+        var hdd = hddRepo.findByModel(editHddModel);
         editHardware.setHdd(hdd);
-        var display = displayRepo.findByModel(displayModel);
+        var display = displayRepo.findByModel(editDisplayModel);
         editHardware.setDisplay(display);
 
         if (!saveRecord(editHardware)) {
@@ -138,7 +130,7 @@ public class HardwareController {
                     "Представлена змінювана назва збірки уже присутня в базі!");
             initializeDropDownChoices(model);
             model.addAttribute("hardware", lastOutputtedHardware);
-            return "view/hardware/editPage";
+            return "view/hardware/table";
         }
         return "redirect:/hardware";
     }

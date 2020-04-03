@@ -1,6 +1,7 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 <#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 
 <@htmlPad.page "Hardware">
@@ -140,9 +141,19 @@
                         <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Відсутня</#if></td>
                         <td>
-                            <a class="btn btn-outline-dark" href="/hardware/edit/${assembly.id}" role="button">
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#hardwareEditModal${assembly.id}">
                                 <i class="fa fa-edit"></i>
-                            </a>
+                            </button>
+                            <@editModal.hardwareEdit id = "${assembly.id}"
+                            currentAssemblyName = "${assembly.assemblyName}"
+                            currentCpuModel = "${(assembly.cpu??)?then(assembly.cpu.model, '')}"
+                            currentGpuModel = "${(assembly.gpu??)?then(assembly.gpu.model, '')}"
+                            currentDisplayModel = "${(assembly.display??)?then(assembly.display.model, '')}"
+                            currentRamModel = "${(assembly.ram??)?then(assembly.ram.model, '')}"
+                            currentSsdModel = "${(assembly.ssd??)?then(assembly.ssd.model, '')}"
+                            currentHddModel = "${(assembly.hdd??)?then(assembly.hdd.model, '')}"
+                            />
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
