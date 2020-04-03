@@ -93,28 +93,20 @@ public class BasketController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editBasket}")
-    private String editRecord(@NotNull @PathVariable Basket editBasket, @NotNull Model model) {
-        model.addAttribute("editBasket", editBasket);
-        initializeDropDownChoices(model);
-        return "view/basket/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String editRecord(@RequestParam Integer employeeId, @RequestParam Integer clientId,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+    private String editRecord(@RequestParam Integer editEmployeeId, @RequestParam Integer editClientId,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime editDateTime,
                               @PathVariable Basket editBasket, @NotNull Model model) {
         Employee employee = null;
-        if (employeeRepo.findById(employeeId).isPresent())
-            employee = employeeRepo.findById(employeeId).get();
+        if (employeeRepo.findById(editEmployeeId).isPresent())
+            employee = employeeRepo.findById(editEmployeeId).get();
         editBasket.setEmployee(employee);
 
         Client client = null;
-        if (clientRepo.findById(clientId).isPresent())
-            client = clientRepo.findById(clientId).get();
+        if (clientRepo.findById(editClientId).isPresent())
+            client = clientRepo.findById(editClientId).get();
         editBasket.setClient(client);
-        editBasket.setDateTime(dateTime);
+        editBasket.setDateTime(editDateTime);
 
         basketRepo.save(editBasket);
 

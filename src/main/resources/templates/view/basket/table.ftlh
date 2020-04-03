@@ -1,5 +1,6 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 <#setting locale="uk">
 
@@ -108,7 +109,11 @@
                             <td>${basket.employee.id}</td>
                             <td>${basket.employee.firstName}</td>
                             <td>${basket.employee.secondName}</td>
-                            <td>${basket.employee.shop.address}</td>
+                            <#if (basket.employee.shop)??>
+                                <td>${basket.employee.shop.address}</td>
+                            <#else>
+                                <td>Видалено</td>
+                            </#if>
                         <#else>
                             <td>Видалено</td>
                             <td>Видалено</td>
@@ -126,8 +131,17 @@
                             <td>Видалено</td>
                         </#if>
                         <td>${basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
-                        <td><a class="btn btn-outline-dark" href="/basket/edit/${basket.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#basketEditModal${basket.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.basketEdit id="${basket.id}"
+                            currentEmployeeId = "${(basket.employee??)?then(basket.employee.id, "")}"
+                            currentClientId = "${(basket.client??)?then(basket.client.id, "")}"
+                            currentDateTime = "${basket.dateTime}"
+                            />
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${basket.id}">
