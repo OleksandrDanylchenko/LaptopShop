@@ -85,35 +85,28 @@ public class AvailabilityController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editAvailability}")
-    private String editRecord(@NotNull @PathVariable Availability editAvailability, @NotNull Model model) {
-        model.addAttribute("editAvailability", editAvailability);
-        initializeDropDownChoices(model);
-        return "view/availability/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String editRecord(@RequestParam Integer price, @RequestParam Integer quantity,
-                              @RequestParam String laptopModel, @RequestParam String shopAddress,
-                              @RequestParam Date dateStart, @RequestParam Date dateEnd,
-                              @PathVariable Availability editAvailability, @NotNull Model model) {
-        var laptop = laptopRepo.findByLabelModel(laptopModel);
+    private String editRecord(@RequestParam Integer editPrice, @RequestParam Integer editQuantity,
+                              @RequestParam String editLaptopModel, @RequestParam String editShopAddress,
+                              @RequestParam Date editDateStart, @RequestParam Date editDateEnd,
+                              @NotNull @PathVariable Availability editAvailability, @NotNull Model model) {
+        var laptop = laptopRepo.findByLabelModel(editLaptopModel);
         editAvailability.setLaptop(laptop);
 
-        var shop = shopRepo.findByAddress(shopAddress).get(0);
+        var shop = shopRepo.findByAddress(editShopAddress).get(0);
         editAvailability.setShop(shop);
 
-        editAvailability.setPrice(price);
-        editAvailability.setQuantity(quantity);
-        editAvailability.setDateStart(dateStart);
-        editAvailability.setDateEnd(dateEnd);
+        editAvailability.setPrice(editPrice);
+        editAvailability.setQuantity(editQuantity);
+        editAvailability.setDateStart(editDateStart);
+        editAvailability.setDateEnd(editDateEnd);
 
         if (!saveRecord(editAvailability)) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель ноутбуку уже присутня в записах про наявність!");
             initializeDropDownChoices(model);
-            return "view/availability/editPage";
+            model.addAttribute("availabilities", lastOutputtedAvailabilities);
+            return "view/availability/table";
         }
         return "redirect:/availability";
     }

@@ -19,7 +19,7 @@
                         <div class="modal-body">
                             <form method="post" id="availabilityAddForm" action="/availability/add"
                                   class="form-group needs-validation w-100" novalidate
-                                  onsubmit="return validateDates()">
+                                  onsubmit="return validateDatesAdd()">
                                 <div class="form-row mb-2">
                                     <div class="col">
                                         <label class="d-inline ml-2" for="laptopModel">Модель ноутбуку:</label>
@@ -74,7 +74,7 @@
                                         <div class="invalid-feedback">Уведено некоректну дату закінчення продаж!
                                         </div>
                                     </div>
-                                    <@dO.datesBreaker "newDateStart" "newDateEnd"/>
+                                    <@dO.datesBreaker id="Add" dateStartId="newDateStart" dateEndId="newDateEnd"/>
                                 </div>
                                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                             </form>

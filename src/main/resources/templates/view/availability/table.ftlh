@@ -1,5 +1,6 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 <#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 <#setting locale="uk">
@@ -107,8 +108,19 @@
                         <td>${availability.shop.address}</td>
                         <td>${availability.dateStart}</td>
                         <td>${availability.dateEnd}</td>
-                        <td><a class="btn btn-outline-dark" href="/availability/edit/${availability.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#availabilityEditModal${availability.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.availabilityEdit id="${availability.id}"
+                            currentLaptopModel="${availability.laptop.label.model}"
+                            currentPrice="${availability.price?c}"
+                            currentQuantity="${availability.quantity?c}"
+                            currentShopAddress="${availability.shop.address}"
+                            currentDateStart="${availability.dateStart?iso_local}"
+                            currentDateEnd="${availability.dateEnd?iso_local}"/>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${availability.id}">

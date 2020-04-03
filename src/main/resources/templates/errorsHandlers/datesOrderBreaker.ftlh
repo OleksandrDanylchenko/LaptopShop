@@ -1,10 +1,10 @@
-<#macro datesBreaker dateStartId dateEndId>
+<#macro datesBreaker id dateStartId dateEndId>
     <script>
-        function validateDates() {
-            let dateStart = document.getElementById("${dateStartId}");
-            let dateEnd = document.getElementById("${dateEndId}");
-            if (dateStart.value > dateEnd.value)
-                document.getElementById("${dateEndId}").value = "";
+        function validateDates${id}() {
+            let dateStart = $("#${dateStartId}").val();
+            let dateEnd = $("#${dateEndId}").val();
+            if (dateStart > dateEnd)
+                $("#${dateEndId}").val("").change();
         }
     </script>
 </#macro>
