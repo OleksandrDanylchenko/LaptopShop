@@ -15,7 +15,7 @@
                     <form method="post" action="/basket/edit/${id}" id="basketEditForm${id}"
                           class="form-group needs-validation w-100" novalidate>
                         <#if employeeIds?has_content>
-                            <div class="form-row my-2">
+                            <div class="form-row mb-2">
                                 <div class="col">
                                     <label class="d-inline ml-2" for="employeeSelect${id}">ID співробітника:</label>
                                     <select class="custom-select" id="employeeSelect${id}" name="editEmployeeId">

@@ -137,8 +137,8 @@
                                 <i class="fa fa-edit"></i>
                             </button>
                             <@editModal.basketEdit id="${basket.id}"
-                            currentEmployeeId = "${(basket.employee??)?then(basket.employee.id, "")}"
-                            currentClientId = "${(basket.client??)?then(basket.client.id, "")}"
+                            currentEmployeeId = "${(basket.employee??)?then(basket.employee.id, '')}"
+                            currentClientId = "${(basket.client??)?then(basket.client.id, '')}"
                             currentDateTime = "${basket.dateTime}"
                             />
                         </td>

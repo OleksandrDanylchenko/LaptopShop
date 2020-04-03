@@ -72,25 +72,17 @@ public class BuyingController {
     }
 
     @NotNull
-    @GetMapping("/edit/{editBuying}")
-    private String editRecord(@NotNull @PathVariable Buying editBuying, @NotNull Model model) {
-        model.addAttribute("editBuying", editBuying);
-        initializeDropDownChoices(model);
-        return "view/buying/editPage";
-    }
-
-    @NotNull
     @PostMapping("/edit/{editBuying}")
-    private String editRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
-                              @RequestParam Integer totalPrice, @PathVariable Buying editBuying,
+    private String editRecord(@RequestParam Integer editBasketId, @RequestParam String editLaptopModel,
+                              @RequestParam Integer editTotalPrice, @PathVariable Buying editBuying,
                               @NotNull Model model) {
         Basket basket = null;
-        if (basketRepo.findById(basketId).isPresent())
-            basket = basketRepo.findById(basketId).get();
+        if (basketRepo.findById(editBasketId).isPresent())
+            basket = basketRepo.findById(editBasketId).get();
         editBuying.setBasket(basket);
-        var laptop = laptopRepo.findByLabelModel(laptopModel);
+        var laptop = laptopRepo.findByLabelModel(editLaptopModel);
         editBuying.setLaptop(laptop);
-        editBuying.setTotalPrice(totalPrice);
+        editBuying.setTotalPrice(editTotalPrice);
 
         buyingRepo.save(editBuying);
         return "redirect:/buying";

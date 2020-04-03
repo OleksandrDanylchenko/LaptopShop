@@ -1,5 +1,6 @@
 <#import "../../parts/htmlPad.ftlh" as htmlPad>
 <#import "addModal.ftlh" as addModal>
+<#import "editModal.ftlh" as editModal>
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 
 <@htmlPad.page "Buying">
@@ -94,8 +95,17 @@
                             <td>Видалено</td>
                             <td>Видалено</td>
                         </#if>
-                        <td><a class="btn btn-outline-dark" href="/buying/edit/${buying.id}"
-                               role="button"><i class="fa fa-edit"></i></a></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#buyingEditModal${buying.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.buyingEdit id="${buying.id}"
+                            currentBasketId="${(buying.basket??)?then(buying.basket.id, '')}"
+                            currentLaptopModel="${(buying.laptop??)?then(buying.laptop.label.model, '')}"
+                            currentTotalPrice="${buying.totalPrice?c}"
+                            />
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                                     data-target="#deleteModal${buying.id}">
