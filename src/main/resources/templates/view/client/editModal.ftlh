@@ -48,9 +48,9 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#clientEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editFirstNameInput${id}").value = "${clientFirstName}";
-                            document.getElementById("editSecondNameInput${id}").value = "${clientSecondName}";
-                            document.getElementById("editDateRegInput${id}").value = "${clientDateReg}";
+                            $("#editFirstNameInput${id}").val("${clientFirstName}").change();
+                            $("#editSecondNameInput${id}").val("${clientSecondName}").change();
+                            $("#editDateRegInput${id}").val("${clientDateReg}").change();
                         })
                     </script>
                 </div>

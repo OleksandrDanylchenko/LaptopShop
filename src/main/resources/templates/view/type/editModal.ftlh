@@ -28,7 +28,7 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#typeEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editNameInput${id}").value = "${typeName}";
+                            $("#editNameInput${id}").val("${typeName}").change();
                         })
                     </script>
                 </div>

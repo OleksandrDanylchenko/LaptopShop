@@ -40,8 +40,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#ramEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editModelInput${id}").value = "${ramModel}";
-                            document.getElementById("editMemoryInput${id}").value = "${ramMemory}";
+                            $("#editModelInput${id}").val("${ramModel}").change();
+                            $("#editMemoryInput${id}").val("${ramMemory}").change();
                         })
                     </script>
                 </div>

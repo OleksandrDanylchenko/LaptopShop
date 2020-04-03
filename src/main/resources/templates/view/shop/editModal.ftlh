@@ -28,7 +28,7 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#shopEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editAddressInput${id}").value = "${shopAddress}";
+                            $("#editAddressInput${id}").val("${shopAddress}").change();
                         })
                     </script>
                 </div>

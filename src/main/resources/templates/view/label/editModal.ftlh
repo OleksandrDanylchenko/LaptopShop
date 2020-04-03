@@ -39,8 +39,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#labelEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editBrandInput${id}").value = "${labelBrand}";
-                            document.getElementById("editModelInput${id}").value = "${labelModel}";
+                            $("#editBrandInput${id}").val("${labelBrand}").change();
+                            $("#editModelInput${id}").val("${labelModel}").change();
                         })
                     </script>
                 </div>

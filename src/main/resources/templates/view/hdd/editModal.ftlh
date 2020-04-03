@@ -41,8 +41,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#hddEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editModelInput${id}").value = "${hddModel}";
-                            document.getElementById("editMemoryInput${id}").value = "${hddMemory}";
+                            $("#editModelInput${id}").val("${hddModel}").change();
+                            $("#editMemoryInput${id}").val("${hddMemory}").change();
                         })
                     </script>
                 </div>

@@ -41,8 +41,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#gpuEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editModelInput${id}").value = "${gpuModel}";
-                            document.getElementById("editMemoryInput${id}").value = "${gpuMemory}";
+                            $("#editModelInput${id}").val("${gpuModel}").change();
+                            $("#editMemoryInput${id}").val("${gpuMemory}").change();
                         })
                     </script>
                 </div>

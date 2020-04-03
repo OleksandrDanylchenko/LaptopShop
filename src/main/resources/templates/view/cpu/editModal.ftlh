@@ -41,8 +41,8 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#cpuEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editModelInput${id}").value = "${cpuModel}";
-                            document.getElementById("editFrequencyInput${id}").value = "${cpuFrequency}";
+                            $("#editModelInput${id}").val("${cpuModel}").change();
+                            $("#editFrequencyInput${id}").val("${cpuFrequency}").change();
                         })
                     </script>
                 </div>

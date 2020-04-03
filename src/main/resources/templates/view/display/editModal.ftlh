@@ -58,10 +58,10 @@
                     <!-- Restore initial value on opening of modal -->
                     <script>
                         $('#displayEditModal${id}').on('show.bs.modal', function () {
-                            document.getElementById("editModelInput${id}").value = "${displayModel}";
-                            document.getElementById("editTypeInput${id}").value = "${displayType}";
-                            document.getElementById("editDiagonalInput${id}").value = "${displayDiagonal}";
-                            document.getElementById("editResolutionInput${id}").value = "${displayResolution}";
+                            $("#editModelInput${id}").val("${displayModel}").change();
+                            $("#editTypeInput${id}").val("${displayType}").change();
+                            $("#editDiagonalInput${id}").val("${displayDiagonal}").change();
+                            $("#editResolutionInput${id}").val("${displayResolution}").change();
                         })
                     </script>
                 </div>
