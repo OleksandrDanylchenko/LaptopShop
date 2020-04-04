@@ -5,23 +5,35 @@
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 <#import "../../excel/excelUploadModal.ftlh" as eU>
 
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
+
 <@htmlPad.page "Display">
+    <@security.authorize access="!hasAnyAuthority('MANAGER', 'CEO')">
+        <div class="container">
+    </@security.authorize>
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                    data-target="#displayAddModal">
-                <i class="far fa-plus-square"></i> Додати новий дисплей
-            </button>
-            <@addModal.displayAdd/>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                        data-target="#displayAddModal">
+                    <i class="far fa-plus-square"></i> Додати новий дисплей
+                </button>
+                <@addModal.displayAdd/>
+            </@security.authorize>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
-                    data-target="#DisplayExcelUploadModal">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
-            </button>
-            <@eU.excelUpload tableNameEn="Display" tableNameUk="дисплеїв"/>
-            <a class="btn btn-success" id="fixedBtnHeight" href="/display/exportExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                        data-target="#DisplayExcelUploadModal">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+                </button>
+                <@eU.excelUpload tableNameEn="Display" tableNameUk="дисплеїв"/>
+            </@security.authorize>
+            <@security.authorize access="isAuthenticated()">
+                <a class="btn btn-success" id="fixedBtnHeight" href="/display/exportExcel" role="button">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
+                </a>
+            </@security.authorize>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
@@ -70,40 +82,52 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="text-danger" scope="col">Id</th>
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th class="text-danger" scope="col">Id</th>
+                    </@security.authorize>
+
                     <th scope="col">Модель</th>
                     <th scope="col">Тип</th>
                     <th scope="col">Діагональ</th>
                     <th scope="col">Розширення</th>
-                    <th></th>
-                    <th></th>
+
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th></th>
+                        <th></th>
+                    </@security.authorize>
                 </tr>
                 </thead>
                 <tbody>
                 <#list displays as display>
                     <tr>
-                        <th class="text-danger" scope="row">${display.id}</th>
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <th class="text-danger" scope="row">${display.id}</th>
+                        </@security.authorize>
+
                         <td>${display.model}</td>
                         <td>${display.type}</td>
                         <td>${display.diagonal}</td>
                         <td>${display.resolution}</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#displayEditModal${display.id}">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <@editModal.displayEdit id="${display.id}" displayModel="${display.model}"
-                            displayType="${display.type}" displayDiagonal="${display.diagonal}"
-                            displayResolution="${display.resolution}"/>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${display.id}">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <@deleteModal.delete id="${display.id}"
-                            deletionLink="/display/delete/${display.id}"/>
-                        </td>
+
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <td>
+                                <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                        data-target="#displayEditModal${display.id}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <@editModal.displayEdit id="${display.id}" displayModel="${display.model}"
+                                displayType="${display.type}" displayDiagonal="${display.diagonal}"
+                                displayResolution="${display.resolution}"/>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#deleteModal${display.id}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <@deleteModal.delete id="${display.id}"
+                                deletionLink="/display/delete/${display.id}"/>
+                            </td>
+                        </@security.authorize>
                     </tr>
                 </#list>
                 </tbody>
@@ -112,4 +136,7 @@
             <div class="h3">Не знайдено жодного дисплею.</div>
         </#if>
     </div>
+    <@security.authorize access="!hasAnyAuthority('MANAGER', 'CEO')">
+        </div>
+    </@security.authorize>
 </@htmlPad.page>

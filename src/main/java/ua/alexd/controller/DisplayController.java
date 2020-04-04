@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +34,12 @@ public class DisplayController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String model,
-                              @RequestParam(required = false) String type,
-                              @RequestParam(required = false) String diagonal,
-                              @RequestParam(required = false) String resolution,
-                              @NotNull Model siteModel) {
+    @PreAuthorize("isAuthenticated()")
+    public String getRecords(@RequestParam(required = false) String model,
+                             @RequestParam(required = false) String type,
+                             @RequestParam(required = false) String diagonal,
+                             @RequestParam(required = false) String resolution,
+                             @NotNull Model siteModel) {
         var displaySpecification = Specification.where(modelLike(model)).and(typeEqual(type))
                 .and(diagonalEqual(diagonal)).and(resolutionEqual(resolution));
         var displays = displayRepo.findAll(displaySpecification);
@@ -48,7 +50,8 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newDisplay") Display newDisplay, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@NotNull @ModelAttribute("newDisplay") Display newDisplay, @NotNull Model model) {
         if (!saveRecord(newDisplay)) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель дисплею уже присутня в базі!");
@@ -60,9 +63,10 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/edit/{editDisplay}")
-    private String editRecord(@RequestParam String editModel, @RequestParam String editType,
-                              @RequestParam String editDiagonal, @RequestParam String editResolution,
-                              @NotNull @PathVariable Display editDisplay, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editModel, @RequestParam String editType,
+                             @RequestParam String editDiagonal, @RequestParam String editResolution,
+                             @NotNull @PathVariable Display editDisplay, @NotNull Model model) {
         editDisplay.setModel(editModel);
         editDisplay.setType(editType);
         editDisplay.setDiagonal(editDiagonal);
@@ -78,7 +82,8 @@ public class DisplayController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var displayFilePath = "";
         try {
@@ -97,14 +102,16 @@ public class DisplayController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("displays", lastOutputtedDisplay);
         return "displayExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delDisplay}")
-    private String deleteRecord(@NotNull @PathVariable Display delDisplay) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable Display delDisplay) {
         displayRepo.delete(delDisplay);
         return "redirect:/display";
     }
