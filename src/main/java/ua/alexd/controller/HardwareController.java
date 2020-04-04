@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class HardwareController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String displayModel,
+    public String getRecords(@RequestParam(required = false) String displayModel,
                               @RequestParam(required = false) String displayDiagonal,
                               @RequestParam(required = false) String displayResolution,
                               @RequestParam(required = false) String displayType,
@@ -82,7 +83,8 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
                              @RequestParam String ramModel, @RequestParam String ssdModel,
                              @RequestParam String displayModel, @RequestParam String hddModel,
                              @RequestParam String gpuModel, @NotNull Model model) {
@@ -106,7 +108,8 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/edit/{editHardware}")
-    private String editRecord(@RequestParam String editAssemblyName, @RequestParam String editCpuModel,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editAssemblyName, @RequestParam String editCpuModel,
                               @RequestParam String editRamModel, @RequestParam String editSsdModel,
                               @RequestParam String editDisplayModel, @RequestParam String editHddModel,
                               @RequestParam String editGpuModel, @NotNull @PathVariable Hardware editHardware,
@@ -137,7 +140,8 @@ public class HardwareController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var hardwareFilePath = "";
         try {
@@ -157,14 +161,16 @@ public class HardwareController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("hardware", lastOutputtedHardware);
         return "hardwareExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delHardware}")
-    private String deleteRecord(@NotNull @PathVariable Hardware delHardware) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable Hardware delHardware) {
         hardwareRepo.delete(delHardware);
         return "redirect:/hardware";
     }

@@ -5,23 +5,32 @@
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 <#import "../../excel/excelUploadModal.ftlh" as eU>
 
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
+
 <@htmlPad.page "Hardware">
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                    data-target="#hardwareAddModal">
-                <i class="far fa-plus-square"></i> Додати нову збірку
-            </button>
-            <@addModal.hardwareAdd/>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                        data-target="#hardwareAddModal">
+                    <i class="far fa-plus-square"></i> Додати нову збірку
+                </button>
+                <@addModal.hardwareAdd/>
+            </@security.authorize>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
-                    data-target="#HardwareExcelUploadModal">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
-            </button>
-            <@eU.excelUpload tableNameEn="Hardware" tableNameUk="збірок"/>
-            <a class="btn btn-success" id="fixedBtnHeight" href="/hardware/exportExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                        data-target="#HardwareExcelUploadModal">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+                </button>
+                <@eU.excelUpload tableNameEn="Hardware" tableNameUk="збірок"/>
+            </@security.authorize>
+            <@security.authorize access="isAuthenticated()">
+                <a class="btn btn-success" id="fixedBtnHeight" href="/hardware/exportExcel" role="button">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
+                </a>
+            </@security.authorize>
         </div>
         <div class="col-lg-6 col-sm-7 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
@@ -121,7 +130,10 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="text-danger" scope="col">Id</th>
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th class="text-danger" scope="col">Id</th>
+                    </@security.authorize>
+
                     <th scope="col">Назва збірки</th>
                     <th scope="col">Модель процесора</th>
                     <th scope="col">Модель відеокарти</th>
@@ -129,14 +141,20 @@
                     <th scope="col">Модель оперативної пам'яті</th>
                     <th scope="col">Модель SSD диску</th>
                     <th scope="col">Модель HDD диску</th>
-                    <th></th>
-                    <th></th>
+
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th></th>
+                        <th></th>
+                    </@security.authorize>
                 </tr>
                 </thead>
                 <tbody>
                 <#list hardware as assembly>
                     <tr>
-                        <th class="text-danger" scope="row">${assembly.id}</th>
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <th class="text-danger" scope="row">${assembly.id}</th>
+                        </@security.authorize>
+
                         <td>${assembly.assemblyName}</td>
                         <td><#if assembly.cpu??>${assembly.cpu.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.gpu??>${assembly.gpu.model}<#else>Відсутня</#if></td>
@@ -144,29 +162,32 @@
                         <td><#if assembly.ram??>${assembly.ram.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.ssd??>${assembly.ssd.model}<#else>Відсутня</#if></td>
                         <td><#if assembly.hdd??>${assembly.hdd.model}<#else>Відсутня</#if></td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#hardwareEditModal${assembly.id}">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <@editModal.hardwareEdit id = "${assembly.id}"
-                            currentAssemblyName = "${assembly.assemblyName}"
-                            currentCpuModel = "${(assembly.cpu??)?then(assembly.cpu.model, '')}"
-                            currentGpuModel = "${(assembly.gpu??)?then(assembly.gpu.model, '')}"
-                            currentDisplayModel = "${(assembly.display??)?then(assembly.display.model, '')}"
-                            currentRamModel = "${(assembly.ram??)?then(assembly.ram.model, '')}"
-                            currentSsdModel = "${(assembly.ssd??)?then(assembly.ssd.model, '')}"
-                            currentHddModel = "${(assembly.hdd??)?then(assembly.hdd.model, '')}"
-                            />
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${assembly.id}">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <@deleteModal.delete id="${assembly.id}"
-                            deletionLink="/hardware/delete/${assembly.id}"/>
-                        </td>
+
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <td>
+                                <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                        data-target="#hardwareEditModal${assembly.id}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <@editModal.hardwareEdit id = "${assembly.id}"
+                                currentAssemblyName = "${assembly.assemblyName}"
+                                currentCpuModel = "${(assembly.cpu??)?then(assembly.cpu.model, '')}"
+                                currentGpuModel = "${(assembly.gpu??)?then(assembly.gpu.model, '')}"
+                                currentDisplayModel = "${(assembly.display??)?then(assembly.display.model, '')}"
+                                currentRamModel = "${(assembly.ram??)?then(assembly.ram.model, '')}"
+                                currentSsdModel = "${(assembly.ssd??)?then(assembly.ssd.model, '')}"
+                                currentHddModel = "${(assembly.hdd??)?then(assembly.hdd.model, '')}"
+                                />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#deleteModal${assembly.id}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <@deleteModal.delete id="${assembly.id}"
+                                deletionLink="/hardware/delete/${assembly.id}"/>
+                            </td>
+                        </@security.authorize>
                     </tr>
                 </#list>
                 </tbody>

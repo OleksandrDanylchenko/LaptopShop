@@ -78,7 +78,7 @@
             </div>
         </div>
         <#if displays?has_content>
-            <div class="h1">Список співробітників:</div>
+            <div class="h1">Список дисплеїв:</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
