@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-4">
                             <input type="number" step="0.1" min="0.1" class="form-control mr-1 mt-2" name="frequency"
-                                   value="${RequestParameters.frequency!}" placeholder="Частота (GhZ)"/>
+                                   value="${RequestParameters.frequency!}" placeholder="Частота"/>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-danger float-right">
