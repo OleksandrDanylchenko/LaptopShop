@@ -20,6 +20,7 @@ import static ua.alexd.specification.TypeSpecification.typeNameLike;
 
 @Controller
 @RequestMapping("/type")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class TypeController {
     private final TypeRepo typeRepo;
     private Iterable<Type> lastOutputtedTypes;
@@ -43,7 +44,6 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/add")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
         if (!saveRecord(newType)) {
             model.addAttribute("errorMessage",
@@ -56,7 +56,6 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/edit/{editType}")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editName, @NotNull @PathVariable Type editType, @NotNull Model model) {
         editType.setName(editName);
         if (!saveRecord(editType)) {
@@ -70,7 +69,6 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/importExcel")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var typeFilePath = "";
@@ -97,7 +95,6 @@ public class TypeController {
 
     @NotNull
     @GetMapping("/delete/{delType}")
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable Type delType) {
         typeRepo.delete(delType);
         return "redirect:/type";

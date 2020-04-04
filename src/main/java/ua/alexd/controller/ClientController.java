@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import static ua.alexd.specification.ClientSpecification.*;
 
 @Controller
 @RequestMapping("/client")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class ClientController {
     private final ClientRepo clientRepo;
     private static Iterable<Client> lastOutputtedClients;
@@ -34,7 +36,7 @@ public class ClientController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String firstName,
+    public String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
                               @NotNull Model model) {
@@ -50,14 +52,14 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newClient") Client newClient, @NotNull Model model) {
+    public String addRecord(@NotNull @ModelAttribute("newClient") Client newClient, @NotNull Model model) {
         clientRepo.save(newClient);
         return "redirect:/client";
     }
 
     @NotNull
     @PostMapping("/edit/{editClient}")
-    private String editRecord(@RequestParam String editFirstName, @RequestParam String editSecondName,
+    public String editRecord(@RequestParam String editFirstName, @RequestParam String editSecondName,
                               @RequestParam Date editDateReg, @NotNull @PathVariable Client editClient,
                               @NotNull Model model) {
         editClient.setFirstName(editFirstName);
@@ -69,7 +71,7 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var clientFilePath = "";
         try {
@@ -88,14 +90,14 @@ public class ClientController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("clients", lastOutputtedClients);
         return "clientExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delClient}")
-    private String deleteRecord(@NotNull @PathVariable Client delClient) {
+    public String deleteRecord(@NotNull @PathVariable Client delClient) {
         clientRepo.delete(delClient);
         return "redirect:/client";
     }

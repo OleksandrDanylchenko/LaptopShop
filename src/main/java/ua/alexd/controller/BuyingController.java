@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import static ua.alexd.specification.BuyingSpecification.*;
 
 @Controller
 @RequestMapping("/buying")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class BuyingController {
     private final BuyingRepo buyingRepo;
     private static Iterable<Buying> lastOutputtedBuyings;
@@ -43,7 +45,7 @@ public class BuyingController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) Integer basketId,
+    public String getRecords(@RequestParam(required = false) Integer basketId,
                               @RequestParam(required = false) String laptopModel,
                               @RequestParam(required = false) Integer totalPrice,
                               @RequestParam(required = false)
@@ -60,7 +62,7 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
+    public String addRecord(@RequestParam Integer basketId, @RequestParam String laptopModel,
                              @RequestParam Integer totalPrice, @NotNull Model model) {
         Basket basket = null;
         if (basketRepo.findById(basketId).isPresent())
@@ -73,7 +75,7 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/edit/{editBuying}")
-    private String editRecord(@RequestParam Integer editBasketId, @RequestParam String editLaptopModel,
+    public String editRecord(@RequestParam Integer editBasketId, @RequestParam String editLaptopModel,
                               @RequestParam Integer editTotalPrice, @PathVariable Buying editBuying,
                               @NotNull Model model) {
         Basket basket = null;
@@ -90,7 +92,7 @@ public class BuyingController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var buyingFilePath = "";
         try {
@@ -110,14 +112,14 @@ public class BuyingController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("buyings", lastOutputtedBuyings);
         return "buyingExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delBuying}")
-    private String deleteRecord(@NotNull @PathVariable Buying delBuying) {
+    public String deleteRecord(@NotNull @PathVariable Buying delBuying) {
         buyingRepo.delete(delBuying);
         return "redirect:/buying";
     }

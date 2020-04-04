@@ -34,7 +34,7 @@ public class SSDController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String model,
+    public String getRecords(@RequestParam(required = false) String model,
                               @RequestParam(required = false) Integer memory,
                               @NotNull Model siteModel) {
         var ssdSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
@@ -46,7 +46,7 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD, @NotNull Model model) {
+    public String addRecord(@NotNull @ModelAttribute("newSSD") SSD newSSD, @NotNull Model model) {
         if (!saveRecord(newSSD)) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель SSD диску уже присутня в базі!");
@@ -58,7 +58,7 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/edit/{editSSD}")
-    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
+    public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                               @NotNull @PathVariable SSD editSSD, @NotNull Model siteModel) {
         editSSD.setModel(editModel);
         editSSD.setMemory(editMemory);
@@ -73,7 +73,7 @@ public class SSDController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var SSDFilePath = "";
         try {
@@ -92,14 +92,14 @@ public class SSDController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("ssds", lastOutputtedSSDs);
         return "ssdExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delSSD}")
-    private String deleteRecord(@NotNull @PathVariable SSD delSSD) {
+    public String deleteRecord(@NotNull @PathVariable SSD delSSD) {
         ssdRepo.delete(delSSD);
         return "redirect:/ssd";
     }

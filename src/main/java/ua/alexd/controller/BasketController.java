@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import static ua.alexd.specification.BasketSpecification.*;
 
 @Controller
 @RequestMapping("/basket")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class BasketController {
     private final BasketRepo basketRepo;
     private static Iterable<Basket> lastOutputtedBaskets;
@@ -47,7 +49,7 @@ public class BasketController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) Integer employeeId,
+    public String getRecords(@RequestParam(required = false) Integer employeeId,
                               @RequestParam(required = false) String employeeFirstName,
                               @RequestParam(required = false) String employeeSecondName,
                               @RequestParam(required = false) String employeeShopAddress,
@@ -74,7 +76,7 @@ public class BasketController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam Integer employeeId,
+    public String addRecord(@RequestParam Integer employeeId,
                              @RequestParam Integer clientId,
                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
                              @NotNull Model model) {
@@ -94,7 +96,7 @@ public class BasketController {
 
     @NotNull
     @PostMapping("/edit/{editBasket}")
-    private String editRecord(@RequestParam Integer editEmployeeId, @RequestParam Integer editClientId,
+    public String editRecord(@RequestParam Integer editEmployeeId, @RequestParam Integer editClientId,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime editDateTime,
                               @PathVariable Basket editBasket, @NotNull Model model) {
         Employee employee = null;
@@ -115,7 +117,7 @@ public class BasketController {
 
     @NotNull
     @GetMapping("/graph")
-    private String graphBaskets(@NotNull Model model) {
+    public String graphBaskets(@NotNull Model model) {
         var employeesDataPoints = basketGraphService.getEmployeesDataPoints();
         var clientsDataPoints = basketGraphService.getClientsDataPoints();
         model.addAttribute("employeesDataPoints", employeesDataPoints);
@@ -125,7 +127,7 @@ public class BasketController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var basketFilePath = "";
         try {
@@ -145,14 +147,14 @@ public class BasketController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("baskets", lastOutputtedBaskets);
         return "basketExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delBasket}")
-    private String deleteRecord(@NotNull @PathVariable Basket delBasket) {
+    public String deleteRecord(@NotNull @PathVariable Basket delBasket) {
         basketRepo.delete(delBasket);
         return "redirect:/basket";
     }

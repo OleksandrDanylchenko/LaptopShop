@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import static ua.alexd.specification.LabelSpecification.modelLike;
 
 @Controller
 @RequestMapping("/label")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class LabelController {
     private final LabelRepo labelRepo;
     private static Iterable<Label> lastOutputtedLabel;
@@ -34,7 +36,7 @@ public class LabelController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String brand,
+    public String getRecords(@RequestParam(required = false) String brand,
                               @RequestParam(required = false) String model,
                               @NotNull Model siteModel) {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
@@ -46,7 +48,7 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newLabel") Label newLabel, @NotNull Model model) {
+    public String addRecord(@NotNull @ModelAttribute("newLabel") Label newLabel, @NotNull Model model) {
         if (!saveRecord(newLabel)) {
             model.addAttribute("errorMessage", "Представлена нова модель уже присутня в базі!");
             model.addAttribute("labels", lastOutputtedLabel);
@@ -57,7 +59,7 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/edit/{editLabel}")
-    private String editRecord(@RequestParam String editBrand, @RequestParam String editModel,
+    public String editRecord(@RequestParam String editBrand, @RequestParam String editModel,
                               @NotNull @PathVariable Label editLabel, @NotNull Model model) {
         editLabel.setBrand(editBrand);
         editLabel.setModel(editModel);
@@ -71,7 +73,7 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var labelFilePath = "";
         try {
@@ -89,14 +91,14 @@ public class LabelController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("labels", lastOutputtedLabel);
         return "labelExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delLabel}")
-    private String deleteRecord(@NotNull @PathVariable Label delLabel) {
+    public String deleteRecord(@NotNull @PathVariable Label delLabel) {
         labelRepo.delete(delLabel);
         return "redirect:/label";
     }

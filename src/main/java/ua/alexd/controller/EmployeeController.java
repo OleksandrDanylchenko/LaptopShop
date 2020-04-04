@@ -2,6 +2,7 @@ package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import static ua.alexd.specification.EmployeeSpecification.*;
 
 @Controller
 @RequestMapping("/employee")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class EmployeeController {
     private final EmployeeRepo employeeRepo;
     private static Iterable<Employee> lastOutputtedEmployees;
@@ -36,7 +38,7 @@ public class EmployeeController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String firstName,
+    public String getRecords(@RequestParam(required = false) String firstName,
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false) String shopAddress,
                               @RequestParam(required = false) String isWorking,
@@ -52,7 +54,7 @@ public class EmployeeController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String firstName, @RequestParam String secondName,
+    public String addRecord(@RequestParam String firstName, @RequestParam String secondName,
                              @RequestParam String shopAddress, @NotNull Model model) {
         var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
         var newEmployee = new Employee(firstName, secondName, shop, true);
@@ -62,7 +64,7 @@ public class EmployeeController {
 
     @NotNull
     @PostMapping("/edit/{editEmployee}")
-    private String editRecord(@NotNull @PathVariable Employee editEmployee,
+    public String editRecord(@NotNull @PathVariable Employee editEmployee,
                               @RequestParam String editFirstName, @RequestParam String editSecondName,
                               @RequestParam String editShopAddress, @NotNull @RequestParam String editIsWorking,
                               @NotNull Model model) {
@@ -77,7 +79,7 @@ public class EmployeeController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var employeeFilePath = "";
         try {
@@ -97,14 +99,14 @@ public class EmployeeController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("employees", lastOutputtedEmployees);
         return "employeeExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delEmployee}")
-    private String deleteRecord(@NotNull @PathVariable Employee delEmployee) {
+    public String deleteRecord(@NotNull @PathVariable Employee delEmployee) {
         employeeRepo.delete(delEmployee);
         return "redirect:/employee";
     }
