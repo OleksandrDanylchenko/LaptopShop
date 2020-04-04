@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,8 @@ public class CPUController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String model,
+    @PreAuthorize("isAuthenticated()")
+    public String getRecords(@RequestParam(required = false) String model,
                               @RequestParam(required = false) String frequency,
                               @NotNull Model siteModel) {
         var cpuSpecification = Specification.where(modelLike(model)).and(frequencyEqual(frequency));
@@ -46,7 +48,8 @@ public class CPUController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
         if (!saveRecord(newCPU)) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель процесору уже присутня в базі!");
@@ -58,7 +61,8 @@ public class CPUController {
 
     @NotNull
     @PostMapping("/edit/{editCpu}")
-    private String addRecord(@RequestParam String editModel, @RequestParam String editFrequency,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@RequestParam String editModel, @RequestParam String editFrequency,
                              @NotNull @PathVariable CPU editCpu, @NotNull Model model) {
         editCpu.setModel(editModel);
         editCpu.setFrequency(editFrequency);
@@ -73,7 +77,8 @@ public class CPUController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var cpuFilePath = "";
         try {
@@ -92,14 +97,16 @@ public class CPUController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("cpus", lastOutputtedCPUs);
         return "cpuExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delCpu}")
-    private String deleteRecord(@NotNull @PathVariable CPU delCpu) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable CPU delCpu) {
         cpuRepo.delete(delCpu);
         return "redirect:/cpu";
     }

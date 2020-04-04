@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import static ua.alexd.specification.AvailabilitySpecification.*;
 
 @Controller
 @RequestMapping("/availability")
+@PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class AvailabilityController {
     private final AvailabilityRepo availabilityRepo;
     private static Iterable<Availability> lastOutputtedAvailabilities;
@@ -43,7 +45,7 @@ public class AvailabilityController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) Integer price,
+    public String getRecords(@RequestParam(required = false) Integer price,
                               @RequestParam(required = false) Integer quantity,
                               @RequestParam(required = false) String laptopModel,
                               @RequestParam(required = false) String shopAddress,
@@ -66,7 +68,7 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam Integer price, @RequestParam Integer quantity,
+    public String addRecord(@RequestParam Integer price, @RequestParam Integer quantity,
                              @RequestParam String laptopModel, @RequestParam String shopAddress,
                              @RequestParam Date dateStart,
                              @RequestParam Date dateEnd,
@@ -86,7 +88,7 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/edit/{editAvailability}")
-    private String editRecord(@RequestParam Integer editPrice, @RequestParam Integer editQuantity,
+    public String editRecord(@RequestParam Integer editPrice, @RequestParam Integer editQuantity,
                               @RequestParam String editLaptopModel, @RequestParam String editShopAddress,
                               @RequestParam Date editDateStart, @RequestParam Date editDateEnd,
                               @NotNull @PathVariable Availability editAvailability, @NotNull Model model) {
@@ -113,7 +115,7 @@ public class AvailabilityController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var uploadedFilePath = "";
         try {
@@ -133,14 +135,14 @@ public class AvailabilityController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("availabilities", lastOutputtedAvailabilities);
         return "availabilityExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delAvailability}")
-    private String deleteRecord(@NotNull @PathVariable Availability delAvailability) {
+    public String deleteRecord(@NotNull @PathVariable Availability delAvailability) {
         availabilityRepo.delete(delAvailability);
         return "redirect:/availability";
     }
