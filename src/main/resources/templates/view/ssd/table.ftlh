@@ -5,22 +5,34 @@
 <#import "../../parts/deleteModal.ftlh" as deleteModal>
 <#import "../../excel/excelUploadModal.ftlh" as eU>
 
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
+
 <@htmlPad.page "SSD">
+    <@security.authorize access="!hasAnyAuthority('MANAGER', 'CEO')">
+        <div class="container">
+    </@security.authorize>
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ssdAddModal">
-                <i class="far fa-plus-square"></i> Додати новий SSD диск
-            </button>
-            <@addModal.ssdAdd/>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ssdAddModal">
+                    <i class="far fa-plus-square"></i> Додати новий SSD диск
+                </button>
+                <@addModal.ssdAdd/>
+            </@security.authorize>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
-                    data-target="#SsdExcelUploadModal">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
-            </button>
-            <@eU.excelUpload tableNameEn="Ssd" tableNameUk="SSD дисків"/>
-            <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                        data-target="#SsdExcelUploadModal">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+                </button>
+                <@eU.excelUpload tableNameEn="Ssd" tableNameUk="SSD дисків"/>
+            </@security.authorize>
+            <@security.authorize access="isAuthenticated()">
+                <a class="btn btn-success" id="fixedBtnHeight" href="/ssd/exportExcel" role="button">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
+                </a>
+            </@security.authorize>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
@@ -59,34 +71,46 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="text-danger" scope="col">Id</th>
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th class="text-danger" scope="col">Id</th>
+                    </@security.authorize>
+
                     <th scope="col">Модель</th>
                     <th scope="col">Пам'ять(GiB)</th>
-                    <th></th>
-                    <th></th>
+
+                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                        <th></th>
+                        <th></th>
+                    </@security.authorize>
                 </tr>
                 </thead>
                 <tbody>
                 <#list ssds as ssd>
                     <tr>
-                        <th class="text-danger" scope="row">${ssd.id}</th>
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <th class="text-danger" scope="row">${ssd.id}</th>
+                        </@security.authorize>
+
                         <td>${ssd.model}</td>
                         <td>${ssd.memory}</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#ssdEditModal${ssd.id}">
-                                <i class="fa fa-edit"></i>
-                            </button>
-                            <@editModal.ssdEdit id="${ssd.id}" ssdModel="${ssd.model}" ssdMemory="${ssd.memory?c}"/>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${ssd.id}">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <@deleteModal.delete id="${ssd.id}"
-                            deletionLink="/ssd/delete/${ssd.id}"/>
-                        </td>
+
+                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+                            <td>
+                                <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                        data-target="#ssdEditModal${ssd.id}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <@editModal.ssdEdit id="${ssd.id}" ssdModel="${ssd.model}" ssdMemory="${ssd.memory?c}"/>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                        data-target="#deleteModal${ssd.id}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <@deleteModal.delete id="${ssd.id}"
+                                deletionLink="/ssd/delete/${ssd.id}"/>
+                            </td>
+                        </@security.authorize>
                     </tr>
                 </#list>
                 </tbody>
@@ -95,4 +119,7 @@
             <div class="h3">Не знайдено жодного SSD диску.</div>
         </#if>
     </div>
+    <@security.authorize access="!hasAnyAuthority('MANAGER', 'CEO')">
+        </div>
+    </@security.authorize>
 </@htmlPad.page>
