@@ -5,29 +5,23 @@
 <#import "../../errorsHandlers/errorOutput.ftlh" as eO>
 <#import "../../excel/excelUploadModal.ftlh" as eU>
 
-<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
-
 <@htmlPad.page "Type">
     <div class="row">
         <div class="col">
-            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#typeAddModal">
-                    <i class="far fa-plus-square"></i> Додати новий тип ноутбуків
-                </button>
-                <@addModal.typeAdd/>
-            </@security.authorize>
+            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#typeAddModal">
+                <i class="far fa-plus-square"></i> Додати новий тип ноутбуків
+            </button>
+            <@addModal.typeAdd/>
         </div>
-
         <div class="d-flex justify-content-center">
-            <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
-                        data-target="#TypeExcelUploadModal">
-                    <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
-                </button>
-                <@eU.excelUpload tableNameEn="Type" tableNameUk="типів"/>
-            </@security.authorize>
+            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                    data-target="#TypeExcelUploadModal">
+                <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
+            </button>
+            <@eU.excelUpload tableNameEn="Type" tableNameUk="типів"/>
             <a class="btn btn-success" id="fixedBtnHeight" href="/type/exportExcel" role="button">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
+                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
+            </a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">
             <button class="btn btn-dark mt-sm-0 mt-2 w-100" type="button" data-toggle="collapse"
@@ -66,47 +60,31 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                        <th class="text-danger" scope="col">Id</th>
-                    </@security.authorize>
-                     <@security.authorize access="hasAnyAuthority('USER')">
-                         <th class="text-danger" scope="col">#</th>
-                     </@security.authorize>
+                    <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Назва</th>
-                    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                        <th></th>
-                        <th></th>
-                    </@security.authorize>
+                    <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <#list types as type>
                     <tr>
-                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                            <th class="text-danger" scope="row">${type.id}</th>
-                        </@security.authorize>
-                        <@security.authorize access="hasAnyAuthority('USER')">
-                            <th class="text-danger" scope="col">${type?counter}</th>
-                        </@security.authorize>
-
+                        <th class="text-danger" scope="row">${type.id}</th>
                         <td>${type.name}</td>
-
-                        <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                            <td>
-                                <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#typeEditModal${type.id}">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <@editModal.typeEdit id="${type.id}" typeName="${type.name}"/>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${type.id}">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                <@deleteModal.delete id="${type.id}" deletionLink="/type/delete/${type.id}"/>
-                            </td>
-                        </@security.authorize>
+                        <td>
+                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                    data-target="#typeEditModal${type.id}">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <@editModal.typeEdit id="${type.id}" typeName="${type.name}"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                    data-target="#deleteModal${type.id}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <@deleteModal.delete id="${type.id}" deletionLink="/type/delete/${type.id}"/>
+                        </td>
                     </tr>
                 </#list>
                 </tbody>

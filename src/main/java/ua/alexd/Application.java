@@ -13,6 +13,7 @@ public class Application {
         freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(singletonList("/META-INF/security.tld"));
     }
 
+    // TODO Design errors
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);
     }

@@ -34,7 +34,11 @@
     <div class="container-fluid mt-lg-3 mt-2 px-5">
         <#nested>
     </div>
-    <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
+
+    <#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
+    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
+        <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
+    </@security.authorize>
 
     </body>
     </html>

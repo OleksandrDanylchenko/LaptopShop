@@ -3,6 +3,7 @@ package ua.alexd.security;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import static ua.alexd.security.UserSpecification.isActiveEqual;
 import static ua.alexd.security.UserSpecification.usernameEqual;
 
-
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasAuthority('CEO')")
 public class UserController {
     private final UserRepo userRepo;
     private static Iterable<User> lastOutputtedUsers;

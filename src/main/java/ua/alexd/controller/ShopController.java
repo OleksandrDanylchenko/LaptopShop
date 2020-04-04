@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ShopController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String address, @NotNull Model model) {
+    public String getRecords(@RequestParam(required = false) String address, @NotNull Model model) {
         var shopSpecification = Specification.where(addressLike(address));
         var shops = shopRepo.findAll(shopSpecification);
         lastOutputtedShops = shops;
@@ -46,7 +47,8 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
         if (!saveRecord(newShop)) {
             model.addAttribute("Представлена нова адреса магазину уже уже присутня в базі!");
             model.addAttribute("shops", lastOutputtedShops);
@@ -57,7 +59,8 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/edit/{editShop}")
-    private String editRecord(@RequestParam String editAddress, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editAddress, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
         editShop.setAddress(editAddress);
         if (!saveRecord(editShop)) {
             model.addAttribute("Представлена змінювана адреса магазину уже присутня в базі!");
@@ -69,7 +72,8 @@ public class ShopController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var shopFilePath = "";
         try {
@@ -88,14 +92,16 @@ public class ShopController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("shops", lastOutputtedShops);
         return "shopExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delShop}")
-    private String deleteRecord(@NotNull @PathVariable Shop delShop) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable Shop delShop) {
         dismissEmployees(delShop);
         shopRepo.delete(delShop);
         return "redirect:/shop";
