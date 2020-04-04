@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import static ua.alexd.specification.TypeSpecification.typeNameLike;
 @RequestMapping("/type")
 public class TypeController {
     private final TypeRepo typeRepo;
-    private static Iterable<Type> lastOutputtedTypes;
+    private Iterable<Type> lastOutputtedTypes;
 
     private final TypeExcelImporter excelImporter;
 
@@ -32,7 +33,7 @@ public class TypeController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String typeName, @NotNull Model model) {
+    public String getRecords(@RequestParam(required = false) String typeName, @NotNull Model model) {
         var typeSpecification = Specification.where(typeNameLike(typeName));
         var types = typeRepo.findAll(typeSpecification);
         lastOutputtedTypes = types;
@@ -42,7 +43,8 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@NotNull @ModelAttribute("newType") Type newType, @NotNull Model model) {
         if (!saveRecord(newType)) {
             model.addAttribute("errorMessage",
                     "Представлена нова назва типу уже присутня в базі!");
@@ -54,7 +56,8 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/edit/{editType}")
-    private String editRecord(@RequestParam String editName, @NotNull @PathVariable Type editType, @NotNull Model model) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editName, @NotNull @PathVariable Type editType, @NotNull Model model) {
         editType.setName(editName);
         if (!saveRecord(editType)) {
             model.addAttribute("errorMessage",
@@ -67,7 +70,8 @@ public class TypeController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var typeFilePath = "";
         try {
@@ -86,14 +90,15 @@ public class TypeController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("types", lastOutputtedTypes);
         return "typeExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delType}")
-    private String deleteRecord(@NotNull @PathVariable Type delType) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable Type delType) {
         typeRepo.delete(delType);
         return "redirect:/type";
     }

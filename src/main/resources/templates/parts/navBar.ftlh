@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="/styles/navbarStyle.css">
 
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
+
 <nav class="navbar navbar-expand-xl bg-light">
     <a class="navbar-brand" href="/">
         <img width="100px" height="60px" src="/navbarLogo.png" alt="navbarLogo">
@@ -10,8 +12,8 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <#assign controllers = ['availability', 'basket', 'buying', 'client', 'cpu', 'display', 'employee', 'gpu',
-    'hardware', 'hdd', 'label', 'laptop', 'ram', 'shop', 'ssd', 'type']>
+    <#assign controllers = ['availability', 'basket', 'buying', 'client', 'employee', 'shop', 'cpu', 'gpu', 'ram',
+     'hdd', 'ssd', 'display', 'hardware', 'type', 'label', 'laptop']>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -21,18 +23,22 @@
                 </li>
             </#list>
         </ul>
+        <@security.authorize access="!isAuthenticated()">
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <a class="btn btn-outline-dark" href="/login" role="button"><i class="fas fa-user-cog"></i> Увійти</a>
             </div>
         </div>
-        <div class="row">
-            <div class="col d-flex justify-content-center">
-                <form action="/logout" method="post">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-outline-dark"><i class="fas fa-user-cog"></i> Вийти</button>
-                </form>
+        </@security.authorize>
+        <@security.authorize access="isAuthenticated()">
+            <div class="row">
+                <div class="col d-flex justify-content-center">
+                    <form action="/logout" method="post">
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-outline-dark"><i class="fas fa-user-cog"></i> Вийти</button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </@security.authorize>
     </div>
 </nav>

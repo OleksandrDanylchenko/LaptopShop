@@ -1,8 +1,10 @@
 package ua.alexd.config;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,6 +13,7 @@ import ua.alexd.security.UserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
@@ -20,9 +23,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
-        var staticResources = new String[]{
-                "/",
+        var allowedPages = new String[]{
                 "/registration",
+                "/",
+                "/shop",
+                "/laptop",
+                "/type",
+                "/hardware",
+                "/display",
+                "/ssd",
+                "/hdd",
+                "/ram",
+                "/gpu",
+                "/cpu",
+                "/basket"
+        };
+
+        var staticResources = new String[]{
                 "/favicon.ico",
                 "/navbarLogo.png",
                 "/images/**",
@@ -30,8 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/scripts/**"
         };
 
+        var allowedUrls = ArrayUtils.addAll(staticResources, allowedPages);
+
         http.authorizeRequests()
-                .antMatchers(staticResources).permitAll()
+                .antMatchers(allowedUrls).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

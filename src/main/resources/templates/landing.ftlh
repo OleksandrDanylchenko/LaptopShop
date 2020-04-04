@@ -1,6 +1,6 @@
-<#import "parts/htmlPad.ftlh" as pad>
+<#import "parts/htmlPad.ftlh" as htmlPad>
 
-<@pad.page "Alex Laptop Shop">
+<@htmlPad.page "Alex Laptop Shop">
     <div class="h-100 d-flex justify-content-center">
         <div class="jumbotron-fluid my-auto text-center">
             <div class="display-lg-1 display-3" style="color: #343a40">Доброго дня!</div>
@@ -10,4 +10,4 @@
             </div>
         </div>
     </div>
-</@pad.page>
+</@htmlPad.page>
