@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class LaptopController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String hardwareAssemblyName,
+    public String getRecords(@RequestParam(required = false) String hardwareAssemblyName,
                               @RequestParam(required = false) String typeName,
                               @RequestParam(required = false) String labelBrand,
                               @RequestParam(required = false) String labelModel,
@@ -60,7 +61,8 @@ public class LaptopController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
                              @RequestParam String labelModel, @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName).get(0);
@@ -79,7 +81,8 @@ public class LaptopController {
 
     @NotNull
     @PostMapping("/edit/{editLaptop}")
-    private String editRecord(@RequestParam String editAssemblyName, @RequestParam String editTypeName,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editAssemblyName, @RequestParam String editTypeName,
                               @RequestParam String editLabelModel, @NotNull @PathVariable Laptop editLaptop,
                               @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(editAssemblyName);
@@ -101,7 +104,8 @@ public class LaptopController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var laptopFilePath = "";
         try {
@@ -119,21 +123,18 @@ public class LaptopController {
         }
     }
 
-    private static void initializeImportAttributes(@NotNull Model model) {
-        model.addAttribute("controllerName", Laptop.class.getSimpleName());
-        model.addAttribute("tableName", "ноутбуків");
-    }
-
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("laptops", lastOutputtedLaptops);
         return "laptopExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delLaptop}")
-    private String deleteRecord(@NotNull @PathVariable Laptop delLaptop) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable Laptop delLaptop) {
         laptopRepo.delete(delLaptop);
         return "redirect:/laptop";
     }
