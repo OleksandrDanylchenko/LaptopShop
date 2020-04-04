@@ -3,6 +3,7 @@ package ua.alexd.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,8 @@ public class HDDController {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String model,
+    @PreAuthorize("isAuthenticated()")
+    public String getRecords(@RequestParam(required = false) String model,
                               @RequestParam(required = false) Integer memory,
                               @NotNull Model siteModel) {
         var hddSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
@@ -46,7 +48,8 @@ public class HDDController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@NotNull @ModelAttribute("newHDD") HDD newHDD,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String addRecord(@NotNull @ModelAttribute("newHDD") HDD newHDD,
                              @NotNull Model model) {
         if (!saveRecord(newHDD)) {
             model.addAttribute("errorMessage",
@@ -59,7 +62,8 @@ public class HDDController {
 
     @NotNull
     @PostMapping("/edit/{editHDD}")
-    private String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                               @NotNull @PathVariable HDD editHDD, @NotNull Model model) {
         editHDD.setModel(editModel);
         editHDD.setMemory(editMemory);
@@ -73,7 +77,8 @@ public class HDDController {
 
     @NotNull
     @PostMapping("/importExcel")
-    private String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
             throws IOException {
         var HDDFilePath = "";
         try {
@@ -92,14 +97,16 @@ public class HDDController {
 
     @NotNull
     @GetMapping("/exportExcel")
-    private String exportExcel(@NotNull Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String exportExcel(@NotNull Model model) {
         model.addAttribute("hdds", lastOutputtedHDDs);
         return "hddExcelView";
     }
 
     @NotNull
     @GetMapping("/delete/{delHDD}")
-    private String deleteRecord(@NotNull @PathVariable HDD delHDD) {
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
+    public String deleteRecord(@NotNull @PathVariable HDD delHDD) {
         hddRepo.delete(delHDD);
         return "redirect:/hdd";
     }
