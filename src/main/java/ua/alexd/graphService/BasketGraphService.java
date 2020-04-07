@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 @Lazy
-public class BasketGraphService {
+public final class BasketGraphService {
     private BasketRepo basketRepo;
 
     public BasketGraphService(BasketRepo basketRepo) {

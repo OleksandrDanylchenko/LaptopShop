@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Label;
 
-public class LabelSpecification {
+public final class LabelSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Label> brandEqual(String expression) {

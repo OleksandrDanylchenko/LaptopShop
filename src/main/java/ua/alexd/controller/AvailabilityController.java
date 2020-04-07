@@ -25,7 +25,7 @@ import static ua.alexd.specification.AvailabilitySpecification.*;
 @Controller
 @RequestMapping("/availability")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public class AvailabilityController {
+public final class AvailabilityController {
     private final AvailabilityRepo availabilityRepo;
     private static Iterable<Availability> lastOutputtedAvailabilities;
 

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.CPU;
 
-public class CPUSpecification {
+public final class CPUSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<CPU> modelLike(String expression) {

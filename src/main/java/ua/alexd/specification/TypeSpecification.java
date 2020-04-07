@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Type;
 
-public class TypeSpecification {
+public final class TypeSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Type> typeNameLike(String expression) {

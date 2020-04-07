@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ua.alexd.repos.UserRepo;
 
 @Service
-public class UserService implements UserDetailsService {
+public final class UserService implements UserDetailsService {
     private UserRepo userRepo;
 
     public UserService(UserRepo userRepo) {

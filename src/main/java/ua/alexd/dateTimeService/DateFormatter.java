@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 
 @Service
 @Lazy
-public class DateFormatter {
+public final class DateFormatter {
     private static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat abridgedDateFormat = new SimpleDateFormat("d-M-yy");
 

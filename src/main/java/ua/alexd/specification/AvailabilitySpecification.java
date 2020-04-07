@@ -7,7 +7,7 @@ import ua.alexd.domain.Availability;
 
 import java.sql.Date;
 
-public class AvailabilitySpecification {
+public final class AvailabilitySpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Availability> laptopModelLike(String expression) {

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Hardware;
 
-public class HardwareSpecification {
+public final class HardwareSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Hardware> displayModelLike(String expression) {

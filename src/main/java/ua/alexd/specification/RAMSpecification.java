@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.RAM;
 
-public class RAMSpecification {
+public final class RAMSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<RAM> modelLike(String expression) {

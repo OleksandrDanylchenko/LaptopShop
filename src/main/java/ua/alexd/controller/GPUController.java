@@ -21,7 +21,7 @@ import static ua.alexd.specification.GPUSpecification.modelLike;
 
 @Controller
 @RequestMapping("/gpu")
-public class GPUController {
+public final class GPUController {
     private final GPURepo gpuRepo;
     private static Iterable<GPU> lastOutputtedGPUs;
 

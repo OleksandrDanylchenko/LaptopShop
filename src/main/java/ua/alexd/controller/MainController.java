@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class MainController {
+public final class MainController {
     @GetMapping
     public String landing(@NotNull Model model) {
         return "landing";

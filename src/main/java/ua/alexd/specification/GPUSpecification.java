@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.GPU;
 
-public class GPUSpecification {
+public final class GPUSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<GPU> modelLike(String expression) {

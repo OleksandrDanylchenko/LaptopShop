@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Laptop;
 
-public class LaptopSpecification {
+public final class LaptopSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Laptop> hardwareAssemblyNameLike(String expression) {
