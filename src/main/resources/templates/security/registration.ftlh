@@ -19,6 +19,14 @@
             </div>
             <div class="form-row my-2">
                 <div class="col">
+                    <label class="d-inline ml-2" for="emailInput">Нова електронна пошта:</label>
+                    <input type="email" id="emailInput" class="form-control" name="email"
+                           value="${RequestParameters.email!}" required/>
+                    <div class="invalid-feedback">Нову електронну пошту уведено некоректно!</div>
+                </div>
+            </div>
+            <div class="form-row my-2">
+                <div class="col">
                     <label class="d-inline ml-2" for="passwordInput">Новий пароль:</label>
                     <input type="password" id="passwordInput" class="form-control" name="password"
                            value="${RequestParameters.password!}" required/>

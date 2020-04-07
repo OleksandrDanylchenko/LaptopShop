@@ -54,7 +54,6 @@
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/no.api.freemarker/freemarker-java8 -->
         <dependency>
             <groupId>no.api.freemarker</groupId>
             <artifactId>freemarker-java8</artifactId>
@@ -73,20 +72,18 @@
             <artifactId>mssql-jdbc</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>4.1.2</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>4.1.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -97,15 +94,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>5.3.1.RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jsp-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.2.6.RELEASE</version>
         </dependency>
     </dependencies>
 

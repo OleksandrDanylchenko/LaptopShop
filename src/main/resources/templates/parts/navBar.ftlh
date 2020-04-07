@@ -16,6 +16,9 @@
         <ul class="navbar-nav mr-auto">
             <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                 <li class="nav-item text-center">
+                    <a class="nav-link" href="/user">User</a>
+                </li>
+                <li class="nav-item text-center">
                     <a class="nav-link" href="/availability">Availability</a>
                 </li>
                 <li class="nav-item text-center">

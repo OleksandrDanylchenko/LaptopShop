@@ -7,6 +7,12 @@
         <#if (RequestParameters.error)??>
             <@eO.errorOutput"Неправильний логін чи пароль!"/>
         </#if>
+        <#if (successfulActivationMessage)??>
+            <div class="d-flex flex-grow-1 justify-content-center alert alert-success alert-dismissible fade show">
+                ${successfulActivationMessage}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        </#if>
         <p class="h1 text-center">Автентифікація:</p>
         <form method="post" action="/login" class="form-group needs-validation w-100" novalidate>
             <div class="form-row my-2">

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @ComponentScan
 @PropertySource("classpath:excelExport.properties")
+@PropertySource("classpath:mailSender.properties")
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(@NotNull ViewControllerRegistry registry) {

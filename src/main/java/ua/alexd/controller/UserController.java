@@ -1,4 +1,4 @@
-package ua.alexd.security;
+package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -7,9 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.alexd.repos.UserRepo;
+import ua.alexd.security.Role;
+import ua.alexd.security.User;
 
-import static ua.alexd.security.UserSpecification.isActiveEqual;
-import static ua.alexd.security.UserSpecification.usernameEqual;
+import static ua.alexd.specification.UserSpecification.isActiveEqual;
+import static ua.alexd.specification.UserSpecification.usernameEqual;
 
 @Controller
 @RequestMapping("/user")
@@ -24,7 +27,7 @@ public class UserController {
 
     @NotNull
     @GetMapping
-    private String getRecords(@RequestParam(required = false) String username,
+    public String getRecords(@RequestParam(required = false) String username,
                               @RequestParam(required = false) String isActive,
                               @NotNull Model model) {
         var userSpecification = Specification.where(usernameEqual(username)).and(isActiveEqual(isActive));
@@ -37,12 +40,11 @@ public class UserController {
 
     @NotNull
     @PostMapping("/add")
-    private String addRecord(@RequestParam String newUsername, @RequestParam String newPassword,
-                             @RequestParam String role, @NotNull Model model) {
-        var newUser = new User(newUsername, newPassword, true, Role.valueOf(role));
+    public String addRecord(@NotNull @ModelAttribute("newUser") User newUser, @NotNull Model model) {
+        newUser.setActive(true);
         if (!saveRecord(newUser)) {
             model.addAttribute("errorMessage",
-                    "Представлений новий логін уже присутній у базі!");
+                    "Представлений новий логін чи e-mail уже присутній в базі даних!");
             model.addAttribute("users", lastOutputtedUsers);
             model.addAttribute("roles", Role.values());
             return "view/user/table";
@@ -52,16 +54,18 @@ public class UserController {
 
     @NotNull
     @PostMapping("/edit/{editUser}")
-    private String editRecord(@RequestParam String editUsername, @RequestParam String editPassword,
+    public String editRecord(@RequestParam String editUsername, @RequestParam String editPassword,
                               @RequestParam Role editRole, @NotNull @RequestParam String editActive,
-                              @NotNull @PathVariable User editUser, @NotNull Model model) {
+                              @NotNull @RequestParam String editEmail, @NotNull @PathVariable User editUser,
+                              @NotNull Model model) {
         editUser.setUsername(editUsername);
         editUser.setPassword(editPassword);
         editUser.setRole(editRole);
+        editUser.setEmail(editEmail);
         editUser.setActive(editActive.equals("Активний"));
         if (!saveRecord(editUser)) {
             model.addAttribute("errorMessage",
-                    "Представлений змінюваний логін уже присутній у базі!");
+                    "Представлений змінюваний логін чи e-mail уже присутній в базі даних!");
             model.addAttribute("users", lastOutputtedUsers);
             model.addAttribute("roles", Role.values());
             return "view/user/table";
@@ -71,7 +75,7 @@ public class UserController {
 
     @NotNull
     @GetMapping("/delete/{delUser}")
-    private String deleteRecord(@NotNull @PathVariable User delUser) {
+    public String deleteRecord(@NotNull @PathVariable User delUser) {
         userRepo.delete(delUser);
         return "redirect:/user";
     }

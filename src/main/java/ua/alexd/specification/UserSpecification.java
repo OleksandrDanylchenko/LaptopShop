@@ -1,8 +1,9 @@
-package ua.alexd.security;
+package ua.alexd.specification;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
+import ua.alexd.security.User;
 
 public class UserSpecification {
     @Nullable

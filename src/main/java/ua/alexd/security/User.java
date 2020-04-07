@@ -30,14 +30,32 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Basic
+    @Column(name = "email")
+    private String email;
+
+    @Basic
+    @Column(name = "activationCode")
+    private String activationCode;
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
+    }
+
     public User() {
     }
 
-    public User(String username, String password, boolean isActive, Role role) {
+    public User(String username, String password, boolean isActive, Role role, String email, String activationCode) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;
         this.role = role;
+        this.email = email;
+        this.activationCode = activationCode;
     }
 
     public int getId() {
@@ -78,6 +96,14 @@ public class User implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
