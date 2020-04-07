@@ -14,7 +14,7 @@ import static ua.alexd.security.Role.USER;
 
 @Controller
 @RequestMapping("/registration")
-public class RegistrationController {
+public final class RegistrationController {
     private final UserRepo userRepo;
     private final ActivationMailSender mailSender;
 

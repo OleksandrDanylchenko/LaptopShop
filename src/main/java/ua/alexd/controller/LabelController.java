@@ -22,7 +22,7 @@ import static ua.alexd.specification.LabelSpecification.modelLike;
 @Controller
 @RequestMapping("/label")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public class LabelController {
+public final class LabelController {
     private final LabelRepo labelRepo;
     private static Iterable<Label> lastOutputtedLabel;
 

@@ -21,7 +21,7 @@ import static ua.alexd.specification.EmployeeSpecification.*;
 @Controller
 @RequestMapping("/employee")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public class EmployeeController {
+public final class EmployeeController {
     private final EmployeeRepo employeeRepo;
     private static Iterable<Employee> lastOutputtedEmployees;
 

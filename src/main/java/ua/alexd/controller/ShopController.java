@@ -21,7 +21,7 @@ import static ua.alexd.specification.ShopSpecification.addressLike;
 
 @Controller
 @RequestMapping("/shop")
-public class ShopController {
+public final class ShopController {
     private final ShopRepo shopRepo;
     private static Iterable<Shop> lastOutputtedShops;
 

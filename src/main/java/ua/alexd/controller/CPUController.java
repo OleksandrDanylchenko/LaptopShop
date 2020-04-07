@@ -21,7 +21,7 @@ import static ua.alexd.specification.CPUSpecification.modelLike;
 
 @Controller
 @RequestMapping("/cpu")
-public class CPUController {
+public final class CPUController {
     private final CPURepo cpuRepo;
     private static Iterable<CPU> lastOutputtedCPUs;
 

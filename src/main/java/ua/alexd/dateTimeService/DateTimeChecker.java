@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Service
 @Lazy
-public class DateTimeChecker {
+public final class DateTimeChecker {
     private static Date nonValidDate;
 
     static {

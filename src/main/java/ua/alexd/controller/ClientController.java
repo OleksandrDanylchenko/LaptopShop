@@ -22,7 +22,7 @@ import static ua.alexd.specification.ClientSpecification.*;
 @Controller
 @RequestMapping("/client")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public class ClientController {
+public final class ClientController {
     private final ClientRepo clientRepo;
     private static Iterable<Client> lastOutputtedClients;
 

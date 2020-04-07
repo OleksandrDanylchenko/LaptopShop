@@ -21,7 +21,7 @@ import static ua.alexd.specification.RAMSpecification.modelLike;
 
 @Controller
 @RequestMapping("/ram")
-public class RAMController {
+public final class RAMController {
     private final RAMRepo ramRepo;
     private static Iterable<RAM> lastOutputtedRams;
 
