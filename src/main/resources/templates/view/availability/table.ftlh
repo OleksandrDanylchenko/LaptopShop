@@ -115,10 +115,10 @@
                         <td>${availability.dateEnd}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#availabilityEditModal${availability.id}">
+                                    data-target="#availabilityEditModal${availability.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.availabilityEdit id="${availability.id}"
+                            <@editModal.availabilityEdit id="${availability.id?c}"
                             currentLaptopModel="${availability.laptop.label.model}"
                             currentPrice="${availability.price?c}"
                             currentQuantity="${availability.quantity?c}"
@@ -128,11 +128,11 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${availability.id}">
+                                    data-target="#deleteModal${availability.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${availability.id}"
-                            deletionLink="/availability/delete/${availability.id}"/>
+                            <@deleteModal.delete id="${availability.id?c}"
+                            deletionLink="/availability/delete/${availability.id?c}"/>
                         </td>
                     </tr>
                 </#list>

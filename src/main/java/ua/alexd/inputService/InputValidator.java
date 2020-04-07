@@ -1,7 +1,12 @@
 package ua.alexd.inputService;
 
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
 import java.util.regex.Pattern;
 
+@Service
+@Lazy
 public class InputValidator {
     public static boolean stringContainsAlphabet(String str) {
         if (str != null) {

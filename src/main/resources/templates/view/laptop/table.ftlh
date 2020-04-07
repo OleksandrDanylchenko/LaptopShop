@@ -114,10 +114,10 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#laptopEditModal${laptop.id}">
+                                        data-target="#laptopEditModal${laptop.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.laptopEdit id="${laptop.id}"
+                                <@editModal.laptopEdit id="${laptop.id?c}"
                                 currentLabelModel = "${(laptop.label??)?then(laptop.label.model, '')}"
                                 currentType = "${(laptop.type??)?then(laptop.type.name, '')}"
                                 currentAssembly = "${(laptop.hardware??)?then(laptop.hardware.assemblyName, '')}"
@@ -125,11 +125,11 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${laptop.id}">
+                                        data-target="#deleteModal${laptop.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${laptop.id}"
-                                deletionLink="/laptop/delete/${laptop.id}"/>
+                                <@deleteModal.delete id="${laptop.id?c}"
+                                deletionLink="/laptop/delete/${laptop.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

@@ -96,18 +96,18 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#ramEditModal${ram.id}">
+                                        data-target="#ramEditModal${ram.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.ramEdit id="${ram.id}" ramModel="${ram.model}" ramMemory="${ram.memory}"/>
+                                <@editModal.ramEdit id="${ram.id?c}" ramModel="${ram.model}" ramMemory="${ram.memory}"/>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${ram.id}">
+                                        data-target="#deleteModal${ram.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${ram.id}"
-                                deletionLink="/ram/delete/${ram.id}"/>
+                                <@deleteModal.delete id="${ram.id?c}"
+                                deletionLink="/ram/delete/${ram.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

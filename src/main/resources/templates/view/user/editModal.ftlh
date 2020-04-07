@@ -1,7 +1,7 @@
 <#import "../../errorsHandlers/emptyFieldsBreaker.ftlh" as eB>
 <#import "../../modalInputManage/formStatusCleaner.ftlh" as fSc>
 
-<#macro userEdit id currentUsername currentPassword activeStatus currentRole>
+<#macro userEdit id currentUsername currentPassword activeStatus currentRole currentEmail>
     <div class="modal fade" id="userEditModal${id}" data-backdrop="static" tabindex="-1"
          role="dialog" aria-labelledby="userEditLabel${id}" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -17,7 +17,7 @@
                           class="form-group needs-validation w-100" novalidate>
                         <div class="form-row mb-2">
                             <div class="col">
-                                <label class="d-inline ml-2" for="model">Змінюваний логін:</label>
+                                <label class="d-inline ml-2" for="editUsernameInput${id}">Змінюваний логін:</label>
                                 <input type="text" id="editUsernameInput${id}" class="form-control"
                                        name="editUsername" required/>
                                 <div class="invalid-feedback">Змінюваний логін уведено некоректно!</div>
@@ -25,7 +25,14 @@
                         </div>
                         <div class="form-row my-2">
                             <div class="col">
-                                <label class="d-inline ml-2" for="passwordInput">Змінюваний пароль:</label>
+                                <label class="d-inline ml-2" for="emailInput${id}">Змінювана електронна пошта:</label>
+                                <input type="email" id="emailInput${id}" class="form-control" name="editEmail" required/>
+                                <div class="invalid-feedback">Змінювану пошту уведено некоректно!</div>
+                            </div>
+                        </div>
+                        <div class="form-row my-2">
+                            <div class="col">
+                                <label class="d-inline ml-2" for="editPasswordInput${id}">Змінюваний пароль:</label>
                                 <input type="password" id="editPasswordInput${id}" class="form-control"
                                        name="editPassword" required/>
                                 <div class="invalid-feedback">Змінюваний пароль уведено некоректно!</div>
@@ -66,6 +73,7 @@
                             $("#editPasswordInput${id}").val("${currentPassword}").change();
                             $("#activeSelect${id}").val("${activeStatus}").change();
                             $("#${currentRole}${id}").prop("checked", true);
+                            $("#emailInput${id}").val("${currentEmail}").change();
                         })
                     </script>
                 </div>

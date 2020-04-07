@@ -98,18 +98,18 @@
                          <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#gpuEditModal${gpu.id}">
+                                    data-target="#gpuEditModal${gpu.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.gpuEdit id="${gpu.id}" gpuModel="${gpu.model}" gpuMemory="${gpu.memory}"/>
+                            <@editModal.gpuEdit id="${gpu.id?c}" gpuModel="${gpu.model}" gpuMemory="${gpu.memory}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${gpu.id}">
+                                    data-target="#deleteModal${gpu.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${gpu.id}"
-                            deletionLink="/gpu/delete/${gpu.id}"/>
+                            <@deleteModal.delete id="${gpu.id?c}"
+                            deletionLink="/gpu/delete/${gpu.id?c}"/>
                         </td>
                          </@security.authorize>
                     </tr>

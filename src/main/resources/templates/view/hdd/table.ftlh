@@ -97,18 +97,18 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#hddEditModal${hdd.id}">
+                                        data-target="#hddEditModal${hdd.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.hddEdit id="${hdd.id}" hddModel="${hdd.model}" hddMemory="${hdd.memory?c}"/>
+                                <@editModal.hddEdit id="${hdd.id?c}" hddModel="${hdd.model}" hddMemory="${hdd.memory?c}"/>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${hdd.id}">
+                                        data-target="#deleteModal${hdd.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${hdd.id}"
-                                deletionLink="/hdd/delete/${hdd.id}"/>
+                                <@deleteModal.delete id="${hdd.id?c}"
+                                deletionLink="/hdd/delete/${hdd.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

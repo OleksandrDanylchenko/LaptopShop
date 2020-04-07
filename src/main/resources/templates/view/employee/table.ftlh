@@ -101,21 +101,21 @@
                         <td>${employee.isWorking?then("Працюючий", "Звільнений")}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#employeeEditModal${employee.id}">
+                                    data-target="#employeeEditModal${employee.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.employeeEdit id="${employee.id}" currentFirstName="${employee.firstName}"
+                            <@editModal.employeeEdit id="${employee.id?c}" currentFirstName="${employee.firstName}"
                             currentSecondName="${employee.secondName}"
                             currentShopAddress="${(employee.shop??)?then(employee.shop.address, '')}"
                             currentWorkingStatus="${employee.isWorking?string('Працюючий', 'Звільнений')}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${employee.id}">
+                                    data-target="#deleteModal${employee.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${employee.id}"
-                            deletionLink="/employee/delete/${employee.id}"/>
+                            <@deleteModal.delete id="${employee.id?c}"
+                            deletionLink="/employee/delete/${employee.id?c}"/>
                         </td>
                     </tr>
                 </#list>

@@ -85,19 +85,19 @@
                         <td>${client.dateReg}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#clientEditModal${client.id}">
+                                    data-target="#clientEditModal${client.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.clientEdit id="${client.id}"clientFirstName="${client.firstName}"
+                            <@editModal.clientEdit id="${client.id?c}"clientFirstName="${client.firstName}"
                             clientSecondName="${client.secondName}" clientDateReg="${client.dateReg?iso_utc}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${client.id}">
+                                    data-target="#deleteModal${client.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${client.id}"
-                            deletionLink="/client/delete/${client.id}"/>
+                            <@deleteModal.delete id="${client.id?c}"
+                            deletionLink="/client/delete/${client.id?c}"/>
                         </td>
                     </tr>
                 </#list>

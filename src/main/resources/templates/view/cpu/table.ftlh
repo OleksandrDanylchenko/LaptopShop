@@ -98,18 +98,18 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#cpuEditModal${cpu.id}">
+                                        data-target="#cpuEditModal${cpu.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.cpuEdit id="${cpu.id}" cpuModel="${cpu.model}" cpuFrequency="${cpu.frequency}"/>
+                                <@editModal.cpuEdit id="${cpu.id?c}" cpuModel="${cpu.model}" cpuFrequency="${cpu.frequency}"/>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${cpu.id}">
+                                        data-target="#deleteModal${cpu.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${cpu.id}"
-                                deletionLink="/cpu/delete/${cpu.id}"/>
+                                <@deleteModal.delete id="${cpu.id?c}"
+                                deletionLink="/cpu/delete/${cpu.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

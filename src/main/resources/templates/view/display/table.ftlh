@@ -112,20 +112,20 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#displayEditModal${display.id}">
+                                        data-target="#displayEditModal${display.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.displayEdit id="${display.id}" displayModel="${display.model}"
+                                <@editModal.displayEdit id="${display.id?c}" displayModel="${display.model}"
                                 displayType="${display.type}" displayDiagonal="${display.diagonal}"
                                 displayResolution="${display.resolution}"/>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${display.id}">
+                                        data-target="#deleteModal${display.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${display.id}"
-                                deletionLink="/display/delete/${display.id}"/>
+                                <@deleteModal.delete id="${display.id?c}"
+                                deletionLink="/display/delete/${display.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

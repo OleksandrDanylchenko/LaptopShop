@@ -75,18 +75,18 @@
                         <td>${label.model}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#labelEditModal${label.id}">
+                                    data-target="#labelEditModal${label.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.labelEdit id="${label.id}" labelBrand="${label.brand}" labelModel="${label.model}"/>
+                            <@editModal.labelEdit id="${label.id?c}" labelBrand="${label.brand}" labelModel="${label.model}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${label.id}">
+                                    data-target="#deleteModal${label.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${label.id}"
-                            deletionLink="/label/delete/${label.id}"/>
+                            <@deleteModal.delete id="${label.id?c}"
+                            deletionLink="/label/delete/${label.id?c}"/>
                         </td>
                     </tr>
                 </#list>

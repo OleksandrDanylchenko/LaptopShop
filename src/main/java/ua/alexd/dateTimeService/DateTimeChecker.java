@@ -1,11 +1,15 @@
 package ua.alexd.dateTimeService;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
+@Service
+@Lazy
 public class DateTimeChecker {
     private static Date nonValidDate;
 

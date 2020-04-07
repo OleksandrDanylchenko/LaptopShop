@@ -91,17 +91,17 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#shopEditModal${shop.id}">
+                                        data-target="#shopEditModal${shop.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.shopEdit id="${shop.id}" shopAddress="${shop.address}"/>
+                                <@editModal.shopEdit id="${shop.id?c}" shopAddress="${shop.address}"/>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${shop.id}">
+                                        data-target="#deleteModal${shop.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${shop.id}" deletionLink="/shop/delete/${shop.id}"/>
+                                <@deleteModal.delete id="${shop.id?c}" deletionLink="/shop/delete/${shop.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

@@ -3,11 +3,15 @@ package ua.alexd.dateTimeService;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
 
+@Service
+@Lazy
 public class DateFormatter {
     private static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat abridgedDateFormat = new SimpleDateFormat("d-M-yy");

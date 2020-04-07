@@ -73,17 +73,17 @@
                         <td>${type.name}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#typeEditModal${type.id}">
+                                    data-target="#typeEditModal${type.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.typeEdit id="${type.id}" typeName="${type.name}"/>
+                            <@editModal.typeEdit id="${type.id?c}" typeName="${type.name}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${type.id}">
+                                    data-target="#deleteModal${type.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${type.id}" deletionLink="/type/delete/${type.id}"/>
+                            <@deleteModal.delete id="${type.id?c}" deletionLink="/type/delete/${type.id?c}"/>
                         </td>
                     </tr>
                 </#list>

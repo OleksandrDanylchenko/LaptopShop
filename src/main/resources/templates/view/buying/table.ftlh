@@ -107,10 +107,10 @@
                         </#if>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#buyingEditModal${buying.id}">
+                                    data-target="#buyingEditModal${buying.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.buyingEdit id="${buying.id}"
+                            <@editModal.buyingEdit id="${buying.id?c}"
                             currentBasketId="${(buying.basket??)?then(buying.basket.id, '')}"
                             currentLaptopModel="${(buying.laptop??)?then(buying.laptop.label.model, '')}"
                             currentTotalPrice="${buying.totalPrice?c}"
@@ -118,11 +118,11 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${buying.id}">
+                                    data-target="#deleteModal${buying.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${buying.id}"
-                            deletionLink="/buying/delete/${buying.id}"/>
+                            <@deleteModal.delete id="${buying.id?c}"
+                            deletionLink="/buying/delete/${buying.id?c}"/>
                         </td>
                     </tr>
                 </#list>

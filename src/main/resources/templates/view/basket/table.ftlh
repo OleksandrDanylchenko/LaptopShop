@@ -143,10 +143,10 @@
                         <td>${basket.dateTime.format('yyyy-MM-dd HH:mm')}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#basketEditModal${basket.id}">
+                                    data-target="#basketEditModal${basket.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.basketEdit id="${basket.id}"
+                            <@editModal.basketEdit id="${basket.id?c}"
                             currentEmployeeId = "${(basket.employee??)?then(basket.employee.id, '')}"
                             currentClientId = "${(basket.client??)?then(basket.client.id, '')}"
                             currentDateTime = "${basket.dateTime}"
@@ -154,11 +154,11 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${basket.id}">
+                                    data-target="#deleteModal${basket.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${basket.id}"
-                            deletionLink="/basket/delete/${basket.id}"/>
+                            <@deleteModal.delete id="${basket.id?c}"
+                            deletionLink="/basket/delete/${basket.id?c}"/>
                         </td>
                     </tr>
                 </#list>

@@ -166,10 +166,10 @@
                         <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
                             <td>
                                 <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                        data-target="#hardwareEditModal${assembly.id}">
+                                        data-target="#hardwareEditModal${assembly.id?c}">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <@editModal.hardwareEdit id = "${assembly.id}"
+                                <@editModal.hardwareEdit id = "${assembly.id?c}"
                                 currentAssemblyName = "${assembly.assemblyName}"
                                 currentCpuModel = "${(assembly.cpu??)?then(assembly.cpu.model, '')}"
                                 currentGpuModel = "${(assembly.gpu??)?then(assembly.gpu.model, '')}"
@@ -181,11 +181,11 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                        data-target="#deleteModal${assembly.id}">
+                                        data-target="#deleteModal${assembly.id?c}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <@deleteModal.delete id="${assembly.id}"
-                                deletionLink="/hardware/delete/${assembly.id}"/>
+                                <@deleteModal.delete id="${assembly.id?c}"
+                                deletionLink="/hardware/delete/${assembly.id?c}"/>
                             </td>
                         </@security.authorize>
                     </tr>

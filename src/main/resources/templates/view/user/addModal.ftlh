@@ -19,16 +19,21 @@
                         <div class="form-row my-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="newLoginInput">Новий логін:</label>
-                                <input type="text" id="newLoginInput" class="form-control" name="newUsername"
-                                       value="${RequestParameters.username!}" required/>
+                                <input type="text" id="newLoginInput" class="form-control" name="username" required/>
                                 <div class="invalid-feedback">Новий логін уведено некоректно!</div>
                             </div>
                         </div>
                         <div class="form-row my-2">
                             <div class="col">
+                                <label class="d-inline ml-2" for="emailInput">Нова електронна пошта:</label>
+                                <input type="email" id="emailInput" class="form-control" name="email" required/>
+                                <div class="invalid-feedback">Нову електронну пошту уведено некоректно!</div>
+                            </div>
+                        </div>
+                        <div class="form-row my-2">
+                            <div class="col">
                                 <label class="d-inline ml-2" for="newPasswordInput">Новий пароль:</label>
-                                <input type="password" id="newPasswordInput" class="form-control" name="newPassword"
-                                       value="${RequestParameters.password!}" required/>
+                                <input type="password" id="newPasswordInput" class="form-control" name="password" required/>
                                 <div class="invalid-feedback">Новий пароль уведено некоректно!</div>
                             </div>
                         </div>
@@ -36,7 +41,7 @@
                             <div class="col">
                                 <#list roles as role>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="role" id="radio${role?index}"
+                                        <input class="form-check-input" type="radio" id="radio${role?index}" name="role"
                                                value="${role}" ${role?is_first?string("checked", "")} />
                                         <label class="form-check-label" for="radio${role?index}">
                                             ${role}

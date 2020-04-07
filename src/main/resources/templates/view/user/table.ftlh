@@ -57,6 +57,7 @@
                     <th class="text-danger" scope="col">Id</th>
                     <th scope="col">Логін</th>
                     <th scope="col">Роль</th>
+                    <th scope="col">E-mail</th>
                     <th scope="col">Статус користувача</th>
                     <th></th>
                     <th></th>
@@ -68,23 +69,25 @@
                         <th class="text-danger" scope="row">${user.id}</th>
                         <td>${user.username}</td>
                         <td>${user.role}</td>
+                        <td>${user.email}</td>
                         <td>${user.isActive?then("Активний", "Неактивний")}</td>
                         <td>
                             <button type="button" class="btn btn-outline-dark" data-toggle="modal"
-                                    data-target="#userEditModal${user.id}">
+                                    data-target="#userEditModal${user.id?c}">
                                 <i class="fa fa-edit"></i>
                             </button>
-                            <@editModal.userEdit id="${user.id}" currentUsername="${user.username}"
+                            <@editModal.userEdit id="${user.id?c}" currentUsername="${user.username}"
                             currentPassword="${user.password}" currentRole="${user.role}"
-                            activeStatus="${user.isActive?string('Активний', 'Неактивний')}"/>
+                            activeStatus="${user.isActive?string('Активний', 'Неактивний')}"
+                            currentEmail="${user.email}"/>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                    data-target="#deleteModal${user.id}">
+                                    data-target="#deleteModal${user.id?c}">
                                 <i class="fa fa-trash"></i>
                             </button>
-                            <@deleteModal.delete id="${user.id}"
-                            deletionLink="/user/delete/${user.id}"/>
+                            <@deleteModal.delete id="${user.id?c}"
+                            deletionLink="/user/delete/${user.id?c}"/>
                         </td>
                     </tr>
                 </#list>
