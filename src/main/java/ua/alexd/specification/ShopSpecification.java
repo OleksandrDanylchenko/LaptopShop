@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Shop;
 
-public class ShopSpecification {
+public final class ShopSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Shop> addressLike(String expression) {

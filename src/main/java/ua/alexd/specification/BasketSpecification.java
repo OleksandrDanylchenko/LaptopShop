@@ -5,10 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Basket;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class BasketSpecification {
+public final class BasketSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Basket> employeeIdEqual(Integer expression) {

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.security.User;
 
-public class UserSpecification {
+public final class UserSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<User> usernameEqual(String expression) {

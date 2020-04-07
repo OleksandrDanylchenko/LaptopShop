@@ -7,7 +7,7 @@ import ua.alexd.domain.Buying;
 
 import java.time.LocalDateTime;
 
-public class BuyingSpecification {
+public final class BuyingSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Buying> basketIdEqual(Integer expression) {

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.SSD;
 
-public class SSDSpecification {
+public final class SSDSpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<SSD> modelLike(String expression) {

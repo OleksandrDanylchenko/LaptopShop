@@ -7,14 +7,14 @@ import ua.alexd.domain.Availability;
 
 import java.sql.Date;
 
-public class AvailabilitySpecification {
+public final class AvailabilitySpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Availability> laptopModelLike(String expression) {
         if (expression == null || expression.isEmpty())
             return null;
         return (root, query, builder) -> builder.like(root.join("laptop").join("label")
-                        .get("model"), "%" + expression + "%");
+                .get("model"), "%" + expression + "%");
     }
 
     @Nullable

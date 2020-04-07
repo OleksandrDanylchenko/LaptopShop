@@ -4,9 +4,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.jpa.domain.Specification;
 import ua.alexd.domain.Display;
-import ua.alexd.domain.GPU;
 
-public class DisplaySpecification {
+public final class DisplaySpecification {
     @Nullable
     @Contract(pure = true)
     public static Specification<Display> modelLike(String expression) {

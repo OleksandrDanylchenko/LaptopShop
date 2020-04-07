@@ -5,7 +5,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.document.AbstractXlsxView;
 import ua.alexd.domain.RAM;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +16,9 @@ import static ua.alexd.dateTimeService.DateTimeProvider.getCurrentDateTime;
 
 @Service("ramExcelView")
 @Lazy
-public class RAMExcelExporter extends AbstractXlsxView {
-    private final RowsStylerBuilder rowsStylerBuilder;
-
+public class RAMExcelExporter extends ExcelExporter {
     public RAMExcelExporter(RowsStylerBuilder rowsStylerBuilder) {
-        this.rowsStylerBuilder = rowsStylerBuilder;
+        super(rowsStylerBuilder);
     }
 
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
