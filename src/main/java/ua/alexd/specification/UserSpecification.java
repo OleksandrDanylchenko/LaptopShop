@@ -21,4 +21,12 @@ public class UserSpecification {
             return null;
         return (root, query, builder) -> builder.equal(root.get("isActive"), expression.equals("Активний"));
     }
+
+    @Nullable
+    @Contract(pure = true)
+    public static Specification<User> emailLike(String expression) {
+        if (expression == null || expression.isBlank())
+            return null;
+        return (root, query, builder) -> builder.like(root.get("email"), "%" + expression + "%");
+    }
 }

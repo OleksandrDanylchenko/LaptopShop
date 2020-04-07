@@ -27,6 +27,12 @@
                     </div>
                     <div class="form-row my-2">
                         <div class="col">
+                            <input type="email"class="form-control" name="email"
+                                   value="${RequestParameters.email!}" placeholder="E-mail"/>
+                        </div>
+                    </div>
+                    <div class="form-row my-2">
+                        <div class="col">
                             <select class="custom-select" name="isActive">
                                 <option value="" selected disabled>Статус користувача</option>
                                 <option>Активний</option>

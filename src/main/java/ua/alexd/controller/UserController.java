@@ -11,8 +11,7 @@ import ua.alexd.repos.UserRepo;
 import ua.alexd.security.Role;
 import ua.alexd.security.User;
 
-import static ua.alexd.specification.UserSpecification.isActiveEqual;
-import static ua.alexd.specification.UserSpecification.usernameEqual;
+import static ua.alexd.specification.UserSpecification.*;
 
 @Controller
 @RequestMapping("/user")
@@ -25,12 +24,15 @@ public class UserController {
         this.userRepo = userRepo;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String username,
-                              @RequestParam(required = false) String isActive,
-                              @NotNull Model model) {
-        var userSpecification = Specification.where(usernameEqual(username)).and(isActiveEqual(isActive));
+                             @RequestParam(required = false) String isActive,
+                             @RequestParam(required = false) String email,
+                             @NotNull Model model) {
+        var userSpecification = Specification.where(usernameEqual(username)).and(isActiveEqual(isActive))
+                .and(emailLike(email));
         var users = userRepo.findAll(userSpecification);
         lastOutputtedUsers = users;
         model.addAttribute("users", users);
@@ -55,9 +57,9 @@ public class UserController {
     @NotNull
     @PostMapping("/edit/{editUser}")
     public String editRecord(@RequestParam String editUsername, @RequestParam String editPassword,
-                              @RequestParam Role editRole, @NotNull @RequestParam String editActive,
-                              @NotNull @RequestParam String editEmail, @NotNull @PathVariable User editUser,
-                              @NotNull Model model) {
+                             @RequestParam Role editRole, @NotNull @RequestParam String editActive,
+                             @NotNull @RequestParam String editEmail, @NotNull @PathVariable User editUser,
+                             @NotNull Model model) {
         editUser.setUsername(editUsername);
         editUser.setPassword(editPassword);
         editUser.setRole(editRole);
