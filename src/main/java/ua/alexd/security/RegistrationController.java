@@ -2,6 +2,7 @@ package ua.alexd.security;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,15 @@ import static ua.alexd.security.Role.USER;
 
 @Controller
 @RequestMapping("/registration")
-public final class RegistrationController {
+public class RegistrationController {
     private final UserRepo userRepo;
     private final ActivationMailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegistrationController(UserRepo userRepo, ActivationMailSender mailSender) {
+    public RegistrationController(UserRepo userRepo, ActivationMailSender mailSender, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @NotNull
@@ -37,6 +40,8 @@ public final class RegistrationController {
                     "Представлений новий логін чи e-mail уже присутній в базі даних!");
             return "/security/registration";
         }
+        var encodedPassword = passwordEncoder.encode(newUser.getPassword());
+        newUser.setPassword(encodedPassword);
         newUser.setActive(false);
         newUser.setRole(USER);
         newUser.setActivationCode(UUID.randomUUID().toString());

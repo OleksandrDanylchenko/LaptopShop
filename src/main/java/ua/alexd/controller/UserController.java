@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,11 @@ import static ua.alexd.specification.UserSpecification.*;
 public class UserController {
     private final UserRepo userRepo;
     private static Iterable<User> lastOutputtedUsers;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepo userRepo) {
+    public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -44,6 +47,8 @@ public class UserController {
     @PostMapping("/add")
     public String addRecord(@NotNull @ModelAttribute("newUser") User newUser, @NotNull Model model) {
         newUser.setActive(true);
+        var encodedPassword = passwordEncoder.encode(newUser.getPassword());
+        newUser.setPassword(encodedPassword);
         if (!saveRecord(newUser)) {
             model.addAttribute("errorMessage",
                     "Представлений новий логін чи e-mail уже присутній в базі даних!");
@@ -61,7 +66,8 @@ public class UserController {
                              @NotNull @RequestParam String editEmail, @NotNull @PathVariable User editUser,
                              @NotNull Model model) {
         editUser.setUsername(editUsername);
-        editUser.setPassword(editPassword);
+        var encodedPassword = passwordEncoder.encode(editPassword);
+        editUser.setPassword(encodedPassword);
         editUser.setRole(editRole);
         editUser.setEmail(editEmail);
         editUser.setActive(editActive.equals("Активний"));
