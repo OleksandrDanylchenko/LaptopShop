@@ -101,8 +101,6 @@ public class AvailabilityService {
             return true;
         } catch (IllegalArgumentException | IOException ignored) {
             deleteNonValidFile(uploadedFilePath);
-            model.addAttribute("errorMessage",
-                    "Завантажено некоректний файл таблиці записів про наявність!");
             return false;
         }
     }

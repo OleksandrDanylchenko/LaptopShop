@@ -65,7 +65,6 @@ public final class BasketSpecification {
         return (root, query, builder) -> builder.equal(root.join("client").get("secondName"), expression);
     }
 
-    @Nullable
     @Contract(pure = true)
     public static Specification<Basket> dateTimeEqual(LocalDateTime expression) {
         if (expression == null)

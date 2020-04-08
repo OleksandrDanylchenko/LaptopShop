@@ -13,7 +13,6 @@ import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
 import ua.alexd.excelInteraction.imports.BasketExcelImporter;
 import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.graphService.BasketGraphService;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
 import ua.alexd.repos.EmployeeRepo;
@@ -35,17 +34,13 @@ public class BasketService {
     private final BasketExcelImporter excelImporter;
     private final UploadedFilesManager filesManager;
 
-    private final BasketGraphService basketGraphService;
-
     public BasketService(BasketRepo basketRepo, ClientRepo clientRepo, EmployeeRepo employeeRepo,
-                         BasketExcelImporter excelImporter, UploadedFilesManager filesManager,
-                         BasketGraphService basketGraphService) {
+                         BasketExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.basketRepo = basketRepo;
         this.clientRepo = clientRepo;
         this.employeeRepo = employeeRepo;
         this.excelImporter = excelImporter;
         this.filesManager = filesManager;
-        this.basketGraphService = basketGraphService;
     }
 
     public Iterable<Basket> loadBasketTable(Integer employeeId, String employeeFirstName, String employeeSecondName,
@@ -100,7 +95,6 @@ public class BasketService {
             client = clientRepo.findById(editClientId).get();
         editBasket.setClient(client);
         editBasket.setDateTime(editDateTime);
-
         basketRepo.save(editBasket);
     }
 
@@ -114,8 +108,6 @@ public class BasketService {
             return true;
         } catch (IllegalArgumentException | IOException ignored) {
             deleteNonValidFile(basketFilePath);
-            model.addAttribute("errorMessage",
-                    "Завантажено некоректний файл для таблиці кошиків!");
             return false;
         }
     }
