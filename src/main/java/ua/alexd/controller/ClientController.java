@@ -1,55 +1,34 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.alexd.dateTimeService.DateTimeChecker;
+import ua.alexd.controllerService.ClientService;
 import ua.alexd.domain.Client;
-import ua.alexd.excelInteraction.imports.ClientExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.ClientRepo;
 
-import java.io.IOException;
 import java.sql.Date;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.ClientSpecification.*;
 
 @Controller
 @RequestMapping("/client")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class ClientController {
-    private final ClientRepo clientRepo;
-    private static Iterable<Client> lastOutputtedClients;
-    private final DateTimeChecker timeChecker;
+    private final ClientService clientService;
+    private Iterable<Client> lastOutputtedClients;
 
-    private final ClientExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public ClientController(ClientRepo clientRepo, DateTimeChecker timeChecker, ClientExcelImporter excelImporter,
-                            UploadedFilesManager filesManager) {
-        this.clientRepo = clientRepo;
-        this.timeChecker = timeChecker;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String firstName,
-                              @RequestParam(required = false) String secondName,
-                              @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
-                              @NotNull Model model) {
-        if (timeChecker.isNonValidDate(dateReg))
-            dateReg = null;
-        var clientSpecification = Specification.where(firstNameEqual(firstName))
-                .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));
-        var clients = clientRepo.findAll(clientSpecification);
+                             @RequestParam(required = false) String secondName,
+                             @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
+                             @NotNull Model model) {
+        var clients = clientService.loadClientTable(firstName, secondName, dateReg);
         lastOutputtedClients = clients;
         model.addAttribute("clients", clients);
         return "view/client/table";
@@ -57,40 +36,30 @@ public class ClientController {
 
     @NotNull
     @PostMapping("/add")
-    public String addRecord(@NotNull @ModelAttribute("newClient") Client newClient, @NotNull Model model) {
-        clientRepo.save(newClient);
+    public String addRecord(@NotNull @ModelAttribute("newClient") Client newClient) {
+        clientService.addClientRecord(newClient);
         return "redirect:/client";
     }
 
     @NotNull
     @PostMapping("/edit/{editClient}")
     public String editRecord(@RequestParam String editFirstName, @RequestParam String editSecondName,
-                              @RequestParam Date editDateReg, @NotNull @PathVariable Client editClient,
-                              @NotNull Model model) {
-        editClient.setFirstName(editFirstName);
-        editClient.setSecondName(editSecondName);
-        editClient.setDateReg(editDateReg);
-        clientRepo.save(editClient);
+                             @RequestParam Date editDateReg, @NotNull @PathVariable Client editClient) {
+        clientService.editClientRecord(editFirstName, editSecondName, editDateReg, editClient);
         return "redirect:/client";
     }
 
     @NotNull
     @PostMapping("/importExcel")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var clientFilePath = "";
-        try {
-            clientFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newClients = excelImporter.importFile(clientFilePath);
-            newClients.forEach(clientRepo::save);
-            return "redirect:/client";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(clientFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = clientService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці клієнтів!");
             model.addAttribute("clients", lastOutputtedClients);
             return "view/client/table";
         }
+        return "redirect:/client";
     }
 
     @NotNull
@@ -103,7 +72,7 @@ public class ClientController {
     @NotNull
     @GetMapping("/delete/{delClient}")
     public String deleteRecord(@NotNull @PathVariable Client delClient) {
-        clientRepo.delete(delClient);
+        clientService.deleteRecord(delClient);
         return "redirect:/client";
     }
 }
