@@ -1,59 +1,45 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ua.alexd.repos.UserRepo;
+import ua.alexd.controllerService.UserService;
 import ua.alexd.security.Role;
 import ua.alexd.security.User;
-
-import static ua.alexd.specification.UserSpecification.*;
 
 @Controller
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('CEO')")
 public class UserController {
-    private final UserRepo userRepo;
-    private static Iterable<User> lastOutputtedUsers;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private Iterable<User> lastOutputtedUsers;
 
-    public UserController(UserRepo userRepo, PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String username,
                              @RequestParam(required = false) String isActive,
                              @RequestParam(required = false) String email,
                              @NotNull Model model) {
-        var userSpecification = Specification.where(usernameEqual(username)).and(isActiveEqual(isActive))
-                .and(emailLike(email));
-        var users = userRepo.findAll(userSpecification);
+        var users = userService.loadUserTable(username, isActive, email, model);
         lastOutputtedUsers = users;
         model.addAttribute("users", users);
-        model.addAttribute("roles", Role.values());
         return "view/user/table";
     }
 
     @NotNull
     @PostMapping("/add")
     public String addRecord(@NotNull @ModelAttribute("newUser") User newUser, @NotNull Model model) {
-        newUser.setActive(true);
-        var encodedPassword = passwordEncoder.encode(newUser.getPassword());
-        newUser.setPassword(encodedPassword);
-        if (!saveRecord(newUser)) {
+        var isNewUserSaved = userService.addUserRecord(newUser, model);
+        if (!isNewUserSaved) {
             model.addAttribute("errorMessage",
                     "Представлений новий логін чи e-mail уже присутній в базі даних!");
             model.addAttribute("users", lastOutputtedUsers);
-            model.addAttribute("roles", Role.values());
             return "view/user/table";
         }
         return "redirect:/user";
@@ -65,17 +51,12 @@ public class UserController {
                              @RequestParam Role editRole, @NotNull @RequestParam String editActive,
                              @NotNull @RequestParam String editEmail, @NotNull @PathVariable User editUser,
                              @NotNull Model model) {
-        editUser.setUsername(editUsername);
-        var encodedPassword = passwordEncoder.encode(editPassword);
-        editUser.setPassword(encodedPassword);
-        editUser.setRole(editRole);
-        editUser.setEmail(editEmail);
-        editUser.setActive(editActive.equals("Активний"));
-        if (!saveRecord(editUser)) {
+        var isEditUserSaved = userService.editUserRecord(editUsername, editPassword, editRole,
+                editActive, editEmail, editUser, model);
+        if (!isEditUserSaved) {
             model.addAttribute("errorMessage",
                     "Представлений змінюваний логін чи e-mail уже присутній в базі даних!");
             model.addAttribute("users", lastOutputtedUsers);
-            model.addAttribute("roles", Role.values());
             return "view/user/table";
         }
         return "redirect:/user";
@@ -84,17 +65,7 @@ public class UserController {
     @NotNull
     @GetMapping("/delete/{delUser}")
     public String deleteRecord(@NotNull @PathVariable User delUser) {
-        userRepo.delete(delUser);
+        userService.deleteRecord(delUser);
         return "redirect:/user";
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean saveRecord(User saveUser) {
-        try {
-            userRepo.save(saveUser);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
     }
 }

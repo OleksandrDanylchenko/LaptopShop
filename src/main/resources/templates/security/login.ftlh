@@ -7,9 +7,9 @@
         <#if (RequestParameters.error)??>
             <@eO.errorOutput"Неправильний логін чи пароль!"/>
         </#if>
-        <#if (successfulActivationMessage)??>
+        <#if (activationMessage)??>
             <div class="d-flex flex-grow-1 justify-content-center alert alert-success alert-dismissible fade show">
-                ${successfulActivationMessage}
+                ${activationMessage}
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         </#if>

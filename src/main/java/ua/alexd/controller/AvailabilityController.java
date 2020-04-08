@@ -31,7 +31,7 @@ public class AvailabilityController {
                              @RequestParam(required = false, defaultValue = "0001-01-01") Date dateStart,
                              @RequestParam(required = false, defaultValue = "0001-01-01") Date dateEnd,
                              @NotNull Model model) {
-        var availabilities = availabilityService.loadTable(price, quantity, laptopModel, shopAddress,
+        var availabilities = availabilityService.loadAvailabilityTable(price, quantity, laptopModel, shopAddress,
                 dateStart, dateEnd, model);
         lastOutputtedAvailabilities = availabilities;
         model.addAttribute("availabilities", availabilities);

@@ -11,17 +11,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.alexd.security.service.UserService;
+import ua.alexd.security.ShopUserDetails;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private UserService userService;
+    private final ShopUserDetails shopUserDetails;
 
-    public WebSecurityConfig(UserService userService) {
-        this.userService = userService;
+    public WebSecurityConfig(ShopUserDetails shopUserDetails) {
+        this.shopUserDetails = shopUserDetails;
     }
+
 
     @Override
     protected void configure(@NotNull HttpSecurity http) throws Exception {
@@ -71,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(@NotNull AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
+        auth.userDetailsService(shopUserDetails)
                 .passwordEncoder(passwordEncoder());
     }
 }

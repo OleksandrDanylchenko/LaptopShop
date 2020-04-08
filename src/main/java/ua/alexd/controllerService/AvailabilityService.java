@@ -44,13 +44,13 @@ public class AvailabilityService {
         this.filesManager = filesManager;
     }
 
-    public Iterable<Availability> loadTable(Integer price, Integer quantity, String laptopModel, String shopAddress,
-                                            Date dateStart, Date dateEnd, Model model) {
+    public Iterable<Availability> loadAvailabilityTable(Integer price, Integer quantity, String laptopModel,
+                                                        String shopAddress, Date dateStart, Date dateEnd, Model model) {
         var availabilitySpecification = createAvailabilitySpecification(
                 price, quantity, laptopModel, shopAddress,
                 dateStart, dateEnd);
         var availabilities = availabilityRepo.findAll(availabilitySpecification);
-        initializeDropDownChoices(model);
+        initializeAvailabilityChoices(model);
         return availabilities;
     }
 
@@ -72,7 +72,7 @@ public class AvailabilityService {
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         var shop = shopRepo.findByAddress(shopAddress).get(0);
         var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
-        initializeDropDownChoices(model);
+        initializeAvailabilityChoices(model);
         return saveRecord(newAvailability);
     }
 
@@ -87,12 +87,12 @@ public class AvailabilityService {
         editAvailability.setQuantity(quantity);
         editAvailability.setDateStart(dateStart);
         editAvailability.setDateEnd(dateEnd);
-        initializeDropDownChoices(model);
+        initializeAvailabilityChoices(model);
         return saveRecord(editAvailability);
     }
 
     public boolean importExcelRecords(MultipartFile uploadingFile, Model model) {
-        initializeDropDownChoices(model);
+        initializeAvailabilityChoices(model);
         var uploadedFilePath = "";
         try {
             uploadedFilePath = filesManager.saveUploadingFile(uploadingFile);
@@ -120,7 +120,7 @@ public class AvailabilityService {
         availabilityRepo.delete(delAvailability);
     }
 
-    private void initializeDropDownChoices(@NotNull Model model) {
+    private void initializeAvailabilityChoices(@NotNull Model model) {
         model.addAttribute("laptopModels", laptopRepo.getAllModels())
                 .addAttribute("shopAddresses", shopRepo.getAllAddresses());
     }
