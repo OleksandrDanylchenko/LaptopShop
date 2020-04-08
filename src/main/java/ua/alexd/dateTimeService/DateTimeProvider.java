@@ -9,11 +9,11 @@ import java.util.Date;
 
 @Service
 @Lazy
-public final class DateTimeProvider {
+public class DateTimeProvider {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 
     @NotNull
-    public static String getCurrentDateTime() {
+    public String getCurrentDateTime() {
         return formatter.format(new Date());
     }
 }

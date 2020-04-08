@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.dateTimeService.DateTimeProvider.getCurrentDateTime;
-
 @Service("ramExcelView")
 @Lazy
 public class RAMExcelExporter extends ExcelExporter {
@@ -24,7 +22,7 @@ public class RAMExcelExporter extends ExcelExporter {
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         @SuppressWarnings("unchecked") List<RAM> rams = (List<RAM>) model.get("rams");
-        var currentDateTime = getCurrentDateTime();
+        var currentDateTime = timeProvider.getCurrentDateTime();
         var sheet = workbook.createSheet("RAMs sheet");
         sheet.setFitToPage(true);
 

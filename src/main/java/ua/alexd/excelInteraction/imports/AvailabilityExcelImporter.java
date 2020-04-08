@@ -8,6 +8,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import ua.alexd.dateTimeService.DateParser;
+import ua.alexd.dateTimeService.DateTimeChecker;
 import ua.alexd.domain.Availability;
 import ua.alexd.domain.Laptop;
 import ua.alexd.domain.Shop;
@@ -21,19 +23,22 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.alexd.dateTimeService.DateFormatter.parseDate;
-import static ua.alexd.dateTimeService.DateTimeChecker.isDateStartPrevDateEnd;
 import static ua.alexd.excelInteraction.imports.TableValidator.isValidTableStructure;
 
 @Service
 @Lazy
 public class AvailabilityExcelImporter {
-    private LaptopRepo laptopRepo;
-    private ShopRepo shopRepo;
+    private final LaptopRepo laptopRepo;
+    private final ShopRepo shopRepo;
+    private final DateParser dateParser;
+    private final DateTimeChecker timeChecker;
 
-    public AvailabilityExcelImporter(LaptopRepo laptopRepo, ShopRepo shopRepo) {
+    public AvailabilityExcelImporter(LaptopRepo laptopRepo, ShopRepo shopRepo,
+                                     DateParser dateParser, DateTimeChecker timeChecker) {
         this.laptopRepo = laptopRepo;
         this.shopRepo = shopRepo;
+        this.dateParser = dateParser;
+        this.timeChecker = timeChecker;
     }
 
     @NotNull
@@ -77,12 +82,12 @@ public class AvailabilityExcelImporter {
                             shop = shopRepo.findByAddress(cellValue).get(0);
                         else if (cell.getColumnIndex() == dateStartColNum)
                             try {
-                                dateStart = parseDate(cellValue);
+                                dateStart = dateParser.parseDate(cellValue);
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
                             }
                         else if (cell.getColumnIndex() == dateEndColNum)
                             try {
-                                dateEnd = parseDate(cellValue);
+                                dateEnd = dateParser.parseDate(cellValue);
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
                             }
                     }
@@ -95,10 +100,10 @@ public class AvailabilityExcelImporter {
             throw new IllegalArgumentException();
     }
 
-    private static void addNewAvailability(Laptop laptop, int price, int quantity, Shop shop,
-                                           Date dateStart, Date dateEnd, ArrayList<Availability> newAvailabilities) {
+    private void addNewAvailability(Laptop laptop, int price, int quantity, Shop shop,
+                                    Date dateStart, Date dateEnd, ArrayList<Availability> newAvailabilities) {
         if (laptop != null && price >= 5000 && quantity >= 1 && shop != null &&
-                dateStart != null && dateEnd != null && !isDateStartPrevDateEnd(dateStart, dateEnd)) {
+                dateStart != null && dateEnd != null && !timeChecker.isDateStartPrevDateEnd(dateStart, dateEnd)) {
             var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
             newAvailabilities.add(newAvailability);
         }

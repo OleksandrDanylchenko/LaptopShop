@@ -20,7 +20,7 @@ import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
 @RequestMapping("/hardware")
-public final class HardwareController {
+public class HardwareController {
     private final HardwareRepo hardwareRepo;
     private static Iterable<Hardware> lastOutputtedHardware;
 

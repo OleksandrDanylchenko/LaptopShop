@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.dateTimeService.DateTimeProvider.getCurrentDateTime;
-
 @Service("typeExcelView")
 @Lazy
 public class TypeExcelExporter extends ExcelExporter {
@@ -25,7 +23,7 @@ public class TypeExcelExporter extends ExcelExporter {
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         @SuppressWarnings("unchecked") List<Type> types = (List<Type>) model.get("types");
-        var currentDateTime = getCurrentDateTime();
+        var currentDateTime = timeProvider.getCurrentDateTime();
         var sheet = workbook.createSheet("Types sheet");
         sheet.setFitToPage(true);
 

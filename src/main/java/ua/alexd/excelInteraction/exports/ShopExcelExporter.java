@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-import static ua.alexd.dateTimeService.DateTimeProvider.getCurrentDateTime;
-
 @Service("shopExcelView")
 @Lazy
 public class ShopExcelExporter extends ExcelExporter {
@@ -25,7 +23,7 @@ public class ShopExcelExporter extends ExcelExporter {
     protected void buildExcelDocument(@NotNull Map<String, Object> model, @NotNull Workbook workbook,
                                       @NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
         @SuppressWarnings("unchecked") List<Shop> shops = (List<Shop>) model.get("shops");
-        var currentDateTime = getCurrentDateTime();
+        var currentDateTime = timeProvider.getCurrentDateTime();
         var sheet = workbook.createSheet("Shops sheet");
         sheet.setFitToPage(true);
 

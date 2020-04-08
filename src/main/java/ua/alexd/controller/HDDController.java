@@ -21,7 +21,7 @@ import static ua.alexd.specification.HDDSpecification.modelLike;
 
 @Controller
 @RequestMapping("/hdd")
-public final class HDDController {
+public class HDDController {
     private final HDDRepo hddRepo;
     private static Iterable<HDD> lastOutputtedHDDs;
 

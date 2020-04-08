@@ -23,7 +23,7 @@ import static ua.alexd.specification.LaptopSpecification.*;
 
 @Controller
 @RequestMapping("/laptop")
-public final class LaptopController {
+public class LaptopController {
     private final LaptopRepo laptopRepo;
     private static Iterable<Laptop> lastOutputtedLaptops;
 

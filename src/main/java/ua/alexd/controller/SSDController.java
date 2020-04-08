@@ -21,7 +21,7 @@ import static ua.alexd.specification.SSDSpecification.modelLike;
 
 @Controller
 @RequestMapping("/ssd")
-public final class SSDController {
+public class SSDController {
     private final SSDRepo ssdRepo;
     private static Iterable<SSD> lastOutputtedSSDs;
 

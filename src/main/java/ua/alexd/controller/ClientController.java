@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.dateTimeService.DateTimeChecker;
 import ua.alexd.domain.Client;
 import ua.alexd.excelInteraction.imports.ClientExcelImporter;
 import ua.alexd.repos.ClientRepo;
@@ -14,7 +15,6 @@ import ua.alexd.repos.ClientRepo;
 import java.io.IOException;
 import java.sql.Date;
 
-import static ua.alexd.dateTimeService.DateTimeChecker.isNonValidDate;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.ClientSpecification.*;
@@ -22,14 +22,16 @@ import static ua.alexd.specification.ClientSpecification.*;
 @Controller
 @RequestMapping("/client")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public final class ClientController {
+public class ClientController {
     private final ClientRepo clientRepo;
     private static Iterable<Client> lastOutputtedClients;
+    private final DateTimeChecker timeChecker;
 
     private final ClientExcelImporter excelImporter;
 
-    public ClientController(ClientRepo clientRepo, ClientExcelImporter excelImporter) {
+    public ClientController(ClientRepo clientRepo, DateTimeChecker timeChecker, ClientExcelImporter excelImporter) {
         this.clientRepo = clientRepo;
+        this.timeChecker = timeChecker;
         this.excelImporter = excelImporter;
     }
 
@@ -40,7 +42,7 @@ public final class ClientController {
                               @RequestParam(required = false) String secondName,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateReg,
                               @NotNull Model model) {
-        if (isNonValidDate(dateReg))
+        if (timeChecker.isNonValidDate(dateReg))
             dateReg = null;
         var clientSpecification = Specification.where(firstNameEqual(firstName))
                 .and(secondNameEqual(secondName)).and(dateRegEqual(dateReg));

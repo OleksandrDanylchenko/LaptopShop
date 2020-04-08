@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.dateTimeService.DateTimeChecker;
 import ua.alexd.domain.Availability;
 import ua.alexd.excelInteraction.imports.AvailabilityExcelImporter;
 import ua.alexd.repos.AvailabilityRepo;
@@ -17,7 +18,6 @@ import ua.alexd.repos.ShopRepo;
 import java.io.IOException;
 import java.sql.Date;
 
-import static ua.alexd.dateTimeService.DateTimeChecker.isNonValidDate;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.AvailabilitySpecification.*;
@@ -25,18 +25,20 @@ import static ua.alexd.specification.AvailabilitySpecification.*;
 @Controller
 @RequestMapping("/availability")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public final class AvailabilityController {
+public class AvailabilityController {
     private final AvailabilityRepo availabilityRepo;
     private static Iterable<Availability> lastOutputtedAvailabilities;
+    private final DateTimeChecker timeChecker;
 
     private final LaptopRepo laptopRepo;
     private final ShopRepo shopRepo;
 
     private final AvailabilityExcelImporter excelImporter;
 
-    public AvailabilityController(AvailabilityRepo availabilityRepo, LaptopRepo laptopRepo, ShopRepo shopRepo,
-                                  AvailabilityExcelImporter excelImporter) {
+    public AvailabilityController(AvailabilityRepo availabilityRepo, DateTimeChecker timeChecker,
+                                  LaptopRepo laptopRepo, ShopRepo shopRepo, AvailabilityExcelImporter excelImporter) {
         this.availabilityRepo = availabilityRepo;
+        this.timeChecker = timeChecker;
         this.laptopRepo = laptopRepo;
         this.shopRepo = shopRepo;
         this.excelImporter = excelImporter;
@@ -52,9 +54,9 @@ public final class AvailabilityController {
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateStart,
                               @RequestParam(required = false, defaultValue = "0001-01-01") Date dateEnd,
                               @NotNull Model model) {
-        if (isNonValidDate(dateStart))
+        if (timeChecker.isNonValidDate(dateStart))
             dateStart = null;
-        if (isNonValidDate(dateEnd))
+        if (timeChecker.isNonValidDate(dateEnd))
             dateEnd = null;
         var availabilitySpecification = Specification.where(fullPriceEqual(price)).and(quantityEqual(quantity))
                 .and(laptopModelLike(laptopModel)).and(shopAddressLike(shopAddress)).and(dateStartEqual(dateStart))

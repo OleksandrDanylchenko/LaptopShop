@@ -27,7 +27,7 @@ import static ua.alexd.specification.BasketSpecification.*;
 @Controller
 @RequestMapping("/basket")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public final class BasketController {
+public class BasketController {
     private final BasketRepo basketRepo;
     private static Iterable<Basket> lastOutputtedBaskets;
 

@@ -16,7 +16,7 @@ import static ua.alexd.specification.UserSpecification.*;
 @Controller
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('CEO')")
-public final class UserController {
+public class UserController {
     private final UserRepo userRepo;
     private static Iterable<User> lastOutputtedUsers;
 

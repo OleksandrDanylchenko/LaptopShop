@@ -21,7 +21,7 @@ import static ua.alexd.specification.TypeSpecification.typeNameLike;
 @Controller
 @RequestMapping("/type")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public final class TypeController {
+public class TypeController {
     private final TypeRepo typeRepo;
     private Iterable<Type> lastOutputtedTypes;
 

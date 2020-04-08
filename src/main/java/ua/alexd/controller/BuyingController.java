@@ -25,7 +25,7 @@ import static ua.alexd.specification.BuyingSpecification.*;
 @Controller
 @RequestMapping("/buying")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-public final class BuyingController {
+public class BuyingController {
     private final BuyingRepo buyingRepo;
     private static Iterable<Buying> lastOutputtedBuyings;
 

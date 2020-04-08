@@ -20,7 +20,7 @@ import static ua.alexd.specification.DisplaySpecification.*;
 
 @Controller
 @RequestMapping("/display")
-public final class DisplayController {
+public class DisplayController {
     private final DisplayRepo displayRepo;
     private Iterable<Display> lastOutputtedDisplay;
 

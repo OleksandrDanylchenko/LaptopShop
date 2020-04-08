@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import ua.alexd.dateTimeService.DateParser;
 import ua.alexd.domain.Client;
 
 import java.io.File;
@@ -16,13 +17,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.alexd.dateTimeService.DateFormatter.parseDate;
 import static ua.alexd.excelInteraction.imports.TableValidator.isValidTableStructure;
 import static ua.alexd.inputService.InputValidator.stringContainsAlphabet;
 
 @Service
 @Lazy
 public class ClientExcelImporter {
+    private final DateParser dateParser;
+
+    public ClientExcelImporter(DateParser dateParser) {
+        this.dateParser = dateParser;
+    }
+
     @NotNull
     public List<Client> importFile(String uploadedFilePath)
             throws IOException, IllegalArgumentException {
@@ -52,7 +58,7 @@ public class ClientExcelImporter {
                             secondName = cellValue;
                         else if (cell.getColumnIndex() == dateRegColNum)
                             try {
-                                dateReg = parseDate(cellValue);
+                                dateReg = dateParser.parseDate(cellValue);
                             } catch (ParseException | ArrayIndexOutOfBoundsException ignored) {
                             }
                     }
