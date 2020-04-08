@@ -16,12 +16,12 @@
             <@addModal.availabilityAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+            <button type="button" class="btn btn-success mr-2 fixedBtnHeight" data-toggle="modal"
                     data-target="#AvailabilityExcelUploadModal">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
             </button>
             <@eU.excelUpload tableNameEn="Availability" tableNameUk="записів про наявність"/>
-            <a class="btn btn-success mr-2" id="fixedBtnHeight" href="/availability/exportExcel" role="button">
+            <a class="btn btn-success fixedBtnHeight" href="/availability/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
             </a>
         </div>

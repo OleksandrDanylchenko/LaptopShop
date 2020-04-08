@@ -15,12 +15,12 @@
             <@addModal.employeeAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+            <button type="button" class="btn btn-success mr-2 fixedBtnHeight" data-toggle="modal"
                     data-target="#EmployeeExcelUploadModal">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
             </button>
             <@eU.excelUpload tableNameEn="Employee" tableNameUk="співробітників"/>
-            <a class="btn btn-success" id="fixedBtnHeight" href="/employee/exportExcel" role="button">
+            <a class="btn btn-success fixedBtnHeight" href="/employee/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">

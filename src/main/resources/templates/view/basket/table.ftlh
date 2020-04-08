@@ -16,14 +16,14 @@
             <@addModal.basketAdd/>
         </div>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-outline-danger mr-5" id="fixedBtnHeight" href="/basket/graph" role="button">
+            <a class="btn btn-outline-danger mr-5 fixedBtnHeight" href="/basket/graph" role="button">
                 <i class="fas fa-chart-pie"></i></a>
-            <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+            <button type="button" class="btn btn-success mr-2 fixedBtnHeight" data-toggle="modal"
                     data-target="#BasketExcelUploadModal">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
             </button>
             <@eU.excelUpload tableNameEn="Basket" tableNameUk="кошиків"/>
-            <a class="btn btn-success" id="fixedBtnHeight" href="/basket/exportExcel" role="button">
+            <a class="btn btn-success fixedBtnHeight" href="/basket/exportExcel" role="button">
                 <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i></a>
         </div>
         <div class="col-lg-4 col-sm-5 col-12">

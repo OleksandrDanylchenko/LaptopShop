@@ -23,14 +23,14 @@
         </div>
         <div class="d-flex justify-content-center">
             <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                <button type="button"class="btn btn-success mr-2 fixedBtnHeight" data-toggle="modal"
                         data-target="#DisplayExcelUploadModal">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
                 </button>
                 <@eU.excelUpload tableNameEn="Display" tableNameUk="дисплеїв"/>
             </@security.authorize>
             <@security.authorize access="isAuthenticated()">
-                <a class="btn btn-success" id="fixedBtnHeight" href="/display/exportExcel" role="button">
+                <a class="btn btn-success fixedBtnHeight" href="/display/exportExcel" role="button">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
                 </a>
             </@security.authorize>

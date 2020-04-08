@@ -23,14 +23,14 @@
         </div>
         <div class="d-flex justify-content-center">
             <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-                <button type="button" class="btn btn-success mr-2" id="fixedBtnHeight" data-toggle="modal"
+                <button type="button" class="btn btn-success mr-2 fixedBtnHeight" data-toggle="modal"
                         data-target="#GpuExcelUploadModal">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-upload"></i>
                 </button>
                 <@eU.excelUpload tableNameEn="Gpu" tableNameUk="відеокарт"/>
             </@security.authorize>
             <@security.authorize access="isAuthenticated()">
-                <a class="btn btn-success" id="fixedBtnHeight" href="/gpu/exportExcel" role="button">
+                <a class="btn btn-success fixedBtnHeight" href="/gpu/exportExcel" role="button">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
                 </a>
             </@security.authorize>
