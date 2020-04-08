@@ -10,13 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.dateTimeService.DateTimeChecker;
 import ua.alexd.domain.Client;
 import ua.alexd.excelInteraction.imports.ClientExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.ClientRepo;
 
 import java.io.IOException;
 import java.sql.Date;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.ClientSpecification.*;
 
 @Controller
@@ -28,11 +28,14 @@ public class ClientController {
     private final DateTimeChecker timeChecker;
 
     private final ClientExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public ClientController(ClientRepo clientRepo, DateTimeChecker timeChecker, ClientExcelImporter excelImporter) {
+    public ClientController(ClientRepo clientRepo, DateTimeChecker timeChecker, ClientExcelImporter excelImporter,
+                            UploadedFilesManager filesManager) {
         this.clientRepo = clientRepo;
         this.timeChecker = timeChecker;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -77,7 +80,7 @@ public class ClientController {
             throws IOException {
         var clientFilePath = "";
         try {
-            clientFilePath = saveUploadingFile(uploadingFile);
+            clientFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newClients = excelImporter.importFile(clientFilePath);
             newClients.forEach(clientRepo::save);
             return "redirect:/client";

@@ -12,6 +12,7 @@ import ua.alexd.domain.Basket;
 import ua.alexd.domain.Client;
 import ua.alexd.domain.Employee;
 import ua.alexd.excelInteraction.imports.BasketExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.graphService.BasketGraphService;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.ClientRepo;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BasketSpecification.*;
 
 @Controller
@@ -35,14 +35,18 @@ public class BasketController {
     private final EmployeeRepo employeeRepo;
 
     private final BasketExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
+
     private final BasketGraphService basketGraphService;
 
     public BasketController(BasketRepo basketRepo, ClientRepo clientRepo, EmployeeRepo employeeRepo,
-                            BasketExcelImporter excelImporter, BasketGraphService basketGraphService) {
+                            BasketExcelImporter excelImporter, UploadedFilesManager filesManager,
+                            BasketGraphService basketGraphService) {
         this.basketRepo = basketRepo;
         this.clientRepo = clientRepo;
         this.employeeRepo = employeeRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
         this.basketGraphService = basketGraphService;
     }
 
@@ -131,7 +135,7 @@ public class BasketController {
             throws IOException {
         var basketFilePath = "";
         try {
-            basketFilePath = saveUploadingFile(uploadingFile);
+            basketFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newBaskets = excelImporter.importFile(basketFilePath);
             newBaskets.forEach(basketRepo::save);
             return "redirect:/basket";

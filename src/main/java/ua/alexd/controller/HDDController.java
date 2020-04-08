@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.HDD;
 import ua.alexd.excelInteraction.imports.HDDExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.HDDRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.HDDSpecification.memoryEqual;
 import static ua.alexd.specification.HDDSpecification.modelLike;
 
@@ -26,10 +26,12 @@ public class HDDController {
     private static Iterable<HDD> lastOutputtedHDDs;
 
     private final HDDExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public HDDController(HDDRepo hddRepo, HDDExcelImporter excelImporter) {
+    public HDDController(HDDRepo hddRepo, HDDExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.hddRepo = hddRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -37,8 +39,8 @@ public class HDDController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
-                              @RequestParam(required = false) Integer memory,
-                              @NotNull Model siteModel) {
+                             @RequestParam(required = false) Integer memory,
+                             @NotNull Model siteModel) {
         var hddSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var hdds = hddRepo.findAll(hddSpecification);
         lastOutputtedHDDs = hdds;
@@ -50,7 +52,7 @@ public class HDDController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newHDD") HDD newHDD,
-                             @NotNull Model model) {
+                            @NotNull Model model) {
         if (!saveRecord(newHDD)) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель HDD диску уже присутня в базі!");
@@ -64,7 +66,7 @@ public class HDDController {
     @PostMapping("/edit/{editHDD}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
-                              @NotNull @PathVariable HDD editHDD, @NotNull Model model) {
+                             @NotNull @PathVariable HDD editHDD, @NotNull Model model) {
         editHDD.setModel(editModel);
         editHDD.setMemory(editMemory);
         if (!saveRecord(editHDD)) {
@@ -82,7 +84,7 @@ public class HDDController {
             throws IOException {
         var HDDFilePath = "";
         try {
-            HDDFilePath = saveUploadingFile(uploadingFile);
+            HDDFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newHDDs = excelImporter.importFile(HDDFilePath);
             newHDDs.forEach(this::saveRecord);
             return "redirect:/hdd";

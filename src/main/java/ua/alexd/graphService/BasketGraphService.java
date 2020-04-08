@@ -12,13 +12,14 @@ import java.util.Map;
 
 @Service
 @Lazy
-public final class BasketGraphService {
+public class BasketGraphService {
     private BasketRepo basketRepo;
 
     public BasketGraphService(BasketRepo basketRepo) {
         this.basketRepo = basketRepo;
     }
 
+    @NotNull
     public List<Map<Object, Object>> getEmployeesDataPoints() {
         var employeesDataPoints = new ArrayList<Map<Object, Object>>();
 
@@ -32,6 +33,7 @@ public final class BasketGraphService {
         return employeesDataPoints;
     }
 
+    @NotNull
     public List<Map<Object, Object>> getClientsDataPoints() {
         var clientsDataPoints = new ArrayList<Map<Object, Object>>();
 

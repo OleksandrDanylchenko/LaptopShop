@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Hardware;
 import ua.alexd.excelInteraction.imports.HardwareExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.*;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.HardwareSpecification.*;
 
 @Controller
@@ -32,10 +32,11 @@ public class HardwareController {
     private final GPURepo gpuRepo;
 
     private final HardwareExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
     public HardwareController(HardwareRepo hardwareRepo, CPURepo cpuRepo, RAMRepo ramRepo,
                               SSDRepo ssdRepo, DisplayRepo displayRepo, HDDRepo hddRepo,
-                              GPURepo gpuRepo, HardwareExcelImporter excelImporter) {
+                              GPURepo gpuRepo, HardwareExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.hardwareRepo = hardwareRepo;
         this.cpuRepo = cpuRepo;
         this.ramRepo = ramRepo;
@@ -44,27 +45,28 @@ public class HardwareController {
         this.hddRepo = hddRepo;
         this.gpuRepo = gpuRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String displayModel,
-                              @RequestParam(required = false) String displayDiagonal,
-                              @RequestParam(required = false) String displayResolution,
-                              @RequestParam(required = false) String displayType,
-                              @RequestParam(required = false) String cpuModel,
-                              @RequestParam(required = false) String cpuFrequency,
-                              @RequestParam(required = false) String ramModel,
-                              @RequestParam(required = false) Integer ramMemory,
-                              @RequestParam(required = false) String ssdModel,
-                              @RequestParam(required = false) Integer ssdMemory,
-                              @RequestParam(required = false) String hddModel,
-                              @RequestParam(required = false) Integer hddMemory,
-                              @RequestParam(required = false) String gpuModel,
-                              @RequestParam(required = false) Integer gpuMemory,
-                              @RequestParam(required = false) String assemblyName,
-                              @NotNull Model model) {
+                             @RequestParam(required = false) String displayDiagonal,
+                             @RequestParam(required = false) String displayResolution,
+                             @RequestParam(required = false) String displayType,
+                             @RequestParam(required = false) String cpuModel,
+                             @RequestParam(required = false) String cpuFrequency,
+                             @RequestParam(required = false) String ramModel,
+                             @RequestParam(required = false) Integer ramMemory,
+                             @RequestParam(required = false) String ssdModel,
+                             @RequestParam(required = false) Integer ssdMemory,
+                             @RequestParam(required = false) String hddModel,
+                             @RequestParam(required = false) Integer hddMemory,
+                             @RequestParam(required = false) String gpuModel,
+                             @RequestParam(required = false) Integer gpuMemory,
+                             @RequestParam(required = false) String assemblyName,
+                             @NotNull Model model) {
         var hardwareSpecification = Specification
                 .where(displayModelLike(displayModel)).and(displayDiagonalEqual(displayDiagonal))
                 .and(displayResolutionEqual(displayResolution)).and(displayTypeEqual(displayType))
@@ -85,9 +87,9 @@ public class HardwareController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@RequestParam String assemblyName, @RequestParam String cpuModel,
-                             @RequestParam String ramModel, @RequestParam String ssdModel,
-                             @RequestParam String displayModel, @RequestParam String hddModel,
-                             @RequestParam String gpuModel, @NotNull Model model) {
+                            @RequestParam String ramModel, @RequestParam String ssdModel,
+                            @RequestParam String displayModel, @RequestParam String hddModel,
+                            @RequestParam String gpuModel, @NotNull Model model) {
         var cpu = cpuRepo.findByModel(cpuModel);
         var ram = ramRepo.findByModel(ramModel);
         var ssd = ssdRepo.findByModel(ssdModel);
@@ -110,10 +112,10 @@ public class HardwareController {
     @PostMapping("/edit/{editHardware}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editAssemblyName, @RequestParam String editCpuModel,
-                              @RequestParam String editRamModel, @RequestParam String editSsdModel,
-                              @RequestParam String editDisplayModel, @RequestParam String editHddModel,
-                              @RequestParam String editGpuModel, @NotNull @PathVariable Hardware editHardware,
-                              @NotNull Model model) {
+                             @RequestParam String editRamModel, @RequestParam String editSsdModel,
+                             @RequestParam String editDisplayModel, @RequestParam String editHddModel,
+                             @RequestParam String editGpuModel, @NotNull @PathVariable Hardware editHardware,
+                             @NotNull Model model) {
         editHardware.setAssemblyName(editAssemblyName);
         var cpu = cpuRepo.findByModel(editCpuModel);
         editHardware.setCpu(cpu);
@@ -145,7 +147,7 @@ public class HardwareController {
             throws IOException {
         var hardwareFilePath = "";
         try {
-            hardwareFilePath = saveUploadingFile(uploadingFile);
+            hardwareFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newHardware = excelImporter.importFile(hardwareFilePath);
             newHardware.forEach(this::saveRecord);
             return "redirect:/hardware";

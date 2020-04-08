@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Laptop;
 import ua.alexd.excelInteraction.imports.LaptopExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.HardwareRepo;
 import ua.alexd.repos.LabelRepo;
 import ua.alexd.repos.LaptopRepo;
@@ -18,7 +19,6 @@ import ua.alexd.repos.TypeRepo;
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.LaptopSpecification.*;
 
 @Controller
@@ -32,24 +32,26 @@ public class LaptopController {
     private final LabelRepo labelRepo;
 
     private final LaptopExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
     public LaptopController(LaptopRepo laptopRepo, HardwareRepo hardwareRepo, TypeRepo typeRepo, LabelRepo labelRepo,
-                            LaptopExcelImporter excelImporter) {
+                            LaptopExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.laptopRepo = laptopRepo;
         this.hardwareRepo = hardwareRepo;
         this.typeRepo = typeRepo;
         this.labelRepo = labelRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String hardwareAssemblyName,
-                              @RequestParam(required = false) String typeName,
-                              @RequestParam(required = false) String labelBrand,
-                              @RequestParam(required = false) String labelModel,
-                              @NotNull Model model) {
+                             @RequestParam(required = false) String typeName,
+                             @RequestParam(required = false) String labelBrand,
+                             @RequestParam(required = false) String labelModel,
+                             @NotNull Model model) {
         var laptopSpecification = Specification.where(hardwareAssemblyNameLike(hardwareAssemblyName))
                 .and(typeNameEqual(typeName)).and(labelBrandEqual(labelBrand)).and(labelModelLike(labelModel));
         var laptops = laptopRepo.findAll(laptopSpecification);
@@ -63,7 +65,7 @@ public class LaptopController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
-                             @RequestParam String labelModel, @NotNull Model model) {
+                            @RequestParam String labelModel, @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
         var type = typeRepo.findByName(typeName).get(0);
         var label = labelRepo.findByModel(labelModel);
@@ -83,8 +85,8 @@ public class LaptopController {
     @PostMapping("/edit/{editLaptop}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editAssemblyName, @RequestParam String editTypeName,
-                              @RequestParam String editLabelModel, @NotNull @PathVariable Laptop editLaptop,
-                              @NotNull Model model) {
+                             @RequestParam String editLabelModel, @NotNull @PathVariable Laptop editLaptop,
+                             @NotNull Model model) {
         var hardware = hardwareRepo.findByAssemblyName(editAssemblyName);
         editLaptop.setHardware(hardware);
         var type = typeRepo.findByName(editTypeName).get(0);
@@ -109,7 +111,7 @@ public class LaptopController {
             throws IOException {
         var laptopFilePath = "";
         try {
-            laptopFilePath = saveUploadingFile(uploadingFile);
+            laptopFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newLaptops = excelImporter.importFile(laptopFilePath);
             newLaptops.forEach(this::saveRecord);
             return "redirect:/laptop";

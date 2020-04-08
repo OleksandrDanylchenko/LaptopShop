@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Shop;
 import ua.alexd.excelInteraction.imports.ShopExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.ShopSpecification.addressLike;
 
 @Controller
@@ -28,11 +28,14 @@ public class ShopController {
     private final EmployeeRepo employeeRepo;
 
     private final ShopExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public ShopController(ShopRepo shopRepo, EmployeeRepo employeeRepo, ShopExcelImporter excelImporter) {
+    public ShopController(ShopRepo shopRepo, EmployeeRepo employeeRepo, ShopExcelImporter excelImporter,
+                          UploadedFilesManager filesManager) {
         this.shopRepo = shopRepo;
         this.employeeRepo = employeeRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @NotNull
@@ -77,7 +80,7 @@ public class ShopController {
             throws IOException {
         var shopFilePath = "";
         try {
-            shopFilePath = saveUploadingFile(uploadingFile);
+            shopFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newShops = excelImporter.importFile(shopFilePath);
             newShops.forEach(this::saveRecord);
             return "redirect:/shop";

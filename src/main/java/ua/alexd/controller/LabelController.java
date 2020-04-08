@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Label;
 import ua.alexd.excelInteraction.imports.LabelExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.LabelRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.LabelSpecification.brandEqual;
 import static ua.alexd.specification.LabelSpecification.modelLike;
 
@@ -27,18 +27,20 @@ public class LabelController {
     private static Iterable<Label> lastOutputtedLabel;
 
     private final LabelExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public LabelController(LabelRepo labelRepo, LabelExcelImporter excelImporter) {
+    public LabelController(LabelRepo labelRepo, LabelExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.labelRepo = labelRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String brand,
-                              @RequestParam(required = false) String model,
-                              @NotNull Model siteModel) {
+                             @RequestParam(required = false) String model,
+                             @NotNull Model siteModel) {
         var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
         var labels = labelRepo.findAll(labelSpecification);
         lastOutputtedLabel = labels;
@@ -60,7 +62,7 @@ public class LabelController {
     @NotNull
     @PostMapping("/edit/{editLabel}")
     public String editRecord(@RequestParam String editBrand, @RequestParam String editModel,
-                              @NotNull @PathVariable Label editLabel, @NotNull Model model) {
+                             @NotNull @PathVariable Label editLabel, @NotNull Model model) {
         editLabel.setBrand(editBrand);
         editLabel.setModel(editModel);
         if (!saveRecord(editLabel)) {
@@ -77,7 +79,7 @@ public class LabelController {
             throws IOException {
         var labelFilePath = "";
         try {
-            labelFilePath = saveUploadingFile(uploadingFile);
+            labelFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newLabels = excelImporter.importFile(labelFilePath);
             newLabels.forEach(this::saveRecord);
             return "redirect:/label";

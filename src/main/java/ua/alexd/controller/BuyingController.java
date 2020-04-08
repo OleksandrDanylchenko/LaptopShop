@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Basket;
 import ua.alexd.domain.Buying;
 import ua.alexd.excelInteraction.imports.BuyingExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.BasketRepo;
 import ua.alexd.repos.BuyingRepo;
 import ua.alexd.repos.LaptopRepo;
@@ -19,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.BuyingSpecification.*;
 
 @Controller
@@ -33,13 +33,15 @@ public class BuyingController {
     private final LaptopRepo laptopRepo;
 
     private final BuyingExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
     public BuyingController(BuyingRepo buyingRepo, BasketRepo basketRepo, LaptopRepo laptopRepo,
-                            BuyingExcelImporter excelImporter) {
+                            BuyingExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.buyingRepo = buyingRepo;
         this.basketRepo = basketRepo;
         this.laptopRepo = laptopRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -96,7 +98,7 @@ public class BuyingController {
             throws IOException {
         var buyingFilePath = "";
         try {
-            buyingFilePath = saveUploadingFile(uploadingFile);
+            buyingFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newBuyings = excelImporter.importFile(buyingFilePath);
             newBuyings.forEach(buyingRepo::save);
             return "redirect:/buying";

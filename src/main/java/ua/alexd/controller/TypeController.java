@@ -15,7 +15,6 @@ import ua.alexd.repos.TypeRepo;
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.TypeSpecification.typeNameLike;
 
 @Controller
@@ -73,7 +72,7 @@ public class TypeController {
             throws IOException {
         var typeFilePath = "";
         try {
-            typeFilePath = saveUploadingFile(uploadingFile);
+//            typeFilePath = saveUploadingFile(uploadingFile);
             var newTypes = excelImporter.importFile(typeFilePath);
             newTypes.forEach(this::saveRecord);
             return "redirect:/type";

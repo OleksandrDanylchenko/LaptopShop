@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.SSD;
 import ua.alexd.excelInteraction.imports.SSDExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.SSDRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.SSDSpecification.memoryEqual;
 import static ua.alexd.specification.SSDSpecification.modelLike;
 
@@ -26,10 +26,12 @@ public class SSDController {
     private static Iterable<SSD> lastOutputtedSSDs;
 
     private final SSDExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public SSDController(SSDRepo ssdRepo, SSDExcelImporter excelImporter) {
+    public SSDController(SSDRepo ssdRepo, SSDExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.ssdRepo = ssdRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -82,7 +84,7 @@ public class SSDController {
             throws IOException {
         var SSDFilePath = "";
         try {
-            SSDFilePath = saveUploadingFile(uploadingFile);
+            SSDFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newSSDs = excelImporter.importFile(SSDFilePath);
             newSSDs.forEach(this::saveRecord);
             return "redirect:/ssd";

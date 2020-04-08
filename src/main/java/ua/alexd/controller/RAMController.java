@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.RAM;
 import ua.alexd.excelInteraction.imports.RAMExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.RAMRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.RAMSpecification.memoryEqual;
 import static ua.alexd.specification.RAMSpecification.modelLike;
 
@@ -26,10 +26,12 @@ public class RAMController {
     private static Iterable<RAM> lastOutputtedRams;
 
     private final RAMExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public RAMController(RAMRepo ramRepo, RAMExcelImporter excelImporter) {
+    public RAMController(RAMRepo ramRepo, RAMExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.ramRepo = ramRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -37,8 +39,8 @@ public class RAMController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
-                              @RequestParam(required = false) Integer memory,
-                              @NotNull Model siteModel) {
+                             @RequestParam(required = false) Integer memory,
+                             @NotNull Model siteModel) {
         var ramSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var rams = ramRepo.findAll(ramSpecification);
         lastOutputtedRams = rams;
@@ -63,7 +65,7 @@ public class RAMController {
     @PostMapping("/edit/{editRam}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
-                              @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
+                             @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
         editRam.setModel(editModel);
         editRam.setMemory(editMemory);
         if (!saveRecord(editRam)) {
@@ -82,7 +84,7 @@ public class RAMController {
             throws IOException {
         var RAMFilePath = "";
         try {
-            RAMFilePath = saveUploadingFile(uploadingFile);
+            RAMFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newRAMs = excelImporter.importFile(RAMFilePath);
             newRAMs.forEach(this::saveRecord);
             return "redirect:/ram";

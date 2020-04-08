@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.Employee;
 import ua.alexd.excelInteraction.imports.EmployeeExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.EmployeeRepo;
 import ua.alexd.repos.ShopRepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.EmployeeSpecification.*;
 
 @Controller
@@ -28,21 +28,24 @@ public class EmployeeController {
     private final ShopRepo shopRepo;
 
     private final EmployeeExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo, EmployeeExcelImporter excelImporter) {
+    public EmployeeController(EmployeeRepo employeeRepo, ShopRepo shopRepo, EmployeeExcelImporter excelImporter,
+                              UploadedFilesManager filesManager) {
         this.employeeRepo = employeeRepo;
         this.shopRepo = shopRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String firstName,
-                              @RequestParam(required = false) String secondName,
-                              @RequestParam(required = false) String shopAddress,
-                              @RequestParam(required = false) String isWorking,
-                              @NotNull Model model) {
+                             @RequestParam(required = false) String secondName,
+                             @RequestParam(required = false) String shopAddress,
+                             @RequestParam(required = false) String isWorking,
+                             @NotNull Model model) {
         var employeesSpecification = Specification.where(firstNameEqual(firstName)).and(secondNameEqual(secondName))
                 .and(shopAddressLike(shopAddress)).and(isWorkingEqual(isWorking));
         var employees = employeeRepo.findAll(employeesSpecification);
@@ -55,7 +58,7 @@ public class EmployeeController {
     @NotNull
     @PostMapping("/add")
     public String addRecord(@RequestParam String firstName, @RequestParam String secondName,
-                             @RequestParam String shopAddress, @NotNull Model model) {
+                            @RequestParam String shopAddress, @NotNull Model model) {
         var shop = shopAddress != null ? shopRepo.findByAddress(shopAddress).get(0) : null;
         var newEmployee = new Employee(firstName, secondName, shop, true);
         employeeRepo.save(newEmployee);
@@ -65,9 +68,9 @@ public class EmployeeController {
     @NotNull
     @PostMapping("/edit/{editEmployee}")
     public String editRecord(@NotNull @PathVariable Employee editEmployee,
-                              @RequestParam String editFirstName, @RequestParam String editSecondName,
-                              @RequestParam String editShopAddress, @NotNull @RequestParam String editIsWorking,
-                              @NotNull Model model) {
+                             @RequestParam String editFirstName, @RequestParam String editSecondName,
+                             @RequestParam String editShopAddress, @NotNull @RequestParam String editIsWorking,
+                             @NotNull Model model) {
         editEmployee.setFirstName(editFirstName);
         editEmployee.setSecondName(editSecondName);
         var employeeShop = shopRepo.findByAddress(editShopAddress).get(0);
@@ -83,7 +86,7 @@ public class EmployeeController {
             throws IOException {
         var employeeFilePath = "";
         try {
-            employeeFilePath = saveUploadingFile(uploadingFile);
+            employeeFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newEmployees = excelImporter.importFile(employeeFilePath);
             newEmployees.forEach(employeeRepo::save);
             return "redirect:/employee";

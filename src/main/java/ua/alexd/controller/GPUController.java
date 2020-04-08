@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.GPU;
 import ua.alexd.excelInteraction.imports.GPUExcelImporter;
+import ua.alexd.excelInteraction.imports.UploadedFilesManager;
 import ua.alexd.repos.GPURepo;
 
 import java.io.IOException;
 
 import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.saveUploadingFile;
 import static ua.alexd.specification.GPUSpecification.memoryEqual;
 import static ua.alexd.specification.GPUSpecification.modelLike;
 
@@ -26,10 +26,12 @@ public class GPUController {
     private static Iterable<GPU> lastOutputtedGPUs;
 
     private final GPUExcelImporter excelImporter;
+    private final UploadedFilesManager filesManager;
 
-    public GPUController(GPURepo gpuRepo, GPUExcelImporter excelImporter) {
+    public GPUController(GPURepo gpuRepo, GPUExcelImporter excelImporter, UploadedFilesManager filesManager) {
         this.gpuRepo = gpuRepo;
         this.excelImporter = excelImporter;
+        this.filesManager = filesManager;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -37,8 +39,8 @@ public class GPUController {
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
-                              @RequestParam(required = false) Integer memory,
-                              @NotNull Model siteModel) {
+                             @RequestParam(required = false) Integer memory,
+                             @NotNull Model siteModel) {
         var gpuSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
         var gpus = gpuRepo.findAll(gpuSpecification);
         lastOutputtedGPUs = gpus;
@@ -63,7 +65,7 @@ public class GPUController {
     @PostMapping("/edit/{editGpu}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
-                              @NotNull @PathVariable GPU editGpu, @NotNull Model model) {
+                             @NotNull @PathVariable GPU editGpu, @NotNull Model model) {
         editGpu.setModel(editModel);
         editGpu.setMemory(editMemory);
         if (!saveRecord(editGpu)) {
@@ -82,7 +84,7 @@ public class GPUController {
             throws IOException {
         var GPUFilePath = "";
         try {
-            GPUFilePath = saveUploadingFile(uploadingFile);
+            GPUFilePath = filesManager.saveUploadingFile(uploadingFile);
             var newGPUs = excelImporter.importFile(GPUFilePath);
             newGPUs.forEach(this::saveRecord);
             return "redirect:/gpu";
