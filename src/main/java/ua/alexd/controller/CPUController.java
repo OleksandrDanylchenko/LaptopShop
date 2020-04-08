@@ -1,48 +1,31 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.CPUService;
 import ua.alexd.domain.CPU;
-import ua.alexd.excelInteraction.imports.CPUExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.CPURepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.CPUSpecification.frequencyEqual;
-import static ua.alexd.specification.CPUSpecification.modelLike;
 
 @Controller
 @RequestMapping("/cpu")
 public class CPUController {
-    private final CPURepo cpuRepo;
-    private static Iterable<CPU> lastOutputtedCPUs;
+    private final CPUService cpuService;
+    private Iterable<CPU> lastOutputtedCPUs;
 
-    private final CPUExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public CPUController(CPURepo cpuRepo, CPUExcelImporter excelImporter, UploadedFilesManager filesManager) {
-        this.cpuRepo = cpuRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public CPUController(CPUService cpuService) {
+        this.cpuService = cpuService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
-                              @RequestParam(required = false) String frequency,
-                              @NotNull Model siteModel) {
-        var cpuSpecification = Specification.where(modelLike(model)).and(frequencyEqual(frequency));
-        var cpus = cpuRepo.findAll(cpuSpecification);
+                             @RequestParam(required = false) String frequency,
+                             @NotNull Model siteModel) {
+        var cpus = cpuService.loadCPUTable(model, frequency);
         lastOutputtedCPUs = cpus;
         siteModel.addAttribute("cpus", cpus);
         return "view/cpu/table";
@@ -52,7 +35,8 @@ public class CPUController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newCPU") CPU newCPU, @NotNull Model model) {
-        if (!saveRecord(newCPU)) {
+        var isNewCPUSaved = cpuService.addCPURecord(newCPU);
+        if (!isNewCPUSaved) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
@@ -65,10 +49,9 @@ public class CPUController {
     @PostMapping("/edit/{editCpu}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@RequestParam String editModel, @RequestParam String editFrequency,
-                             @NotNull @PathVariable CPU editCpu, @NotNull Model model) {
-        editCpu.setModel(editModel);
-        editCpu.setFrequency(editFrequency);
-        if (!saveRecord(editCpu)) {
+                            @NotNull @PathVariable CPU editCpu, @NotNull Model model) {
+        var isEditCPUSaved = cpuService.editCPURecord(editModel, editFrequency, editCpu);
+        if (!isEditCPUSaved) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель процесору уже присутня в базі!");
             model.addAttribute("cpus", lastOutputtedCPUs);
@@ -80,21 +63,15 @@ public class CPUController {
     @NotNull
     @PostMapping("/importExcel")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var cpuFilePath = "";
-        try {
-            cpuFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newCPUs = excelImporter.importFile(cpuFilePath);
-            newCPUs.forEach(this::saveRecord);
-            return "redirect:/cpu";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(cpuFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = cpuService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці процесорів!");
             model.addAttribute("cpus", lastOutputtedCPUs);
             return "view/cpu/table";
         }
+        return "redirect:/cpu";
     }
 
     @NotNull
@@ -109,16 +86,7 @@ public class CPUController {
     @GetMapping("/delete/{delCpu}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable CPU delCpu) {
-        cpuRepo.delete(delCpu);
+        cpuService.deleteRecord(delCpu);
         return "redirect:/cpu";
-    }
-
-    private boolean saveRecord(CPU saveCPU) {
-        try {
-            cpuRepo.save(saveCPU);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
     }
 }
