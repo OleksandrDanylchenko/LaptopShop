@@ -32,7 +32,7 @@
                 </div>
             </div>
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-            <div class="form-row my-2">
+            <div class="form-row my-3">
                 <div class="col">
                     <a class="btn btn-dark" href="/registration" role="button">Зареєструватися</a>
                 </div>

@@ -35,8 +35,9 @@ public class RegistrationController {
             return "/security/registration";
         }
         model.addAttribute("activationMessage",
-                "Очікуйте на лист з посиланням на активацію вашого облікового запису.");
-        return "redirect:/login";
+                "Очікуйте на лист з посиланням на активацію вашого облікового запису " +
+                        "за поштою " + newUser.getEmail() + ".");
+        return "/security/login";
     }
 
     @NotNull

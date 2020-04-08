@@ -33,7 +33,7 @@
                     <div class="invalid-feedback">Новий пароль уведено некоректно!</div>
                 </div>
             </div>
-            <div class="form-row my-2">
+            <div class="form-row my-3">
                 <div class="col">
                     <a class="btn btn-dark" href="/login" role="button">Увійти</a>
                 </div>
