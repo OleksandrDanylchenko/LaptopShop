@@ -1,48 +1,31 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.RAMService;
 import ua.alexd.domain.RAM;
-import ua.alexd.excelInteraction.imports.RAMExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.RAMRepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.RAMSpecification.memoryEqual;
-import static ua.alexd.specification.RAMSpecification.modelLike;
 
 @Controller
 @RequestMapping("/ram")
 public class RAMController {
-    private final RAMRepo ramRepo;
-    private static Iterable<RAM> lastOutputtedRams;
+    private final RAMService ramService;
+    private Iterable<RAM> lastOutputtedRams;
 
-    private final RAMExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public RAMController(RAMRepo ramRepo, RAMExcelImporter excelImporter, UploadedFilesManager filesManager) {
-        this.ramRepo = ramRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public RAMController(RAMService ramService) {
+        this.ramService = ramService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
                              @RequestParam(required = false) Integer memory,
                              @NotNull Model siteModel) {
-        var ramSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
-        var rams = ramRepo.findAll(ramSpecification);
+        var rams = ramService.loadRAMTable(model, memory);
         lastOutputtedRams = rams;
         siteModel.addAttribute("rams", rams);
         return "view/ram/table";
@@ -52,7 +35,8 @@ public class RAMController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newRAM") RAM newRAM, @NotNull Model model) {
-        if (!saveRecord(newRAM)) {
+        var isNewRAMSaved = ramService.addRAMRecord(newRAM);
+        if (!isNewRAMSaved) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель оперативної пам'яті уже присутня в базі!");
             model.addAttribute("rams", lastOutputtedRams);
@@ -65,13 +49,12 @@ public class RAMController {
     @PostMapping("/edit/{editRam}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
-                             @NotNull @PathVariable RAM editRam, @NotNull Model siteModel) {
-        editRam.setModel(editModel);
-        editRam.setMemory(editMemory);
-        if (!saveRecord(editRam)) {
-            siteModel.addAttribute("errorMessage",
+                             @NotNull @PathVariable RAM editRam, @NotNull Model model) {
+        var isEditRAMSaved = ramService.editRANRecord(editModel, editMemory, editRam, model);
+        if (!isEditRAMSaved) {
+            model.addAttribute("errorMessage",
                     "Представлена змінювана модель оперативної пам'яті уже присутня в базі!");
-            siteModel.addAttribute("rams", lastOutputtedRams);
+            model.addAttribute("rams", lastOutputtedRams);
             return "view/ram/table";
         }
         return "redirect:/ram";
@@ -80,21 +63,15 @@ public class RAMController {
     @NotNull
     @PostMapping("/importExcel")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var RAMFilePath = "";
-        try {
-            RAMFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newRAMs = excelImporter.importFile(RAMFilePath);
-            newRAMs.forEach(this::saveRecord);
-            return "redirect:/ram";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(RAMFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = ramService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці оперативної пам'яті!");
             model.addAttribute("rams", lastOutputtedRams);
             return "view/ram/table";
         }
+        return "redirect:/ram";
     }
 
     @NotNull
@@ -109,16 +86,7 @@ public class RAMController {
     @GetMapping("/delete/{delRam}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable RAM delRam) {
-        ramRepo.delete(delRam);
+        ramService.deleteRecord(delRam);
         return "redirect:/ram";
-    }
-
-    private boolean saveRecord(RAM saveRAM) {
-        try {
-            ramRepo.save(saveRAM);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
     }
 }
