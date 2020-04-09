@@ -1,48 +1,28 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.ShopService;
 import ua.alexd.domain.Shop;
-import ua.alexd.excelInteraction.imports.ShopExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.EmployeeRepo;
-import ua.alexd.repos.ShopRepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.ShopSpecification.addressLike;
 
 @Controller
 @RequestMapping("/shop")
 public class ShopController {
-    private final ShopRepo shopRepo;
-    private static Iterable<Shop> lastOutputtedShops;
+    private final ShopService shopService;
+    private Iterable<Shop> lastOutputtedShops;
 
-    private final EmployeeRepo employeeRepo;
-
-    private final ShopExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public ShopController(ShopRepo shopRepo, EmployeeRepo employeeRepo, ShopExcelImporter excelImporter,
-                          UploadedFilesManager filesManager) {
-        this.shopRepo = shopRepo;
-        this.employeeRepo = employeeRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public ShopController(ShopService shopService) {
+        this.shopService = shopService;
     }
 
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String address, @NotNull Model model) {
-        var shopSpecification = Specification.where(addressLike(address));
-        var shops = shopRepo.findAll(shopSpecification);
+        var shops = shopService.loadShopTable(address);
         lastOutputtedShops = shops;
         model.addAttribute("shops", shops);
         return "view/shop/table";
@@ -52,7 +32,8 @@ public class ShopController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newShop") Shop newShop, @NotNull Model model) {
-        if (!saveRecord(newShop)) {
+        var isNewShopSaved = shopService.addShopRecord(newShop);
+        if (!isNewShopSaved) {
             model.addAttribute("Представлена нова адреса магазину уже уже присутня в базі!");
             model.addAttribute("shops", lastOutputtedShops);
             return "view/shop/table";
@@ -63,9 +44,10 @@ public class ShopController {
     @NotNull
     @PostMapping("/edit/{editShop}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String editRecord(@RequestParam String editAddress, @NotNull @PathVariable Shop editShop, @NotNull Model model) {
-        editShop.setAddress(editAddress);
-        if (!saveRecord(editShop)) {
+    public String editRecord(@RequestParam String editAddress, @NotNull @PathVariable Shop editShop,
+                             @NotNull Model model) {
+        var isEditShopSaved = shopService.editShopRecord(editAddress, editShop);
+        if (!isEditShopSaved) {
             model.addAttribute("Представлена змінювана адреса магазину уже присутня в базі!");
             model.addAttribute("shops", lastOutputtedShops);
             return "view/shop/table";
@@ -76,21 +58,15 @@ public class ShopController {
     @NotNull
     @PostMapping("/importExcel")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var shopFilePath = "";
-        try {
-            shopFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newShops = excelImporter.importFile(shopFilePath);
-            newShops.forEach(this::saveRecord);
-            return "redirect:/shop";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(shopFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = shopService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці магазинів!");
             model.addAttribute("shops", lastOutputtedShops);
             return "view/shop/table";
         }
+        return "redirect:/shop";
     }
 
     @NotNull
@@ -105,24 +81,7 @@ public class ShopController {
     @GetMapping("/delete/{delShop}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable Shop delShop) {
-        dismissEmployees(delShop);
-        shopRepo.delete(delShop);
+        shopService.deleteRecord(delShop);
         return "redirect:/shop";
-    }
-
-    private boolean saveRecord(Shop saveShop) {
-        try {
-            shopRepo.save(saveShop);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
-    }
-
-    private void dismissEmployees(@NotNull Shop delShop) {
-        var employees = delShop.getShopEmployees();
-        employees.forEach(e -> e.setActive(false));
-        for (var employee : employees)
-            employeeRepo.save(employee);
     }
 }

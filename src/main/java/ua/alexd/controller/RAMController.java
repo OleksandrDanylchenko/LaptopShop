@@ -50,7 +50,7 @@ public class RAMController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                              @NotNull @PathVariable RAM editRam, @NotNull Model model) {
-        var isEditRAMSaved = ramService.editRANRecord(editModel, editMemory, editRam, model);
+        var isEditRAMSaved = ramService.editRANRecord(editModel, editMemory, editRam);
         if (!isEditRAMSaved) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель оперативної пам'яті уже присутня в базі!");

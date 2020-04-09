@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import ua.alexd.domain.RAM;
 import ua.alexd.excelInteraction.imports.RAMExcelImporter;
@@ -46,7 +45,7 @@ public class RAMService {
         return saveRecord(newRAM);
     }
 
-    public boolean editRANRecord(String editModel, Integer editMemory, @NotNull RAM editRam, @NotNull Model model) {
+    public boolean editRANRecord(String editModel, Integer editMemory, @NotNull RAM editRam) {
         editRam.setModel(editModel);
         editRam.setMemory(editMemory);
         return saveRecord(editRam);
