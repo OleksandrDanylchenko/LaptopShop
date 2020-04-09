@@ -1,48 +1,31 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.LabelService;
 import ua.alexd.domain.Label;
-import ua.alexd.excelInteraction.imports.LabelExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.LabelRepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.LabelSpecification.brandEqual;
-import static ua.alexd.specification.LabelSpecification.modelLike;
 
 @Controller
 @RequestMapping("/label")
 @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
 public class LabelController {
-    private final LabelRepo labelRepo;
-    private static Iterable<Label> lastOutputtedLabel;
+    private final LabelService labelService;
+    private Iterable<Label> lastOutputtedLabel;
 
-    private final LabelExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public LabelController(LabelRepo labelRepo, LabelExcelImporter excelImporter, UploadedFilesManager filesManager) {
-        this.labelRepo = labelRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public LabelController(LabelService labelService) {
+        this.labelService = labelService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String brand,
                              @RequestParam(required = false) String model,
                              @NotNull Model siteModel) {
-        var labelSpecification = Specification.where(brandEqual(brand)).and(modelLike(model));
-        var labels = labelRepo.findAll(labelSpecification);
+        var labels = labelService.loadLabelTable(brand, model);
         lastOutputtedLabel = labels;
         siteModel.addAttribute("labels", labels);
         return "view/label/table";
@@ -51,8 +34,10 @@ public class LabelController {
     @NotNull
     @PostMapping("/add")
     public String addRecord(@NotNull @ModelAttribute("newLabel") Label newLabel, @NotNull Model model) {
-        if (!saveRecord(newLabel)) {
-            model.addAttribute("errorMessage", "Представлена нова модель уже присутня в базі!");
+        var isNewLabelSaved = labelService.addLabelRecord(newLabel);
+        if (!isNewLabelSaved) {
+            model.addAttribute("errorMessage",
+                    "Представлена нова модель уже присутня в базі!");
             model.addAttribute("labels", lastOutputtedLabel);
             return "view/label/table";
         }
@@ -63,10 +48,10 @@ public class LabelController {
     @PostMapping("/edit/{editLabel}")
     public String editRecord(@RequestParam String editBrand, @RequestParam String editModel,
                              @NotNull @PathVariable Label editLabel, @NotNull Model model) {
-        editLabel.setBrand(editBrand);
-        editLabel.setModel(editModel);
-        if (!saveRecord(editLabel)) {
-            model.addAttribute("errorMessage", "Представлена змінювана модель уже присутня в базі!");
+        var isEditLabelSaved = labelService.editLabelRecord(editBrand, editModel, editLabel);
+        if (!isEditLabelSaved) {
+            model.addAttribute("errorMessage",
+                    "Представлена змінювана модель уже присутня в базі!");
             model.addAttribute("labels", lastOutputtedLabel);
             return "view/label/table";
         }
@@ -75,20 +60,14 @@ public class LabelController {
 
     @NotNull
     @PostMapping("/importExcel")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var labelFilePath = "";
-        try {
-            labelFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newLabels = excelImporter.importFile(labelFilePath);
-            newLabels.forEach(this::saveRecord);
-            return "redirect:/label";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(labelFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = labelService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage", "Завантажено некоректний файл для таблиці найменувань!");
             model.addAttribute("labels", lastOutputtedLabel);
             return "view/label/table";
         }
+        return "redirect:/label";
     }
 
     @NotNull
@@ -101,16 +80,7 @@ public class LabelController {
     @NotNull
     @GetMapping("/delete/{delLabel}")
     public String deleteRecord(@NotNull @PathVariable Label delLabel) {
-        labelRepo.delete(delLabel);
+        labelService.deleteRecord(delLabel);
         return "redirect:/label";
-    }
-
-    private boolean saveRecord(Label saveLabel) {
-        try {
-            labelRepo.save(saveLabel);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
     }
 }

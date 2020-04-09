@@ -19,14 +19,14 @@
                         <div class="form-row mb-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="brand">Назва бренду:</label>
-                                <input type="text" id="editBrandInput${id}" class="form-control" name="brand" required/>
+                                <input type="text" id="editBrandInput${id}" class="form-control" name="editBrand" required/>
                                 <div class="invalid-feedback">Назву бренду задано некоректно!</div>
                             </div>
                         </div>
                         <div class="form-row my-2">
                             <div class="col">
                                 <label class="d-inline ml-2" for="model">Назва змінюваної моделі:</label>
-                                <input type="text" id="editModelInput${id}" class="form-control" name="model" required/>
+                                <input type="text" id="editModelInput${id}" class="form-control" name="editModel" required/>
                                 <div class="invalid-feedback">Назву змінюваної моделі задано некоректно!</div>
                             </div>
                         </div>
