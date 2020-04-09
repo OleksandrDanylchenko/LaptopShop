@@ -1,50 +1,24 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.LaptopService;
 import ua.alexd.domain.Laptop;
-import ua.alexd.excelInteraction.imports.LaptopExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.HardwareRepo;
-import ua.alexd.repos.LabelRepo;
-import ua.alexd.repos.LaptopRepo;
-import ua.alexd.repos.TypeRepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.LaptopSpecification.*;
 
 @Controller
 @RequestMapping("/laptop")
 public class LaptopController {
-    private final LaptopRepo laptopRepo;
-    private static Iterable<Laptop> lastOutputtedLaptops;
+    private final LaptopService laptopService;
+    private Iterable<Laptop> lastOutputtedLaptops;
 
-    private final HardwareRepo hardwareRepo;
-    private final TypeRepo typeRepo;
-    private final LabelRepo labelRepo;
-
-    private final LaptopExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public LaptopController(LaptopRepo laptopRepo, HardwareRepo hardwareRepo, TypeRepo typeRepo, LabelRepo labelRepo,
-                            LaptopExcelImporter excelImporter, UploadedFilesManager filesManager) {
-        this.laptopRepo = laptopRepo;
-        this.hardwareRepo = hardwareRepo;
-        this.typeRepo = typeRepo;
-        this.labelRepo = labelRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public LaptopController(LaptopService laptopService) {
+        this.laptopService = laptopService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     public String getRecords(@RequestParam(required = false) String hardwareAssemblyName,
@@ -52,12 +26,9 @@ public class LaptopController {
                              @RequestParam(required = false) String labelBrand,
                              @RequestParam(required = false) String labelModel,
                              @NotNull Model model) {
-        var laptopSpecification = Specification.where(hardwareAssemblyNameLike(hardwareAssemblyName))
-                .and(typeNameEqual(typeName)).and(labelBrandEqual(labelBrand)).and(labelModelLike(labelModel));
-        var laptops = laptopRepo.findAll(laptopSpecification);
+        var laptops = laptopService.loadLaptopTable(hardwareAssemblyName, typeName, labelBrand, labelModel, model);
         lastOutputtedLaptops = laptops;
         model.addAttribute("laptops", laptops);
-        initializeDropDownChoices(model);
         return "view/laptop/table";
     }
 
@@ -66,16 +37,11 @@ public class LaptopController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@RequestParam String hardwareAssemblyName, @RequestParam String typeName,
                             @RequestParam String labelModel, @NotNull Model model) {
-        var hardware = hardwareRepo.findByAssemblyName(hardwareAssemblyName);
-        var type = typeRepo.findByName(typeName).get(0);
-        var label = labelRepo.findByModel(labelModel);
-        var newLaptop = new Laptop(label, type, hardware);
-
-        if (!saveRecord(newLaptop)) {
+        var isNewLaptopSaved = laptopService.addLaptopRecord(hardwareAssemblyName, typeName, labelModel, model);
+        if (!isNewLaptopSaved) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель ноутбука уже присутня в базі!");
             model.addAttribute("laptops", lastOutputtedLaptops);
-            initializeDropDownChoices(model);
             return "view/laptop/table";
         }
         return "redirect:/laptop";
@@ -87,18 +53,12 @@ public class LaptopController {
     public String editRecord(@RequestParam String editAssemblyName, @RequestParam String editTypeName,
                              @RequestParam String editLabelModel, @NotNull @PathVariable Laptop editLaptop,
                              @NotNull Model model) {
-        var hardware = hardwareRepo.findByAssemblyName(editAssemblyName);
-        editLaptop.setHardware(hardware);
-        var type = typeRepo.findByName(editTypeName).get(0);
-        editLaptop.setType(type);
-        var label = labelRepo.findByModel(editLabelModel);
-        editLaptop.setLabel(label);
-
-        if (!saveRecord(editLaptop)) {
+        var isEditLaptopSaved = laptopService.editLaptopRecord(editAssemblyName, editTypeName, editLabelModel,
+                editLaptop, model);
+        if (!isEditLaptopSaved) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель ноутбука уже присутня в базі!");
             model.addAttribute("laptops", lastOutputtedLaptops);
-            initializeDropDownChoices(model);
             return "view/laptop/table";
         }
         return "redirect:/laptop";
@@ -107,22 +67,15 @@ public class LaptopController {
     @NotNull
     @PostMapping("/importExcel")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var laptopFilePath = "";
-        try {
-            laptopFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newLaptops = excelImporter.importFile(laptopFilePath);
-            newLaptops.forEach(this::saveRecord);
-            return "redirect:/laptop";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(laptopFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = laptopService.importExcelRecords(uploadingFile, model);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці ноутбуків!");
             model.addAttribute("laptops", lastOutputtedLaptops);
-            initializeDropDownChoices(model);
             return "view/laptop/table";
         }
+        return "redirect:/laptop";
     }
 
     @NotNull
@@ -137,22 +90,7 @@ public class LaptopController {
     @GetMapping("/delete/{delLaptop}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable Laptop delLaptop) {
-        laptopRepo.delete(delLaptop);
+        laptopService.deleteRecord(delLaptop);
         return "redirect:/laptop";
-    }
-
-    private boolean saveRecord(Laptop saveLaptop) {
-        try {
-            laptopRepo.save(saveLaptop);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
-    }
-
-    private void initializeDropDownChoices(@NotNull Model model) {
-        model.addAttribute("hardwareAssemblyNames", hardwareRepo.getAllAssemblyNames())
-                .addAttribute("typeNames", typeRepo.getAllNames())
-                .addAttribute("labelModels", labelRepo.getAllModels());
     }
 }

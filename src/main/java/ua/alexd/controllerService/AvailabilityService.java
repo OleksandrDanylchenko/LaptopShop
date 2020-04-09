@@ -69,16 +69,17 @@ public class AvailabilityService {
 
     public boolean addAvailabilityRecord(Integer price, Integer quantity, String laptopModel, String shopAddress,
                                          Date dateStart, Date dateEnd, Model model) {
+        initializeAvailabilityChoices(model);
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         var shop = shopRepo.findByAddress(shopAddress).get(0);
         var newAvailability = new Availability(quantity, price, dateStart, dateEnd, shop, laptop);
-        initializeAvailabilityChoices(model);
         return saveRecord(newAvailability);
     }
 
     public boolean editAvailabilityRecord(Integer price, Integer quantity, String laptopModel, String shopAddress,
                                           Date dateStart, Date dateEnd, @NotNull Availability editAvailability,
                                           Model model) {
+        initializeAvailabilityChoices(model);
         var laptop = laptopRepo.findByLabelModel(laptopModel);
         editAvailability.setLaptop(laptop);
         var shop = shopRepo.findByAddress(shopAddress).get(0);
@@ -87,7 +88,6 @@ public class AvailabilityService {
         editAvailability.setQuantity(quantity);
         editAvailability.setDateStart(dateStart);
         editAvailability.setDateEnd(dateEnd);
-        initializeAvailabilityChoices(model);
         return saveRecord(editAvailability);
     }
 
