@@ -1,7 +1,6 @@
 package ua.alexd.controllerService;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonVa
 import static ua.alexd.specification.HardwareSpecification.*;
 
 @Service
-@Lazy
 public class HardwareService {
     private final HardwareRepo hardwareRepo;
 
