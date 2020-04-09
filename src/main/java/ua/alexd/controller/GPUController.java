@@ -1,48 +1,31 @@
 package ua.alexd.controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ua.alexd.controllerService.GpuService;
 import ua.alexd.domain.GPU;
-import ua.alexd.excelInteraction.imports.GPUExcelImporter;
-import ua.alexd.excelInteraction.imports.UploadedFilesManager;
-import ua.alexd.repos.GPURepo;
-
-import java.io.IOException;
-
-import static ua.alexd.excelInteraction.imports.UploadedFilesManager.deleteNonValidFile;
-import static ua.alexd.specification.GPUSpecification.memoryEqual;
-import static ua.alexd.specification.GPUSpecification.modelLike;
 
 @Controller
 @RequestMapping("/gpu")
 public class GPUController {
-    private final GPURepo gpuRepo;
-    private static Iterable<GPU> lastOutputtedGPUs;
+    private final GpuService gpuService;
+    private Iterable<GPU> lastOutputtedGPUs;
 
-    private final GPUExcelImporter excelImporter;
-    private final UploadedFilesManager filesManager;
-
-    public GPUController(GPURepo gpuRepo, GPUExcelImporter excelImporter, UploadedFilesManager filesManager) {
-        this.gpuRepo = gpuRepo;
-        this.excelImporter = excelImporter;
-        this.filesManager = filesManager;
+    public GPUController(GpuService gpuService) {
+        this.gpuService = gpuService;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @NotNull
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public String getRecords(@RequestParam(required = false) String model,
                              @RequestParam(required = false) Integer memory,
                              @NotNull Model siteModel) {
-        var gpuSpecification = Specification.where(modelLike(model)).and(memoryEqual(memory));
-        var gpus = gpuRepo.findAll(gpuSpecification);
+        var gpus = gpuService.loadGPUTable(model, memory);
         lastOutputtedGPUs = gpus;
         siteModel.addAttribute("gpus", gpus);
         return "view/gpu/table";
@@ -52,7 +35,8 @@ public class GPUController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String addRecord(@NotNull @ModelAttribute("newGPU") GPU newGPU, @NotNull Model model) {
-        if (!saveRecord(newGPU)) {
+        var isNewGPUSaved = gpuService.addGPURecord(newGPU);
+        if (!isNewGPUSaved) {
             model.addAttribute("errorMessage",
                     "Представлена нова модель відеокарти уже присутня в базі!");
             model.addAttribute("gpus", lastOutputtedGPUs);
@@ -66,9 +50,8 @@ public class GPUController {
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String editRecord(@RequestParam String editModel, @RequestParam Integer editMemory,
                              @NotNull @PathVariable GPU editGpu, @NotNull Model model) {
-        editGpu.setModel(editModel);
-        editGpu.setMemory(editMemory);
-        if (!saveRecord(editGpu)) {
+        var isEditGPUSaved = gpuService.editGPURecord(editModel, editMemory, editGpu);
+        if (!isEditGPUSaved) {
             model.addAttribute("errorMessage",
                     "Представлена змінювана модель відеокарти уже присутня в базі!");
             model.addAttribute("gpus", lastOutputtedGPUs);
@@ -80,21 +63,15 @@ public class GPUController {
     @NotNull
     @PostMapping("/importExcel")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
-    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model)
-            throws IOException {
-        var GPUFilePath = "";
-        try {
-            GPUFilePath = filesManager.saveUploadingFile(uploadingFile);
-            var newGPUs = excelImporter.importFile(GPUFilePath);
-            newGPUs.forEach(this::saveRecord);
-            return "redirect:/gpu";
-        } catch (IllegalArgumentException ignored) {
-            deleteNonValidFile(GPUFilePath);
+    public String importExcel(@NotNull @RequestParam MultipartFile uploadingFile, @NotNull Model model) {
+        var isRecordsImported = gpuService.importExcelRecords(uploadingFile);
+        if (!isRecordsImported) {
             model.addAttribute("errorMessage",
                     "Завантажено некоректний файл для таблиці відеокарт!");
             model.addAttribute("gpus", lastOutputtedGPUs);
             return "view/gpu/table";
         }
+        return "redirect:/gpu";
     }
 
     @NotNull
@@ -109,16 +86,7 @@ public class GPUController {
     @GetMapping("/delete/{delGpu}")
     @PreAuthorize("hasAnyAuthority('MANAGER', 'CEO')")
     public String deleteRecord(@NotNull @PathVariable GPU delGpu) {
-        gpuRepo.delete(delGpu);
+        gpuService.deleteRecord(delGpu);
         return "redirect:/gpu";
-    }
-
-    private boolean saveRecord(GPU saveGpu) {
-        try {
-            gpuRepo.save(saveGpu);
-        } catch (DataIntegrityViolationException ignored) {
-            return false;
-        }
-        return true;
     }
 }
