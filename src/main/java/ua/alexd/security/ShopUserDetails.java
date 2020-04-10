@@ -1,5 +1,6 @@
 package ua.alexd.security;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class ShopUserDetails implements UserDetailsService {
     }
 
     @Override
-    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username)
+    public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         return userRepo.findByUsername(username);
     }
