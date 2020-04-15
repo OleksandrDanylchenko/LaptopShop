@@ -39,6 +39,7 @@
                         </div>
                         <div class="form-row mt-3 ml-2">
                             <div class="col">
+                                <label class="radio control-label">Нова роль:</label>
                                 <#list roles as role>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" id="radio${role?index}" name="role"

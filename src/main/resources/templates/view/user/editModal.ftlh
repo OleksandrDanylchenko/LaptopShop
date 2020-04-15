@@ -51,6 +51,7 @@
                         </div>
                         <div class="form-row mt-3 ml-2">
                             <div class="col">
+                                <label class="radio control-label">Змінювана роль:</label>
                                 <#list roles as role>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="editRole"
@@ -70,7 +71,6 @@
                     <script>
                         $("#userEditModal${id}").on("show.bs.modal", function () {
                             $("#editUsernameInput${id}").val("${currentUsername}").change();
-                            $("#editPasswordInput${id}").val("${currentPassword}").change();
                             $("#activeSelect${id}").val("${activeStatus}").change();
                             $("#${currentRole}${id}").prop("checked", true);
                             $("#emailInput${id}").val("${currentEmail}").change();
