@@ -2,7 +2,7 @@
     <script>
         $("#${modalId}").on('hidden.bs.modal', function () {
             <#list inputIds as inputId>
-                document.getElementById("${inputId}").value = "";
+                $("#${inputId}").val("").change();
             </#list>
         });
     </script>

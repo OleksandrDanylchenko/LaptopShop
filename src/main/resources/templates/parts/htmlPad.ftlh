@@ -36,10 +36,7 @@
     </div>
 
     <#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
-    <@security.authorize access="hasAnyAuthority('MANAGER', 'CEO')">
-        <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
-    </@security.authorize>
-
+    <#include "../errorsHandlers/errorSubmissionBreaker.ftlh">
     </body>
     </html>
 </#macro>

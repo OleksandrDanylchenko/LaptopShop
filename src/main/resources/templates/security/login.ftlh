@@ -40,6 +40,7 @@
                     <button type="submit" class="btn btn-danger float-right">Увійти</button>
                 </div>
             </div>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         </form>
         <@eB.emptyBreaker inputIds=["loginInput", "passwordInput"]/>
     </div>
