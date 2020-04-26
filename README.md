@@ -11,7 +11,7 @@
 
 Додаток реалізовано на стеку:
 -
-- Back end: **Java 13 + Spring Boot (різноманітні вшиті сервіси)** <br/>
+- Back end: **Java 13 + Spring Boot 2.2.6 (різноманітні вшиті сервіси)** <br/>
 - Front end: **Freemarker + Bootstrap** <br/>
 - Database: **Microsoft SQL Server** <br/>
 ***
